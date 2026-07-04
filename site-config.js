@@ -35,3 +35,24 @@ window.VF_CONFIG = {
   s.src = "https://gc.zgo.at/count.js";
   document.head.appendChild(s);
 })();
+
+/* ── Light/dark theme toggle (persisted) ── */
+(function () {
+  var root = document.documentElement;
+  function icons() {
+    var light = root.dataset.theme === "light";
+    document.querySelectorAll("[data-themetoggle]").forEach(function (b) { b.textContent = light ? "☀️" : "🌙"; });
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.content = light ? "#f3f5fa" : "#05070f";
+  }
+  document.querySelectorAll("[data-themetoggle]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var next = root.dataset.theme === "light" ? "dark" : "light";
+      root.dataset.theme = next;
+      try { localStorage.setItem("vf-theme", next); } catch (e) {}
+      icons();
+      document.dispatchEvent(new CustomEvent("vf-themechange"));
+    });
+  });
+  icons();
+})();

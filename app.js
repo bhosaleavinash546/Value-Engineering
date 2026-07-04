@@ -133,7 +133,10 @@
   if (canvas && !reduced) {
     const ctx = canvas.getContext("2d");
     let W, H, parts = [], mouse = { x: -9999, y: -9999 };
-    const COLORS = ["rgba(34,211,238,", "rgba(139,92,246,", "rgba(245,158,11,"];
+    const palette = () => document.documentElement.dataset.theme === "light"
+      ? ["rgba(29,78,216,", "rgba(30,86,176,", "rgba(150,99,18,"]
+      : ["rgba(90,162,255,", "rgba(46,111,232,", "rgba(217,164,74,"];
+    let COLORS = palette();
     function resize() {
       W = canvas.width = canvas.offsetWidth * devicePixelRatio;
       H = canvas.height = canvas.offsetHeight * devicePixelRatio;
@@ -148,6 +151,7 @@
     }
     resize();
     window.addEventListener("resize", resize);
+    document.addEventListener("vf-themechange", () => { COLORS = palette(); resize(); });
     canvas.parentElement.addEventListener("mousemove", (e) => {
       const b = canvas.getBoundingClientRect();
       mouse.x = (e.clientX - b.left) * devicePixelRatio;
@@ -187,7 +191,7 @@
           if (d < LINK) {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = "rgba(139,92,246," + (1 - d / LINK) * 0.22 + ")";
+            ctx.strokeStyle = COLORS[1] + (1 - d / LINK) * 0.22 + ")";
             ctx.lineWidth = devicePixelRatio * 0.7;
             ctx.stroke();
           }

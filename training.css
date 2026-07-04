@@ -36,7 +36,7 @@
 .tr-sidebar{position:sticky;top:76px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);overflow:hidden}
 .tr-side-head{font-family:var(--font-m);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc1);padding:1rem 1.2rem;border-bottom:1px solid var(--line)}
 #modNav{max-height:56vh;overflow-y:auto}
-.mod-link{display:flex;align-items:center;gap:.75rem;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.04);padding:.8rem 1.1rem;cursor:pointer;color:var(--muted);font-family:var(--font-b);transition:background .25s,color .25s}
+.mod-link{display:flex;align-items:center;gap:.75rem;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line-soft);padding:.8rem 1.1rem;cursor:pointer;color:var(--muted);font-family:var(--font-b);transition:background .25s,color .25s}
 .mod-link:hover{background:var(--card-hi);color:var(--txt)}
 .mod-link.is-active{background:rgba(46,111,232,.14);color:var(--txt);box-shadow:inset 3px 0 0 var(--acc2)}
 .mod-link .mchk{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:.65rem;color:transparent;transition:all .3s}
@@ -46,7 +46,7 @@
 .mod-link.mod-exam{border-top:1px solid var(--line)}
 .mod-link.mod-exam .mchk{border-radius:7px}
 .tr-side-foot{padding:1rem 1.2rem;border-top:1px solid var(--line)}
-.tr-side-bar{height:6px;border-radius:6px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:.5rem}
+.tr-side-bar{height:6px;border-radius:6px;background:var(--track);overflow:hidden;margin-bottom:.5rem}
 .tr-side-bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:6px;transition:width .5s var(--ease-out)}
 .tr-side-prog span{font-size:.7rem;color:var(--muted);font-family:var(--font-m)}
 @media (max-width:960px){.tr-sidebar{position:static}#modNav{max-height:38vh}}
@@ -82,7 +82,7 @@
 .ex-gate .ex-warn{color:var(--acc3);font-size:.84rem}
 .ex-q-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.2rem}
 .ex-q-head span{font-family:var(--font-m);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc1)}
-.ex-bar{flex:1;height:5px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden}
+.ex-bar{flex:1;height:5px;border-radius:5px;background:var(--track);overflow:hidden}
 .ex-bar i{display:block;height:100%;background:var(--grad);transition:width .4s var(--ease-out)}
 .ex-q{font-family:var(--font-d);font-size:1.15rem;font-weight:600;margin-bottom:1.2rem;line-height:1.5}
 .ex-opts{display:grid;gap:.6rem;margin-bottom:1.4rem}
@@ -107,7 +107,7 @@
 .ex-note{color:var(--muted);font-size:.9rem;max-width:520px;margin:0 auto 1.6rem}
 .ex-review{text-align:left;max-width:680px;margin:0 auto 1.6rem;border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:1.2rem 1.4rem}
 .ex-review h4{font-family:var(--font-m);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc3);margin-bottom:.8rem}
-.ex-review-item{border-bottom:1px solid rgba(255,255,255,.05);padding:.7rem 0;font-size:.84rem}
+.ex-review-item{border-bottom:1px solid var(--line-soft);padding:.7rem 0;font-size:.84rem}
 .ex-review-item b{display:block;color:var(--txt);margin-bottom:.25rem}
 .ex-review-item .wrong{color:#f87171}
 .ex-review-item .right{color:#34d399}
@@ -212,3 +212,14 @@
 
 /* ── Certificate disclaimer ── */
 .cert-disclaimer{margin-top:1.1rem;font-size:.6rem;color:#94a3b8;letter-spacing:.04em}
+
+/* ── Light theme (Academy) ── */
+html[data-theme="light"] .tr-nav{background:rgba(255,255,255,.85)}
+html[data-theme="light"] .tr-hero{background:radial-gradient(90% 130% at 50% -20%,rgba(46,111,232,.1),transparent 60%),#fff}
+html[data-theme="light"] .ex-ring .rbg{stroke:rgba(15,23,42,.09)}
+html[data-theme="light"] .qc-opt.is-right{background:rgba(15,131,61,.12);border-color:#15803d;color:#116233}
+html[data-theme="light"] .qc-expl.show-right{color:#116233}
+html[data-theme="light"] .qc-opt.is-wrong{background:rgba(190,50,50,.1);color:#b91c1c}
+html[data-theme="light"] .qc-expl.show-wrong{color:#b91c1c}
+html[data-theme="light"] .tr-badge.is-earned{color:#966312}
+html[data-theme="light"] .tmod,html[data-theme="light"] .tr-sidebar{box-shadow:0 2px 14px rgba(20,30,60,.05)}
