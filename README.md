@@ -23,8 +23,7 @@ All integrations live in **`site-config.js`** — fill a value, commit, and the 
 |---|---|---|
 | Newsletter capture | [buttondown.com](https://buttondown.com) | your username → `buttondownUser` |
 | Contact form inbox | [formspree.io](https://formspree.io) | form ID → `formspreeId` |
-| "Book a call" button | [calendly.com](https://calendly.com) | event link → `calendlyUrl` |
 | Visitor analytics | [goatcounter.com](https://www.goatcounter.com) | site code → `goatcounterCode` |
 
 Until configured, the newsletter and contact form gracefully fall back to opening
-a pre-filled email draft, and the booking button stays hidden.
+a pre-filled email draft.

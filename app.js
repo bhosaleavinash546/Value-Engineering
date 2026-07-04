@@ -663,7 +663,7 @@
     if (a.teardown === "never") add("Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "#benchmark", "Benchmarking");
 
     // Programme
-    if (a.maturity === "never") add("Start with one product, one SAVE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "#engage", "Start a Program");
+    if (a.maturity === "never") add("Start with one product, one SAVE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "training.html", "VE Academy");
     else if (a.maturity === "oneoff") add("Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "#governance", "Governance & KPIs");
     else add("Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "#tech", "Technology Stack");
 
@@ -734,8 +734,9 @@
       <div class="wr-recs">${recs.map(([t, d, href, label], i) =>
         `<div class="wr-rec"><i>${i + 1}</i><span><b>${t}</b><small>${d} → <a href="${href}">${label}</a></small></span></div>`).join("")}</div>
       <div class="wr-actions">
-        <a class="btn btn-primary" href="mailto:bhosale.avinash546@gmail.com?subject=${encodeURIComponent("Value Diagnosis — let's talk")}&body=${mailBody}">✉ Email this diagnosis to Avinash</a>
+        <a class="btn btn-primary" href="training.html">🎓 Learn how to fix this — free course</a>
         <a class="btn btn-ghost" href="#toolkit">Get the free toolkit</a>
+        <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=${encodeURIComponent("Question about my Value Diagnosis")}&body=${mailBody}">Ask a question</a>
       </div></div>`;
   }
 
