@@ -375,7 +375,7 @@
       ["top", "Home"], ["about", "Value Engineering"], ["save", "SAVE Job Plan"],
       ["fast", "Function Analysis"], ["levers", "Cost Levers"], ["ideation", "Ideation"],
       ["tech", "Technology"], ["benchmark", "Benchmarking"], ["industries", "Industries"],
-      ["governance", "Savings Funnel"], ["glossary", "Glossary"], ["faq", "FAQ"], ["engage", "Begin"],
+      ["governance", "Savings Funnel"], ["toolkit", "Toolkit"], ["glossary", "Glossary"], ["faq", "FAQ"], ["engage", "Begin"],
     ].filter(([id]) => document.getElementById(id));
     dotnav.innerHTML = SECTIONS.map(([id, label]) =>
       `<a href="#${id}" data-label="${label}" aria-label="${label}"></a>`).join("");
@@ -410,4 +410,112 @@
       });
     });
   });
+})();
+
+/* ════════ Lever Selector & Savings Estimator ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ── Lever Selector ── */
+  const LEVERS = {
+    shouldcost: ["Should-Cost / Cleansheet Negotiation", "Sourcing", "Model what parts should cost and negotiate the gap with facts.", "5–15% on quoted price"],
+    lpp: ["Linear Performance Pricing", "Sourcing", "Regress price vs. cost drivers across the family; attack the outliers.", "3–8% category spend"],
+    rfq: ["Competitive RFQ & E-Auctions", "Sourcing", "Refresh the competitive set; auction spec-stable commodities.", "5–20% tendered scope"],
+    bundle: ["Supplier Consolidation & Bundling", "Sourcing", "Fewer, better suppliers in exchange for step-change pricing.", "5–12% bundled spend"],
+    bcc: ["Best-Cost-Country Sourcing", "Sourcing", "Total-landed-cost sourcing across best-cost regions.", "15–40% vs. high-cost base"],
+    supvave: ["Supplier VAVE Workshops", "Sourcing", "Gain-share programmes surface ideas internal teams can't see.", "3–7% supplier spend"],
+    index: ["Raw-Material Indexation & Hedging", "Sourcing", "Index the raw material, negotiate the conversion, claw back windfalls.", "kills 2–5% volatility"],
+    matsub: ["Material Substitution", "Design", "Validated switches: metal→polymer, grade optimisation, recyclates.", "10–40% part cost"],
+    partcount: ["Part-Count Reduction & Integration", "Design", "Combine parts via snap-fits, multi-functional geometry, castings.", "5–15% assembly cost"],
+    dfma: ["DFM / DFA (DFMA)", "Design", "Minimum-part criteria, self-locating features, one-axis assembly.", "10–30% assembly time"],
+    despec: ["Feature Rationalisation / De-speccing", "Design", "Remove features customers don't value — backed by data.", "3–10% unit cost"],
+    tol: ["Tolerance & Spec Optimisation", "Design", "Open non-functional tolerances; kill redundant callouts.", "5–20% machining"],
+    safety: ["Safety-Factor Right-Sizing", "Design", "Replace stacked legacy margins with CAE-validated factors.", "5–15% material"],
+    platform: ["Modular Architecture & Platforms", "Design", "Common cores, standard interfaces, late differentiation.", "15–30% dev + unit"],
+    standard: ["Standardisation & Carry-Over", "Design", "Preferred parts, proven modules, reuse over reinvention.", "scale + quality gains"],
+    auto: ["Automation & Robotics", "Manufacturing", "Cobots, vision inspection, automated packing — cycle-time economics.", "20–60% direct labour"],
+    process: ["Process Substitution", "Manufacturing", "Re-pick the process for today's volume: casting vs machining etc.", "15–40% conversion"],
+    makebuy: ["Make-vs-Buy Rebalancing", "Manufacturing", "Re-run the math with current wages, utilisation and freight.", "10–20% moved scope"],
+    yield: ["Yield & First-Pass Quality", "Manufacturing", "Attack scrap and rework Paretos with DOE, SPC, error-proofing.", "2–8% COGS"],
+    tooling: ["Low-Cost Intelligent Tooling", "Manufacturing", "Right-size tool life; family moulds; printed jigs & fixtures.", "30–50% tooling capex"],
+    pack: ["Packaging Spec Optimisation", "Pack & Log", "Right-size board grade, remove layers, redesign dunnage.", "10–30% packaging"],
+    returnable: ["Returnable Packaging", "Pack & Log", "Durable totes and racks on closed loops replace one-way corrugate.", "30–60% per-trip"],
+    cube: ["Cube Utilisation & Mode Shift", "Pack & Log", "Fill the container: knock-down designs, sea over air, milk runs.", "10–25% freight"],
+    sku: ["SKU & Variant Rationalisation", "Complexity", "Kill the long tail; release inventory, changeovers and admin.", "2–5% total COGS"],
+    common: ["Commonality & Reuse Index", "Complexity", "Manage % common parts as a KPI, rewarded at design gates.", "compounding gains"],
+    warranty: ["Warranty & Lifecycle Cost Design", "Complexity", "Design out warranty Paretos; design in serviceability.", "20–40% warranty spend"],
+  };
+  const PAIN_MAP = {
+    bom: { shouldcost: 3, matsub: 3, lpp: 2, bcc: 2, supvave: 2, index: 1 },
+    supplier: { shouldcost: 3, rfq: 3, index: 2, bundle: 2, lpp: 2, bcc: 1 },
+    labour: { dfma: 3, partcount: 3, auto: 3, process: 2, makebuy: 1 },
+    variants: { sku: 3, platform: 3, common: 3, standard: 2, despec: 1 },
+    overspec: { despec: 3, safety: 3, tol: 3, matsub: 2, standard: 1 },
+    warranty: { warranty: 3, yield: 3, tol: 2, dfma: 1, standard: 1 },
+    logistics: { pack: 3, returnable: 3, cube: 3, bcc: 1, sku: 1 },
+    lowvol: { platform: 3, standard: 2, tooling: 3, makebuy: 2, process: 2 },
+  };
+  const IND_BONUS = {
+    auto: { supvave: 1.5, platform: 1.5, partcount: 1 },
+    consumer: { pack: 1.5, sku: 1.5, matsub: 1 },
+    heavy: { process: 1.5, safety: 1.5, platform: 1 },
+    appliance: { platform: 1.5, standard: 1, matsub: 1 },
+    aero: { matsub: 1.5, process: 1, shouldcost: 1 },
+    electronics: { rfq: 1.5, shouldcost: 1, partcount: 1 },
+    medical: { pack: 1.5, standard: 1, matsub: 1 },
+    industrial: { index: 1.5, standard: 1, safety: 1 },
+  };
+  const selPains = $("#selPains");
+  if (selPains) {
+    const results = $("#selResults"), hint = $("#selHint"), industry = $("#selIndustry");
+    function update() {
+      const on = $$(".pain.is-on", selPains).map((b) => b.dataset.pain);
+      $$(".pain", selPains).forEach((b) =>
+        b.classList.toggle("is-off", on.length >= 3 && !b.classList.contains("is-on")));
+      if (!on.length) { hint.hidden = false; results.innerHTML = ""; return; }
+      hint.hidden = true;
+      const score = {};
+      on.forEach((p) => Object.entries(PAIN_MAP[p] || {}).forEach(([k, v]) => (score[k] = (score[k] || 0) + v)));
+      Object.entries(IND_BONUS[industry.value] || {}).forEach(([k, v]) => { if (score[k]) score[k] += v; });
+      const top = Object.entries(score).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      results.innerHTML = top.map(([k]) => {
+        const [name, fam, desc, impact] = LEVERS[k];
+        return `<li><b>${name}</b><small>${desc}</small><span class="sel-fam">${fam} · impact ${impact}</span></li>`;
+      }).join("");
+    }
+    selPains.addEventListener("click", (e) => {
+      const b = e.target.closest(".pain");
+      if (!b || b.classList.contains("is-off")) return;
+      b.classList.toggle("is-on");
+      update();
+    });
+    industry.addEventListener("change", update);
+  }
+
+  /* ── Savings Estimator ── */
+  const RANGES = { auto: [3, 8], consumer: [5, 12], heavy: [8, 15], appliance: [6, 12], aero: [5, 10], electronics: [10, 20], medical: [5, 10], industrial: [8, 15] };
+  const eVol = $("#estVol");
+  if (eVol) {
+    const eCur = $("#estCur"), eCost = $("#estCost"), eInd = $("#estInd"), eWave = $("#estWave");
+    const oSpend = $("#estSpend"), oSave = $("#estSave"), oUnit = $("#estUnit");
+    const fmt = (n, cur) => {
+      if (!isFinite(n)) return "—";
+      const a = Math.abs(n);
+      const s = a >= 1e9 ? (n / 1e9).toFixed(2) + "B" : a >= 1e6 ? (n / 1e6).toFixed(2) + "M" : a >= 1e3 ? (n / 1e3).toFixed(1) + "k" : n.toFixed(2);
+      return cur + s;
+    };
+    function calc() {
+      const vol = +eVol.value || 0, cost = +eCost.value || 0, cur = eCur.value;
+      let [lo, hi] = RANGES[eInd.value] || [5, 12];
+      if (eWave.value === "mature") { lo = 3; hi = 5; }
+      const spend = vol * cost;
+      oSpend.textContent = fmt(spend, cur);
+      oSave.textContent = spend ? fmt(spend * lo / 100, cur) + " – " + fmt(spend * hi / 100, cur) : "—";
+      oUnit.textContent = cost ? fmt(cost * lo / 100, cur) + " – " + fmt(cost * hi / 100, cur) + " per unit" : "—";
+    }
+    [eCur, eVol, eCost, eInd, eWave].forEach((el) => { el.addEventListener("input", calc); el.addEventListener("change", calc); });
+    calc();
+  }
 })();

@@ -8,6 +8,14 @@
 <meta property="og:title" content="ValueForge — Value Engineering & Product Cost Optimisation" />
 <meta property="og:description" content="SAVE 6-phase job plan · 36 cost levers · TRIZ, SCAMPER & FAST ideation · Should-cost, teardown & benchmarking · 8 industry playbooks." />
 <meta property="og:type" content="website" />
+<meta property="og:url" content="https://bhosaleavinash546.github.io/Value-Engineering/" />
+<meta property="og:image" content="https://bhosaleavinash546.github.io/Value-Engineering/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ValueForge — Value Engineering & Product Cost Optimisation" />
+<meta name="twitter:image" content="https://bhosaleavinash546.github.io/Value-Engineering/og-image.png" />
+<link rel="canonical" href="https://bhosaleavinash546.github.io/Value-Engineering/" />
 <meta name="keywords" content="value engineering, value analysis, VAVE, product cost optimisation, cost reduction, should-cost, cleansheet, teardown benchmarking, SAVE job plan, FAST diagram, TRIZ, DFMA, target costing, design to cost" />
 <meta name="author" content="Avinash Bhosale" />
 <meta name="theme-color" content="#05070f" />
@@ -477,6 +485,43 @@
       <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h4>Commonality &amp; Reuse Index</h4><p>Measure and manage % common parts across the portfolio as a KPI; reward reuse in design gates just like performance targets.</p><b class="impact">Compounding scale gains</b></article>
       <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h4>Warranty &amp; Lifecycle Cost Design</h4><p>Design out top warranty Paretos, design in serviceability and upgradeability — optimise total cost of ownership, not just unit BOM.</p><b class="impact">20–40% warranty spend</b></article>
     </div>
+
+    <div class="selector" data-reveal>
+      <div class="sel-head">
+        <h3>Not sure where to start? <span class="grad-text">Lever Selector</span></h3>
+        <p>Pick your industry and your biggest pains — get your top five levers, ranked.</p>
+      </div>
+      <div class="sel-body">
+        <div class="sel-controls">
+          <label class="sel-label">Your industry</label>
+          <select id="selIndustry" class="sel-select">
+            <option value="auto">Automotive &amp; EV</option>
+            <option value="consumer">Consumer Products / FMCG</option>
+            <option value="heavy">Heavy Machinery</option>
+            <option value="appliance">Home Appliances</option>
+            <option value="aero">Aerospace &amp; Defence</option>
+            <option value="electronics">Electronics &amp; High-Tech</option>
+            <option value="medical">Medical Devices</option>
+            <option value="industrial">Industrial &amp; Energy</option>
+          </select>
+          <label class="sel-label">Your biggest pains <small>(pick up to 3)</small></label>
+          <div class="sel-pains" id="selPains">
+            <button class="pain" data-pain="bom">Purchased material cost too high</button>
+            <button class="pain" data-pain="supplier">Supplier prices keep creeping</button>
+            <button class="pain" data-pain="labour">Assembly labour is heavy</button>
+            <button class="pain" data-pain="variants">Too many variants / SKUs</button>
+            <button class="pain" data-pain="overspec">Product feels over-engineered</button>
+            <button class="pain" data-pain="warranty">Quality &amp; warranty costs hurt</button>
+            <button class="pain" data-pain="logistics">Freight &amp; packaging expensive</button>
+            <button class="pain" data-pain="lowvol">Low volume, high mix</button>
+          </div>
+        </div>
+        <div class="sel-out">
+          <p class="sel-hint" id="selHint">Select at least one pain to see your ranked levers.</p>
+          <ol class="sel-results" id="selResults"></ol>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -891,11 +936,32 @@
   </div>
 </section>
 
-<!-- ══════════ GLOSSARY ══════════ -->
-<section class="section section-alt" id="glossary">
+<!-- ══════════ TOOLKIT ══════════ -->
+<section class="section section-alt" id="toolkit">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>10 · The Lexicon</p>
+      <p class="kicker" data-reveal>10 · The Toolkit</p>
+      <h2 data-reveal data-delay="100">Don't just read it — <span class="grad-text">run it</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        Five field-tested worksheets, free to use. Open, print or save as PDF, and take them straight into your next workshop.
+      </p>
+    </div>
+    <div class="tool-grid" data-stagger>
+      <a class="tool-card tilt" data-reveal href="toolkit/fast-worksheet.html" target="_blank" rel="noopener"><span class="tool-n">01</span><h4>FAST Diagram Worksheet</h4><p>Verb–noun function capture table plus a scoped canvas for building the HOW→/←WHY logic chain.</p><em>Open worksheet ↗</em></a>
+      <a class="tool-card tilt" data-reveal href="toolkit/function-cost-matrix.html" target="_blank" rel="noopener"><span class="tool-n">02</span><h4>Function–Cost Matrix</h4><p>Component-to-function cost allocation grid and the value-index scoring table with verdict thresholds.</p><em>Open worksheet ↗</em></a>
+      <a class="tool-card tilt" data-reveal href="toolkit/save-workshop-agenda.html" target="_blank" rel="noopener"><span class="tool-n">03</span><h4>SAVE Workshop Agenda</h4><p>A complete 3-day agenda across all six phases, with pre-workshop checklist and facilitator rules.</p><em>Open template ↗</em></a>
+      <a class="tool-card tilt" data-reveal href="toolkit/idea-capture.html" target="_blank" rel="noopener"><span class="tool-n">04</span><h4>Idea Capture Sheet</h4><p>Creative-phase log: function attacked, idea, lever family, saving, effort, risk, owner — 18 rows per sheet.</p><em>Open worksheet ↗</em></a>
+      <a class="tool-card tilt" data-reveal href="toolkit/savings-funnel-tracker.html" target="_blank" rel="noopener"><span class="tool-n">05</span><h4>Savings Funnel Tracker</h4><p>L1→L4 stage definitions and the monthly pipeline review table that keeps ideas moving to the P&amp;L.</p><em>Open tracker ↗</em></a>
+      <div class="tool-card tool-cta" data-reveal><h4>Want them tailored?</h4><p>Company-branded templates, digital funnel dashboards, or a facilitated first workshop — that's consulting territory.</p><a class="btn btn-primary magnetic" href="#engage">Talk to Avinash <span class="btn-arr">→</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GLOSSARY ══════════ -->
+<section class="section" id="glossary">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>11 · The Lexicon</p>
       <h2 data-reveal data-delay="100">Speak <span class="grad-text">cost engineering</span></h2>
       <p class="sec-lede" data-reveal data-delay="200">Twenty-four terms that carry every VAVE conversation. Type to filter.</p>
     </div>
@@ -931,10 +997,10 @@
 </section>
 
 <!-- ══════════ FAQ ══════════ -->
-<section class="section" id="faq">
+<section class="section section-alt" id="faq">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>11 · The Answers</p>
+      <p class="kicker" data-reveal>12 · The Answers</p>
       <h2 data-reveal data-delay="100">Questions every programme <span class="grad-text">asks first</span></h2>
     </div>
     <div class="faq-list" data-stagger>
@@ -953,9 +1019,47 @@
 <!-- ══════════ ENGAGE / CTA ══════════ -->
 <section class="section section-cta" id="engage">
   <div class="container">
+
+    <div class="estimator" data-reveal>
+      <div class="est-head">
+        <h3>Estimate your <span class="grad-text">savings potential</span></h3>
+        <p>Indicative, based on the industry ranges published on this site. Real numbers come from a real study.</p>
+      </div>
+      <div class="est-body">
+        <div class="est-inputs">
+          <label>Currency
+            <select id="estCur"><option value="€">€ EUR</option><option value="$">$ USD</option><option value="₹">₹ INR</option><option value="£">£ GBP</option></select></label>
+          <label>Annual volume (units)
+            <input type="number" id="estVol" value="100000" min="1" /></label>
+          <label>Unit product cost
+            <input type="number" id="estCost" value="120" min="0.01" step="0.01" /></label>
+          <label>Industry
+            <select id="estInd">
+              <option value="auto">Automotive &amp; EV (3–8%)</option>
+              <option value="consumer">Consumer / FMCG (5–12%)</option>
+              <option value="heavy" selected>Heavy Machinery (8–15%)</option>
+              <option value="appliance">Home Appliances (6–12%)</option>
+              <option value="aero">Aerospace &amp; Defence (5–10%)</option>
+              <option value="electronics">Electronics (10–20%)</option>
+              <option value="medical">Medical Devices (5–10%)</option>
+              <option value="industrial">Industrial &amp; Energy (8–15%)</option>
+            </select></label>
+          <label>Programme maturity
+            <select id="estWave"><option value="first">First structured wave</option><option value="mature">Mature programme (annual)</option></select></label>
+        </div>
+        <div class="est-out">
+          <div class="est-row"><span>Annual product spend</span><b id="estSpend">—</b></div>
+          <div class="est-row est-big"><span>Indicative savings / year</span><b id="estSave">—</b></div>
+          <div class="est-row"><span>Per unit</span><b id="estUnit">—</b></div>
+          <p class="est-note">Typical study ROI exceeds <strong>10:1</strong> with portfolio payback under 12 months.
+          A 2–4 week baseline phase turns this range into a validated, part-by-part number.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="cta-box" data-reveal>
       <div class="cta-orb"></div>
-      <p class="kicker">12 · Begin</p>
+      <p class="kicker">13 · Begin</p>
       <h2>Your product is carrying cost<br />that <span class="grad-text">adds no value.</span></h2>
       <p class="cta-sub">Pick one product line. Run one disciplined SAVE study. Watch the funnel fill.
       Value Engineering isn't a slogan — it's a job plan, and it starts with the Information Phase.</p>
@@ -964,7 +1068,18 @@
         <div class="cs" data-reveal><b>Week 3</b><span>SAVE workshop: 6 phases, cross-functional team, 200+ ideas</span></div>
         <div class="cs" data-reveal><b>Week 4–12</b><span>Develop, decide, implement — savings tracked to the P&amp;L</span></div>
       </div>
-      <a href="#save" class="btn btn-primary btn-lg magnetic">Revisit the Method <span class="btn-arr">→</span></a>
+      <div class="consult" data-reveal>
+        <div class="consult-badge">AB</div>
+        <div class="consult-info">
+          <h3>Work with <span class="grad-text">Avinash Bhosale</span></h3>
+          <p>Value Engineering &amp; Product Cost Optimisation consultant — teardown benchmarking, should-cost modelling
+          and facilitated SAVE workshops that land savings in the P&amp;L, not in slide decks.</p>
+        </div>
+        <div class="consult-actions">
+          <a class="btn btn-primary magnetic" href="mailto:avinash.bhosale8925@gmail.com?subject=Value%20Engineering%20enquiry%20via%20ValueForge">✉ Email Avinash</a>
+          <a class="btn btn-ghost magnetic" href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener">View Portfolio ↗</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -979,13 +1094,17 @@
         <a class="brand" href="#top">Value<span>Forge</span></a>
         <p>Value Engineering · Product Cost Optimisation · Competitive Benchmarking.<br />
         Function-first thinking, from Lawrence Miles' 1947 insight to today's AI-driven cost stack.</p>
+        <div class="footer-contact">
+          <a href="mailto:avinash.bhosale8925@gmail.com">✉ avinash.bhosale8925@gmail.com</a>
+          <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener">Portfolio — Avinash Bhosale ↗</a>
+        </div>
       </div>
       <div class="footer-col"><h5>Method</h5><a href="#about">What is VE</a><a href="#save">SAVE Job Plan</a><a href="#fast">Function Analysis</a><a href="#ideation">Ideation Techniques</a></div>
       <div class="footer-col"><h5>Arsenal</h5><a href="#levers">36 Cost Levers</a><a href="#tech">Technology Stack</a><a href="#benchmark">Benchmarking</a><a href="#industries">Industry Playbooks</a></div>
-      <div class="footer-col"><h5>Reference</h5><a href="#governance">Savings Funnel &amp; KPIs</a><a href="#glossary">Glossary</a><a href="#faq">FAQ</a><a href="#engage">Start a Program</a></div>
+      <div class="footer-col"><h5>Reference</h5><a href="#governance">Savings Funnel &amp; KPIs</a><a href="#toolkit">Free Toolkit</a><a href="#glossary">Glossary</a><a href="#faq">FAQ</a><a href="#engage">Start a Program</a></div>
     </div>
     <div class="footer-bar">
-      <p class="footer-credit">Designed &amp; Developed by <b class="grad-text">Avinash Bhosale</b></p>
+      <p class="footer-credit">Designed &amp; Developed by <a class="grad-text" href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b class="grad-text">Avinash Bhosale</b></a></p>
       <p class="footer-copy">© <span id="year"></span> ValueForge · Educational reference on Value Engineering &amp; Cost Optimisation</p>
     </div>
   </div>
