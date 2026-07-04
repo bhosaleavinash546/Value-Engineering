@@ -179,3 +179,33 @@
 .qc-expl.show-wrong{display:block;color:#f3a1a0}
 .qc-expl.show-right{display:block;color:#7ce3ad}
 .tmod-done:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none}
+
+/* ── Certificate share page ── */
+.cert-page{max-width:1000px;margin-inline:auto;padding:3rem 4vw 4rem}
+.cert-verify-note{max-width:680px;margin:1.4rem auto 0;text-align:center;font-size:.78rem;color:var(--muted)}
+.cert-verify-note a{color:var(--acc1)}
+.cert-invalid{text-align:center;padding:5rem 1rem}
+.cert-invalid h2{font-size:1.6rem;margin-bottom:.8rem}
+.cert-invalid p{color:var(--muted);max-width:460px;margin:0 auto 1.6rem}
+
+/* ── Gamification: points, rank, badges ── */
+.tr-rank{font-family:var(--font-m);font-size:.66rem;letter-spacing:.1em;color:var(--acc3);white-space:nowrap}
+.tr-badges{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.tr-badge{display:flex;align-items:center;gap:.4rem;border:1px solid var(--line);border-radius:100px;padding:.3rem .7rem;font-size:.64rem;color:var(--muted);opacity:.45;transition:all .3s}
+.tr-badge.is-earned{opacity:1;border-color:rgba(217,164,74,.55);color:var(--acc3);background:rgba(217,164,74,.07)}
+.tr-points{font-family:var(--font-m);font-size:.7rem;color:var(--acc1);margin-top:.4rem;display:block}
+
+/* ── Role paths ── */
+.tr-roles{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.6rem}
+.tr-roles span{font-size:.72rem;color:var(--muted);align-self:center;margin-right:.3rem}
+.role-chip{border:1px solid var(--line);border-radius:100px;background:var(--card);color:var(--muted);padding:.45rem 1.05rem;font-size:.8rem;font-family:var(--font-b);cursor:pointer;transition:all .25s}
+.role-chip:hover{color:var(--txt);border-color:var(--acc1)}
+.role-chip.is-on{background:var(--grad);border-color:transparent;color:#fff}
+.mod-link .mrec{margin-left:auto;font-size:.72rem;color:var(--acc3);display:none}
+.mod-link.is-rec .mrec{display:inline}
+
+/* ── Assignment box ── */
+.tdo{border-left:3px solid #2ea36b;background:rgba(28,127,75,.07);border-radius:0 14px 14px 0;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.tdo h4{font-family:var(--font-m);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#4ade80;margin-bottom:.5rem}
+.tdo p{font-size:.86rem;color:var(--muted);margin:0}
+.tdo a{color:#4ade80;border-bottom:1px dashed rgba(74,222,128,.5)}

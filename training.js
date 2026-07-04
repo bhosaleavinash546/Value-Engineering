@@ -33,18 +33,64 @@
     if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  /* ── Gamification: points, ranks, milestone badges ── */
+  const RANKS = [[0, "Value Apprentice"], [300, "Value Explorer"], [600, "Value Analyst"], [900, "Value Engineer"], [1200, "Value Champion"], [2000, "Certified Master"]];
+  const BADGES = [
+    ["🧭", "Foundations", ["m1", "m2"]],
+    ["🛠", "Job Plan Master", ["m3", "m4", "m5", "m6", "m7", "m8"]],
+    ["📐", "Cost Toolsmith", ["m9", "m10", "m11"]],
+    ["🏛", "Programme Leader", ["m12"]],
+  ];
+  function points() {
+    let p = state.done.length * 100;
+    if (state.exam && state.exam.passed) p += 800;
+    return p;
+  }
+  function rank(p) { return RANKS.reduce((r, [min, name]) => (p >= min ? name : r), RANKS[0][1]); }
+
   function refreshProgress() {
     const total = courseMods.length;
     const done = state.done.length;
     const pct = Math.round((done / total) * 100);
     $("#navProgFill").style.width = pct + "%";
-    $("#navProgText").textContent = state.exam && state.exam.passed ? "Certified ✓" : pct + "% complete";
+    $("#navProgText").textContent = state.exam && state.exam.passed ? "Certified ✓ · " + rank(points()) : pct + "% · " + rank(points());
     $("#sideProgFill").style.width = pct + "%";
     $("#sideProgText").textContent = `${done} / ${total} modules` + (state.exam && state.exam.passed ? " · certified" : "");
+    const pts = $("#trPoints");
+    if (pts) pts.textContent = points() + " pts · " + rank(points());
+    const badgeBox = $("#trBadges");
+    if (badgeBox) badgeBox.innerHTML = BADGES.map(([ico, name, req]) =>
+      `<span class="tr-badge${req.every((m) => state.done.includes(m)) ? " is-earned" : ""}" title="${name}: complete ${req.join(", ")}">${ico} ${name}</span>`).join("");
     $$(".mod-link", modNav).forEach((l) => {
       const id = l.dataset.target;
       l.classList.toggle("is-done", id === "exam" ? !!(state.exam && state.exam.passed) : state.done.includes(id));
     });
+  }
+
+  /* ── Role-based learning paths ── */
+  const ROLE_RECS = {
+    design: ["m1", "m3", "m4", "m5", "m7", "m10"],
+    sourcing: ["m1", "m2", "m9", "m10", "m11"],
+    manager: ["m1", "m2", "m6", "m8", "m12"],
+    all: [],
+  };
+  function applyRole(role) {
+    state.role = role; save();
+    $$(".role-chip").forEach((c) => c.classList.toggle("is-on", c.dataset.role === role));
+    const recs = ROLE_RECS[role] || [];
+    $$(".mod-link", modNav).forEach((l) => {
+      l.classList.toggle("is-rec", recs.includes(l.dataset.target));
+      let star = l.querySelector(".mrec");
+      if (!star) { star = document.createElement("span"); star.className = "mrec"; star.textContent = "★ for you"; l.appendChild(star); }
+    });
+  }
+  const roleBar = $("#trRoles");
+  if (roleBar) {
+    roleBar.addEventListener("click", (e) => {
+      const c = e.target.closest(".role-chip");
+      if (c) applyRole(c.dataset.role);
+    });
+    if (state.role) applyRole(state.role);
   }
 
   modNav.addEventListener("click", (e) => {
@@ -187,12 +233,35 @@
     });
   }
 
+  function certToken(e) {
+    const json = JSON.stringify({ n: e.name, s: e.score, d: e.date, id: e.id });
+    return btoa(unescape(encodeURIComponent(json))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
   function renderCertificate() {
     const e = state.exam;
+    const shareUrl = new URL("certificate.html?c=" + certToken(e), location.href).toString();
+    const li = new URL("https://www.linkedin.com/profile/add");
+    li.searchParams.set("startTask", "CERTIFICATION_NAME");
+    li.searchParams.set("name", "Value Engineering 360° Practitioner — ValueForge VE Academy");
+    li.searchParams.set("organizationName", "ValueForge VE Academy");
+    li.searchParams.set("issueYear", e.date.slice(0, 4));
+    li.searchParams.set("issueMonth", String(+e.date.slice(5, 7)));
+    li.searchParams.set("certUrl", shareUrl);
+    li.searchParams.set("certId", e.id);
     mount.innerHTML = `<div class="ex-gate"><p><strong style="color:#34d399">✓ Certified.</strong> Your VE Practitioner Certificate is below —
-      print it or save it as a PDF. It's stored in this browser, so you can come back anytime.</p>
-      <button class="btn btn-ghost" id="exRetake">Retake the exam for a better score</button></div>`;
+      add it to LinkedIn, share the link, or save it as a PDF. It's stored in this browser, so you can come back anytime.</p>
+      <div class="ex-actions" style="margin-bottom:.6rem">
+        <a class="btn btn-primary" href="${li.toString()}" target="_blank" rel="noopener">in&nbsp; Add to LinkedIn profile</a>
+        <button class="btn btn-ghost" id="copyShare">🔗 Copy share link</button>
+        <button class="btn btn-ghost" id="exRetake">Retake for a better score</button>
+      </div></div>`;
     $("#exRetake").addEventListener("click", startExam);
+    $("#copyShare").addEventListener("click", () => {
+      (navigator.clipboard ? navigator.clipboard.writeText(shareUrl) : Promise.reject())
+        .then(() => { $("#copyShare").textContent = "✓ Link copied"; })
+        .catch(() => { prompt("Copy your certificate link:", shareUrl); });
+    });
     $("#certName").textContent = e.name;
     $("#certScore").textContent = e.score + "%";
     $("#certDate").textContent = new Date(e.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });

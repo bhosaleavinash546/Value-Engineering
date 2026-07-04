@@ -1083,6 +1083,43 @@
       </div>
     </div>
 
+    <div class="services" data-reveal>
+      <div class="svc-head">
+        <h3>Ways to <span class="accent">work together</span></h3>
+        <p>Four engagement formats, from a single facilitated study to a full capability build.</p>
+      </div>
+      <div class="svc-grid" data-stagger>
+        <article class="svc" data-reveal>
+          <span class="svc-n">01</span><h4>SAVE Workshop Facilitation</h4>
+          <p>A complete 6-phase value study on one product line: 2–4 weeks preparation, a 3–5 day facilitated
+          cross-functional workshop, and development support until proposals are decision-ready.</p>
+          <ul><li>Costed baseline &amp; function analysis</li><li>200+ ideas, ranked shortlist, business cases</li><li>Savings roadmap with owners &amp; dates</li></ul>
+          <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=SAVE%20Workshop%20Facilitation%20enquiry">Enquire →</a>
+        </article>
+        <article class="svc" data-reveal>
+          <span class="svc-n">02</span><h4>Teardown &amp; Benchmarking Programme</h4>
+          <p>Competitive teardown of your product vs. the market leader: documented disassembly, digital BOM,
+          part-by-part should-cost comparison and a quantified cost walk to target.</p>
+          <ul><li>Side-by-side function &amp; cost comparison</li><li>Gap analysis with named levers</li><li>Idea harvest feeding your funnel</li></ul>
+          <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=Teardown%20%26%20Benchmarking%20enquiry">Enquire →</a>
+        </article>
+        <article class="svc" data-reveal>
+          <span class="svc-n">03</span><h4>Should-Cost &amp; Negotiation Support</h4>
+          <p>Cleansheet models for your top-spend parts — AI-accelerated — plus linear performance pricing across
+          part families and preparation for fact-based supplier negotiations.</p>
+          <ul><li>Glass-box cost models per part</li><li>LPP outlier target list</li><li>Negotiation fact packs</li></ul>
+          <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=Should-Cost%20Support%20enquiry">Enquire →</a>
+        </article>
+        <article class="svc" data-reveal>
+          <span class="svc-n">04</span><h4>VE Training &amp; Capability Building</h4>
+          <p>Corporate cohorts of the <a href="training.html">VE Academy</a> with live exercises on your own products,
+          facilitator coaching, and a governance setup so the capability stays after the engagement ends.</p>
+          <ul><li>Team certification with live practice</li><li>Savings funnel &amp; KPI installation</li><li>Train-the-facilitator coaching</li></ul>
+          <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=VE%20Training%20%26%20Capability%20enquiry">Enquire →</a>
+        </article>
+      </div>
+    </div>
+
     <div class="cta-box" data-reveal>
       <div class="cta-orb"></div>
       <p class="kicker">14 · Begin</p>
@@ -1114,10 +1151,24 @@
         </div>
         <div class="consult-actions">
           <a class="btn btn-primary magnetic" href="mailto:bhosale.avinash546@gmail.com?subject=Value%20Engineering%20enquiry%20via%20ValueForge">✉ Email Avinash</a>
+          <a class="btn btn-primary magnetic" id="calendlyBtn" target="_blank" rel="noopener" hidden>📅 Book a 30-min call</a>
           <a class="btn btn-ghost magnetic" href="https://www.linkedin.com/in/avinash-bhosale-671bbb80" target="_blank" rel="noopener">in LinkedIn ↗</a>
           <a class="btn btn-ghost magnetic" href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener">View Portfolio ↗</a>
         </div>
       </div>
+
+      <form class="contact-form" id="contactForm" data-reveal>
+        <h4>Or send a message right here</h4>
+        <div class="cf-row">
+          <input type="text" id="cfName" required placeholder="Your name" aria-label="Your name" />
+          <input type="email" id="cfEmail" required placeholder="Work email" aria-label="Work email" />
+        </div>
+        <textarea id="cfMsg" required rows="4" placeholder="What product or cost challenge are you looking at?"></textarea>
+        <div class="cf-actions">
+          <button class="btn btn-primary" type="submit" id="cfSubmit">Send message →</button>
+          <span class="cf-status" id="cfStatus"></span>
+        </div>
+      </form>
     </div>
   </div>
 </section>
@@ -1142,6 +1193,14 @@
       <div class="footer-col"><h5>Arsenal</h5><a href="#levers">36 Cost Levers</a><a href="#tech">Technology Stack</a><a href="#benchmark">Benchmarking</a><a href="#industries">Industry Playbooks</a></div>
       <div class="footer-col"><h5>Reference</h5><a href="#governance">Savings Funnel &amp; KPIs</a><a href="#toolkit">Free Toolkit</a><a href="training.html">VE Academy & Certificate</a><a href="#glossary">Glossary</a><a href="#faq">FAQ</a><a href="#engage">Start a Program</a></div>
     </div>
+    <div class="newsletter" id="newsletter">
+      <div class="nl-txt"><h4>One cost-engineering insight, monthly.</h4>
+      <p>Lever deep-dives, teardown notes and VAVE tactics — no spam, unsubscribe anytime.</p></div>
+      <form class="nl-form" id="nlForm">
+        <input type="email" id="nlEmail" required placeholder="you@company.com" aria-label="Email address" />
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+      </form>
+    </div>
     <div class="footer-bar">
       <p class="footer-credit">Designed &amp; Developed by <a class="grad-text" href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b class="grad-text">Avinash Bhosale</b></a></p>
       <p class="footer-copy">© <span id="year"></span> ValueForge · Educational reference on Value Engineering &amp; Cost Optimisation</p>
@@ -1149,6 +1208,7 @@
   </div>
 </footer>
 
+<script src="site-config.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

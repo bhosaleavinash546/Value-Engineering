@@ -13,6 +13,9 @@
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="training.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Course","name":"Value Engineering 360° Practitioner Course","description":"Free 12-module Value Engineering certification course: the SAVE 6-phase job plan, function analysis & FAST, creative techniques, should-costing, teardown benchmarking, AI-era methods and programme governance, with a 30-question exam at 80% pass mark.","provider":{"@type":"Organization","name":"ValueForge VE Academy","url":"https://bhosaleavinash546.github.io/Value-Engineering/"},"educationalCredentialAwarded":"ValueForge VE Practitioner Certificate","teaches":["Value Engineering","SAVE job plan","Function analysis","FAST diagrams","Should-cost modelling","Teardown benchmarking","TRIZ","Cost optimisation"],"isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Avinash Bhosale"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","category":"Free"},"hasCourseInstance":{"@type":"CourseInstance","courseMode":"online","courseWorkload":"PT2H30M"}}
+</script>
 </head>
 <body class="tr-body">
 
@@ -39,6 +42,13 @@
       <div><b>30</b><span>exam questions</span></div>
       <div><b>80%</b><span>to earn the certificate</span></div>
     </div>
+    <div class="tr-roles" id="trRoles">
+      <span>I am a…</span>
+      <button class="role-chip" data-role="design">Design Engineer</button>
+      <button class="role-chip" data-role="sourcing">Buyer / Sourcing</button>
+      <button class="role-chip" data-role="manager">Manager / Leader</button>
+      <button class="role-chip" data-role="all">Show everything</button>
+    </div>
     <button class="btn btn-primary btn-lg" id="startBtn">Start learning →</button>
   </div>
 </header>
@@ -49,6 +59,8 @@
     <nav id="modNav"></nav>
     <div class="tr-side-foot">
       <div class="tr-side-prog"><div class="tr-side-bar"><i id="sideProgFill"></i></div><span id="sideProgText">0 / 12 modules</span></div>
+      <span class="tr-points" id="trPoints">0 pts · Value Apprentice</span>
+      <div class="tr-badges" id="trBadges"></div>
     </div>
   </aside>
 
@@ -106,6 +118,8 @@ but adds real esteem value customers pay €35 for — <strong>higher value too<
         <li>VE (design) has ~10× the leverage of VA (production) — but both pay.</li>
         <li>Function-first thinking is what separates VE from a discount hunt.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Pick any household product on your desk right now. Write its <strong>basic function</strong> (verb + noun) and five
+<strong>secondary functions</strong>. Then ask of each: is this a requirement, or just how this design happens to work?</p></div>
       <div class="qcheck" data-qc="m1"></div>
       <button class="btn btn-primary tmod-done" data-done="m1">Mark complete & continue →</button>
     </section>
@@ -146,6 +160,8 @@ finance + bearing supplier."</em> One paragraph — and every argument the works
         <li>Cross-functional team of 6–10 with a facilitator who owns process, not content.</li>
         <li>No sponsor, no study — decisions need someone empowered to make them.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Draft a five-line scope statement for a product you know well: baseline cost, target %, in scope, out of scope, sponsor.
+Use the pre-workshop checklist in the <a href="toolkit/save-workshop-agenda.html" target="_blank" rel="noopener">SAVE Workshop Agenda template</a>.</p></div>
       <div class="qcheck" data-qc="m2"></div>
       <button class="btn btn-primary tmod-done" data-done="m2">Mark complete & continue →</button>
     </section>
@@ -180,6 +196,9 @@ labour per unit, invisible on every spreadsheet, found only by walking the line.
         <li>Deliverable: a validated cost & requirement baseline, Pareto-ranked.</li>
         <li>Touch the product, walk the line — spreadsheets hide what floors reveal.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>List your product's ten biggest parts and guess-rank their cost. Now find real numbers for the top three — how wrong
+were you? That gap is why the Information Phase exists. Capture it in the
+<a href="toolkit/function-cost-matrix.html" target="_blank" rel="noopener">Function–Cost Matrix worksheet</a> (Step 1).</p></div>
       <div class="qcheck" data-qc="m3"></div>
       <button class="btn btn-primary tmod-done" data-done="m3">Mark complete & continue →</button>
     </section>
@@ -232,6 +251,9 @@ carries €0.60 of cost but a neon lamp achieves the function for €0.15 — VI
         <li>FAST: HOW→ / ←WHY between scope lines; valid logic reads both ways.</li>
         <li>VI = Cost ÷ Worth; above 2.0 is your target list. VE picks battles with arithmetic.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Do a full function analysis of a stapler or kettle: functions table, FAST sketch, cost allocation, worth estimate, VI.
+Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">FAST Diagram Worksheet</a> and the
+<a href="toolkit/function-cost-matrix.html" target="_blank" rel="noopener">Function–Cost Matrix</a> — 30 minutes, and you'll have run Phase 2 for real.</p></div>
       <div class="qcheck" data-qc="m4"></div>
       <button class="btn btn-primary tmod-done" data-done="m4">Mark complete & continue →</button>
     </section>
@@ -272,6 +294,8 @@ principle 40 (composite material). Ten routes where the drawing showed one.</p><
         <li>Ideate on the function ("how else to transmit torque?"), never the part.</li>
         <li>Mix techniques: brainwriting for equality, TRIZ for contradictions, AI for volume.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Solo 6-3-5: take your worst-VI function from the last exercise and write 3 ideas every 5 minutes for 30 minutes —
+18 ideas minimum, no self-censoring. Log them in the <a href="toolkit/idea-capture.html" target="_blank" rel="noopener">Idea Capture Sheet</a>.</p></div>
       <div class="qcheck" data-qc="m5"></div>
       <button class="btn btn-primary tmod-done" data-done="m5">Mark complete & continue →</button>
     </section>
@@ -305,6 +329,9 @@ it's clustered into next year's platform scenario, where its tooling investment 
         <li>Pugh compares vs. the current design; weighted matrices make trade-offs explicit.</li>
         <li>Roughly 1 in 8 raw ideas survives into development — and that's healthy.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Score your top six ideas on savings, risk, effort (1–9 each, weighted 50/30/20). Rank them. Notice how the ranking
+argues with your gut — that argument is the point. The columns are in the
+<a href="toolkit/idea-capture.html" target="_blank" rel="noopener">Idea Capture Sheet</a>.</p></div>
       <div class="qcheck" data-qc="m6"></div>
       <button class="btn btn-primary tmod-done" data-done="m6">Mark complete & continue →</button>
     </section>
@@ -342,6 +369,8 @@ margin holds; DFMEA adds one new failure mode (edge condition), mitigated by a d
         <li>Validate with simulation and FMEA — de-risking is what makes savings real.</li>
         <li>Target sub-12-month paybacks; report savings net and dated.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Build one business case: pick your #1 idea, estimate per-unit saving × annual volume, guess the one-time cost,
+compute payback in months. If it's under 12, you'd take it to a real board.</p></div>
       <div class="qcheck" data-qc="m7"></div>
       <button class="btn btn-primary tmod-done" data-done="m7">Mark complete & continue →</button>
     </section>
@@ -377,6 +406,8 @@ ideas and reassigned 3 orphaned ones — that discipline is why L4 keeps growing
         <li>L1→L4 funnel, monthly review, owners and dates — or ideas die quietly.</li>
         <li>Savings count only in the P&L, audited vs. the frozen baseline.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Set up the <a href="toolkit/savings-funnel-tracker.html" target="_blank" rel="noopener">Savings Funnel Tracker</a>
+with your ideas at L1 — owner, saving, next gate date for each. Diary a 30-minute review for one month from now.</p></div>
       <div class="qcheck" data-qc="m8"></div>
       <button class="btn btn-primary tmod-done" data-done="m8">Mark complete & continue →</button>
     </section>
@@ -421,6 +452,8 @@ buyer stops paying for idle air.</p></div>
         <li>Should-cost = 7 negotiable layers; negotiate with physics, not percentages.</li>
         <li>LPP finds outliers in your own purchase data — the cheapest savings you'll ever locate.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Take any purchased part you know the price of. Split it into the seven should-cost layers by rough percentage.
+Which layer would you challenge first, and with what fact?</p></div>
       <div class="qcheck" data-qc="m9"></div>
       <button class="btn btn-primary tmod-done" data-done="m9">Mark complete & continue →</button>
     </section>
@@ -461,6 +494,8 @@ Three creative-phase targets from one afternoon with a torque driver and a scale
         <li>Benchmark six dimensions; price alone tells you almost nothing.</li>
         <li>A cost walk without owners and dates is a poster, not a plan.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Tear down something broken or cheap (an old mouse, a torch). Photograph FIRST. Count parts, fasteners, and estimate
+assembly seconds. Write down two ideas the designer missed.</p></div>
       <div class="qcheck" data-qc="m10"></div>
       <button class="btn btn-primary tmod-done" data-done="m10">Mark complete & continue →</button>
     </section>
@@ -500,6 +535,8 @@ this. The negotiation now starts from physics; the quotes arrive into a prepared
         <li>AI diverges and drafts; humans judge and decide.</li>
         <li>Technology multiplies the method — it never substitutes for it.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Prompt an AI assistant with your function list from Module 4: <em>"Generate 20 ways to [verb noun] for a consumer
+product, ranked by likely cost."</em> Compare with your 6-3-5 output — what did each source find that the other missed?</p></div>
       <div class="qcheck" data-qc="m11"></div>
       <button class="btn btn-primary tmod-done" data-done="m11">Mark complete & continue →</button>
     </section>
@@ -539,6 +576,8 @@ year. That's what "VE as an operating system" looks like on one page.</p></div>
         <li>8–15% first wave, 3–5%/yr sustained, ROI &gt; 10:1.</li>
         <li>SAVE (VMA → AVS → CVS) and EN 12973 are the professional backbone.</li>
       </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Draft a one-page programme charter: three KPIs you would track, the monthly agenda (30 minutes), and who sits on the
+value board. If you can't name the people, that's your first action.</p></div>
       <div class="qcheck" data-qc="m12"></div>
       <button class="btn btn-primary tmod-done" data-done="m12">Mark complete & take the exam →</button>
     </section>
@@ -583,6 +622,7 @@ year. That's what "VE as an operating system" looks like on one page.</p></div>
   <p>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b>Avinash Bhosale</b></a></p>
 </footer>
 
+<script src="site-config.js"></script>
 <script src="training.js"></script>
 </body>
 </html>

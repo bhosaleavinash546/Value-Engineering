@@ -743,3 +743,67 @@
   restart.addEventListener("click", () => { step = 0; for (const k in answers) delete answers[k]; renderQuestion(); });
   renderQuestion();
 })();
+
+/* ════════ Newsletter, contact form & booking (config-driven) ════════ */
+(function () {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const cfg = window.VF_CONFIG || {};
+
+  /* Calendly booking button appears when configured */
+  const cal = $("#calendlyBtn");
+  if (cal && cfg.calendlyUrl) { cal.href = cfg.calendlyUrl; cal.hidden = false; }
+
+  /* Newsletter: Buttondown when configured, email-draft fallback otherwise */
+  const nlForm = $("#nlForm");
+  if (nlForm) {
+    nlForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = $("#nlEmail").value.trim();
+      if (!email) return;
+      if (cfg.buttondownUser) {
+        const f = document.createElement("form");
+        f.method = "POST";
+        f.action = "https://buttondown.com/api/emails/embed-subscribe/" + cfg.buttondownUser;
+        f.target = "_blank";
+        const inp = document.createElement("input");
+        inp.name = "email"; inp.value = email;
+        f.appendChild(inp); document.body.appendChild(f); f.submit(); f.remove();
+        nlForm.innerHTML = '<p class="nl-done">✓ Almost there — confirm the email we just sent you.</p>';
+      } else {
+        location.href = "mailto:bhosale.avinash546@gmail.com?subject=" +
+          encodeURIComponent("Subscribe me to ValueForge insights") +
+          "&body=" + encodeURIComponent("Please add " + email + " to the monthly VE insights list.");
+      }
+    });
+  }
+
+  /* Contact form: Formspree when configured, email-draft fallback otherwise */
+  const cform = $("#contactForm");
+  if (cform) {
+    cform.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = $("#cfName").value.trim(), email = $("#cfEmail").value.trim(), msg = $("#cfMsg").value.trim();
+      const status = $("#cfStatus"), btn = $("#cfSubmit");
+      if (cfg.formspreeId) {
+        btn.disabled = true; status.textContent = "Sending…";
+        try {
+          const res = await fetch("https://formspree.io/f/" + cfg.formspreeId, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({ name, email, message: msg }),
+          });
+          if (!res.ok) throw new Error();
+          cform.innerHTML = '<p class="cf-done">✓ Message sent — Avinash will get back to you shortly.</p>';
+        } catch {
+          status.textContent = "Couldn't send — try the email button above.";
+          btn.disabled = false;
+        }
+      } else {
+        location.href = "mailto:bhosale.avinash546@gmail.com?subject=" +
+          encodeURIComponent("ValueForge enquiry from " + name) +
+          "&body=" + encodeURIComponent(msg + "\n\n— " + name + " (" + email + ")");
+      }
+    });
+  }
+})();

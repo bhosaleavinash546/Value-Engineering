@@ -736,3 +736,43 @@ section[id]{scroll-margin-top:80px}
 .nav-train{color:var(--acc3)!important;font-weight:600}
 .tool-academy{border-color:rgba(46,111,232,.5);background:rgba(46,111,232,.08)}
 .tool-academy:hover{border-color:var(--acc1)}
+
+/* ════════ SERVICES ════════ */
+.services{margin-bottom:2rem}
+.svc-head{text-align:center;margin-bottom:1.8rem}
+.svc-head h3{font-size:1.5rem}
+.svc-head p{color:var(--muted);font-size:.9rem;margin-top:.4rem}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.svc{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:1.5rem;display:flex;flex-direction:column;text-align:left;transition:border-color .3s,transform .3s var(--ease-spring)}
+.svc:hover{border-color:var(--acc1);transform:translateY(-5px)}
+.svc-n{font-family:var(--font-m);font-size:.7rem;color:var(--acc3);letter-spacing:.2em}
+.svc h4{font-size:1rem;margin:.6rem 0 .5rem}
+.svc p{font-size:.8rem;color:var(--muted);margin-bottom:.8rem}
+.svc p a{color:var(--acc1)}
+.svc ul{list-style:none;display:grid;gap:.35rem;margin-bottom:1.2rem}
+.svc li{font-size:.75rem;color:var(--muted);padding-left:1.1rem;position:relative}
+.svc li::before{content:"✓";position:absolute;left:0;color:#34d399}
+.svc .btn{margin-top:auto;align-self:flex-start;padding:.55rem 1.15rem;font-size:.8rem}
+@media (max-width:1000px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.svc-grid{grid-template-columns:1fr}}
+
+/* ════════ NEWSLETTER ════════ */
+.newsletter{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;border:1px solid var(--line);border-radius:var(--r);background:radial-gradient(120% 160% at 10% 0%,rgba(46,111,232,.12),transparent 55%),var(--card);padding:1.6rem 2rem;margin-bottom:2rem}
+.nl-txt h4{font-size:1.1rem;margin-bottom:.3rem}
+.nl-txt p{font-size:.8rem;color:var(--muted)}
+.nl-form{display:flex;gap:.6rem;flex-wrap:wrap}
+.nl-form input{min-width:260px;padding:.8rem 1.2rem;border-radius:100px;border:1px solid var(--line);background:var(--bg2);color:var(--txt);font-family:var(--font-b);font-size:.9rem;outline:none;transition:border-color .3s}
+.nl-form input:focus{border-color:var(--acc2)}
+.nl-form .btn{padding:.8rem 1.5rem;font-size:.88rem}
+.nl-done{color:#34d399;font-size:.9rem}
+
+/* ════════ CONTACT FORM ════════ */
+.contact-form{max-width:640px;margin:1.6rem auto 0;text-align:left;border:1px solid var(--line);border-radius:var(--r);background:rgba(9,13,28,.6);padding:1.5rem 1.7rem}
+.contact-form h4{font-family:var(--font-m);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc1);margin-bottom:1rem}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem}
+.contact-form input,.contact-form textarea{width:100%;padding:.8rem 1rem;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--txt);font-family:var(--font-b);font-size:.88rem;outline:none;resize:vertical;transition:border-color .3s}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--acc2)}
+.cf-actions{display:flex;align-items:center;gap:1rem;margin-top:.9rem}
+.cf-status{font-size:.8rem;color:var(--muted)}
+.cf-done{color:#34d399;font-size:.95rem;text-align:center;padding:1rem 0}
+@media (max-width:560px){.cf-row{grid-template-columns:1fr}}
