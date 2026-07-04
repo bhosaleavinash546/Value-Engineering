@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   ValueForge — motion & interaction engine
+   VAVEhub — motion & interaction engine
    Framer-Motion-grade springs, reveals & canvas — dependency-free
    Designed & Developed by Avinash Bhosale
    ════════════════════════════════════════════════════════════ */
@@ -724,7 +724,7 @@
     const phase = answers.stage === "dev" ? "VE — engineer it out in design" : "VA — optimise the running product";
     const start = answers.maturity === "never" ? "One focused SAVE study" : answers.maturity === "oneoff" ? "Governed savings funnel" : "AI-augmented programme";
     const mailBody = encodeURIComponent(
-      "Hi Avinash,\n\nI ran the Value Diagnosis on ValueForge. My situation:\n" +
+      "Hi Avinash,\n\nI ran the Value Diagnosis on VAVEhub. My situation:\n" +
       QUESTIONS.map((Q) => `- ${Q.q} ${Q.opts.find((o) => o[0] === answers[Q.id])[1]}`).join("\n") +
       `\n\nIndicated opportunity: ${opp}.\n\nI'd like to discuss how Value Engineering could help.\n`);
     stage.innerHTML = `<div class="wiz-result">
@@ -777,7 +777,7 @@
         nlForm.innerHTML = '<p class="nl-done">✓ Almost there — confirm the email we just sent you.</p>';
       } else {
         location.href = "mailto:bhosale.avinash546@gmail.com?subject=" +
-          encodeURIComponent("Subscribe me to ValueForge insights") +
+          encodeURIComponent("Subscribe me to VAVEhub insights") +
           "&body=" + encodeURIComponent("Please add " + email + " to the monthly VE insights list.");
       }
     });
@@ -806,7 +806,7 @@
         }
       } else {
         location.href = "mailto:bhosale.avinash546@gmail.com?subject=" +
-          encodeURIComponent("ValueForge enquiry from " + name) +
+          encodeURIComponent("VAVEhub enquiry from " + name) +
           "&body=" + encodeURIComponent(msg + "\n\n— " + name + " (" + email + ")");
       }
     });

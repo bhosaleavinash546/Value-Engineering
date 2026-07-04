@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   ValueForge — one-file activation for newsletter, contact
+   VAVEhub — one-file activation for newsletter, contact
    form, booking and analytics. Fill a value, push, and the
    feature switches on. Leave empty ("") to keep the fallback.
    ════════════════════════════════════════════════════════════ */

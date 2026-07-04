@@ -819,3 +819,8 @@ html[data-theme="light"] .nl-done,html[data-theme="light"] .cf-done{color:#0f8a5
 /* ── Theme toggle button ── */
 .theme-toggle{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--txt);cursor:pointer;font-size:1.05rem;display:grid;place-items:center;transition:border-color .3s,transform .3s var(--ease-spring)}
 .theme-toggle:hover{border-color:var(--acc1);transform:rotate(15deg) scale(1.08)}
+
+/* ── VAVEhub logomark ── */
+.logo-mark{width:27px;height:27px;color:var(--acc1);flex:0 0 auto}
+.brand{align-items:center}
+.cert-seal{padding:6px}

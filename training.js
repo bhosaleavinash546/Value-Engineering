@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════
-   ValueForge VE Academy — course engine, exam & certificate
+   VAVEhub VE Academy — course engine, exam & certificate
    ════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -172,7 +172,7 @@
     const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
     mount.innerHTML = `<div class="ex-gate">
       <p>Thirty questions, drawn at random from a 45-question bank spanning all twelve modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
-      to earn the <strong>ValueForge VE Practitioner Certificate</strong>. You can retake the exam as many times as you like —
+      to earn the <strong>VAVEhub VE Practitioner Certificate</strong>. You can retake the exam as many times as you like —
       a fresh random 30 is drawn from the bank on every attempt.</p>
       ${remaining > 0 ? `<p class="ex-warn">Heads up: ${remaining} module${remaining > 1 ? "s" : ""} not yet completed. You can still attempt the exam, but we recommend finishing the course first.</p>` : ""}
       <button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>
@@ -245,7 +245,7 @@
     if (gen) gen.addEventListener("click", () => {
       const name = ($("#certNameInput").value || "").trim();
       if (!name) { $("#certNameInput").focus(); $("#certNameInput").placeholder = "Please enter your name first"; return; }
-      state.exam = { passed: true, score: pct, name, date: new Date().toISOString().slice(0, 10), id: "VF-" + Date.now().toString(36).toUpperCase() };
+      state.exam = { passed: true, score: pct, name, date: new Date().toISOString().slice(0, 10), id: "VH-" + Date.now().toString(36).toUpperCase() };
       save(); refreshProgress(); renderCertificate();
     });
   }
@@ -260,8 +260,8 @@
     const shareUrl = new URL("certificate.html?c=" + certToken(e), location.href).toString();
     const li = new URL("https://www.linkedin.com/profile/add");
     li.searchParams.set("startTask", "CERTIFICATION_NAME");
-    li.searchParams.set("name", "Value Engineering 360° Practitioner — ValueForge VE Academy");
-    li.searchParams.set("organizationName", "ValueForge VE Academy");
+    li.searchParams.set("name", "Value Engineering 360° Practitioner — VAVEhub VE Academy");
+    li.searchParams.set("organizationName", "VAVEhub VE Academy");
     li.searchParams.set("issueYear", e.date.slice(0, 4));
     li.searchParams.set("issueMonth", String(+e.date.slice(5, 7)));
     li.searchParams.set("certUrl", shareUrl);
