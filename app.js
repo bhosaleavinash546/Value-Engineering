@@ -322,3 +322,92 @@
   const y = $("#year");
   if (y) y.textContent = new Date().getFullYear();
 })();
+
+/* ════════ World-class upgrades: dotnav, glossary, FAQ, FAST, funnel ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ── Animated draw-in for FAST diagram, should-cost bar & funnel ── */
+  const drawIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      drawIO.unobserve(e.target);
+      e.target.classList.add("is-in");
+      $$("[data-bar]", e.target).forEach((b) => b.classList.add("is-in"));
+    });
+  }, { threshold: 0.3 });
+  ["#fastSvg", "#scBar", "#funnelChart", ".matrix"].forEach((sel) => {
+    const el = $(sel);
+    if (el) drawIO.observe(el);
+  });
+
+  /* ── Glossary live search ── */
+  const gSearch = $("#gSearch");
+  if (gSearch) {
+    const terms = $$("#gGrid .g-term");
+    const empty = $("#gEmpty");
+    gSearch.addEventListener("input", () => {
+      const q = gSearch.value.trim().toLowerCase();
+      let shown = 0;
+      terms.forEach((t) => {
+        const hit = !q || t.textContent.toLowerCase().includes(q);
+        t.classList.toggle("is-hidden", !hit);
+        if (hit) shown++;
+      });
+      empty.hidden = shown > 0;
+    });
+  }
+
+  /* ── FAQ: close others when one opens ── */
+  const faqs = $$(".faq-item");
+  faqs.forEach((d) => {
+    d.addEventListener("toggle", () => {
+      if (d.open) faqs.forEach((o) => { if (o !== d && o.open) o.open = false; });
+    });
+  });
+
+  /* ── Section dot navigation ── */
+  const dotnav = $("#dotnav");
+  if (dotnav) {
+    const SECTIONS = [
+      ["top", "Home"], ["about", "Value Engineering"], ["save", "SAVE Job Plan"],
+      ["fast", "Function Analysis"], ["levers", "Cost Levers"], ["ideation", "Ideation"],
+      ["tech", "Technology"], ["benchmark", "Benchmarking"], ["industries", "Industries"],
+      ["governance", "Savings Funnel"], ["glossary", "Glossary"], ["faq", "FAQ"], ["engage", "Begin"],
+    ].filter(([id]) => document.getElementById(id));
+    dotnav.innerHTML = SECTIONS.map(([id, label]) =>
+      `<a href="#${id}" data-label="${label}" aria-label="${label}"></a>`).join("");
+    const dots = $$("a", dotnav);
+    const dotIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        dots.forEach((d) => d.classList.toggle("is-active", d.getAttribute("href") === "#" + e.target.id));
+      });
+    }, { rootMargin: "-38% 0px -58% 0px" });
+    SECTIONS.forEach(([id]) => dotIO.observe(document.getElementById(id)));
+  }
+
+  /* ── Back to top ── */
+  const toTop = $("#toTop");
+  if (toTop) {
+    window.addEventListener("scroll", () => {
+      toTop.classList.toggle("is-visible", scrollY > 700);
+    }, { passive: true });
+    toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  }
+
+  /* ── Keyboard arrows on tab lists ── */
+  [[".save-tab"], [".ind-tab"]].forEach(([sel]) => {
+    const tabs = $$(sel);
+    tabs.forEach((t, i) => {
+      t.addEventListener("keydown", (e) => {
+        let next = null;
+        if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+        if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+        if (next) { e.preventDefault(); next.focus(); next.click(); }
+      });
+    });
+  });
+})();

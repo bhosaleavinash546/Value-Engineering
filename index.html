@@ -8,6 +8,24 @@
 <meta property="og:title" content="ValueForge — Value Engineering & Product Cost Optimisation" />
 <meta property="og:description" content="SAVE 6-phase job plan · 36 cost levers · TRIZ, SCAMPER & FAST ideation · Should-cost, teardown & benchmarking · 8 industry playbooks." />
 <meta property="og:type" content="website" />
+<meta name="keywords" content="value engineering, value analysis, VAVE, product cost optimisation, cost reduction, should-cost, cleansheet, teardown benchmarking, SAVE job plan, FAST diagram, TRIZ, DFMA, target costing, design to cost" />
+<meta name="author" content="Avinash Bhosale" />
+<meta name="theme-color" content="#05070f" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"ValueForge","url":"https://bhosaleavinash546.github.io/Value-Engineering/","description":"One-stop reference for Value Engineering, Product Cost Optimisation & Competitive Benchmarking.","author":{"@type":"Person","name":"Avinash Bhosale"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the difference between Value Analysis, Value Engineering and VAVE?","acceptedAnswer":{"@type":"Answer","text":"Value Analysis (VA) improves products already in production; Value Engineering (VE) applies the same function-based method during design, before cost is locked in. VAVE is the umbrella term for both."}},
+{"@type":"Question","name":"When should a company run a Value Engineering study?","acceptedAnswer":{"@type":"Answer","text":"At design gates of new programmes, when margins are under pressure, when a teardown reveals a competitive cost gap, and as recurring annual VAVE waves on high-volume product lines."}},
+{"@type":"Question","name":"Who should be on a VE workshop team?","acceptedAnswer":{"@type":"Answer","text":"A cross-functional team of six to ten: design engineering, manufacturing, purchasing, quality, finance, service, key suppliers, and a trained facilitator."}},
+{"@type":"Question","name":"How long does a Value Engineering study take?","acceptedAnswer":{"@type":"Answer","text":"Typically two to four weeks of preparation, a three-to-five-day workshop covering the six SAVE phases, and six to twelve weeks of development and implementation."}},
+{"@type":"Question","name":"How much can Value Engineering save?","acceptedAnswer":{"@type":"Answer","text":"A first structured wave typically reduces product cost by 8 to 15 percent; mature programmes sustain 3 to 5 percent annually, with study ROIs above 10:1."}},
+{"@type":"Question","name":"Does cost reduction through VE hurt quality?","acceptedAnswer":{"@type":"Answer","text":"No. VE is defined as improving the function-to-cost ratio: required functions are protected or improved, and any de-contenting is validated with customer and warranty data."}},
+{"@type":"Question","name":"Which standards and certifications govern Value Engineering?","acceptedAnswer":{"@type":"Answer","text":"The SAVE International Value Methodology Standard and EN 12973 (Value Management) are the key standards; professionals certify as VMA, AVS and CVS through SAVE International."}},
+{"@type":"Question","name":"How is Value Engineering different from ordinary cost-cutting?","acceptedAnswer":{"@type":"Answer","text":"Cost-cutting removes cost wherever it is easiest, often damaging value. VE starts from functions and their worth, uses cross-functional teams and data such as should-cost models, and removes only cost that adds no function."}}
+]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -32,6 +50,8 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<nav class="dotnav" id="dotnav" aria-label="Section navigation"></nav>
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
 <nav class="nav" id="nav" aria-label="Primary">
   <div class="nav-inner container">
@@ -155,6 +175,19 @@
         <div class="vt" data-reveal><b>Cost value</b><span>The sum of material, labour, overhead and lifecycle cost.</span></div>
       </div>
     </div>
+
+    <div class="ve-timeline" data-reveal>
+      <h4>Eight decades of engineered value <span>· scroll the timeline →</span></h4>
+      <div class="tl-track" data-stagger>
+        <div class="tl-item" data-reveal><b>1947</b><h5>The insight</h5><p>Lawrence D. Miles creates Value Analysis at General Electric after wartime material substitutes prove better <em>and</em> cheaper.</p></div>
+        <div class="tl-item" data-reveal><b>1954</b><h5>VE gets its name</h5><p>The US Navy Bureau of Ships applies the method during design — coining the term "Value Engineering".</p></div>
+        <div class="tl-item" data-reveal><b>1959</b><h5>SAVE is founded</h5><p>The Society of American Value Engineers standardises the discipline — today's SAVE International.</p></div>
+        <div class="tl-item" data-reveal><b>1965</b><h5>Japan industrialises VE</h5><p>SJVE is founded; VE fuses with target costing inside Japan's product-development machine.</p></div>
+        <div class="tl-item" data-reveal><b>1993</b><h5>Mandated by policy</h5><p>US OMB Circular A-131 requires VE across federal agencies; EN 12973 later codifies Value Management in Europe.</p></div>
+        <div class="tl-item" data-reveal><b>2010s</b><h5>The digital turn</h5><p>Should-cost software, CT-scan teardowns and spend analytics industrialise cost engineering.</p></div>
+        <div class="tl-item" data-reveal><b>Today</b><h5>Continuous &amp; AI-native</h5><p>LLM copilots, generative design and knowledge graphs turn VE from an event into an always-on capability.</p></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -213,6 +246,7 @@
             <div class="fast-demo" aria-hidden="true">
               <div class="fast-label">FAST logic&nbsp;·&nbsp;<b>HOW →</b>&nbsp;&nbsp;<b>← WHY</b></div>
               <div class="fast-flow"><span class="fnode hi">Higher-order<br /><b>Move People</b></span><i>→</i><span class="fnode basic">Basic<br /><b>Transmit Torque</b></span><i>→</i><span class="fnode">Secondary<br /><b>Couple Shafts</b></span><i>→</i><span class="fnode">Secondary<br /><b>Fasten Flange</b></span></div>
+              <a class="fast-more" href="#fast">See the full FAST walkthrough &amp; function–cost matrix ↓</a>
             </div>
           </div>
           <aside class="sp-side"><h5>Deliverable</h5><p>A ranked list of <b>value mismatches</b> — functions whose cost far exceeds their worth. These become the creative targets.</p><div class="sp-metric"><b>C/W &gt; 2</b><span>flags a function as a prime VE target</span></div></aside>
@@ -288,11 +322,100 @@
   </div>
 </section>
 
-<!-- ══════════ COST LEVERS ══════════ -->
-<section class="section" id="levers">
+<!-- ══════════ FUNCTION ANALYSIS DEEP-DIVE ══════════ -->
+<section class="section" id="fast">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>03 · The Arsenal</p>
+      <p class="kicker" data-reveal>03 · The Heart</p>
+      <h2 data-reveal data-delay="100">Function Analysis, <span class="grad-text">done properly</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        What separates Value Engineering from a discount hunt: express the product as <strong>verb–noun functions</strong>,
+        map their logic in a <strong>FAST diagram</strong>, load every euro of cost onto the functions it serves —
+        then attack the mismatches with arithmetic, not anecdotes. Worked live on an everyday product: the electric kettle.
+      </p>
+    </div>
+
+    <div class="fast-board" data-reveal>
+      <div class="fast-board-head">
+        <h3>FAST diagram — electric kettle <span>Function Analysis System Technique</span></h3>
+        <p>Read <b>→</b> to ask <em>HOW?</em> · Read <b>←</b> to ask <em>WHY?</em> · Everything between the dashed scope lines is the study.</p>
+      </div>
+      <div class="fast-svg-wrap">
+        <svg class="fast-svg" id="fastSvg" viewBox="0 0 980 340" role="img" aria-label="FAST diagram of an electric kettle">
+          <!-- direction labels -->
+          <text class="fdir" x="205" y="30">HOW ▸</text>
+          <text class="fdir fdir-r" x="775" y="30" text-anchor="end">◂ WHY</text>
+          <!-- scope lines -->
+          <line class="fscope" x1="185" y1="45" x2="185" y2="325" />
+          <line class="fscope" x1="780" y1="45" x2="780" y2="325" />
+          <text class="fscope-t" x="185" y="338" text-anchor="middle">scope line</text>
+          <text class="fscope-t" x="780" y="338" text-anchor="middle">scope line</text>
+          <!-- connectors -->
+          <path class="fline" d="M160 180 H200" />
+          <path class="fline" d="M350 180 H390" />
+          <path class="fline" d="M540 180 H580" />
+          <path class="fline" d="M730 180 H800" />
+          <path class="fline" d="M275 205 V270 H390" />
+          <path class="fline" d="M540 270 H580" />
+          <path class="fline fline-dot" d="M555 92 V155" />
+          <path class="fline fline-dot" d="M735 92 V155" />
+          <!-- nodes -->
+          <g class="fn fn-hi"><rect x="10" y="155" rx="10" width="150" height="50"/><text x="85" y="176" text-anchor="middle">Brew Beverage</text><text class="fn-t" x="85" y="192" text-anchor="middle">higher-order</text></g>
+          <g class="fn fn-basic"><rect x="200" y="155" rx="10" width="150" height="50"/><text x="275" y="176" text-anchor="middle">Heat Water</text><text class="fn-t" x="275" y="192" text-anchor="middle">BASIC function</text></g>
+          <g class="fn"><rect x="390" y="155" rx="10" width="150" height="50"/><text x="465" y="176" text-anchor="middle">Generate Heat</text><text class="fn-t" x="465" y="192" text-anchor="middle">secondary</text></g>
+          <g class="fn"><rect x="580" y="155" rx="10" width="150" height="50"/><text x="655" y="176" text-anchor="middle">Convert Energy</text><text class="fn-t" x="655" y="192" text-anchor="middle">secondary</text></g>
+          <g class="fn fn-out"><rect x="800" y="155" rx="10" width="150" height="50"/><text x="875" y="176" text-anchor="middle">Supply Power</text><text class="fn-t" x="875" y="192" text-anchor="middle">assumed · out of scope</text></g>
+          <g class="fn"><rect x="390" y="245" rx="10" width="150" height="50"/><text x="465" y="266" text-anchor="middle">Contain Water</text><text class="fn-t" x="465" y="282" text-anchor="middle">supporting</text></g>
+          <g class="fn"><rect x="580" y="245" rx="10" width="150" height="50"/><text x="655" y="266" text-anchor="middle">Control Temp.</text><text class="fn-t" x="655" y="282" text-anchor="middle">supporting</text></g>
+          <g class="fn fn-all"><rect x="480" y="42" rx="10" width="150" height="50"/><text x="555" y="63" text-anchor="middle">Ensure Safety</text><text class="fn-t" x="555" y="79" text-anchor="middle">all-time function</text></g>
+          <g class="fn fn-all"><rect x="660" y="42" rx="10" width="150" height="50"/><text x="735" y="63" text-anchor="middle">Convey Esteem</text><text class="fn-t" x="735" y="79" text-anchor="middle">all-time function</text></g>
+        </svg>
+      </div>
+      <div class="fast-legend">
+        <span><i class="lg lg-hi"></i>Higher-order objective</span>
+        <span><i class="lg lg-basic"></i>Basic function — why the product exists</span>
+        <span><i class="lg lg-sec"></i>Secondary / supporting — how this design does it</span>
+        <span><i class="lg lg-all"></i>All-time functions — active across the whole path</span>
+      </div>
+    </div>
+
+    <div class="matrix-wrap" data-reveal>
+      <div class="matrix-head">
+        <h3>Function–cost matrix &amp; <span class="grad-text">value index</span></h3>
+        <p>Allocate the kettle's <strong>€12.40 works cost</strong> to its functions, estimate each function's
+        <strong>worth</strong> — the lowest cost that could still achieve it — and the mismatches surface themselves.
+        <em>VI = Cost ÷ Worth; anything above 2.0 is a creative-phase target.</em></p>
+      </div>
+      <div class="matrix-scroll">
+        <table class="matrix">
+          <thead><tr><th>Function <small>(verb–noun)</small></th><th>Type</th><th>Cost €</th><th>Worth €</th><th>Value Index</th><th></th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr class="vi-ok"><td>Heat water</td><td>Basic</td><td>3.20</td><td>2.80</td><td>1.14</td><td><div class="vi-bar"><i data-bar style="--w:29%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-watch"><td>Contain water</td><td>Basic</td><td>2.60</td><td>1.90</td><td>1.37</td><td><div class="vi-bar"><i data-bar style="--w:34%"></i></div></td><td>Watch</td></tr>
+            <tr class="vi-watch"><td>Control temperature</td><td>Secondary</td><td>1.80</td><td>1.20</td><td>1.50</td><td><div class="vi-bar"><i data-bar style="--w:38%"></i></div></td><td>Watch</td></tr>
+            <tr class="vi-ok"><td>Prevent scald</td><td>Required</td><td>0.90</td><td>0.80</td><td>1.13</td><td><div class="vi-bar"><i data-bar style="--w:28%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-ok"><td>Enable pouring</td><td>Secondary</td><td>0.70</td><td>0.60</td><td>1.17</td><td><div class="vi-bar"><i data-bar style="--w:29%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-ok"><td>Resist corrosion</td><td>Secondary</td><td>0.50</td><td>0.45</td><td>1.11</td><td><div class="vi-bar"><i data-bar style="--w:28%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-attack"><td>Indicate status</td><td>Secondary</td><td>0.60</td><td>0.15</td><td>4.00</td><td><div class="vi-bar"><i data-bar style="--w:100%"></i></div></td><td>Attack</td></tr>
+            <tr class="vi-attack"><td>Convey esteem</td><td>Esteem</td><td>2.10</td><td>0.70</td><td>3.00</td><td><div class="vi-bar"><i data-bar style="--w:75%"></i></div></td><td>Challenge</td></tr>
+          </tbody>
+          <tfoot><tr><td>Total product</td><td></td><td>12.40</td><td>8.60</td><td>1.44</td><td></td><td>−€3.80 gap</td></tr></tfoot>
+        </table>
+      </div>
+      <p class="matrix-note">
+        "Indicate status" costs <strong>4× its worth</strong> — a €0.45-per-unit opportunity hiding in one line.
+        "Convey esteem" deserves a challenge backed by consumer data, not opinion. Multiply by annual volume and
+        this little table is the business case for the whole study — <em>this is how VE picks its battles.</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COST LEVERS ══════════ -->
+<section class="section section-alt" id="levers">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>04 · The Arsenal</p>
       <h2 data-reveal data-delay="100">36 Cost-Reduction <span class="grad-text">Idea-Generation Levers</span></h2>
       <p class="sec-lede" data-reveal data-delay="200">
         Every sustainable product-cost programme pulls from six lever families. Filter the arsenal —
@@ -358,10 +481,10 @@
 </section>
 
 <!-- ══════════ IDEATION ══════════ -->
-<section class="section section-alt" id="ideation">
+<section class="section" id="ideation">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>04 · The Spark</p>
+      <p class="kicker" data-reveal>05 · The Spark</p>
       <h2 data-reveal data-delay="100">Idea-Generation <span class="grad-text">Techniques</span></h2>
       <p class="sec-lede" data-reveal data-delay="200">
         The Creative Phase runs on structured divergence. Twelve battle-tested techniques —
@@ -404,10 +527,10 @@
 </section>
 
 <!-- ══════════ TECHNOLOGY ══════════ -->
-<section class="section" id="tech">
+<section class="section section-alt" id="tech">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>05 · The Stack</p>
+      <p class="kicker" data-reveal>06 · The Stack</p>
       <h2 data-reveal data-delay="100">Modern Technologies &amp; <span class="grad-text">Techniques</span></h2>
       <p class="sec-lede" data-reveal data-delay="200">
         The 2026 cost-engineering stack: physics-based cost models, scan-driven teardowns,
@@ -425,14 +548,40 @@
       <article class="tech-card tilt" data-reveal><span class="tech-n">07</span><h4>Digital Twin &amp; CAE-Driven Margin Removal</h4><p>Simulation-validated designs let you shave stacked safety factors with confidence; virtual DOE replaces expensive physical trials in material and process substitutions.</p><em>Prove it virtually, save it physically</em></article>
       <article class="tech-card tilt" data-reveal><span class="tech-n">08</span><h4>LLM Copilots &amp; Cost Knowledge Graphs</h4><p>Large language models mine warranty text, quotes, standards and past VAVE ideas; knowledge graphs link functions↔parts↔costs↔suppliers so no lesson is ever lost again.</p><em>Institutional memory, on demand</em></article>
     </div>
+
+    <div class="sc-anatomy" data-reveal>
+      <div class="sc-head">
+        <h3>Anatomy of a should-cost — <span class="grad-text">the glass box</span></h3>
+        <p>A quoted price is one opaque number. A should-cost model decomposes it into seven negotiable layers —
+        each built from physics and market rates, each a separate conversation with your supplier.</p>
+      </div>
+      <div class="sc-bar" id="scBar" aria-hidden="true">
+        <i class="s1" data-bar style="--w:32%"><span>Raw material · 32%</span></i>
+        <i class="s2" data-bar style="--w:24%"><span>Process &amp; machine · 24%</span></i>
+        <i class="s3" data-bar style="--w:12%"><span>Labour · 12%</span></i>
+        <i class="s4" data-bar style="--w:4%"><span>4%</span></i>
+        <i class="s5" data-bar style="--w:14%"><span>Overhead · 14%</span></i>
+        <i class="s6" data-bar style="--w:8%"><span>8%</span></i>
+        <i class="s7" data-bar style="--w:6%"><span>6%</span></i>
+      </div>
+      <div class="sc-legend" data-stagger>
+        <div class="scl" data-reveal><i class="s1"></i><b>Raw material — 32%</b><span>Mass × market price ÷ yield. Verify against commodity indices; index it in the contract.</span></div>
+        <div class="scl" data-reveal><i class="s2"></i><b>Process &amp; machine — 24%</b><span>Cycle time × machine-hour rate. Challenge cycle times with physics, rates with regional benchmarks.</span></div>
+        <div class="scl" data-reveal><i class="s3"></i><b>Direct labour — 12%</b><span>Operators per machine × regional wage. Automation level is the negotiable variable.</span></div>
+        <div class="scl" data-reveal><i class="s4"></i><b>Scrap &amp; yield — 4%</b><span>First-pass-yield assumptions hide money; ask for the actual OEE data.</span></div>
+        <div class="scl" data-reveal><i class="s5"></i><b>Overhead — 14%</b><span>Plant utilisation drives this — a supplier at 60% load charges you for idle air.</span></div>
+        <div class="scl" data-reveal><i class="s6"></i><b>SG&amp;A — 8%</b><span>Sales, admin, engineering recovery. Compare across the panel; outliers negotiate down.</span></div>
+        <div class="scl" data-reveal><i class="s7"></i><b>Margin — 6%</b><span>A fair, sustainable profit — transparency beats squeezing. Gain-share anything above it.</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ══════════ BENCHMARKING ══════════ -->
-<section class="section section-alt" id="benchmark">
+<section class="section" id="benchmark">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>06 · The Mirror</p>
+      <p class="kicker" data-reveal>07 · The Mirror</p>
       <h2 data-reveal data-delay="100">Teardown &amp; <span class="grad-text">Competitive Benchmarking</span></h2>
       <p class="sec-lede" data-reveal data-delay="200">
         Benchmarking answers the question VE always asks: <em>what is this function worth?</em>
@@ -478,10 +627,10 @@
 </section>
 
 <!-- ══════════ INDUSTRIES ══════════ -->
-<section class="section" id="industries">
+<section class="section section-alt" id="industries">
   <div class="container">
     <div class="sec-head">
-      <p class="kicker" data-reveal>07 · The Battlegrounds</p>
+      <p class="kicker" data-reveal>08 · The Battlegrounds</p>
       <h2 data-reveal data-delay="100">Industry <span class="grad-text">Playbooks</span></h2>
       <p class="sec-lede" data-reveal data-delay="200">
         The method is universal; the levers that bite are not. Eight industry playbooks with typical
@@ -695,12 +844,118 @@
   </div>
 </section>
 
+<!-- ══════════ GOVERNANCE / SAVINGS FUNNEL ══════════ -->
+<section class="section" id="governance">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>09 · The Operating System</p>
+      <h2 data-reveal data-delay="100">From workshop to <span class="grad-text">operating system</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        One-off studies decay; programmes compound. World-class organisations run VE as a permanent operating system —
+        a governed <strong>savings funnel</strong>, hard KPIs, and a fixed cadence that keeps ideas moving to the P&amp;L.
+      </p>
+    </div>
+
+    <div class="gov-wrap">
+      <div class="funnel" data-reveal>
+        <h3>The savings funnel <span>· a typical 320-idea wave</span></h3>
+        <div class="funnel-chart" id="funnelChart">
+          <div class="fn-row"><span>Ideas generated</span><div class="fn-bar"><i data-bar style="--w:100%" class="f1"></i></div><b>320</b></div>
+          <div class="fn-row"><span>Screened &amp; prioritised</span><div class="fn-bar"><i data-bar style="--w:40%" class="f2"></i></div><b>128</b></div>
+          <div class="fn-row"><span>Business cases validated</span><div class="fn-bar"><i data-bar style="--w:17%" class="f3"></i></div><b>54</b></div>
+          <div class="fn-row"><span>Approved by value board</span><div class="fn-bar"><i data-bar style="--w:11%" class="f4"></i></div><b>34</b></div>
+          <div class="fn-row"><span>Implemented — savings in P&amp;L</span><div class="fn-bar"><i data-bar style="--w:8%" class="f5"></i></div><b>24</b></div>
+        </div>
+        <p class="funnel-note">Roughly <strong>1 in 13 raw ideas</strong> reaches the P&amp;L — which is exactly why the Creative
+        Phase optimises for volume, and why the funnel needs governance, owners and dates at every stage. Ideas without
+        owners are opinions.</p>
+      </div>
+
+      <div class="gov-kpis" data-stagger>
+        <h3 data-reveal>KPIs that keep it honest</h3>
+        <div class="kpi" data-reveal><b>Funnel coverage</b><span>% of product cost under active VAVE study — target ≥ 60% on core lines.</span></div>
+        <div class="kpi" data-reveal><b>Idea conversion rate</b><span>Implemented ÷ generated. Falling conversion means weak development capacity, not weak ideas.</span></div>
+        <div class="kpi" data-reveal><b>Cost transparency</b><span>% of BOM value covered by a should-cost or cleansheet — target ≥ 80%.</span></div>
+        <div class="kpi" data-reveal><b>Savings velocity</b><span>€ landed in the P&amp;L per quarter, audited against the frozen baseline.</span></div>
+        <div class="kpi" data-reveal><b>Average payback</b><span>One-time cost ÷ annual savings — keep the portfolio under 12 months.</span></div>
+        <div class="kpi" data-reveal><b>Reuse index</b><span>% common parts across the portfolio — the quiet KPI behind every scale economy.</span></div>
+      </div>
+    </div>
+
+    <div class="cadence" data-stagger>
+      <div class="cad" data-reveal><b>Monthly</b><span>Funnel review: every idea has an owner, a stage and a date — or it's killed.</span></div>
+      <div class="cad" data-reveal><b>Quarterly</b><span>Wave planning: next products, next teardowns, savings targets re-baselined.</span></div>
+      <div class="cad" data-reveal><b>Annually</b><span>Value roadmap per product line, tied to margin plans and platform strategy.</span></div>
+      <div class="cad" data-reveal><b>Continuously</b><span>Capability building: facilitators certified (VMA · AVS · CVS), lessons fed into design rules.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GLOSSARY ══════════ -->
+<section class="section section-alt" id="glossary">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>10 · The Lexicon</p>
+      <h2 data-reveal data-delay="100">Speak <span class="grad-text">cost engineering</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">Twenty-four terms that carry every VAVE conversation. Type to filter.</p>
+    </div>
+    <input type="search" class="g-search" id="gSearch" placeholder="Search the glossary — try 'worth', 'cleansheet', 'buy-to-fly'…" aria-label="Search glossary" data-reveal />
+    <div class="g-grid" id="gGrid" data-stagger>
+      <div class="g-term" data-reveal><b>VAVE</b><span>Value Analysis / Value Engineering — the umbrella discipline of function-based cost optimisation, in production (VA) and in design (VE).</span></div>
+      <div class="g-term" data-reveal><b>Value Index</b><span>Cost ÷ Worth for a function. Above 1.0, you pay more than the function deserves; above 2.0, attack.</span></div>
+      <div class="g-term" data-reveal><b>Worth</b><span>The lowest cost that could still reliably perform a function — the theoretical floor VE measures against.</span></div>
+      <div class="g-term" data-reveal><b>Basic Function</b><span>The reason the product exists ("heat water"). Remove it and the product is pointless.</span></div>
+      <div class="g-term" data-reveal><b>Secondary Function</b><span>How this particular design happens to work — and therefore where most removable cost hides.</span></div>
+      <div class="g-term" data-reveal><b>FAST Diagram</b><span>Function Analysis System Technique — maps functions on a HOW→/←WHY logic axis between scope lines.</span></div>
+      <div class="g-term" data-reveal><b>Function–Cost Matrix</b><span>Allocates every unit of product cost to the functions it serves, exposing value mismatches.</span></div>
+      <div class="g-term" data-reveal><b>Should-Cost</b><span>A bottom-up estimate of what a part ought to cost, built from material, cycle time, rates and fair margin.</span></div>
+      <div class="g-term" data-reveal><b>Cleansheet</b><span>A fully transparent "glass-box" should-cost model, layer by layer, used for fact-based negotiation.</span></div>
+      <div class="g-term" data-reveal><b>LPP</b><span>Linear Performance Pricing — regressing price against a cost driver across a part family to find outliers.</span></div>
+      <div class="g-term" data-reveal><b>Target Costing</b><span>Market price − required margin = allowable cost, set before design starts and cascaded down.</span></div>
+      <div class="g-term" data-reveal><b>Design-to-Cost</b><span>Managing cost as a design requirement with the same authority as mass, performance or safety.</span></div>
+      <div class="g-term" data-reveal><b>Kaizen Costing</b><span>Continuous, incremental cost reduction during production — the running-change counterpart to target costing.</span></div>
+      <div class="g-term" data-reveal><b>Teardown</b><span>Systematic disassembly and costing of a product — yours or a competitor's — to harvest facts and ideas.</span></div>
+      <div class="g-term" data-reveal><b>Benchmarking</b><span>Structured comparison of cost, design, features and process against the best relevant reference points.</span></div>
+      <div class="g-term" data-reveal><b>DFMA</b><span>Design for Manufacture &amp; Assembly — minimum-part-count logic and assembly-friendly geometry, quantified.</span></div>
+      <div class="g-term" data-reveal><b>Buy-to-Fly Ratio</b><span>Raw material bought ÷ material in the finished part. Aerospace titanium can start at 8:1.</span></div>
+      <div class="g-term" data-reveal><b>OEE</b><span>Overall Equipment Effectiveness = availability × performance × quality — the denominator of machine cost per part.</span></div>
+      <div class="g-term" data-reveal><b>TCO</b><span>Total Cost of Ownership — purchase price plus lifetime energy, service, warranty and disposal cost.</span></div>
+      <div class="g-term" data-reveal><b>PPAP</b><span>Production Part Approval Process — the automotive gate every implemented VAVE change must clear.</span></div>
+      <div class="g-term" data-reveal><b>SKU Rationalisation</b><span>Pruning low-margin variants to release inventory, changeover, quality and admin cost across the chain.</span></div>
+      <div class="g-term" data-reveal><b>Gain-Share</b><span>Contractual split of verified savings with a supplier — the engine of supplier-driven VAVE.</span></div>
+      <div class="g-term" data-reveal><b>Best-Cost Country</b><span>Sourcing region chosen on total landed cost and risk — not just the lowest hourly wage.</span></div>
+      <div class="g-term" data-reveal><b>TRIZ</b><span>Theory of Inventive Problem Solving — resolves design contradictions using 40 principles distilled from patents.</span></div>
+    </div>
+    <p class="g-empty" id="gEmpty" hidden>No match — try a shorter fragment.</p>
+  </div>
+</section>
+
+<!-- ══════════ FAQ ══════════ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>11 · The Answers</p>
+      <h2 data-reveal data-delay="100">Questions every programme <span class="grad-text">asks first</span></h2>
+    </div>
+    <div class="faq-list" data-stagger>
+      <details class="faq-item" data-reveal><summary>What's the difference between Value Analysis, Value Engineering and VAVE?<i></i></summary><p>Value Analysis (VA) improves products already in production — teardown, question, re-engineer. Value Engineering (VE) applies the same function-based method during design, before cost is locked in, which is where the leverage is greatest. VAVE is the umbrella term for both; Value Management adds the governance layer that makes it permanent.</p></details>
+      <details class="faq-item" data-reveal><summary>When should we run a VE study?<i></i></summary><p>Four classic triggers: a new programme passing its concept or design gates (maximum leverage), margins compressed by price pressure or inflation, a teardown revealing a competitor's cost advantage, and — in mature organisations — simply the calendar: annual VAVE waves on every high-volume line, whether or not there's a crisis.</p></details>
+      <details class="faq-item" data-reveal><summary>Who should be in the workshop team?<i></i></summary><p>Six to ten people spanning design engineering, manufacturing, purchasing, quality, finance and service, plus key suppliers for their commodity insight — led by a trained facilitator who owns the process, not the content. Homogeneous teams produce homogeneous ideas; the diversity is the point.</p></details>
+      <details class="faq-item" data-reveal><summary>How long does a study take, end to end?<i></i></summary><p>Preparation 2–4 weeks (data, costed BOM, samples, benchmarks), the workshop itself 3–5 intensive days across the six SAVE phases, then 6–12 weeks of development and implementation sprints. Savings start landing as running changes within one to two quarters.</p></details>
+      <details class="faq-item" data-reveal><summary>How much does it actually save?<i></i></summary><p>A first structured wave on a product that's never had one typically finds 8–15% of product cost; mature programmes sustain 3–5% annually. Study ROI is routinely above 10:1 because the analysis cost is trivial against the recurring savings on volume products.</p></details>
+      <details class="faq-item" data-reveal><summary>Will cost reduction hurt our quality or brand?<i></i></summary><p>Not if it's genuine VE. The method is defined on the value ratio — required functions are protected or improved by construction, and any de-contenting must be justified with customer, warranty and usage data. Most quality damage comes from blunt percentage cuts, which is precisely what VE exists to replace.</p></details>
+      <details class="faq-item" data-reveal><summary>Which standards and certifications matter?<i></i></summary><p>The SAVE International Value Methodology Standard defines the job plan used worldwide; EN 12973 codifies Value Management in Europe. Practitioners certify through SAVE as VMA (associate), AVS (specialist) and CVS (certified value specialist) — a CVS-led study is the professional benchmark.</p></details>
+      <details class="faq-item" data-reveal><summary>How is VE different from ordinary cost-cutting?<i></i></summary><p>Cost-cutting starts from the ledger and removes whatever is easiest — often function the customer valued. VE starts from functions and their worth, quantifies mismatches with should-cost data, generates alternatives cross-functionally, and only then removes cost. One shrinks the product; the other improves the ratio.</p></details>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ ENGAGE / CTA ══════════ -->
 <section class="section section-cta" id="engage">
   <div class="container">
     <div class="cta-box" data-reveal>
       <div class="cta-orb"></div>
-      <p class="kicker">08 · Begin</p>
+      <p class="kicker">12 · Begin</p>
       <h2>Your product is carrying cost<br />that <span class="grad-text">adds no value.</span></h2>
       <p class="cta-sub">Pick one product line. Run one disciplined SAVE study. Watch the funnel fill.
       Value Engineering isn't a slogan — it's a job plan, and it starts with the Information Phase.</p>
@@ -725,9 +980,9 @@
         <p>Value Engineering · Product Cost Optimisation · Competitive Benchmarking.<br />
         Function-first thinking, from Lawrence Miles' 1947 insight to today's AI-driven cost stack.</p>
       </div>
-      <div class="footer-col"><h5>Method</h5><a href="#about">What is VE</a><a href="#save">SAVE Job Plan</a><a href="#ideation">Ideation Techniques</a><a href="#benchmark">Benchmarking</a></div>
-      <div class="footer-col"><h5>Arsenal</h5><a href="#levers">36 Cost Levers</a><a href="#tech">Technology Stack</a><a href="#industries">Industry Playbooks</a><a href="#engage">Start a Program</a></div>
-      <div class="footer-col"><h5>Glossary</h5><span>VAVE · FAST · TRIZ · DFMA</span><span>Should-Cost · Cleansheet · LPP</span><span>Design-to-Cost · Target Costing</span><span>Buy-to-Fly · OEE · TCO</span></div>
+      <div class="footer-col"><h5>Method</h5><a href="#about">What is VE</a><a href="#save">SAVE Job Plan</a><a href="#fast">Function Analysis</a><a href="#ideation">Ideation Techniques</a></div>
+      <div class="footer-col"><h5>Arsenal</h5><a href="#levers">36 Cost Levers</a><a href="#tech">Technology Stack</a><a href="#benchmark">Benchmarking</a><a href="#industries">Industry Playbooks</a></div>
+      <div class="footer-col"><h5>Reference</h5><a href="#governance">Savings Funnel &amp; KPIs</a><a href="#glossary">Glossary</a><a href="#faq">FAQ</a><a href="#engage">Start a Program</a></div>
     </div>
     <div class="footer-bar">
       <p class="footer-credit">Designed &amp; Developed by <b class="grad-text">Avinash Bhosale</b></p>
