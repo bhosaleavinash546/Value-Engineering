@@ -528,7 +528,8 @@
   if (!stage) return;
 
   const QUESTIONS = [
-    { id: "symptom", q: "What is the primary problem you're facing?", sub: "Pick the one that hurts most right now.", opts: [
+    /* ── Part A · Symptoms ── */
+    { id: "symptom", part: "Symptoms", q: "What is the primary problem you're facing?", sub: "Pick the one that hurts most right now.", opts: [
       ["cost", "Product cost is too high", "versus target cost or competitor price points"],
       ["margin", "Margins are shrinking", "price pressure, inflation, unfavourable mix"],
       ["warranty", "Warranty & quality costs are rising", "field failures, claims, rework, recalls"],
@@ -536,30 +537,75 @@
       ["complexity", "Too many variants / SKUs", "complexity is taxing engineering, inventory and quality"],
       ["npd", "New product is over its cost target", "still in development — hasn't launched yet"],
     ]},
-    { id: "where", q: "Where does most of the product cost sit?", sub: "Your best guess is fine.", opts: [
+    { id: "margin", part: "Symptoms", q: "How are product margins trending?", sub: "Against your target margin, over the last 2–3 years.", opts: [
+      ["healthy", "Healthy and stable", "at or above target margin"],
+      ["pressure", "Flat, but under pressure", "price increases no longer stick"],
+      ["below", "Below target and sliding", "cost inflation is outpacing our pricing"],
+      ["loss", "Some products lose money", "we ship negative-margin SKUs and know it"],
+    ]},
+    { id: "warranty", part: "Symptoms", q: "What's your warranty & quality cost situation?", sub: "Claims, rework, scrap, field campaigns.", opts: [
+      ["low", "Under control", "stable, and below ~1% of revenue"],
+      ["creep", "Creeping upward", "claims trending up year on year"],
+      ["pain", "A significant cost line", "warranty visibly hurts the P&L"],
+      ["crisis", "Acute — recalls or field campaigns", "we've had major quality events"],
+    ]},
+    { id: "price", part: "Symptoms", q: "How does your price compare for similar function?", sub: "Same performance, feature for feature.", opts: [
+      ["win", "We win on value", "customers accept our premium"],
+      ["par", "At par with the market", "we neither win nor lose on price"],
+      ["expensive", "We're 5–15% more expensive", "and it's costing us deals"],
+      ["unknown", "We honestly don't know", "no structured feature-price benchmarking"],
+    ]},
+    /* ── Part B · Product & cost exposures ── */
+    { id: "overspec", part: "Exposures", q: "What's the strongest sign of over-engineering in your product?", sub: "Over-specification is invisible cost — most products carry some.", opts: [
+      ["none", "None that we know of", "specs feel right-sized and challenged regularly"],
+      ["safety", "Legacy safety factors", "margins stacked over generations, never revisited"],
+      ["features", "Features customers don't use", "we suspect unvalued content in the product"],
+      ["tolerance", "Tolerances tighter than needed", "print callouts nobody can justify anymore"],
+      ["material", "Premium materials by habit", "grades chosen once and never challenged"],
+    ]},
+    { id: "complexity", part: "Exposures", q: "How complex is your product portfolio?", sub: "Variants, SKUs, engineer-to-order share.", opts: [
+      ["standard", "Few, standardised products", "high commonality across the range"],
+      ["managed", "Manageable variants", "some platform sharing, some proliferation"],
+      ["tail", "A long tail of variants", "many low-volume SKUs nobody dares to kill"],
+      ["custom", "Almost everything is custom", "engineer-to-order dominates our business"],
+    ]},
+    { id: "material", part: "Exposures", q: "How exposed are you to raw-material price swings?", sub: "Steel, copper, resins, electronics, energy.", opts: [
+      ["hedged", "Indexed and hedged", "contracts split raw material from conversion"],
+      ["partial", "Partially covered", "some indexation, plenty of leakage"],
+      ["exposed", "Fully exposed", "supplier increases pass straight through to us"],
+      ["unknown", "We don't track it", "no visibility of the material share in our prices"],
+    ]},
+    { id: "volume", part: "Exposures", q: "Have volumes changed significantly since the product was designed?", sub: "Processes chosen at design volumes drift off-optimum.", opts: [
+      ["same", "Roughly as planned", "the process still fits the volume"],
+      ["up", "Grown significantly", "2× or more — the process may be outgrown"],
+      ["down", "Dropped significantly", "tooling and automation are now oversized"],
+      ["mixed", "Shifted across variants", "the mix looks nothing like the plan"],
+    ]},
+    { id: "where", part: "Exposures", q: "Where does most of the product cost sit?", sub: "Your best guess is fine.", opts: [
       ["bom", "Purchased materials & components", "the BOM dominates — suppliers hold the cost"],
       ["mfg", "In-house manufacturing", "machining, moulding, welding, forming, finishing"],
       ["labour", "Assembly labour", "manual assembly hours drive the cost"],
       ["logistics", "Packaging & logistics", "freight, packaging and warehousing are heavy"],
       ["unknown", "Honestly — we don't know precisely", "we've never split cost down properly"],
     ]},
-    { id: "shouldcost", q: "How well do you know what your parts should cost?", sub: "Not what you pay — what they should cost.", opts: [
+    /* ── Part C · Capability & readiness ── */
+    { id: "shouldcost", part: "Readiness", q: "How well do you know what your parts should cost?", sub: "Not what you pay — what they should cost.", opts: [
       ["models", "We have should-cost models for most spend", "cleansheets or software-based models"],
       ["some", "Some ad-hoc estimates", "a few parts, when negotiations get tough"],
       ["quotes", "We rely on supplier quotes only", "the quote is the price — we can't challenge it"],
     ]},
-    { id: "teardown", q: "When did you last tear down a competitor's product?", sub: "Physically, part by part, with costs attached.", opts: [
+    { id: "teardown", part: "Readiness", q: "When did you last tear down a competitor's product?", sub: "Physically, part by part, with costs attached.", opts: [
       ["recent", "Within the last 12 months", "benchmarking is part of our rhythm"],
       ["old", "Years ago", "we did it once — the insights are stale"],
       ["never", "Never", "we've never systematically torn one down"],
     ]},
-    { id: "stage", q: "Where is the product in its lifecycle?", sub: "This decides whether it's VE (design) or VA (production).", opts: [
+    { id: "stage", part: "Readiness", q: "Where is the product in its lifecycle?", sub: "This decides whether it's VE (design) or VA (production).", opts: [
       ["dev", "In development — before production start", "requirements and design still movable"],
       ["early", "Early production", "launched recently, ramping volumes"],
       ["mature", "Mature, high-volume", "stable design, years of production ahead"],
       ["legacy", "Legacy / declining", "old product, still meaningful volumes"],
     ]},
-    { id: "maturity", q: "Have you run structured VAVE before?", sub: "Honest answer — it shapes the starting point.", opts: [
+    { id: "maturity", part: "Readiness", q: "Have you run structured VAVE before?", sub: "Honest answer — it shapes the starting point.", opts: [
       ["never", "Never", "cost work has been ad-hoc negotiations and budget cuts"],
       ["oneoff", "One-off workshops", "we've tried it — results faded without follow-up"],
       ["program", "A regular programme", "we run waves — looking to raise the game"],
@@ -577,28 +623,51 @@
 
   function buildRecs(a) {
     const recs = [];
-    if (a.stage === "dev") recs.push(["Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "#save", "SAVE Job Plan"]);
-    else if (a.stage === "legacy" || a.stage === "mature") recs.push(["Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "#save", "SAVE Job Plan"]);
-    else recs.push(["Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "#save", "SAVE Job Plan"]);
+    const add = (t, d, href, label) => { if (!recs.some((r) => r[0] === t)) recs.push([t, d, href, label]); };
 
-    if (a.symptom === "warranty") recs.push(["Function-analyse your failure Paretos", "Map warranty claims to functions, not parts — then redesign the under-performing functions and de-spec the over-performing ones.", "#fast", "Function Analysis"]);
-    if (a.symptom === "complexity") recs.push(["Attack the variant long tail", "Pareto margin by SKU, kill or merge the tail, and platform what remains — complexity levers pay across the whole chain.", "#levers", "Cost Levers"]);
-    if (a.symptom === "price" && a.teardown !== "recent") recs.push(["Tear down the competitor that's beating you", "Digitise their BOM, should-cost every part, and find exactly where their cost advantage lives.", "#benchmark", "Benchmarking"]);
+    // Lifecycle anchor play
+    if (a.stage === "dev") add("Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "#save", "SAVE Job Plan");
+    else if (a.stage === "early") add("Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "#save", "SAVE Job Plan");
+    else add("Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "#save", "SAVE Job Plan");
 
-    if (a.where === "bom") recs.push(["Get fact-based with suppliers", "Should-cost your top-spend parts and negotiate the gap with cleansheets and linear performance pricing — typically 5–15% on quoted prices.", "#levers", "Sourcing Levers"]);
-    else if (a.where === "labour") recs.push(["DFMA the assembly", "Part-count reduction and design-for-assembly typically cut 10–30% of assembly time — before any automation spend.", "#levers", "Design Levers"]);
-    else if (a.where === "mfg") recs.push(["Re-pick your processes for today's volumes", "Process substitution, cycle-time and yield levers bite hardest when cost sits in your own plants.", "#levers", "Manufacturing Levers"]);
-    else if (a.where === "logistics") recs.push(["Value-engineer the packaging & freight", "Pack spec, returnables and cube utilisation are the fastest payback levers in the book.", "#levers", "Packaging Levers"]);
-    else if (a.where === "unknown") recs.push(["Build cost transparency first", "You can't optimise what you can't see: build a costed BOM and cleansheet your top 20 parts — everything else follows from that baseline.", "#tech", "Cost Technology"]);
+    // Urgent P&L symptoms
+    if (a.margin === "loss") add("Triage the loss-makers first", "Pareto margin by SKU and fix, re-price or kill negative-margin products — the fastest P&L relief available.", "#levers", "Complexity Levers");
+    if (a.warranty === "pain" || a.warranty === "crisis" || a.symptom === "warranty") add("Function-analyse your failure Paretos", "Map warranty claims to functions, not parts — then redesign the under-performing functions and de-spec the over-performing ones.", "#fast", "Function Analysis");
+    if (a.symptom === "price" || a.price === "expensive" || a.price === "unknown") { if (a.teardown !== "recent") add("Tear down the competitor that's beating you", "Digitise their BOM, should-cost every part, and find exactly where their cost advantage lives.", "#benchmark", "Benchmarking"); }
 
-    if (a.shouldcost === "quotes") recs.push(["Stop negotiating blind", "Relying on quotes alone leaves 5–15% on the table. Start should-cost modelling your A-parts — software or cleansheets.", "#tech", "Should-Cost Stack"]);
-    if (a.teardown === "never" && a.symptom !== "price") recs.push(["Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "#benchmark", "Benchmarking"]);
+    // Over-engineering
+    if (a.overspec && a.overspec !== "none") {
+      const focus = { safety: "CAE-validated safety-factor right-sizing", features: "data-backed feature rationalisation", tolerance: "tolerance and surface-spec optimisation", material: "material-grade optimisation" }[a.overspec];
+      add("De-spec with data, not opinion", `Your flag: ${focus}. Over-engineering is invisible cost — function analysis makes it visible, validation makes it safe to remove.`, "#levers", "Design Levers");
+    }
 
-    if (a.maturity === "never") recs.push(["Start with one product, one SAVE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "#engage", "Start a Program"]);
-    else if (a.maturity === "oneoff") recs.push(["Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "#governance", "Governance & KPIs"]);
-    else recs.push(["Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "#tech", "Technology Stack"]);
+    // Complexity
+    if (a.complexity === "tail" || a.complexity === "custom" || a.symptom === "complexity") add("Attack the variant long tail", a.complexity === "custom" ? "Move from engineer-to-order to configure-to-order: modular architecture, standard interfaces, controlled options." : "Pareto margin by SKU, kill or merge the tail, and platform what remains — complexity levers pay across the whole chain.", "#levers", "Complexity Levers");
 
-    return recs.slice(0, 4);
+    // Commodity exposure
+    if (a.material === "exposed" || a.material === "unknown") add("Split raw material from conversion cost", "Index the material share, negotiate the conversion, hedge the volatile — and claw back windfalls when indices fall.", "#levers", "Sourcing Levers");
+
+    // Volume drift
+    if (a.volume === "up") add("Re-pick processes for today's volume", "Processes chosen at launch volumes are off-optimum after 2× growth: casting vs. machining, automation level, tooling class all deserve a re-run.", "#levers", "Manufacturing Levers");
+    else if (a.volume === "down") add("Right-size tooling and make-vs-buy", "Falling volumes flip the economics: family tooling, outsourcing commodity steps and asset consolidation stop the overhead bleed.", "#levers", "Manufacturing Levers");
+
+    // Cost concentration
+    if (a.where === "bom") add("Get fact-based with suppliers", "Should-cost your top-spend parts and negotiate the gap with cleansheets and linear performance pricing — typically 5–15% on quoted prices.", "#levers", "Sourcing Levers");
+    else if (a.where === "labour") add("DFMA the assembly", "Part-count reduction and design-for-assembly typically cut 10–30% of assembly time — before any automation spend.", "#levers", "Design Levers");
+    else if (a.where === "mfg") add("Attack conversion cost", "Process substitution, cycle-time, OEE and yield levers bite hardest when cost sits in your own plants.", "#levers", "Manufacturing Levers");
+    else if (a.where === "logistics") add("Value-engineer the packaging & freight", "Pack spec, returnables and cube utilisation are the fastest-payback levers in the book.", "#levers", "Packaging Levers");
+    else if (a.where === "unknown") add("Build cost transparency first", "You can't optimise what you can't see: build a costed BOM and cleansheet your top 20 parts — everything else follows from that baseline.", "#tech", "Cost Technology");
+
+    // Capability
+    if (a.shouldcost === "quotes") add("Stop negotiating blind", "Relying on quotes alone leaves 5–15% on the table. Start should-cost modelling your A-parts — software or cleansheets.", "#tech", "Should-Cost Stack");
+    if (a.teardown === "never") add("Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "#benchmark", "Benchmarking");
+
+    // Programme
+    if (a.maturity === "never") add("Start with one product, one SAVE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "#engage", "Start a Program");
+    else if (a.maturity === "oneoff") add("Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "#governance", "Governance & KPIs");
+    else add("Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "#tech", "Technology Stack");
+
+    return recs.slice(0, 5);
   }
 
   function opportunity(a) {
@@ -607,9 +676,17 @@
     if (a.teardown === "never") gaps += 2; else if (a.teardown === "old") gaps += 1;
     if (a.maturity === "never") gaps += 2; else if (a.maturity === "oneoff") gaps += 1;
     if (a.where === "unknown") gaps += 1;
-    if (gaps >= 4) return ["10–15%+", "large untapped headroom"];
+    if (a.overspec && a.overspec !== "none") gaps += 1;
+    if (a.complexity === "tail" || a.complexity === "custom") gaps += 1;
+    if (a.material === "exposed" || a.material === "unknown") gaps += 1;
+    if (a.volume && a.volume !== "same") gaps += 1;
+    if (a.margin === "below" || a.margin === "loss") gaps += 1;
+    if (a.warranty === "pain" || a.warranty === "crisis") gaps += 1;
+    if (a.price === "expensive" || a.price === "unknown") gaps += 1;
+    if (gaps >= 7) return ["12–18%", "major untapped headroom across several fronts"];
+    if (gaps >= 4) return ["10–15%", "large first-wave potential"];
     if (gaps >= 2) return ["8–12%", "solid first-wave potential"];
-    return ["3–5% / yr", "mature-programme territory"];
+    return ["3–5% / yr", "mature-programme territory — compound it annually"];
   }
 
   let step = 0;
@@ -618,7 +695,7 @@
 
   function renderQuestion() {
     const Q = QUESTIONS[step];
-    stepLabel.textContent = `Question ${step + 1} of ${QUESTIONS.length}`;
+    stepLabel.textContent = `${Q.part} · Question ${step + 1} of ${QUESTIONS.length}`;
     fill.style.width = (step / QUESTIONS.length) * 100 + "%";
     back.hidden = step === 0;
     restart.hidden = true;
