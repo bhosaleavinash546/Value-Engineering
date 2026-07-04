@@ -144,8 +144,24 @@
     ["A typical first structured VAVE wave on an unworked product yields about:", ["1–2%", "8–15%", "30–40%", "50%+"], 1],
     ["SAVE International's entry-level certification is:", ["CVS", "AVS", "VMA", "PVA"], 2],
     ["The Development Phase's key deliverable is:", ["A list of raw ideas", "A validated value proposal with savings, one-time cost, risk and timeline", "A press release", "A supplier contract"], 1],
+    ["By the time concept design is frozen, roughly how much lifecycle cost is committed vs. actually spent?", ["10% committed, 80% spent", "70–80% committed, under 10% spent", "50% committed, 50% spent", "100% committed, 100% spent"], 1],
+    ["In the Kano model, a 'reverse' attribute is one that:", ["Everyone loves", "Some customers actively dislike — removing it raises value AND cuts cost", "Works backwards mechanically", "Only engineers notice"], 1],
+    ["Kano 'must-be' requirements should be delivered:", ["With maximum excellence at any cost", "At minimum adequate cost — absence enrages, excellence earns nothing", "Only on premium variants", "After attractive features"], 1],
+    ["Which verbs should be BANNED from function statements?", ["Transmit, conduct, limit", "Provide, allow, enable — they measure nothing and smuggle solutions", "Heat, cool, contain", "Position, support, seal"], 1],
+    ["A 'required secondary' function (e.g. 'suppress interference') is:", ["Optional decoration", "Non-negotiable in existence, fully negotiable in HOW it's achieved", "Always the costliest function", "Outside the scope lines"], 1],
+    ["The final validation of a FAST diagram is:", ["Manager sign-off", "Reading it aloud in both directions — a wrong-sounding sentence is a misplaced card", "Counting the boxes", "Colour-coding the functions"], 1],
+    ["Which is NOT a valid way to estimate a function's worth?", ["Cheapest existing solution in any industry", "Physics/first-principles floor", "Setting worth equal to the current cost", "Historical best ever achieved"], 2],
+    ["In TRIZ, a physical contradiction (something must be X and not-X) is resolved by:", ["Voting", "Separation — in time, space, or condition", "Averaging the two states", "Buying better materials"], 1],
+    ["TRIZ's Ideal Final Result asks:", ["What would the most expensive solution look like?", "How would the function perform itself — no part, no cost, no harm?", "Which competitor is best?", "What does the patent office allow?"], 1],
+    ["Which company industrialised TRIZ — training 1,000+ engineers a year, with one DVD pick-up project reported to save over $100M?", ["Ford", "Samsung", "Nokia", "Boeing"], 1],
+    ["The US federal-aid highway VE programme (2002–2011) averaged implemented savings of about:", ["$1.7 million per year", "$17 million per year", "$1.7 billion per year", "$170 per project"], 2],
+    ["The IBM Proprinter DFMA case reduced assembly time from 1,866 seconds to about:", ["930 seconds", "600 seconds", "170 seconds", "1,700 seconds"], 2],
+    ["A machine-hour rate is calculated as:", ["Machine price ÷ parts made", "(Depreciation + energy + floorspace + maintenance) ÷ (annual hours × OEE)", "Operator wage × 2", "Supplier quote ÷ cycle time"], 1],
+    ["When costing a competitor's torn-down BOM you should assume:", ["Your own region, volumes and processes", "Their likely region, volumes and processes — and trust deltas more than absolutes", "Worst-case costs everywhere", "List prices for all materials"], 1],
+    ["Which statement about teardown legality is correct?", ["All reverse engineering is illegal", "Analysing open-market products is lawful; misappropriated confidential data is the bright line, and copying patented solutions needs a licence or design-around", "Patents are secret documents", "Ethics only apply to hardware"], 1],
   ];
   const PASS_MARK = 0.8;
+  const EXAM_SIZE = 30;
 
   /* ── Exam flow ── */
   const mount = $("#examMount");
@@ -155,9 +171,9 @@
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
     const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
     mount.innerHTML = `<div class="ex-gate">
-      <p>Thirty multiple-choice questions drawn from all twelve modules. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
+      <p>Thirty questions, drawn at random from a 45-question bank spanning all twelve modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
       to earn the <strong>ValueForge VE Practitioner Certificate</strong>. You can retake the exam as many times as you like —
-      questions are shuffled on every attempt.</p>
+      a fresh random 30 is drawn from the bank on every attempt.</p>
       ${remaining > 0 ? `<p class="ex-warn">Heads up: ${remaining} module${remaining > 1 ? "s" : ""} not yet completed. You can still attempt the exam, but we recommend finishing the course first.</p>` : ""}
       <button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>
     </div>`;
@@ -166,7 +182,7 @@
   }
 
   function startExam() {
-    order = BANK.map((_, i) => i).sort(() => Math.random() - 0.5);
+    order = BANK.map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, EXAM_SIZE);
     picks = new Array(BANK.length).fill(null);
     qi = 0;
     renderQ();
@@ -176,13 +192,13 @@
     const bi = order[qi];
     const [q, opts] = BANK[bi];
     mount.innerHTML = `
-      <div class="ex-q-head"><span>Question ${qi + 1} / ${BANK.length}</span><div class="ex-bar"><i style="width:${(qi / BANK.length) * 100}%"></i></div></div>
+      <div class="ex-q-head"><span>Question ${qi + 1} / ${EXAM_SIZE}</span><div class="ex-bar"><i style="width:${(qi / EXAM_SIZE) * 100}%"></i></div></div>
       <div class="ex-q">${q}</div>
       <div class="ex-opts">${opts.map((o, i) =>
         `<button class="ex-opt${picks[bi] === i ? " is-picked" : ""}" data-i="${i}"><span class="eo-key">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div>
       <div class="ex-nav">
         <button class="btn btn-ghost" id="exPrev" ${qi === 0 ? "disabled" : ""}>← Previous</button>
-        <button class="btn btn-primary" id="exNext" ${picks[bi] === null ? "disabled" : ""}>${qi === BANK.length - 1 ? "Submit exam ✓" : "Next →"}</button>
+        <button class="btn btn-primary" id="exNext" ${picks[bi] === null ? "disabled" : ""}>${qi === EXAM_SIZE - 1 ? "Submit exam ✓" : "Next →"}</button>
       </div>`;
     $$(".ex-opt", mount).forEach((b) => b.addEventListener("click", () => {
       picks[bi] = +b.dataset.i;
@@ -191,23 +207,24 @@
     }));
     $("#exPrev").addEventListener("click", () => { if (qi > 0) { qi--; renderQ(); } });
     $("#exNext").addEventListener("click", () => {
-      if (qi < BANK.length - 1) { qi++; renderQ(); } else finishExam();
+      if (qi < EXAM_SIZE - 1) { qi++; renderQ(); } else finishExam();
     });
   }
 
   function finishExam() {
     const wrong = [];
     let score = 0;
-    BANK.forEach(([q, opts, c], i) => {
-      if (picks[i] === c) score++;
-      else wrong.push([q, opts[picks[i]] ?? "—", opts[c]]);
+    order.forEach((bi) => {
+      const [q, opts, c] = BANK[bi];
+      if (picks[bi] === c) score++;
+      else wrong.push([q, opts[picks[bi]] ?? "—", opts[c]]);
     });
-    const pct = Math.round((score / BANK.length) * 100);
-    const passed = score >= Math.ceil(BANK.length * PASS_MARK);
+    const pct = Math.round((score / EXAM_SIZE) * 100);
+    const passed = score >= Math.ceil(EXAM_SIZE * PASS_MARK);
     const color = passed ? "#34d399" : "#f87171";
     mount.innerHTML = `<div class="ex-result">
       <div class="ex-ring"><svg viewBox="0 0 160 160"><circle class="rbg" cx="80" cy="80" r="72"/><circle class="rfg" id="exRing" cx="80" cy="80" r="72" style="stroke:${color}"/></svg>
-      <div class="rnum"><b style="color:${color}">${pct}%</b><span>${score} / ${BANK.length}</span></div></div>
+      <div class="rnum"><b style="color:${color}">${pct}%</b><span>${score} / ${EXAM_SIZE}</span></div></div>
       <div class="ex-verdict ${passed ? "pass" : "fail"}">${passed ? "Congratulations — you passed!" : "Not this time — " + Math.round(PASS_MARK * 100) + "% needed"}</div>
       <p class="ex-note">${passed
         ? "You've demonstrated a working command of the value methodology across all six phases and the modern cost-engineering toolkit. Enter your name to generate your certificate."
