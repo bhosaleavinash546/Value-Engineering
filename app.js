@@ -375,7 +375,7 @@
       ["top", "Home"], ["about", "Value Engineering"], ["save", "SAVE Job Plan"],
       ["fast", "Function Analysis"], ["levers", "Cost Levers"], ["ideation", "Ideation"],
       ["tech", "Technology"], ["benchmark", "Benchmarking"], ["industries", "Industries"],
-      ["governance", "Savings Funnel"], ["toolkit", "Toolkit"], ["glossary", "Glossary"], ["faq", "FAQ"], ["engage", "Begin"],
+      ["governance", "Savings Funnel"], ["toolkit", "Toolkit"], ["glossary", "Glossary"], ["faq", "FAQ"], ["diagnose", "Diagnosis"], ["engage", "Begin"],
     ].filter(([id]) => document.getElementById(id));
     dotnav.innerHTML = SECTIONS.map(([id, label]) =>
       `<a href="#${id}" data-label="${label}" aria-label="${label}"></a>`).join("");
@@ -518,4 +518,151 @@
     [eCur, eVol, eCost, eInd, eWave].forEach((el) => { el.addEventListener("input", calc); el.addEventListener("change", calc); });
     calc();
   }
+})();
+
+/* ════════ Value Diagnosis wizard ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const stage = $("#wizStage");
+  if (!stage) return;
+
+  const QUESTIONS = [
+    { id: "symptom", q: "What is the primary problem you're facing?", sub: "Pick the one that hurts most right now.", opts: [
+      ["cost", "Product cost is too high", "versus target cost or competitor price points"],
+      ["margin", "Margins are shrinking", "price pressure, inflation, unfavourable mix"],
+      ["warranty", "Warranty & quality costs are rising", "field failures, claims, rework, recalls"],
+      ["price", "We're losing deals on price", "competitors deliver similar function for less"],
+      ["complexity", "Too many variants / SKUs", "complexity is taxing engineering, inventory and quality"],
+      ["npd", "New product is over its cost target", "still in development — hasn't launched yet"],
+    ]},
+    { id: "where", q: "Where does most of the product cost sit?", sub: "Your best guess is fine.", opts: [
+      ["bom", "Purchased materials & components", "the BOM dominates — suppliers hold the cost"],
+      ["mfg", "In-house manufacturing", "machining, moulding, welding, forming, finishing"],
+      ["labour", "Assembly labour", "manual assembly hours drive the cost"],
+      ["logistics", "Packaging & logistics", "freight, packaging and warehousing are heavy"],
+      ["unknown", "Honestly — we don't know precisely", "we've never split cost down properly"],
+    ]},
+    { id: "shouldcost", q: "How well do you know what your parts should cost?", sub: "Not what you pay — what they should cost.", opts: [
+      ["models", "We have should-cost models for most spend", "cleansheets or software-based models"],
+      ["some", "Some ad-hoc estimates", "a few parts, when negotiations get tough"],
+      ["quotes", "We rely on supplier quotes only", "the quote is the price — we can't challenge it"],
+    ]},
+    { id: "teardown", q: "When did you last tear down a competitor's product?", sub: "Physically, part by part, with costs attached.", opts: [
+      ["recent", "Within the last 12 months", "benchmarking is part of our rhythm"],
+      ["old", "Years ago", "we did it once — the insights are stale"],
+      ["never", "Never", "we've never systematically torn one down"],
+    ]},
+    { id: "stage", q: "Where is the product in its lifecycle?", sub: "This decides whether it's VE (design) or VA (production).", opts: [
+      ["dev", "In development — before production start", "requirements and design still movable"],
+      ["early", "Early production", "launched recently, ramping volumes"],
+      ["mature", "Mature, high-volume", "stable design, years of production ahead"],
+      ["legacy", "Legacy / declining", "old product, still meaningful volumes"],
+    ]},
+    { id: "maturity", q: "Have you run structured VAVE before?", sub: "Honest answer — it shapes the starting point.", opts: [
+      ["never", "Never", "cost work has been ad-hoc negotiations and budget cuts"],
+      ["oneoff", "One-off workshops", "we've tried it — results faded without follow-up"],
+      ["program", "A regular programme", "we run waves — looking to raise the game"],
+    ]},
+  ];
+
+  const SYMPTOM_VERDICT = {
+    cost: ["Classic cost-out territory — and highly solvable.", "A gap to target or competitor cost is exactly what the SAVE job plan was built for: baseline the cost, analyse the functions, and attack the mismatches part by part."],
+    margin: ["Margin erosion needs a full value wave, not a discount hunt.", "When price can't move up, cost must move down without touching customer value — that's function-based cost optimisation across design, sourcing and complexity at once."],
+    warranty: ["Your cost problem is a value mismatch in disguise.", "Rising warranty means certain functions are under-delivering while others are over-specified. Function analysis on the failure Paretos finds both — and warranty savings usually dwarf piece-price savings."],
+    price: ["You need to know their cost, not just their price.", "Losing on price means a competitor delivers the same function for less. Teardown benchmarking plus should-cost tells you exactly where their advantage lives — then VE closes the gap."],
+    complexity: ["Complexity is a cost lever hiding in plain sight.", "Variant proliferation quietly taxes every function. SKU rationalisation, platforming and commonality typically release 2–5% of total COGS with zero customer-visible change."],
+    npd: ["Perfect timing — 80% of cost is committed in design.", "Value Engineering during development is worth roughly double what the same effort returns after launch. Design-to-cost targets plus function analysis at the next gate is the move."],
+  };
+
+  function buildRecs(a) {
+    const recs = [];
+    if (a.stage === "dev") recs.push(["Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "#save", "SAVE Job Plan"]);
+    else if (a.stage === "legacy" || a.stage === "mature") recs.push(["Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "#save", "SAVE Job Plan"]);
+    else recs.push(["Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "#save", "SAVE Job Plan"]);
+
+    if (a.symptom === "warranty") recs.push(["Function-analyse your failure Paretos", "Map warranty claims to functions, not parts — then redesign the under-performing functions and de-spec the over-performing ones.", "#fast", "Function Analysis"]);
+    if (a.symptom === "complexity") recs.push(["Attack the variant long tail", "Pareto margin by SKU, kill or merge the tail, and platform what remains — complexity levers pay across the whole chain.", "#levers", "Cost Levers"]);
+    if (a.symptom === "price" && a.teardown !== "recent") recs.push(["Tear down the competitor that's beating you", "Digitise their BOM, should-cost every part, and find exactly where their cost advantage lives.", "#benchmark", "Benchmarking"]);
+
+    if (a.where === "bom") recs.push(["Get fact-based with suppliers", "Should-cost your top-spend parts and negotiate the gap with cleansheets and linear performance pricing — typically 5–15% on quoted prices.", "#levers", "Sourcing Levers"]);
+    else if (a.where === "labour") recs.push(["DFMA the assembly", "Part-count reduction and design-for-assembly typically cut 10–30% of assembly time — before any automation spend.", "#levers", "Design Levers"]);
+    else if (a.where === "mfg") recs.push(["Re-pick your processes for today's volumes", "Process substitution, cycle-time and yield levers bite hardest when cost sits in your own plants.", "#levers", "Manufacturing Levers"]);
+    else if (a.where === "logistics") recs.push(["Value-engineer the packaging & freight", "Pack spec, returnables and cube utilisation are the fastest payback levers in the book.", "#levers", "Packaging Levers"]);
+    else if (a.where === "unknown") recs.push(["Build cost transparency first", "You can't optimise what you can't see: build a costed BOM and cleansheet your top 20 parts — everything else follows from that baseline.", "#tech", "Cost Technology"]);
+
+    if (a.shouldcost === "quotes") recs.push(["Stop negotiating blind", "Relying on quotes alone leaves 5–15% on the table. Start should-cost modelling your A-parts — software or cleansheets.", "#tech", "Should-Cost Stack"]);
+    if (a.teardown === "never" && a.symptom !== "price") recs.push(["Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "#benchmark", "Benchmarking"]);
+
+    if (a.maturity === "never") recs.push(["Start with one product, one SAVE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "#engage", "Start a Program"]);
+    else if (a.maturity === "oneoff") recs.push(["Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "#governance", "Governance & KPIs"]);
+    else recs.push(["Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "#tech", "Technology Stack"]);
+
+    return recs.slice(0, 4);
+  }
+
+  function opportunity(a) {
+    let gaps = 0;
+    if (a.shouldcost === "quotes") gaps += 2; else if (a.shouldcost === "some") gaps += 1;
+    if (a.teardown === "never") gaps += 2; else if (a.teardown === "old") gaps += 1;
+    if (a.maturity === "never") gaps += 2; else if (a.maturity === "oneoff") gaps += 1;
+    if (a.where === "unknown") gaps += 1;
+    if (gaps >= 4) return ["10–15%+", "large untapped headroom"];
+    if (gaps >= 2) return ["8–12%", "solid first-wave potential"];
+    return ["3–5% / yr", "mature-programme territory"];
+  }
+
+  let step = 0;
+  const answers = {};
+  const stepLabel = $("#wizStep"), fill = $("#wizFill"), back = $("#wizBack"), restart = $("#wizRestart");
+
+  function renderQuestion() {
+    const Q = QUESTIONS[step];
+    stepLabel.textContent = `Question ${step + 1} of ${QUESTIONS.length}`;
+    fill.style.width = (step / QUESTIONS.length) * 100 + "%";
+    back.hidden = step === 0;
+    restart.hidden = true;
+    stage.innerHTML = `<div class="wiz-q">${Q.q}</div><div class="wiz-sub">${Q.sub}</div>
+      <div class="wiz-opts">${Q.opts.map(([v, t, d]) =>
+        `<button class="wiz-opt${answers[Q.id] === v ? " is-picked" : ""}" data-v="${v}"><span class="wo-dot"></span><span><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>`;
+    stage.querySelectorAll(".wiz-opt").forEach((btn) => btn.addEventListener("click", () => {
+      answers[Q.id] = btn.dataset.v;
+      btn.classList.add("is-picked");
+      setTimeout(() => { step++; step < QUESTIONS.length ? renderQuestion() : renderResult(); }, 220);
+    }));
+  }
+
+  function renderResult() {
+    stepLabel.textContent = "Your diagnosis";
+    fill.style.width = "100%";
+    back.hidden = false;
+    restart.hidden = false;
+    const [head, body] = SYMPTOM_VERDICT[answers.symptom];
+    const [opp, oppNote] = opportunity(answers);
+    const recs = buildRecs(answers);
+    const phase = answers.stage === "dev" ? "VE — engineer it out in design" : "VA — optimise the running product";
+    const start = answers.maturity === "never" ? "One focused SAVE study" : answers.maturity === "oneoff" ? "Governed savings funnel" : "AI-augmented programme";
+    const mailBody = encodeURIComponent(
+      "Hi Avinash,\n\nI ran the Value Diagnosis on ValueForge. My situation:\n" +
+      QUESTIONS.map((Q) => `- ${Q.q} ${Q.opts.find((o) => o[0] === answers[Q.id])[1]}`).join("\n") +
+      `\n\nIndicated opportunity: ${opp}.\n\nI'd like to discuss how Value Engineering could help.\n`);
+    stage.innerHTML = `<div class="wiz-result">
+      <div class="wr-verdict"><h3>${head}</h3><p>${body}</p></div>
+      <div class="wr-stats">
+        <div class="wr-stat"><b>${opp}</b><span>indicated cost opportunity — ${oppNote}</span></div>
+        <div class="wr-stat"><b>${phase.split(" — ")[0]}</b><span>${phase.split(" — ")[1]}</span></div>
+        <div class="wr-stat"><b>${start}</b><span>recommended starting point</span></div>
+      </div>
+      <h4>Your recommended plays</h4>
+      <div class="wr-recs">${recs.map(([t, d, href, label], i) =>
+        `<div class="wr-rec"><i>${i + 1}</i><span><b>${t}</b><small>${d} → <a href="${href}">${label}</a></small></span></div>`).join("")}</div>
+      <div class="wr-actions">
+        <a class="btn btn-primary" href="mailto:bhosale.avinash546@gmail.com?subject=${encodeURIComponent("Value Diagnosis — let's talk")}&body=${mailBody}">✉ Email this diagnosis to Avinash</a>
+        <a class="btn btn-ghost" href="#toolkit">Get the free toolkit</a>
+      </div></div>`;
+  }
+
+  back.addEventListener("click", () => { step = step >= QUESTIONS.length ? QUESTIONS.length - 1 : Math.max(0, step - 1); renderQuestion(); });
+  restart.addEventListener("click", () => { step = 0; for (const k in answers) delete answers[k]; renderQuestion(); });
+  renderQuestion();
 })();

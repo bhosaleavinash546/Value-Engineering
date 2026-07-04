@@ -36,7 +36,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
 </head>
@@ -1016,6 +1016,29 @@
   </div>
 </section>
 
+<!-- ══════════ VALUE DIAGNOSIS ══════════ -->
+<section class="section section-alt" id="diagnose">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>13 · The Diagnosis</p>
+      <h2 data-reveal data-delay="100">What's hurting your product? <span class="accent">Let's find out.</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        Six quick questions about your cost, margin, quality and complexity situation — and you'll get a tailored
+        read on where Value Engineering will bite hardest, what it's likely worth, and where to start.
+      </p>
+    </div>
+
+    <div class="wizard" id="wizard" data-reveal>
+      <div class="wiz-progress"><span id="wizStep">Question 1 of 6</span><div class="wiz-bar"><i id="wizFill"></i></div></div>
+      <div class="wiz-stage" id="wizStage"></div>
+      <div class="wiz-nav">
+        <button class="btn btn-ghost" id="wizBack" hidden>← Back</button>
+        <button class="btn btn-ghost" id="wizRestart" hidden>↻ Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ ENGAGE / CTA ══════════ -->
 <section class="section section-cta" id="engage">
   <div class="container">
@@ -1059,7 +1082,7 @@
 
     <div class="cta-box" data-reveal>
       <div class="cta-orb"></div>
-      <p class="kicker">13 · Begin</p>
+      <p class="kicker">14 · Begin</p>
       <h2>Your product is carrying cost<br />that <span class="grad-text">adds no value.</span></h2>
       <p class="cta-sub">Pick one product line. Run one disciplined SAVE study. Watch the funnel fill.
       Value Engineering isn't a slogan — it's a job plan, and it starts with the Information Phase.</p>
