@@ -223,3 +223,17 @@ html[data-theme="light"] .qc-opt.is-wrong{background:rgba(190,50,50,.1);color:#b
 html[data-theme="light"] .qc-expl.show-wrong{color:#b91c1c}
 html[data-theme="light"] .tr-badge.is-earned{color:#966312}
 html[data-theme="light"] .tmod,html[data-theme="light"] .tr-sidebar{box-shadow:0 2px 14px rgba(20,30,60,.05)}
+
+/* ── Case study & pitfalls boxes ── */
+.tcase{border:1px solid rgba(46,111,232,.4);border-radius:14px;background:rgba(46,111,232,.06);padding:1.2rem 1.4rem;margin:1.6rem 0}
+.tcase h4{font-family:var(--font-m);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc1);margin-bottom:.6rem}
+.tcase h4::before{content:"📚 "}
+.tcase p{font-size:.88rem;color:var(--muted);margin:0;line-height:1.7}
+.tcase p b{color:var(--txt)}
+.tcase p i{font-size:.76rem;color:var(--acc1);font-style:normal;display:block;margin-top:.55rem}
+.tpit{border-left:3px solid #c0504f;background:rgba(190,80,79,.06);border-radius:0 14px 14px 0;padding:1.1rem 1.3rem;margin:1.4rem 0}
+.tpit h4{font-family:var(--font-m);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#e58b8a;margin-bottom:.55rem}
+.tpit ul{list-style:none;display:grid;gap:.35rem}
+.tpit li{font-size:.84rem;color:var(--muted);padding-left:1.2rem;position:relative}
+.tpit li::before{content:"⚠";position:absolute;left:0;color:#e58b8a;font-size:.75rem}
+html[data-theme="light"] .tpit h4,html[data-theme="light"] .tpit li::before{color:#b3403f}
