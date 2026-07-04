@@ -731,3 +731,8 @@ section[id]{scroll-margin-top:80px}
 .wr-actions{display:flex;gap:.8rem;flex-wrap:wrap}
 @media (max-width:700px){.wr-stats{grid-template-columns:1fr}}
 [hidden]{display:none!important}
+
+/* ── Academy links ── */
+.nav-train{color:var(--acc3)!important;font-weight:600}
+.tool-academy{border-color:rgba(46,111,232,.5);background:rgba(46,111,232,.08)}
+.tool-academy:hover{border-color:var(--acc1)}
