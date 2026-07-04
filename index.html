@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ValueForge — Value Engineering, Product Cost Optimisation & Benchmarking</title>
+<meta name="description" content="A deep, practical playbook for Value Engineering (VAVE), Product Cost Optimisation & Competitive Benchmarking — the SAVE 6-phase job plan, 36 cost-reduction levers, ideation techniques, modern cost technologies, and industry-specific strategies for Automotive, Consumer Products, Heavy Machinery, Home Appliances and more." />
+<meta property="og:title" content="ValueForge — Value Engineering & Product Cost Optimisation" />
+<meta property="og:description" content="SAVE 6-phase job plan · 36 cost levers · TRIZ, SCAMPER & FAST ideation · Should-cost, teardown & benchmarking · 8 industry playbooks." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
+</head>
+<body>
+
+<!-- ══════════ PRELOADER ══════════ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader-inner">
+    <div class="preloader-logo">Value<span>Forge</span></div>
+    <div class="preloader-formula">V = <em>F</em> / <em>C</em></div>
+    <div class="preloader-bar"><i id="preloaderFill"></i></div>
+    <div class="preloader-count" id="preloaderCount">0%</div>
+  </div>
+  <div class="preloader-curtain c1"></div>
+  <div class="preloader-curtain c2"></div>
+</div>
+
+<!-- ══════════ CHROME ══════════ -->
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav" id="nav" aria-label="Primary">
+  <div class="nav-inner container">
+    <a class="brand" href="#top">Value<span>Forge</span><em class="brand-tag">VE · Cost · Benchmark</em></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about" data-spy>Value Engineering</a>
+      <a href="#save" data-spy>SAVE Job Plan</a>
+      <a href="#levers" data-spy>Cost Levers</a>
+      <a href="#ideation" data-spy>Ideation</a>
+      <a href="#tech" data-spy>Technology</a>
+      <a href="#benchmark" data-spy>Benchmarking</a>
+      <a href="#industries" data-spy>Industries</a>
+      <a class="nav-cta magnetic" href="#engage">Start a Program</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<header class="hero" id="top">
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-orb o1"></div><div class="hero-orb o2"></div><div class="hero-orb o3"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <div class="container hero-inner">
+    <p class="hero-kicker" data-reveal>ENGINEER VALUE · OPTIMISE COST · BENCHMARK THE BEST</p>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="line"><span class="w">Every</span> <span class="w">product</span> <span class="w">hides</span></span>
+      <span class="line"><span class="w grad">20–40%</span> <span class="w">of</span> <span class="w">avoidable</span> <span class="w">cost.</span></span>
+      <span class="line"><span class="w">We</span> <span class="w">engineer</span> <span class="w">it</span> <span class="w grad2">out.</span></span>
+    </h1>
+    <p class="hero-sub" data-reveal data-delay="500">
+      The complete discipline of <strong>Value Engineering / Value Analysis (VAVE)</strong>, <strong>should-cost driven
+      product cost optimisation</strong> and <strong>competitive teardown benchmarking</strong> — function by function,
+      part by part, cent by cent. Maximum function. Minimum cost. Zero compromise on quality.
+    </p>
+    <div class="hero-ctas" data-reveal data-delay="650">
+      <a href="#save" class="btn btn-primary magnetic">Explore the SAVE Job Plan <span class="btn-arr">→</span></a>
+      <a href="#levers" class="btn btn-ghost magnetic">36 Cost Reduction Levers</a>
+    </div>
+
+    <div class="hero-stats" data-reveal data-delay="800">
+      <div class="hstat"><b><span data-count="8"></span>–<span data-count="15"></span>%</b><span>typical product-cost reduction per VAVE wave</span></div>
+      <div class="hstat"><b><span data-count="80"></span>%</b><span>of lifecycle cost is committed during design</span></div>
+      <div class="hstat"><b><span data-count="10"></span>:1+</b><span>return on a well-run value engineering study</span></div>
+      <div class="hstat"><b><span data-count="300"></span>+</b><span>ideas generated in a focused cross-functional workshop</span></div>
+    </div>
+  </div>
+
+  <a class="scroll-hint" href="#about" aria-label="Scroll"><span></span></a>
+</header>
+
+<!-- ══════════ MARQUEE ══════════ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Value Engineering</span><i>◆</i><span>VAVE</span><i>◆</i><span>Should-Cost</span><i>◆</i><span>Cleansheet</span><i>◆</i><span>Teardown Benchmarking</span><i>◆</i><span>FAST Diagram</span><i>◆</i><span>TRIZ</span><i>◆</i><span>Design-to-Cost</span><i>◆</i><span>DFMA</span><i>◆</i><span>Function Analysis</span><i>◆</i><span>Target Costing</span><i>◆</i><span>Linear Performance Pricing</span><i>◆</i>
+    <span>Value Engineering</span><i>◆</i><span>VAVE</span><i>◆</i><span>Should-Cost</span><i>◆</i><span>Cleansheet</span><i>◆</i><span>Teardown Benchmarking</span><i>◆</i><span>FAST Diagram</span><i>◆</i><span>TRIZ</span><i>◆</i><span>Design-to-Cost</span><i>◆</i><span>DFMA</span><i>◆</i><span>Function Analysis</span><i>◆</i><span>Target Costing</span><i>◆</i><span>Linear Performance Pricing</span><i>◆</i>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════ WHAT IS VE ══════════ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>01 · The Discipline</p>
+      <h2 data-reveal data-delay="100">Value is a ratio.<br /><span class="grad-text">Engineer both sides of it.</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        Born at General Electric in 1947, when engineer <strong>Lawrence D. Miles</strong> discovered that wartime material
+        substitutes often performed <em>better</em> for <em>less</em>, Value Engineering is a systematic, function-oriented
+        method to improve the value of products, processes and projects — now codified worldwide by
+        <strong>SAVE International</strong>.
+      </p>
+    </div>
+
+    <div class="value-formula" data-reveal data-delay="250">
+      <div class="vf-eq">
+        <span class="vf-v">VALUE</span><span class="vf-op">=</span>
+        <span class="vf-frac"><b>FUNCTION</b><small>what it must do — performance, reliability, esteem</small><hr /><b>COST</b><small>total lifecycle cost to deliver that function</small></span>
+      </div>
+      <div class="vf-ways" data-stagger>
+        <div class="vf-way" data-reveal><b>F → · C ↓</b><span>Same function,<br />lower cost</span><em>Classic cost-out</em></div>
+        <div class="vf-way" data-reveal><b>F ↑ · C →</b><span>More function,<br />same cost</span><em>Value-up</em></div>
+        <div class="vf-way" data-reveal><b>F ↑ · C ↓</b><span>More function,<br />lower cost</span><em>The VE ideal</em></div>
+        <div class="vf-way" data-reveal><b>F ↑↑ · C ↑</b><span>Function grows<br />faster than cost</span><em>Premiumisation</em></div>
+        <div class="vf-way" data-reveal><b>F ↘ · C ↓↓</b><span>Trim unvalued function,<br />slash cost</span><em>De-content with data</em></div>
+      </div>
+    </div>
+
+    <div class="triad" data-stagger>
+      <article class="card tilt" data-reveal>
+        <div class="card-num">VA</div>
+        <h3>Value Analysis</h3>
+        <p>Applied to <strong>existing products</strong> in production. Tear down what ships today, question every function,
+        every spec, every part — and remove the cost that customers never asked to pay for.</p>
+        <ul class="mini-list"><li>Current BOM &amp; process as baseline</li><li>Teardown + should-cost gap analysis</li><li>Fast paybacks, running-change friendly</li></ul>
+      </article>
+      <article class="card tilt" data-reveal>
+        <div class="card-num">VE</div>
+        <h3>Value Engineering</h3>
+        <p>Applied <strong>during design</strong> — before cost is locked in. Since ~80% of cost is committed by early
+        design decisions, this is where a euro of effort returns ten.</p>
+        <ul class="mini-list"><li>Design-to-cost targets cascaded to subsystems</li><li>Function-first concept selection</li><li>Cost avoidance, not just cost reduction</li></ul>
+      </article>
+      <article class="card tilt" data-reveal>
+        <div class="card-num">VM</div>
+        <h3>Value Management</h3>
+        <p>The <strong>governance layer</strong>: a permanent operating system of value targets, idea pipelines, tracking
+        funnels and capability building — so VAVE is a habit, not a one-time project.</p>
+        <ul class="mini-list"><li>Savings funnel: idea → validated → implemented</li><li>Cross-functional value teams</li><li>Annual cost roadmaps per product line</li></ul>
+      </article>
+    </div>
+
+    <div class="value-types" data-reveal>
+      <h4>The four classic types of value <span>· after L.D. Miles</span></h4>
+      <div class="vt-grid" data-stagger>
+        <div class="vt" data-reveal><b>Use value</b><span>What the product does — its work-performing functions.</span></div>
+        <div class="vt" data-reveal><b>Esteem value</b><span>What makes it desirable — brand, finish, perceived quality.</span></div>
+        <div class="vt" data-reveal><b>Exchange value</b><span>What it can be traded for — resale, market price power.</span></div>
+        <div class="vt" data-reveal><b>Cost value</b><span>The sum of material, labour, overhead and lifecycle cost.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SAVE JOB PLAN ══════════ -->
+<section class="section section-alt" id="save">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>02 · The Method</p>
+      <h2 data-reveal data-delay="100">The 6-Phase <span class="grad-text">SAVE Job Plan</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        The internationally standardised workshop methodology of SAVE International. Disciplined, sequential and
+        function-driven — bracketed by rigorous <strong>pre-workshop preparation</strong> and
+        <strong>post-workshop implementation &amp; audit</strong>.
+      </p>
+    </div>
+
+    <div class="save-stepper" data-reveal>
+      <div class="save-tabs" role="tablist" id="saveTabs">
+        <button class="save-tab is-active" role="tab" data-tab="0"><b>1</b><span>Information</span></button>
+        <button class="save-tab" role="tab" data-tab="1"><b>2</b><span>Function Analysis</span></button>
+        <button class="save-tab" role="tab" data-tab="2"><b>3</b><span>Creative</span></button>
+        <button class="save-tab" role="tab" data-tab="3"><b>4</b><span>Evaluation</span></button>
+        <button class="save-tab" role="tab" data-tab="4"><b>5</b><span>Development</span></button>
+        <button class="save-tab" role="tab" data-tab="5"><b>6</b><span>Presentation</span></button>
+        <i class="save-tab-ind" id="saveInd"></i>
+      </div>
+
+      <div class="save-panels" id="savePanels">
+        <article class="save-panel is-active">
+          <div class="sp-main">
+            <h3><em>Phase 1</em> Information — know the thing cold</h3>
+            <p>Assemble the complete picture before touching a single idea: scope &amp; constraints, customer and market
+            requirements, quality history, warranty data, volumes, and a <strong>fully costed BOM</strong> down to material,
+            process, labour and overhead. Visit the line. Touch the parts. Ask Miles' founding questions:
+            <em>What is it? What does it do? What does it cost? What is it worth? What else could do the job?</em></p>
+            <div class="sp-cols">
+              <div><h5>Key activities</h5><ul><li>Project scoping &amp; savings target setting</li><li>Cost breakdown &amp; Pareto (top cost drivers)</li><li>Voice of Customer / QFD requirement capture</li><li>Site &amp; supplier visits, sample collection</li><li>Competitive samples procured for teardown</li></ul></div>
+              <div><h5>Tools</h5><ul><li>Cost models &amp; spend cubes</li><li>Pareto / ABC analysis</li><li>QFD &amp; Kano model</li><li>Process flow mapping</li></ul></div>
+            </div>
+          </div>
+          <aside class="sp-side"><h5>Deliverable</h5><p>A validated cost &amp; requirement baseline the whole team trusts — the "single source of truth" for the study.</p><div class="sp-metric"><b>~20%</b><span>of workshop effort — never skip it</span></div></aside>
+        </article>
+
+        <article class="save-panel">
+          <div class="sp-main">
+            <h3><em>Phase 2</em> Function Analysis — the heart of VE</h3>
+            <p>This is what separates VE from generic cost-cutting. Express every element as a two-word
+            <strong>verb–noun function</strong> ("transmit torque", "resist corrosion", "convey esteem"). Classify each as
+            <strong>basic</strong> (why the product exists) or <strong>secondary</strong> (how this design happens to do it).
+            Map logic with a <strong>FAST diagram</strong> (How? → / ← Why?), then build a
+            <strong>function–cost matrix</strong>: allocate every euro of cost to the functions it serves.</p>
+            <div class="sp-cols">
+              <div><h5>Key activities</h5><ul><li>Random function identification (verb + noun)</li><li>Basic vs. secondary classification</li><li>FAST diagramming with scope lines</li><li>Function–cost &amp; function–worth allocation</li><li>Value Index = Cost ÷ Worth per function</li></ul></div>
+              <div><h5>Tools</h5><ul><li>FAST diagram (Technical / Customer)</li><li>Function–cost matrix</li><li>Value mismatch ranking</li><li>Worth estimation (lowest cost to achieve function)</li></ul></div>
+            </div>
+            <div class="fast-demo" aria-hidden="true">
+              <div class="fast-label">FAST logic&nbsp;·&nbsp;<b>HOW →</b>&nbsp;&nbsp;<b>← WHY</b></div>
+              <div class="fast-flow"><span class="fnode hi">Higher-order<br /><b>Move People</b></span><i>→</i><span class="fnode basic">Basic<br /><b>Transmit Torque</b></span><i>→</i><span class="fnode">Secondary<br /><b>Couple Shafts</b></span><i>→</i><span class="fnode">Secondary<br /><b>Fasten Flange</b></span></div>
+            </div>
+          </div>
+          <aside class="sp-side"><h5>Deliverable</h5><p>A ranked list of <b>value mismatches</b> — functions whose cost far exceeds their worth. These become the creative targets.</p><div class="sp-metric"><b>C/W &gt; 2</b><span>flags a function as a prime VE target</span></div></aside>
+        </article>
+
+        <article class="save-panel">
+          <div class="sp-main">
+            <h3><em>Phase 3</em> Creative — quantity breeds quality</h3>
+            <p>Generate the maximum number of ways to perform each targeted <em>function</em> — not to tweak the existing
+            <em>design</em>. Judgement is strictly deferred (Osborn's rule); wild ideas are welcomed because they stretch the
+            solution space. A strong workshop produces <strong>200–400 raw ideas</strong> across brainstorming, brainwriting,
+            TRIZ, SCAMPER and analogy techniques — see the full <a href="#ideation">ideation arsenal ↓</a>.</p>
+            <div class="sp-cols">
+              <div><h5>Key activities</h5><ul><li>Function-by-function idea storms</li><li>Cross-industry analogy hunting</li><li>Supplier &amp; shop-floor idea harvesting</li><li>Idea capture with owner &amp; function tag</li></ul></div>
+              <div><h5>Ground rules</h5><ul><li>Defer all judgement</li><li>Quantity over quality</li><li>Build on others' ideas ("yes, and…")</li><li>Attack functions, not people or departments</li></ul></div>
+            </div>
+          </div>
+          <aside class="sp-side"><h5>Deliverable</h5><p>A tagged idea bank mapped to functions and cost pools — raw material for evaluation.</p><div class="sp-metric"><b>200–400</b><span>ideas from a well-run cross-functional team</span></div></aside>
+        </article>
+
+        <article class="save-panel">
+          <div class="sp-main">
+            <h3><em>Phase 4</em> Evaluation — separate signal from noise</h3>
+            <p>Funnel hundreds of ideas to a shortlist worth engineering effort. First a coarse screen
+            (feasible / promising / parked), then structured ranking on savings potential, technical risk, investment,
+            time-to-implement and customer impact. Combine complementary ideas into <strong>scenarios</strong> and select
+            champions who will carry each one forward.</p>
+            <div class="sp-cols">
+              <div><h5>Key activities</h5><ul><li>Go / grow / park screening</li><li>Weighted criteria scoring</li><li>Pugh concept selection vs. datum design</li><li>Idea clustering into implementation scenarios</li><li>Effort–impact prioritisation matrix</li></ul></div>
+              <div><h5>Tools</h5><ul><li>Pugh matrix</li><li>Weighted evaluation matrix</li><li>Effort–impact (PICK) chart</li><li>Preliminary risk assessment (pre-FMEA)</li></ul></div>
+            </div>
+          </div>
+          <aside class="sp-side"><h5>Deliverable</h5><p>A prioritised shortlist — typically the best 10–15% of ideas — each with an owner, savings estimate and risk grade.</p><div class="sp-metric"><b>≈ 1 in 8</b><span>raw ideas survives into development</span></div></aside>
+        </article>
+
+        <article class="save-panel">
+          <div class="sp-main">
+            <h3><em>Phase 5</em> Development — from idea to business case</h3>
+            <p>Champions convert shortlisted ideas into <strong>implementable value proposals</strong>: engineering
+            validation (CAE, DVP&amp;R test plans), supplier quotes or should-cost estimates, tooling and investment needs,
+            quality/regulatory impact, and a before/after cost walk. Every proposal answers: what changes, what it saves,
+            what it costs to implement, what could go wrong, and when it lands.</p>
+            <div class="sp-cols">
+              <div><h5>Key activities</h5><ul><li>Technical feasibility &amp; simulation</li><li>Should-cost &amp; supplier quotation</li><li>Design FMEA &amp; validation planning</li><li>Implementation cost &amp; payback calculation</li><li>Change management assessment (PPAP, re-cert)</li></ul></div>
+              <div><h5>Tools</h5><ul><li>Cleansheet cost models</li><li>DFMEA / PFMEA</li><li>Business-case templates</li><li>Tolerance &amp; CAE studies</li></ul></div>
+            </div>
+          </div>
+          <aside class="sp-side"><h5>Deliverable</h5><p>Bankable value proposals with net savings, one-time cost, payback and a dated implementation plan.</p><div class="sp-metric"><b>&lt; 12 mo</b><span>payback target for most running-change proposals</span></div></aside>
+        </article>
+
+        <article class="save-panel">
+          <div class="sp-main">
+            <h3><em>Phase 6</em> Presentation — sell it, then land it</h3>
+            <p>Present proposals to the decision board: the value logic, the numbers, the risks, the asks. Secure explicit
+            <strong>go / no-go decisions and resources</strong>, then transition into implementation with tracked owners and
+            milestones. The job plan only "counts" when savings hit the P&amp;L — so audit implemented ideas against the
+            baseline and feed lessons back into design rules and cost standards.</p>
+            <div class="sp-cols">
+              <div><h5>Key activities</h5><ul><li>Management presentation &amp; decision log</li><li>Implementation roadmap with owners &amp; dates</li><li>Savings funnel tracking (identified → implemented)</li><li>Post-implementation audit vs. baseline</li><li>Lessons learned → design guidelines update</li></ul></div>
+              <div><h5>Tools</h5><ul><li>Savings funnel dashboards</li><li>Stage-gate change process</li><li>Idea-to-P&amp;L tracking IDs</li></ul></div>
+            </div>
+          </div>
+          <aside class="sp-side"><h5>Deliverable</h5><p>Approved proposals in execution, a live savings funnel, and institutional knowledge captured for the next programme.</p><div class="sp-metric"><b>P&amp;L</b><span>the only scoreboard that matters</span></div></aside>
+        </article>
+      </div>
+    </div>
+
+    <div class="save-bracket" data-stagger>
+      <div class="sb" data-reveal><b>Pre-workshop</b><span>Team selection · data collection · sample procurement · cost baselining · logistics</span></div>
+      <div class="sb sb-mid" data-reveal><b>6-phase workshop</b><span>Typically 3–5 intensive days, cross-functional: engineering, purchasing, manufacturing, quality, finance, suppliers</span></div>
+      <div class="sb" data-reveal><b>Post-workshop</b><span>Implementation sprints · savings audit · knowledge capture · next-wave planning</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COST LEVERS ══════════ -->
+<section class="section" id="levers">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>03 · The Arsenal</p>
+      <h2 data-reveal data-delay="100">36 Cost-Reduction <span class="grad-text">Idea-Generation Levers</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        Every sustainable product-cost programme pulls from six lever families. Filter the arsenal —
+        each lever states where it bites and the savings range it typically unlocks.
+      </p>
+    </div>
+
+    <div class="filter-bar" data-reveal id="leverFilters">
+      <button class="chip is-active" data-filter="all">All 36</button>
+      <button class="chip" data-filter="design">Product Design</button>
+      <button class="chip" data-filter="material">Materials</button>
+      <button class="chip" data-filter="mfg">Manufacturing</button>
+      <button class="chip" data-filter="sourcing">Sourcing</button>
+      <button class="chip" data-filter="logistics">Packaging &amp; Logistics</button>
+      <button class="chip" data-filter="complexity">Complexity &amp; Lifecycle</button>
+    </div>
+
+    <div class="lever-grid" id="leverGrid" data-stagger>
+      <!-- DESIGN -->
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Part-Count Reduction &amp; Integration</h4><p>Combine parts via snap-fits, multi-functional geometry, insert moulding or mega/giga-casting. Fewer parts = fewer joints, fixtures, fasteners, failure modes and invoices.</p><b class="impact">5–15% assembly cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>DFM / DFA (DFMA)</h4><p>Boothroyd–Dewhurst style design-for-manufacture-and-assembly: minimum-part criteria, self-locating features, one-axis assembly, poka-yoke geometry.</p><b class="impact">10–30% assembly time</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Material Substitution</h4><p>Metal→engineering polymer, brass→coated steel, virgin→glass-filled recyclate. Validate with CAE and accelerated life testing before switching.</p><b class="impact">10–40% part cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Lightweighting &amp; Topology Optimisation</h4><p>Remove material where stress doesn't live: topology-optimised castings, variable wall thickness, tailor-welded blanks, sandwich structures.</p><b class="impact">10–25% material mass</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Tolerance &amp; Surface-Spec Optimisation</h4><p>Every unnecessary decimal costs money. Open non-functional tolerances, downgrade cosmetic specs on hidden surfaces, kill redundant GD&amp;T callouts.</p><b class="impact">5–20% machining cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Standardisation &amp; Carry-Over</h4><p>Preferred-parts catalogues for fasteners, bearings, motors, connectors; reuse proven modules across programmes instead of reinventing them.</p><b class="impact">Scale + quality gains</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Modular Architecture &amp; Platforms</h4><p>Common cores with differentiating tops: shared platforms, standard interfaces, late-point differentiation. Volume concentrates, cost dilutes.</p><b class="impact">15–30% dev + unit cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Feature Rationalisation / De-speccing</h4><p>Use conjoint analysis and warranty/usage data to find features customers don't value — then remove or make them optional. Data-backed de-contenting.</p><b class="impact">3–10% unit cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Design-to-Cost Targets</h4><p>Cascade a market-back target cost to every subsystem and track it at each design gate — cost as a spec, with the same authority as mass or performance.</p><b class="impact">Prevents 10–20% creep</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h4>Safety-Factor Right-Sizing</h4><p>Replace stacked legacy margins with CAE-validated, standards-compliant factors. Over-design is invisible cost; simulation makes it visible.</p><b class="impact">5–15% material</b></article>
+      <!-- MATERIALS -->
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h4>Material-Grade Optimisation</h4><p>Match grade to true duty cycle: 304→409 stainless where corrosion allows, PA66→PA6 or PP-GF where temperature allows, forged→ductile iron.</p><b class="impact">10–30% material cost</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h4>Recycled &amp; Bio-Based Materials</h4><p>Post-consumer resin, remelt alloys and bio-fillers — often cheaper and lower-carbon. Twin win: cost-out plus ESG scorecard.</p><b class="impact">5–20% + CO₂ story</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h4>Near-Net-Shape Blanks</h4><p>Precision forging, casting, MIM, powder metal or AM preforms that slash the buy-to-fly ratio and machining time.</p><b class="impact">20–50% machining</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h4>Nesting &amp; Yield Optimisation</h4><p>Algorithmic nesting, coil-width rationalisation, shared blanks across parts, cut-plan software for sheet, bar and fabric.</p><b class="impact">3–8% raw material</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h4>Scrap Monetisation &amp; Reversion</h4><p>Segregate alloys, close the loop with mills, sell sorted regrind at premium; in aerospace, revert titanium chips into the melt stream.</p><b class="impact">1–3% of spend back</b></article>
+      <!-- MANUFACTURING -->
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Process Substitution</h4><p>Machining→casting, stamping→fine blanking, welding→hemming/adhesives, painting→in-mould colour. Re-pick the process for today's volume, not launch volume.</p><b class="impact">15–40% conversion cost</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Automation &amp; Robotics</h4><p>Cobots for assembly and tending, vision-based inspection, automated packing — justified by cycle-time economics, not fashion.</p><b class="impact">20–60% direct labour</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Cycle-Time &amp; OEE Improvement</h4><p>Conformal-cooled tooling, SMED changeovers, bottleneck engineering, predictive maintenance. Same asset, more parts, lower overhead per unit.</p><b class="impact">10–25% machine cost/part</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Yield &amp; First-Pass Quality</h4><p>Attack scrap and rework Paretos with DOE, SPC and error-proofing. A point of yield in a costly process is pure margin.</p><b class="impact">2–8% COGS</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Low-Cost Intelligent Tooling</h4><p>Right-size tool life to programme volume, family moulds, modular die sets, 3D-printed jigs &amp; fixtures, best-cost-country tool rooms.</p><b class="impact">30–50% tooling capex</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Make-vs-Buy Rebalancing</h4><p>Re-run the make/buy math with current wages, utilisation and freight. Insource high-margin machining; outsource commodity processes.</p><b class="impact">10–20% on moved scope</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h4>Footprint &amp; Best-Cost Manufacturing</h4><p>Locate labour-intensive steps in best-cost regions, automate in high-cost ones, and nearshore where logistics and risk dominate.</p><b class="impact">10–30% landed cost</b></article>
+      <!-- SOURCING -->
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Should-Cost / Cleansheet Negotiation</h4><p>Model what a part <em>should</em> cost from material, cycle time, machine rates and margin — then negotiate the gap with facts, not percentages.</p><b class="impact">5–15% on quoted price</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Linear Performance Pricing (LPP)</h4><p>Regress price against cost drivers (mass, power, size) across your part family; every point above the line is a negotiation target.</p><b class="impact">3–8% category spend</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Competitive RFQ &amp; E-Auctions</h4><p>Refresh the competitive set with qualified challengers; run structured e-auctions for spec-stable commodities.</p><b class="impact">5–20% on tendered scope</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Supplier Consolidation &amp; Bundling</h4><p>Bundle families and programmes to fewer, better suppliers in exchange for step-change pricing and joint productivity commitments.</p><b class="impact">5–12% bundled spend</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Best-Cost-Country Sourcing</h4><p>Total-landed-cost sourcing across India, SEA, Eastern Europe, Mexico — with duty, freight, quality and resilience priced in, not ignored.</p><b class="impact">15–40% vs. high-cost base</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Supplier VAVE / Co-Innovation Workshops</h4><p>Suppliers know their process cost drivers better than you do. Gain-share programmes routinely surface ideas internal teams can't see.</p><b class="impact">3–7% of supplier spend</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Raw-Material Indexation &amp; Hedging</h4><p>Split price into raw-material and conversion; index the first, negotiate the second, hedge the volatile — and claw back windfalls when indices fall.</p><b class="impact">Kills 2–5% volatility leak</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h4>Terms, Incoterms &amp; Duty Engineering</h4><p>Payment terms, consignment stock, FTA utilisation, tariff-code engineering and duty drawback — cash and cost hiding in the paperwork.</p><b class="impact">1–4% landed cost</b></article>
+      <!-- LOGISTICS -->
+      <article class="lever tilt" data-cat="logistics" data-reveal><span class="tag t-logistics">Pack &amp; Log</span><h4>Packaging Spec Optimisation</h4><p>Right-size board grade, remove redundant layers, switch to bulk packs, redesign dunnage. Packaging is a product too — value-engineer it.</p><b class="impact">10–30% packaging cost</b></article>
+      <article class="lever tilt" data-cat="logistics" data-reveal><span class="tag t-logistics">Pack &amp; Log</span><h4>Returnable / Reusable Packaging</h4><p>Durable totes and racks on closed loops replace one-way corrugate — lower cost per trip, less waste, better line-side ergonomics.</p><b class="impact">30–60% per-trip cost</b></article>
+      <article class="lever tilt" data-cat="logistics" data-reveal><span class="tag t-logistics">Pack &amp; Log</span><h4>Cube Utilisation &amp; Mode Shift</h4><p>Design products and packs to fill containers (knock-down, nesting), shift air→sea→rail, run milk-routes and consolidation hubs.</p><b class="impact">10–25% freight</b></article>
+      <!-- COMPLEXITY -->
+      <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h4>SKU &amp; Variant Rationalisation</h4><p>Pareto revenue and margin by variant; kill or merge the long tail. Every dead SKU releases inventory, changeovers, quality and admin cost.</p><b class="impact">2–5% total COGS</b></article>
+      <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h4>Commonality &amp; Reuse Index</h4><p>Measure and manage % common parts across the portfolio as a KPI; reward reuse in design gates just like performance targets.</p><b class="impact">Compounding scale gains</b></article>
+      <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h4>Warranty &amp; Lifecycle Cost Design</h4><p>Design out top warranty Paretos, design in serviceability and upgradeability — optimise total cost of ownership, not just unit BOM.</p><b class="impact">20–40% warranty spend</b></article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ IDEATION ══════════ -->
+<section class="section section-alt" id="ideation">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>04 · The Spark</p>
+      <h2 data-reveal data-delay="100">Idea-Generation <span class="grad-text">Techniques</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        The Creative Phase runs on structured divergence. Twelve battle-tested techniques —
+        from Osborn's brainstorming to TRIZ contradictions to LLM copilots.
+      </p>
+    </div>
+
+    <div class="idea-grid" data-stagger>
+      <article class="idea tilt" data-reveal><i>🌀</i><h4>Classic Brainstorming</h4><p>Osborn's four rules: defer judgement, welcome wild ideas, go for quantity, build on others. Facilitated, time-boxed, function-focused rounds.</p></article>
+      <article class="idea tilt" data-reveal><i>✍️</i><h4>Brainwriting 6-3-5</h4><p>6 people write 3 ideas in 5 minutes, pass the sheet, build on what they receive — 108 ideas in 30 silent minutes; introverts contribute equally.</p></article>
+      <article class="idea tilt" data-reveal><i>🔀</i><h4>SCAMPER</h4><p>Substitute · Combine · Adapt · Modify/Magnify · Put to other use · Eliminate · Reverse/Rearrange — a checklist that mutates any part or process.</p></article>
+      <article class="idea tilt" data-reveal><i>⚡</i><h4>TRIZ</h4><p>Altshuller's theory of inventive problem solving: model the contradiction ("stiffer but lighter"), apply the contradiction matrix and 40 inventive principles, aim for ideality.</p></article>
+      <article class="idea tilt" data-reveal><i>🧭</i><h4>FAST-Driven Ideation</h4><p>Ideate on the function verb–noun, not the part: "how else can we <em>transmit torque</em>?" detaches the team from the incumbent design.</p></article>
+      <article class="idea tilt" data-reveal><i>🧮</i><h4>Morphological Analysis</h4><p>Zwicky box: decompose into sub-functions, list every solution option per sub-function, then combine columns into thousands of concept permutations.</p></article>
+      <article class="idea tilt" data-reveal><i>🔗</i><h4>Synectics &amp; Analogy</h4><p>Make the strange familiar: direct, personal and fantasy analogies plus biomimicry — how does nature, or another industry, deliver this function?</p></article>
+      <article class="idea tilt" data-reveal><i>🗳️</i><h4>Nominal Group Technique</h4><p>Silent individual generation, round-robin sharing, clarification, anonymous ranked voting — kills anchoring and HiPPO bias in one pass.</p></article>
+      <article class="idea tilt" data-reveal><i>📡</i><h4>Delphi Method</h4><p>Iterative anonymous expert rounds with controlled feedback until convergence — ideal for distributed experts and sensitive cost questions.</p></article>
+      <article class="idea tilt" data-reveal><i>✅</i><h4>Miles' Value Questions</h4><p>The original VA checklist: Can it be eliminated? Simplified? Combined? Standardised? Made another way? From another material? By someone else for less?</p></article>
+      <article class="idea tilt" data-reveal><i>🔭</i><h4>Benchmark Transfer</h4><p>Harvest ideas straight from teardowns: competitor solutions, best-in-class cross-industry mechanisms, patent-landscape mining for expired IP you can use freely.</p></article>
+      <article class="idea tilt" data-reveal><i>🤖</i><h4>AI-Assisted Ideation</h4><p>LLM copilots primed with the FAST model, BOM and constraints generate and cluster hundreds of candidate ideas — humans judge, machines diverge.</p></article>
+    </div>
+
+    <!-- VALUE CALCULATOR -->
+    <div class="calc" data-reveal>
+      <div class="calc-head"><h3>Try it live · <span class="grad-text">Value Index Simulator</span></h3>
+      <p>Value Engineering in one interaction: push function up, push cost down, watch value respond.</p></div>
+      <div class="calc-body">
+        <div class="calc-sliders">
+          <label>Function delivered <b id="fVal">70</b><input type="range" id="fSlider" min="10" max="100" value="70" /></label>
+          <label>Cost incurred <b id="cVal">70</b><input type="range" id="cSlider" min="10" max="100" value="70" /></label>
+        </div>
+        <div class="calc-out">
+          <div class="calc-ring"><svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"/></svg>
+          <div class="calc-num"><b id="viNum">1.00</b><span>Value Index</span></div></div>
+          <p class="calc-verdict" id="viVerdict">Balanced — now engineer the ratio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TECHNOLOGY ══════════ -->
+<section class="section" id="tech">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>05 · The Stack</p>
+      <h2 data-reveal data-delay="100">Modern Technologies &amp; <span class="grad-text">Techniques</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        The 2026 cost-engineering stack: physics-based cost models, scan-driven teardowns,
+        generative design and AI copilots — compressing weeks of analysis into hours.
+      </p>
+    </div>
+
+    <div class="tech-grid" data-stagger>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">01</span><h4>AI Should-Cost Modelling</h4><p>Feature-based cost engines (aPriori, Tset, Siemens Teamcenter PCM class) read 3D CAD, simulate the manufacturing process and output cycle time, tooling and piece cost per region — before any supplier quotes.</p><em>CAD-in → cost-out in minutes</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">02</span><h4>Cleansheet Cost Models</h4><p>Bottom-up "glass-box" models built from material masses, cycle times, machine-hour rates, labour content and fair margin — the factual backbone of every serious negotiation.</p><em>Negotiate with physics, not percentages</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">03</span><h4>CT-Scan &amp; 3D Teardown</h4><p>Industrial computed tomography and structured-light scanning digitise competitor products non-destructively: wall thicknesses, hidden joints, weld quality, internal architecture — a full digital BOM.</p><em>See inside the competition</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">04</span><h4>Spend Analytics &amp; Cost Cubes</h4><p>Classified spend cubes joined with BOM data expose price variance for identical parts across plants, programmes and suppliers — the fastest savings you'll ever find.</p><em>Same part, same price, everywhere</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">05</span><h4>Generative Design &amp; Topology Optimisation</h4><p>Algorithms explore thousands of geometry variants against load cases and manufacturing constraints — organic structures that human intuition never draws, at minimum material.</p><em>The algorithm proposes, physics disposes</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">06</span><h4>Additive Manufacturing</h4><p>Part consolidation (dozens of parts into one printed component), tool-less low-volume production, conformal-cooled tooling and rapid functional prototypes for VE trials.</p><em>Complexity becomes free</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">07</span><h4>Digital Twin &amp; CAE-Driven Margin Removal</h4><p>Simulation-validated designs let you shave stacked safety factors with confidence; virtual DOE replaces expensive physical trials in material and process substitutions.</p><em>Prove it virtually, save it physically</em></article>
+      <article class="tech-card tilt" data-reveal><span class="tech-n">08</span><h4>LLM Copilots &amp; Cost Knowledge Graphs</h4><p>Large language models mine warranty text, quotes, standards and past VAVE ideas; knowledge graphs link functions↔parts↔costs↔suppliers so no lesson is ever lost again.</p><em>Institutional memory, on demand</em></article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ BENCHMARKING ══════════ -->
+<section class="section section-alt" id="benchmark">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>06 · The Mirror</p>
+      <h2 data-reveal data-delay="100">Teardown &amp; <span class="grad-text">Competitive Benchmarking</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        Benchmarking answers the question VE always asks: <em>what is this function worth?</em>
+        The best evidence is a competitor delivering it for less.
+      </p>
+    </div>
+
+    <div class="td-steps" data-stagger>
+      <div class="td-step" data-reveal><b>1</b><h4>Acquire &amp; Document</h4><p>Procure competitor units; photograph, weigh and measure everything before the first screw turns.</p></div>
+      <div class="td-step" data-reveal><b>2</b><h4>Systematic Disassembly</h4><p>Level-by-level teardown with time capture — assembly sequence in reverse is assembly cost in disguise.</p></div>
+      <div class="td-step" data-reveal><b>3</b><h4>Digital BOM Capture</h4><p>Every part logged: material, mass, process, supplier marks, tooling clues, fastener count.</p></div>
+      <div class="td-step" data-reveal><b>4</b><h4>Should-Cost Each Part</h4><p>Cleansheet the competitor BOM to estimate their cost position — and expose your gaps line by line.</p></div>
+      <div class="td-step" data-reveal><b>5</b><h4>Harvest &amp; Transfer Ideas</h4><p>Side-by-side function comparison feeds the Creative Phase: adopt, adapt, or leapfrog every smart solution found.</p></div>
+    </div>
+
+    <div class="bench-wrap">
+      <div class="bench-types" data-stagger>
+        <h3 data-reveal>Six benchmarking dimensions</h3>
+        <div class="bt" data-reveal><b>Cost benchmarking</b><span>Part-by-part should-cost vs. competitors and best-in-class plants.</span></div>
+        <div class="bt" data-reveal><b>Functional benchmarking</b><span>Performance per euro: torque/€, lumens/€, litres/€ — value ratios, not absolutes.</span></div>
+        <div class="bt" data-reveal><b>Design benchmarking</b><span>Architecture choices, part integration, material mix, fastening strategies.</span></div>
+        <div class="bt" data-reveal><b>Process benchmarking</b><span>How the best factories make it: automation level, cycle time, yield, layout.</span></div>
+        <div class="bt" data-reveal><b>Feature benchmarking</b><span>Feature sets vs. price ladders across the competitive landscape — who over-serves, who under-prices.</span></div>
+        <div class="bt" data-reveal><b>Patent &amp; IP benchmarking</b><span>Mine patent landscapes for expired art you can use and active art you must design around.</span></div>
+      </div>
+
+      <div class="waterfall" data-reveal>
+        <h3>From current cost to target cost</h3>
+        <p class="wf-sub">Typical VAVE cost walk on a benchmarked product</p>
+        <div class="wf-chart" id="wfChart">
+          <div class="wf-row"><span>Current cost</span><div class="wf-bar"><i class="wf-cur" style="--w:100%"></i></div><b>100</b></div>
+          <div class="wf-row"><span>Design levers</span><div class="wf-bar"><i class="wf-save" style="--w:26%; --x:66%"></i></div><b>−8</b></div>
+          <div class="wf-row"><span>Material levers</span><div class="wf-bar"><i class="wf-save" style="--w:13%; --x:57%"></i></div><b>−4</b></div>
+          <div class="wf-row"><span>Manufacturing levers</span><div class="wf-bar"><i class="wf-save" style="--w:13%; --x:44%"></i></div><b>−4</b></div>
+          <div class="wf-row"><span>Sourcing levers</span><div class="wf-bar"><i class="wf-save" style="--w:16%; --x:28%"></i></div><b>−5</b></div>
+          <div class="wf-row"><span>Logistics &amp; complexity</span><div class="wf-bar"><i class="wf-save" style="--w:7%; --x:21%"></i></div><b>−2</b></div>
+          <div class="wf-row"><span class="wf-target">Target cost</span><div class="wf-bar"><i class="wf-tgt" style="--w:77%"></i></div><b class="wf-tb">77</b></div>
+        </div>
+        <p class="wf-note">Illustrative 23-point walk — real programmes are built bottom-up from validated ideas, each with an owner and a date.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ INDUSTRIES ══════════ -->
+<section class="section" id="industries">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>07 · The Battlegrounds</p>
+      <h2 data-reveal data-delay="100">Industry <span class="grad-text">Playbooks</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        The method is universal; the levers that bite are not. Eight industry playbooks with typical
+        cost structures, signature moves and realistic savings ranges.
+      </p>
+    </div>
+
+    <div class="ind-tabs" id="indTabs" data-reveal>
+      <button class="ind-tab is-active" data-tab="0">🚗 Automotive &amp; EV</button>
+      <button class="ind-tab" data-tab="1">🧴 Consumer Products</button>
+      <button class="ind-tab" data-tab="2">🏗️ Heavy Machinery</button>
+      <button class="ind-tab" data-tab="3">🧊 Home Appliances</button>
+      <button class="ind-tab" data-tab="4">✈️ Aerospace &amp; Defence</button>
+      <button class="ind-tab" data-tab="5">💻 Electronics &amp; High-Tech</button>
+      <button class="ind-tab" data-tab="6">🩺 Medical Devices</button>
+      <button class="ind-tab" data-tab="7">⚡ Industrial &amp; Energy</button>
+    </div>
+
+    <div class="ind-panels" id="indPanels">
+
+      <article class="ind-panel is-active">
+        <div class="ind-left">
+          <h3>Automotive &amp; Electric Vehicles</h3>
+          <p>The most cost-disciplined industry on earth: 60–75% of vehicle cost sits in the purchased BOM across thousands
+          of parts and hundreds of suppliers, under relentless annual price-down pressure. The EV transition resets the
+          game — the battery alone is 30–40% of an EV's cost, making cell chemistry, pack architecture and power
+          electronics the new VAVE frontier.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Purchased BOM</span><div class="bar"><i data-bar style="--w:68%"></i></div><b>~68%</b></div>
+            <div class="bar-row"><span>Direct labour &amp; assembly</span><div class="bar"><i data-bar style="--w:12%"></i></div><b>~12%</b></div>
+            <div class="bar-row"><span>Overhead &amp; depreciation</span><div class="bar"><i data-bar style="--w:13%"></i></div><b>~13%</b></div>
+            <div class="bar-row"><span>Logistics &amp; warranty</span><div class="bar"><i data-bar style="--w:7%"></i></div><b>~7%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Platform &amp; module commonality</span><span>Supplier VAVE &amp; gain-share</span><span>Giga-casting part integration</span><span>Wiring-harness optimisation</span><span>Cell-to-pack battery design</span><span>Should-cost negotiations</span><span>Lightweighting</span><span>Variant rationalisation</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>Mega-casting replaces ~70 stamped-and-welded body parts with 1–2 aluminium castings — deleting hundreds of robots, joints and tolerance chains from the body shop.</p></div>
+          <div class="ind-stat"><b>3–8%</b><span>product cost-down per year, sustained via annual VAVE waves and supplier programmes</span></div>
+          <div class="ind-stat"><b>30–40%</b><span>of EV cost is the battery — the densest VAVE target in modern industry</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Consumer Products &amp; FMCG</h3>
+          <p>High volume, thin margins, brutal shelf-price points: a tenth of a cent per unit matters at hundreds of millions
+          of units. Cost lives in materials, packaging and formulation; complexity from SKU proliferation quietly taxes the
+          whole chain. VE here must protect the consumer experience — de-content invisibly, never noticeably.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Materials &amp; formulation</span><div class="bar"><i data-bar style="--w:45%"></i></div><b>~45%</b></div>
+            <div class="bar-row"><span>Packaging</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+            <div class="bar-row"><span>Conversion &amp; labour</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+            <div class="bar-row"><span>Logistics</span><div class="bar"><i data-bar style="--w:15%"></i></div><b>~15%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Packaging light-weighting</span><span>Formulation optimisation</span><span>SKU rationalisation</span><span>Cube utilisation</span><span>Recycled materials</span><span>Line-speed &amp; yield</span><span>Co-manufacturing footprint</span><span>Price-pack architecture</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>Bottle light-weighting: grams shaved from PET preforms and closures across a billion units — invisible to the shopper, transformative to the P&amp;L, and a headline ESG win.</p></div>
+          <div class="ind-stat"><b>5–12%</b><span>COGS reduction from combined pack, formulation and complexity programmes</span></div>
+          <div class="ind-stat"><b>20–30%</b><span>of SKUs typically deliver &lt;2% of margin — prime rationalisation territory</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Heavy Machinery &amp; Construction / Agricultural Equipment</h3>
+          <p>Low volume, high mix, heavy iron: fabricated structures, castings, hydraulics and powertrain dominate. Cost
+          discipline is hard because every order looks custom — so the biggest lever is architectural: modularise,
+          standardise, and configure instead of engineer-to-order. Steel mass is money; welds are money; variants are money.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Fabrications &amp; castings</span><div class="bar"><i data-bar style="--w:35%"></i></div><b>~35%</b></div>
+            <div class="bar-row"><span>Powertrain &amp; hydraulics</span><div class="bar"><i data-bar style="--w:30%"></i></div><b>~30%</b></div>
+            <div class="bar-row"><span>Assembly labour</span><div class="bar"><i data-bar style="--w:15%"></i></div><b>~15%</b></div>
+            <div class="bar-row"><span>Electricals, cab &amp; other</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Fabrication→casting conversion</span><span>Weld &amp; plate-thickness optimisation</span><span>Modular design &amp; configurators</span><span>Hydraulic system standardisation</span><span>Safety-factor right-sizing via CAE</span><span>Best-cost-country fabrication</span><span>Nesting &amp; steel yield</span><span>Service-parts value analysis</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>Converting multi-piece welded fabrications into single ductile-iron castings at volume: fewer welds, less machining and distortion, 20–40% cheaper at the right annual quantity.</p></div>
+          <div class="ind-stat"><b>8–15%</b><span>unit-cost reduction typical for a first structured VAVE programme</span></div>
+          <div class="ind-stat"><b>30–50%</b><span>fewer engineered variants achievable through modular configure-to-order architectures</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Home Appliances</h3>
+          <p>The classic VAVE arena: refrigerators, washers, ACs and cooktops combine sheet metal, motors/compressors,
+          plastics, foam and fast-growing electronics — sold into savage retail price points. Winners run platform
+          strategies where one motor family, one control board family and one cabinet architecture serve many brands
+          and price tiers.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Motors / compressors &amp; electricals</span><div class="bar"><i data-bar style="--w:30%"></i></div><b>~30%</b></div>
+            <div class="bar-row"><span>Sheet metal &amp; plastics</span><div class="bar"><i data-bar style="--w:35%"></i></div><b>~35%</b></div>
+            <div class="bar-row"><span>Electronics &amp; controls</span><div class="bar"><i data-bar style="--w:15%"></i></div><b>~15%</b></div>
+            <div class="bar-row"><span>Assembly, pack &amp; logistics</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Motor / compressor platforming</span><span>Sheet-metal yield &amp; gauge optimisation</span><span>Universal parts across brands</span><span>Electronics integration (one-board design)</span><span>Insulation &amp; foam optimisation</span><span>Teardown benchmarking vs. Asian OEMs</span><span>Packaging &amp; cube optimisation</span><span>Energy-rating cost balance</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>One inverter-motor platform spanning washer, dryer and dishwasher lines: triple the volume on one design, one supplier tool-set, one quality history — double-digit motor cost reduction.</p></div>
+          <div class="ind-stat"><b>6–12%</b><span>unit cost-down from a full-line VAVE and platform wave</span></div>
+          <div class="ind-stat"><b>#1</b><span>appliance teardown benchmarking is the industry's most institutionalised VE practice</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Aerospace &amp; Defence</h3>
+          <p>Cost per kilogram is measured in hundreds of euros, certification freezes designs for decades, and titanium
+          buy-to-fly ratios of 8:1 mean most of what you buy becomes chips. VE must move inside the certification
+          envelope: near-net blanks, process substitution and assembly-hour attack deliver savings without re-opening
+          type certificates — while AM redraws what's possible on new platforms.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Materials (Ti, Ni, composites)</span><div class="bar"><i data-bar style="--w:30%"></i></div><b>~30%</b></div>
+            <div class="bar-row"><span>Machining &amp; fabrication</span><div class="bar"><i data-bar style="--w:25%"></i></div><b>~25%</b></div>
+            <div class="bar-row"><span>Assembly &amp; integration labour</span><div class="bar"><i data-bar style="--w:25%"></i></div><b>~25%</b></div>
+            <div class="bar-row"><span>Test, cert &amp; overhead</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Buy-to-fly reduction (near-net blanks)</span><span>AM part consolidation</span><span>Assembly-hour reduction &amp; determinate assembly</span><span>Titanium chip reversion</span><span>Should-cost on sole-source suppliers</span><span>Standard fastener rationalisation</span><span>Composite vs. metallic trade studies</span><span>Obsolescence &amp; LTB management</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>3D-printed consolidation of brackets and fuel-system components — 20 machined-and-joined parts become one printed part, lighter and cheaper, with fewer leak paths and inspections.</p></div>
+          <div class="ind-stat"><b>5–10%</b><span>recurring cost reduction without touching certified performance</span></div>
+          <div class="ind-stat"><b>8:1 → 2:1</b><span>buy-to-fly improvement achievable with near-net-shape strategies</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Electronics &amp; High-Tech</h3>
+          <p>The fastest cost clock in industry: component prices erode quarterly, silicon integration continuously deletes
+          parts, and the EMS ecosystem prices assembly by the second. VAVE here is a standing rhythm — quarterly BOM
+          scrubs, alternate-part qualification and DFM reviews with your EMS — not an annual event.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Semiconductors &amp; actives</span><div class="bar"><i data-bar style="--w:40%"></i></div><b>~40%</b></div>
+            <div class="bar-row"><span>Passives, PCB &amp; mechanicals</span><div class="bar"><i data-bar style="--w:25%"></i></div><b>~25%</b></div>
+            <div class="bar-row"><span>Display / battery / modules</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+            <div class="bar-row"><span>EMS assembly &amp; test</span><div class="bar"><i data-bar style="--w:15%"></i></div><b>~15%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Silicon integration (SoC / SiP)</span><span>PCB layer &amp; area reduction</span><span>Alternate-source qualification</span><span>Quarterly BOM cost scrubs</span><span>DFT &amp; test-time reduction</span><span>EMS should-cost &amp; quote levelling</span><span>Connector &amp; cable rationalisation</span><span>Reference-design adoption</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>Successive board respins that integrate discrete functions into a single SoC/SiP: each spin deletes dozens of components, shrinks the PCB, cuts placements and test time — compounding 10–20% BOM savings.</p></div>
+          <div class="ind-stat"><b>10–20%</b><span>BOM reduction per major respin cycle on mature products</span></div>
+          <div class="ind-stat"><b>Quarterly</b><span>the cost-scrub cadence that separates leaders from laggards</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Medical Devices</h3>
+          <p>Every change carries regulatory weight: design history files, biocompatibility, sterilisation validation,
+          510(k)/CE implications. The winning pattern is <em>regulatory-aware VE</em> — batch changes into planned
+          submissions, favour "letter-to-file" scoped changes, and design cost out of the <em>next</em> generation using
+          everything the teardown of the current one taught you.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Materials &amp; components</span><div class="bar"><i data-bar style="--w:35%"></i></div><b>~35%</b></div>
+            <div class="bar-row"><span>Conversion &amp; cleanroom labour</span><div class="bar"><i data-bar style="--w:25%"></i></div><b>~25%</b></div>
+            <div class="bar-row"><span>Quality, regulatory &amp; sterilisation</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+            <div class="bar-row"><span>Packaging &amp; logistics</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Resin &amp; material substitution (with biocomp strategy)</span><span>Sterile-packaging optimisation</span><span>Design for sterilisation method</span><span>Component standardisation across families</span><span>Supplier consolidation &amp; dual sourcing</span><span>Automation of cleanroom assembly</span><span>Next-gen design-to-cost</span><span>Instrument reprocessing economics</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>Sterile-barrier packaging redesign — right-sized trays, one pouch layer instead of two, validated once across a whole family — routinely returns 20–30% of packaging cost with zero patient-facing change.</p></div>
+          <div class="ind-stat"><b>5–10%</b><span>COGS reduction achievable inside a compliant change strategy</span></div>
+          <div class="ind-stat"><b>2×</b><span>savings multiple when VE targets the next generation instead of retrofitting the current one</span></div>
+        </aside>
+      </article>
+
+      <article class="ind-panel">
+        <div class="ind-left">
+          <h3>Industrial Equipment &amp; Energy</h3>
+          <p>Motors, drives, transformers, switchgear, pumps, compressors, solar and wind hardware: copper, steel and
+          electrical-grade laminations dominate cost, and efficiency regulations set hard floors. VE optimises the
+          copper–iron–performance triangle, standardises frames across power ratings, and attacks total cost of
+          ownership — because the customer buys lifetime energy, not just a machine.</p>
+          <h5>Cost structure <span>(typical share of unit cost)</span></h5>
+          <div class="bars">
+            <div class="bar-row"><span>Copper, steel &amp; magnetics</span><div class="bar"><i data-bar style="--w:40%"></i></div><b>~40%</b></div>
+            <div class="bar-row"><span>Fabrication &amp; machining</span><div class="bar"><i data-bar style="--w:22%"></i></div><b>~22%</b></div>
+            <div class="bar-row"><span>Electronics &amp; controls</span><div class="bar"><i data-bar style="--w:18%"></i></div><b>~18%</b></div>
+            <div class="bar-row"><span>Assembly, test &amp; logistics</span><div class="bar"><i data-bar style="--w:20%"></i></div><b>~20%</b></div>
+          </div>
+          <h5>Highest-yield levers</h5>
+          <div class="pill-row"><span>Electromagnetic design optimisation (Cu ↔ Fe trade)</span><span>Aluminium-for-copper windings where valid</span><span>Frame &amp; platform standardisation</span><span>Raw-material indexation &amp; hedging</span><span>Lamination nesting &amp; yield</span><span>Power-electronics integration</span><span>Design for field service</span><span>TCO-based product positioning</span></div>
+        </div>
+        <aside class="ind-right">
+          <div class="ind-case"><h5>Signature move</h5><p>Re-optimising a motor family's electromagnetic design against current copper and steel prices — the optimal Cu/Fe balance moves with the commodity markets, and legacy designs quietly drift off-optimum.</p></div>
+          <div class="ind-stat"><b>8–15%</b><span>material-cost reduction from electromagnetic re-optimisation and frame standardisation</span></div>
+          <div class="ind-stat"><b>40%+</b><span>of unit cost rides on commodity metals — indexation is non-negotiable</span></div>
+        </aside>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ENGAGE / CTA ══════════ -->
+<section class="section section-cta" id="engage">
+  <div class="container">
+    <div class="cta-box" data-reveal>
+      <div class="cta-orb"></div>
+      <p class="kicker">08 · Begin</p>
+      <h2>Your product is carrying cost<br />that <span class="grad-text">adds no value.</span></h2>
+      <p class="cta-sub">Pick one product line. Run one disciplined SAVE study. Watch the funnel fill.
+      Value Engineering isn't a slogan — it's a job plan, and it starts with the Information Phase.</p>
+      <div class="cta-steps" data-stagger>
+        <div class="cs" data-reveal><b>Week 1–2</b><span>Baseline &amp; teardown: costs, functions, benchmarks</span></div>
+        <div class="cs" data-reveal><b>Week 3</b><span>SAVE workshop: 6 phases, cross-functional team, 200+ ideas</span></div>
+        <div class="cs" data-reveal><b>Week 4–12</b><span>Develop, decide, implement — savings tracked to the P&amp;L</span></div>
+      </div>
+      <a href="#save" class="btn btn-primary btn-lg magnetic">Revisit the Method <span class="btn-arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#top">Value<span>Forge</span></a>
+        <p>Value Engineering · Product Cost Optimisation · Competitive Benchmarking.<br />
+        Function-first thinking, from Lawrence Miles' 1947 insight to today's AI-driven cost stack.</p>
+      </div>
+      <div class="footer-col"><h5>Method</h5><a href="#about">What is VE</a><a href="#save">SAVE Job Plan</a><a href="#ideation">Ideation Techniques</a><a href="#benchmark">Benchmarking</a></div>
+      <div class="footer-col"><h5>Arsenal</h5><a href="#levers">36 Cost Levers</a><a href="#tech">Technology Stack</a><a href="#industries">Industry Playbooks</a><a href="#engage">Start a Program</a></div>
+      <div class="footer-col"><h5>Glossary</h5><span>VAVE · FAST · TRIZ · DFMA</span><span>Should-Cost · Cleansheet · LPP</span><span>Design-to-Cost · Target Costing</span><span>Buy-to-Fly · OEE · TCO</span></div>
+    </div>
+    <div class="footer-bar">
+      <p class="footer-credit">Designed &amp; Developed by <b class="grad-text">Avinash Bhosale</b></p>
+      <p class="footer-copy">© <span id="year"></span> ValueForge · Educational reference on Value Engineering &amp; Cost Optimisation</p>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
