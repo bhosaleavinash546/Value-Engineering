@@ -153,3 +153,29 @@
   .cert-actions{display:none}
   @page{size:landscape;margin:10mm}
 }
+
+/* ── Worked example box ── */
+.tex{border-left:3px solid var(--acc3);background:rgba(217,164,74,.06);border-radius:0 14px 14px 0;padding:1.1rem 1.3rem;margin:1.8rem 0}
+.tex h4{font-family:var(--font-m);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc3);margin-bottom:.55rem}
+.tex p{font-size:.88rem;color:var(--muted);margin:0}
+.tex p strong,.tex p em{color:var(--txt)}
+
+/* ── Quick check ── */
+.qcheck{border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:1.3rem 1.4rem;margin:1.8rem 0 1.2rem}
+.qcheck-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem}
+.qcheck-head h4{font-family:var(--font-m);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc1);margin:0}
+.qcheck-head span{font-size:.72rem;color:var(--muted)}
+.qc-item{margin-bottom:1.1rem}
+.qc-item:last-child{margin-bottom:0}
+.qc-q{font-size:.92rem;font-weight:600;color:var(--txt);margin-bottom:.6rem}
+.qc-opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.qc-opt{border:1px solid var(--line);border-radius:100px;background:var(--card);color:var(--muted);padding:.45rem 1rem;font-size:.8rem;font-family:var(--font-b);cursor:pointer;transition:all .25s}
+.qc-opt:hover{border-color:var(--acc1);color:var(--txt)}
+.qc-opt.is-right{background:rgba(28,127,75,.25);border-color:#2ea36b;color:#7ce3ad;pointer-events:none}
+.qc-opt.is-wrong{background:rgba(190,50,50,.15);border-color:#c0504f;color:#f3a1a0;animation:qc-shake .3s}
+.qc-item.is-locked .qc-opt:not(.is-right){opacity:.45;pointer-events:none}
+@keyframes qc-shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.qc-expl{font-size:.78rem;margin-top:.5rem;display:none}
+.qc-expl.show-wrong{display:block;color:#f3a1a0}
+.qc-expl.show-right{display:block;color:#7ce3ad}
+.tmod-done:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none}

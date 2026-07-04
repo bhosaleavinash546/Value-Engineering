@@ -205,3 +205,112 @@
   const firstUnread = courseMods.find((m) => !state.done.includes(m.dataset.mod));
   show(state.exam && state.exam.passed ? "exam" : (firstUnread ? firstUnread.dataset.mod : "exam"), false);
 })();
+
+/* ════════ Per-module quick checks (gate module completion) ════════ */
+(function () {
+  "use strict";
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+  const KEY = "vf-academy";
+  const state = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } })();
+  state.qc = state.qc || {};
+  state.done = state.done || [];
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+
+  const QUICK = {
+    m1: [
+      ["A product delivers the same function as its rival but costs 20% less to make. Its value is…", ["Lower", "Higher", "The same", "Impossible to say"], 1, "Same function ÷ lower cost = a higher Function/Cost ratio."],
+      ["Which of these is NOT one of the four classic types of value?", ["Use value", "Esteem value", "Exchange value", "Discount value"], 3, "The four types: use, esteem, exchange and cost value."],
+    ],
+    m2: [
+      ["The ideal VE workshop team is…", ["Only design engineers", "Cross-functional, 6–10 people, with a trained facilitator", "The entire department", "External consultants only"], 1, "Diversity of functions is where the ideas come from; the facilitator owns process, not content."],
+      ["The one non-negotiable data item before the workshop is…", ["The marketing brochure", "A finance-validated costed BOM", "The org chart", "A patent list"], 1, "No trusted cost baseline, no study — everything builds on the costed BOM."],
+    ],
+    m3: [
+      ["Which is one of Miles' founding questions?", ["What is it worth?", "Who approved it?", "Can we outsource it?", "What's the discount?"], 0, "What is it? What does it do? What does it cost? What is it worth? What else could do the job?"],
+      ["Pareto thinking in the Information Phase means…", ["Analysing every part equally", "Focusing on the ~20% of parts that carry ~80% of the cost", "Ignoring cheap parts forever", "Sorting the BOM alphabetically"], 1, "Analytical firepower goes where the money is."],
+    ],
+    m4: [
+      ["'Fasten flange' vs. 'join components' — the better function statement is…", ["Fasten flange — it's specific", "Join components — abstraction opens the solution space", "Both are equal", "Neither is valid"], 1, "'Fasten flange' locks you into bolts; 'join components' opens welding, adhesives, snap-fits and integration."],
+      ["A function costs €1.00 and its worth is €0.80. Its Value Index is…", ["0.80 — healthy", "1.25 — watch list", "2.00 — attack", "8.00 — attack"], 1, "VI = Cost ÷ Worth = 1.00/0.80 = 1.25, in the 1.2–2.0 watch zone."],
+    ],
+    m5: [
+      ["Mid-brainstorm, a manager says 'that will never work'. The facilitator should…", ["Open a debate", "Defer the judgement — criticism waits for the Evaluation Phase", "Delete the idea", "End the session"], 1, "Osborn's first rule: defer judgement absolutely. Evaluation has its own phase."],
+      ["A 6-3-5 brainwriting session produces how many ideas in ~30 minutes?", ["18", "35", "108", "635"], 2, "6 people × 3 ideas × 6 passes = 108 ideas, silently."],
+    ],
+    m6: [
+      ["The Pugh matrix compares candidate concepts against…", ["A theoretical ideal", "The current design (the datum)", "The cheapest competitor", "The cost target"], 1, "Each concept scores +/−/same per criterion versus the datum design."],
+      ["Parked ideas should be…", ["Deleted to keep things tidy", "Kept — they seed future waves", "Emailed to everyone", "Patented immediately"], 1, "Today's 'not yet' is next year's scenario — park, don't purge."],
+    ],
+    m7: [
+      ["A change saves €0.30/unit on 300,000 units/yr and costs €45k one-time. Payback?", ["1.5 months", "6 months", "18 months", "3 years"], 1, "Annual saving €90k; 45k ÷ 90k = 0.5 years = 6 months."],
+      ["Before shaving a legacy safety factor, you should…", ["Just do it — margins are waste", "Validate with CAE / testing and check the applicable standards", "Ask the supplier's opinion", "Raise the price instead"], 1, "De-risking with simulation and standards is what makes the saving real and safe."],
+    ],
+    m8: [
+      ["The true output of the Presentation Phase is…", ["Applause from management", "Logged go / no-go decisions with owners and dates", "A polished slide deck", "A wall poster"], 1, "A presentation without decisions is a rehearsal."],
+      ["Implemented savings are audited against…", ["The current, inflation-adjusted cost", "The frozen baseline", "The competitor's price", "The sales forecast"], 1, "Freezing the baseline stops inflation and mix changes from blurring the result."],
+    ],
+    m9: [
+      ["Most of your product cost sits in purchased materials. Which lever families bite first?", ["Packaging & logistics", "Sourcing + design", "Overhead allocation", "Warranty design"], 1, "Where the cost sits decides the levers: BOM-heavy → should-cost sourcing plus design changes."],
+      ["A supplier's plant runs at 60% utilisation. Which should-cost layer inflates?", ["Raw material", "Overhead", "Margin", "Freight"], 1, "Overhead is spread over fewer parts — you're paying for idle air. A negotiable fact."],
+    ],
+    m10: [
+      ["The FIRST step of a teardown is…", ["Disassemble as fast as possible", "Photograph, weigh and measure everything", "Send parts out for quotes", "Scan to CAD"], 1, "Document before disassembly — you only get one first teardown."],
+      ["Functional benchmarking compares…", ["Absolute performance only", "Performance per euro (torque/€, lumens/€)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not absolutes — that's the VE lens on benchmarking."],
+    ],
+    m11: [
+      ["The right division of labour with AI in VAVE is…", ["AI replaces the workshop team", "AI diverges and drafts; humans judge, validate and decide", "AI sets the prices", "AI signs supplier contracts"], 1, "AI compresses analysis and idea volume; judgement and validation stay human."],
+      ["CT scanning is used in teardowns to…", ["Sterilise components", "See internal structures non-destructively", "Paint-match surfaces", "Estimate freight cost"], 1, "Wall thicknesses, hidden joints and internal architecture — without cutting the part open."],
+    ],
+    m12: [
+      ["The savings funnel should be reviewed…", ["Annually", "Monthly — every idea has an owner, a stage and a date", "Only when savings slip", "Never, it runs itself"], 1, "Monthly cadence is what stops ideas dying quietly."],
+      ["The SAVE certification ladder, in order, is…", ["CVS → AVS → VMA", "VMA → AVS → CVS", "AVS → CVS → VMA", "PVA → CVS → VMA"], 1, "Value Methodology Associate → Associate Value Specialist → Certified Value Specialist."],
+    ],
+  };
+
+  $$(".qcheck").forEach((box) => {
+    const id = box.dataset.qc;
+    const qs = QUICK[id];
+    if (!qs) return;
+    const doneBtn = document.querySelector(`.tmod-done[data-done="${id}"]`);
+    const solved = new Set();
+    const alreadyCleared = state.done.includes(id) || state.qc[id];
+
+    box.innerHTML = `<div class="qcheck-head"><h4>Quick check</h4><span>${alreadyCleared ? "Cleared ✓" : "Answer both correctly to unlock completion"}</span></div>` +
+      qs.map(([q, opts, c, expl], qiIdx) => `<div class="qc-item" data-qi="${qiIdx}">
+        <div class="qc-q">${qiIdx + 1}. ${q}</div>
+        <div class="qc-opts">${opts.map((o, oi) => `<button class="qc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+        <div class="qc-expl"></div></div>`).join("");
+
+    function gate() {
+      if (doneBtn) doneBtn.disabled = !(alreadyCleared || solved.size === qs.length);
+    }
+    if (!alreadyCleared && doneBtn) doneBtn.disabled = true;
+
+    box.addEventListener("click", (e) => {
+      const btn = e.target.closest(".qc-opt");
+      if (!btn) return;
+      const item = btn.closest(".qc-item");
+      const qiIdx = +item.dataset.qi;
+      const [, , correct, expl] = qs[qiIdx];
+      const expEl = item.querySelector(".qc-expl");
+      if (+btn.dataset.oi === correct) {
+        btn.classList.add("is-right");
+        item.classList.add("is-locked");
+        expEl.textContent = "✓ " + expl;
+        expEl.className = "qc-expl show-right";
+        solved.add(qiIdx);
+        if (solved.size === qs.length) {
+          state.qc[id] = true; save();
+          box.querySelector(".qcheck-head span").textContent = "Cleared ✓";
+          gate();
+        }
+      } else {
+        btn.classList.add("is-wrong");
+        expEl.textContent = "✗ Not quite — try again. Hint: " + expl;
+        expEl.className = "qc-expl show-wrong";
+        setTimeout(() => btn.classList.remove("is-wrong"), 700);
+      }
+    });
+    gate();
+  });
+})();
