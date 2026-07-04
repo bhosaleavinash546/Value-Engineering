@@ -680,3 +680,9 @@ section[id]{scroll-margin-top:80px}
 
 /* ════════ PERFORMANCE ════════ */
 #levers,#ideation,#tech,#benchmark,#industries,#governance,#toolkit,#glossary,#faq,#engage{content-visibility:auto;contain-intrinsic-size:auto 1200px}
+
+/* ── Consultant credentials ── */
+.consult-title{font-family:var(--font-m);font-size:.72rem!important;letter-spacing:.12em;text-transform:uppercase;color:var(--acc1)!important;margin-bottom:.55rem}
+.consult-creds{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.9rem}
+.consult-creds span{border:1px solid var(--line);border-radius:100px;padding:.3rem .8rem;font-size:.7rem;color:var(--muted);background:var(--card)}
+@media (max-width:700px){.consult-creds{justify-content:center}}
