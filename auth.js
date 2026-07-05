@@ -92,7 +92,7 @@
     if (LIVE) {
       // Real path: Supabase sends the email; no client-side code
       try {
-        await supa().auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin" } });
+        await supa().auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
       } catch (e) { banner("otp-banner", "Could not send code: " + (e.message || "try again"), "err"); }
       $("#demo-otp").className = "demo-otp";
     } else {
@@ -233,6 +233,7 @@
     if (LIVE) {
       try {
         const { error } = await supa().auth.verifyOtp({ email: pending.email, token: code, type: "email" });
+        if (!error && pending.pass) { try { await supa().auth.updateUser({ password: pending.pass }); } catch (x) {} }
         loading(e.target, false);
         if (error) return banner("otp-banner", "Invalid or expired code.", "err");
         finishPending();
@@ -249,6 +250,13 @@
 
   function finishPending() {
     clearInterval(resendTimer);
+    if (LIVE) {
+      const nm = pending.name || pending.email.split("@")[0];
+      if (pending.mode === "signup") succeed("Welcome to VAVEhub, " + nm.split(" ")[0] + "!", "Your account is verified and ready.", nm);
+      else if (pending.mode === "reset") succeed("Email verified", "You're signed in — set a new password from your account.", nm);
+      else succeed("You're in!", "Signed in with a one-time code.", nm);
+      pending = null; return;
+    }
     const accts = store.accounts();
     if (pending.mode === "signup") {
       accts[pending.email.toLowerCase()] = { name: pending.name, email: pending.email, pass: hash(pending.pass), created: Date.now() };

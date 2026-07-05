@@ -12,7 +12,17 @@
     try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
   })();
   state.done = state.done || [];
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} if (window.VHCloud) VHCloud.saveProgress(state); };
+  // Pull cloud progress on load (cross-device); merge completed modules & keep best exam.
+  if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
+    if (!cloud) return;
+    let changed = false;
+    (cloud.done || []).forEach((m) => { if (!state.done.includes(m)) { state.done.push(m); changed = true; } });
+    if (cloud.qc) { state.qc = Object.assign({}, cloud.qc, state.qc); }
+    if (cloud.exam && (!state.exam || (cloud.exam.score || 0) > (state.exam.score || 0))) { state.exam = cloud.exam; changed = true; }
+    if (cloud.role && !state.role) state.role = cloud.role;
+    if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); }
+  });
 
   /* ── Modules & sidebar ── */
   const mods = $$(".tmod");
@@ -246,7 +256,7 @@
       const name = ($("#certNameInput").value || "").trim();
       if (!name) { $("#certNameInput").focus(); $("#certNameInput").placeholder = "Please enter your name first"; return; }
       state.exam = { passed: true, score: pct, name, date: new Date().toISOString().slice(0, 10), id: "VH-" + Date.now().toString(36).toUpperCase() };
-      save(); refreshProgress(); renderCertificate();
+      save(); if (window.VHCloud) VHCloud.registerCertificate(state.exam); refreshProgress(); renderCertificate();
     });
   }
 

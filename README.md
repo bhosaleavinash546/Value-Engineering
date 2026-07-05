@@ -27,3 +27,25 @@ All integrations live in **`site-config.js`** — fill a value, commit, and the 
 
 Until configured, the newsletter and contact form gracefully fall back to opening
 a pre-filled email draft.
+
+## Going live with real accounts & certificates (Supabase)
+
+The login page (`auth.html`), cross-device progress sync, and certificate
+verification (`verify.html`) all run in **demo mode** until Supabase is connected.
+To switch everything to production:
+
+1. **Create a free project** at [supabase.com](https://supabase.com).
+2. **Run the schema:** open **SQL Editor → New query**, paste all of
+   `supabase-setup.sql`, and click **Run** (creates the profiles / progress /
+   certificates tables with row-level security).
+3. **Enable email codes:** **Authentication → Providers → Email** — turn on
+   "Confirm email" with the **OTP** (6-digit) option.
+4. **Add your keys:** **Project Settings → API** — copy the **Project URL** and
+   the **anon public** key into `site-config.js`:
+   ```js
+   supabaseUrl:     "https://YOUR-PROJECT.supabase.co",
+   supabaseAnonKey: "eyJ...your anon public key...",
+   ```
+5. Commit & push. Done — real OTP emails, accounts, cloud progress and public
+   certificate verification are now live. (The anon key is public-safe by
+   design; the tables are protected by row-level security.)
