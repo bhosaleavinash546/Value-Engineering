@@ -23,6 +23,14 @@ window.VF_CONFIG = {
         then set your code here (e.g. "valueforge" for
         valueforge.goatcounter.com). Until set, no analytics loads. */
   goatcounterCode: "",
+
+  /* 5) AUTH (real email-OTP login) — create a free project at
+        https://supabase.com, then paste your Project URL and anon
+        (public) key here. Supabase sends real OTP emails and stores
+        accounts securely. Until both are set, the login page runs in
+        DEMO mode (accounts saved in the browser only). */
+  supabaseUrl: "",
+  supabaseAnonKey: "",
 };
 
 /* GoatCounter loader — privacy-friendly, no cookies */

@@ -856,3 +856,9 @@ html[data-theme="light"] .nav-links a:hover,html[data-theme="light"] .nav-links 
 html[data-theme="light"] .hero-bulb::before{background:radial-gradient(circle,rgba(46,111,232,.16),transparent 62%)}
 html[data-theme="light"] .hero-bulb svg{filter:drop-shadow(0 0 22px rgba(46,111,232,.25))}
 @media (prefers-reduced-motion:reduce){.hero-bulb,.hero-bulb::before,.hb-fil,.hb-ray,.hb-spark{animation:none!important}.hb-fil{stroke-dashoffset:0}.hb-ray{opacity:.7}}
+
+/* ── Sign-in nav link ── */
+.nav-signin{font-size:.9rem;font-weight:600;color:var(--txt)!important;padding:.5rem .3rem;transition:color .25s}
+.nav-signin:hover{color:var(--acc1)!important}
+.tr-signin{margin-right:.2rem}
+@media (max-width:1080px){.nav-links .nav-signin{font-size:1.25rem}}
