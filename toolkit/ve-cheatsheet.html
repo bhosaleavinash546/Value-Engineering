@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VE Cheat Sheet — VAVEhub Toolkit</title><link rel="stylesheet" href="_shared.css">
+<style>
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 1.6rem}
+.cols h2:first-child{margin-top:.2rem}
+.mini{font-size:.78rem}
+.mini td{height:auto;padding:.38rem .5rem}
+.mini th{padding:.35rem .5rem}
+.kv{font-size:.8rem;margin:0 0 .8rem 1.05rem}
+.kv li{margin-bottom:.28rem}
+.kv b{color:#1d4ed8}
+code{font-family:'Consolas','Menlo',monospace;font-size:.78rem;background:#eef1fa;border:1px solid #c9d2e6;border-radius:4px;padding:.05rem .3rem;white-space:nowrap}
+.vi-ok{color:#047857;font-weight:700}.vi-watch{color:#b45309;font-weight:700}.vi-attack{color:#b91c1c;font-weight:700}
+@media print{.cols{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.cols{grid-template-columns:1fr}}
+</style></head><body>
+<div class="btnbar"><a class="btn ghost" href="../index.html" style="text-decoration:none">← Back to VAVEhub</a><button class="btn" onclick="window.print()">Print / Save as PDF</button></div>
+<div class="sheet">
+<div class="head"><div><div class="brand">VAVE<b>hub</b> · Toolkit 06</div><h1>The VE Cheat Sheet</h1>
+<p class="sub">The whole discipline on one printable page — pin it above your desk. Full explanations in the free 13-module course at the VAVEhub VE Academy.</p></div></div>
+
+<div class="cols">
+<div>
+<h2>The equation</h2>
+<ul class="kv">
+  <li><b>Value = Function ÷ Cost.</b> Improve the ratio, not just the denominator.</li>
+  <li>Five legit moves: same function / lower cost · more function / same cost · more function / lower cost · function grows faster than cost · trim unvalued function, cut cost sharply.</li>
+</ul>
+
+<h2>SAVE job plan — 6 phases</h2>
+<table class="mini">
+<tr><th style="width:34%">Phase</th><th>Key output</th></tr>
+<tr><td><b>1 Information</b></td><td>Costed BOM (finance-validated), scope, Pareto of cost</td></tr>
+<tr><td><b>2 Function Analysis</b></td><td>Verb+noun functions, FAST diagram, function–cost matrix, VI per function</td></tr>
+<tr><td><b>3 Creative</b></td><td>Volume of ideas per target function — judgement deferred</td></tr>
+<tr><td><b>4 Evaluation</b></td><td>Shortlist via screening + Pugh matrix vs. datum</td></tr>
+<tr><td><b>5 Development</b></td><td>Validated proposals: saving, one-time cost, risk, timeline</td></tr>
+<tr><td><b>6 Presentation</b></td><td>Logged go/no-go decisions with owners &amp; dates</td></tr>
+</table>
+
+<h2>Function rules</h2>
+<ul class="kv">
+  <li>Every function = <b>active verb + measurable noun</b> ("heat water", not "provide heating capability").</li>
+  <li><b>Banned verbs:</b> provide, allow, enable — they measure nothing.</li>
+  <li><b>Basic</b> = why the product exists. <b>Secondary</b> = how this design happens to work → where removable cost hides.</li>
+  <li>FAST: move right = <b>HOW?</b> · move left = <b>WHY?</b> Read the chain aloud both ways to validate.</li>
+</ul>
+
+<h2>Value Index verdicts</h2>
+<table class="mini">
+<tr><th>VI = Cost ÷ Worth</th><th>Verdict</th></tr>
+<tr><td>&lt; 1.2</td><td class="vi-ok">Healthy — leave it alone</td></tr>
+<tr><td>1.2 – 2.0</td><td class="vi-watch">Watch list — challenge at next change</td></tr>
+<tr><td>&gt; 2.0</td><td class="vi-attack">Attack — prime creative-phase target</td></tr>
+</table>
+<p class="note" style="margin-top:.5rem"><b>Worth</b> = the lowest cost that could still reliably perform the function (cheapest solution in any industry, physics floor, or historical best).</p>
+
+<h2>Ideation quick-fire</h2>
+<ul class="kv">
+  <li><b>Rule #1:</b> defer judgement — evaluation has its own phase.</li>
+  <li><b>6-3-5 brainwriting:</b> 6 people × 3 ideas × 6 passes = 108 ideas in ~30 min, silently.</li>
+  <li><b>SCAMPER:</b> Substitute · Combine · Adapt · Modify · Put to other use · Eliminate · Reverse.</li>
+  <li><b>TRIZ:</b> 40 principles for contradictions; physical contradictions → separate in time/space/condition; ask the <b>Ideal Final Result</b>: "how would the function perform itself?"</li>
+</ul>
+</div>
+
+<div>
+<h2>Key formulas</h2>
+<ul class="kv">
+  <li><code>VI = Cost ÷ Worth</code></li>
+  <li><code>Should-cost = material + process + labour + overhead + fair margin</code></li>
+  <li><code>Machine rate = (depreciation + energy + floorspace + maintenance) ÷ (annual hrs × OEE)</code></li>
+  <li><code>Payback = one-time cost ÷ annual saving</code></li>
+  <li><code>Buy-to-fly = material bought ÷ material in finished part</code></li>
+  <li><code>Allowable cost = market price − required margin</code></li>
+  <li><code>Value gap = drifting cost − allowable cost</code></li>
+</ul>
+
+<h2>Lever families (with examples)</h2>
+<table class="mini">
+<tr><th style="width:38%">Family</th><th>Sample levers</th></tr>
+<tr><td><b>Design &amp; DFMA</b></td><td>Part-count reduction, integration, snap-fits, symmetry</td></tr>
+<tr><td><b>Material &amp; spec</b></td><td>Grade optimisation, wall thinning, tolerance relaxation, standard parts</td></tr>
+<tr><td><b>Manufacturing</b></td><td>Process substitution, cycle time, scrap &amp; OEE, near-net-shape</td></tr>
+<tr><td><b>Sourcing</b></td><td>Should-cost negotiation, LPP outliers, best-cost country, gain-share</td></tr>
+<tr><td><b>Feature &amp; variant</b></td><td>Kano-based de-contenting, SKU rationalisation, modularity</td></tr>
+<tr><td><b>Lifecycle</b></td><td>Packaging, logistics density, energy, service &amp; warranty design</td></tr>
+</table>
+
+<h2>Teardown discipline</h2>
+<ul class="kv">
+  <li><b>First step:</b> photograph, weigh, measure everything — <i>before</i> disassembly.</li>
+  <li>Cost their BOM at <b>their</b> region, volumes &amp; processes; trust deltas over absolutes.</li>
+  <li>Benchmark <b>value ratios</b> (torque/€, lumens/€), not absolutes.</li>
+</ul>
+
+<h2>Target costing</h2>
+<ul class="kv">
+  <li>Set the allowable cost <b>before design</b>; cascade vehicle → system → part → supplier target price, each with a named owner.</li>
+  <li><b>Cardinal rule:</b> the target is never exceeded — content trades, it doesn't drift.</li>
+  <li>Run cost like mass: gate status + recovery plan. After SOP, hand over to kaizen costing.</li>
+</ul>
+
+<h2>Savings funnel &amp; expectations</h2>
+<ul class="kv">
+  <li><b>L1</b> idea → <b>L2</b> validated → <b>L3</b> implemented → <b>L4</b> audited vs. <b>frozen baseline</b>. Only L4 counts.</li>
+  <li>First structured wave: <b>8–15%</b> of product cost. Mature programme: <b>3–5%/yr</b>. Study ROI &gt; <b>10:1</b>.</li>
+  <li>~<b>80%</b> of lifecycle cost is committed during design — go early.</li>
+</ul>
+</div>
+</div>
+
+<div class="tips"><b>The five Miles questions</b> — ask them of any part, any day: What is it? What does it do? What does it cost? What is it worth? What else could do the job?</div>
+
+<div class="foot"><span>© Avinash Bhosale · VAVEhub Toolkit — free for personal &amp; internal company use with attribution; commercial redistribution or resale prohibited. SAVE International®, TRIZ® and DFMA® are trademarks of their respective owners.</span><span>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/">Avinash Bhosale</a></span></div>
+</div></body></html>

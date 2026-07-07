@@ -171,3 +171,10 @@ html[data-theme="light"] .auth-brand{background:
   .abg-fil{stroke-dashoffset:0}.abg-ray{opacity:.6}
   .ab-rotator span:first-child{opacity:1;transform:none}
 }
+
+/* ── already-signed-in notice (auth page) ── */
+.signed-note{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;max-width:440px;margin:0 auto 1.1rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:14px;background:var(--card);font-size:.86rem;color:var(--muted)}
+.signed-note .sn-avatar{width:30px;height:30px;border-radius:50%;background:var(--acc2);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--font-d);flex:none}
+.signed-note .sn-text b{color:var(--txt)}
+.signed-note .sn-btn{padding:.42rem .8rem;font-size:.78rem;margin-left:auto}
+.signed-note .sn-btn + .sn-btn{margin-left:0}

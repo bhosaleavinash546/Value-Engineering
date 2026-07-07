@@ -16,6 +16,8 @@
     accounts() { try { return JSON.parse(localStorage.getItem("vh-accounts")) || {}; } catch { return {}; } },
     saveAccounts(a) { try { localStorage.setItem("vh-accounts", JSON.stringify(a)); } catch {} },
     setSession(s) { try { localStorage.setItem("vh-session", JSON.stringify(s)); } catch {} },
+    session() { try { return JSON.parse(localStorage.getItem("vh-session")); } catch { return null; } },
+    clearSession() { try { localStorage.removeItem("vh-session"); } catch {} },
   };
   // very light obfuscation for demo only — NOT real security
   const hash = (s) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return "d" + (h >>> 0).toString(36); };
@@ -27,7 +29,7 @@
     views.forEach((v) => v.classList.toggle("is-active", v.id === "view-" + name));
     const first = $(".auth-view.is-active input");
     if (first) setTimeout(() => first.focus(), 60);
-    banner("signin-banner", ""); banner("signup-banner", ""); banner("forgot-banner", ""); banner("otp-banner", "");
+    banner("signin-banner", ""); banner("signup-banner", ""); banner("forgot-banner", ""); banner("otp-banner", ""); banner("newpass-banner", "");
   }
   $$("[data-goto]").forEach((b) => b.addEventListener("click", () => show(b.dataset.goto)));
 
@@ -92,7 +94,7 @@
     if (LIVE) {
       // Real path: Supabase sends the email; no client-side code
       try {
-        await supa().auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
+        await (await supaReady()).auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
       } catch (e) { banner("otp-banner", "Could not send code: " + (e.message || "try again"), "err"); }
       $("#demo-otp").className = "demo-otp";
     } else {
@@ -105,7 +107,7 @@
   }
 
   function startResend() {
-    let t = 30;
+    let t = 60; // Supabase rate-limits OTP resends to 60s
     const timerEl = $("#otp-timer"), resendEl = $("#otp-resend");
     clearInterval(resendTimer);
     resendEl.innerHTML = 'Didn\'t get it? Resend in <b id="otp-timer">' + t + 's</b>';
@@ -144,22 +146,24 @@
 
   function currentOtp() { return otpInputs.map((i) => i.value).join(""); }
 
-  /* ── Supabase lazy loader (live mode only) ── */
+  /* ── Supabase client (live mode only) — shared with vh-cloud.js ── */
   let _supa = null;
-  function supa() {
+  async function supaReady() {
+    if (window.VHCloud && VHCloud.live) { await VHCloud.ready; if (VHCloud.client()) return VHCloud.client(); }
     if (_supa) return _supa;
+    if (!window.supabase) await new Promise((res) => {
+      const sdk = document.createElement("script");
+      sdk.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      sdk.onload = res; sdk.onerror = res;
+      document.head.appendChild(sdk);
+    });
     if (!window.supabase) throw new Error("Supabase library not loaded");
     _supa = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
     return _supa;
   }
-  if (LIVE) {
-    const sdk = document.createElement("script");
-    sdk.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-    document.head.appendChild(sdk);
-  }
 
-  function succeed(title, msg, name) {
-    if (name) store.setSession({ name, at: Date.now() });
+  function succeed(title, msg, name, email) {
+    if (name) store.setSession({ name, email: email || (pending && pending.email) || "", at: Date.now() });
     $("#success-title").textContent = title;
     $("#success-msg").textContent = msg;
     show("success");
@@ -190,10 +194,11 @@
     loading(e.target, true);
     if (LIVE) {
       try {
-        const { error } = await supa().auth.signInWithPassword({ email, password: pass });
+        const { data, error } = await (await supaReady()).auth.signInWithPassword({ email, password: pass });
         loading(e.target, false);
         if (error) return banner("signin-banner", error.message, "err");
-        succeed("Welcome back!", "Signed in successfully.", email.split("@")[0]);
+        const nm = (data && data.user && data.user.user_metadata && data.user.user_metadata.full_name) || email.split("@")[0];
+        succeed("Welcome back, " + nm.split(" ")[0] + "!", "Signed in successfully.", nm, email);
       } catch (err) { loading(e.target, false); banner("signin-banner", "Sign-in failed. Try the email code option.", "err"); }
       return;
     }
@@ -202,7 +207,7 @@
       const acc = store.accounts()[email.toLowerCase()];
       if (!acc) return banner("signin-banner", "No account found for this email. Create one — it's free.", "err");
       if (acc.pass !== hash(pass)) return banner("signin-banner", "Incorrect password. Try again or reset it.", "err");
-      succeed("Welcome back, " + acc.name.split(" ")[0] + "!", "Signed in successfully.", acc.name);
+      succeed("Welcome back, " + acc.name.split(" ")[0] + "!", "Signed in successfully.", acc.name, email);
     }, 500);
   });
 
@@ -219,6 +224,10 @@
     const email = $("#fp-email").value.trim();
     fieldError($("#fp-email"), !validEmail(email));
     if (!validEmail(email)) return;
+    if (!LIVE && !store.accounts()[email.toLowerCase()]) {
+      banner("forgot-banner", "No account found for this email. Create one instead — it's free.", "err");
+      return;
+    }
     loading(e.target, true);
     setTimeout(() => { loading(e.target, false); sendCode("reset", email); }, 500);
   });
@@ -232,8 +241,8 @@
 
     if (LIVE) {
       try {
-        const { error } = await supa().auth.verifyOtp({ email: pending.email, token: code, type: "email" });
-        if (!error && pending.pass) { try { await supa().auth.updateUser({ password: pending.pass }); } catch (x) {} }
+        const { error } = await (await supaReady()).auth.verifyOtp({ email: pending.email, token: code, type: "email" });
+        if (!error && pending.pass) { try { await (await supaReady()).auth.updateUser({ password: pending.pass }); } catch (x) {} }
         loading(e.target, false);
         if (error) return banner("otp-banner", "Invalid or expired code.", "err");
         finishPending();
@@ -250,11 +259,16 @@
 
   function finishPending() {
     clearInterval(resendTimer);
+    if (pending.mode === "reset") {
+      // Email verified — now let the user actually choose a new password.
+      $("#np-target").textContent = pending.email;
+      show("newpass");
+      return; // keep `pending` for the newpass submit
+    }
     if (LIVE) {
       const nm = pending.name || pending.email.split("@")[0];
-      if (pending.mode === "signup") succeed("Welcome to VAVEhub, " + nm.split(" ")[0] + "!", "Your account is verified and ready.", nm);
-      else if (pending.mode === "reset") succeed("Email verified", "You're signed in — set a new password from your account.", nm);
-      else succeed("You're in!", "Signed in with a one-time code.", nm);
+      if (pending.mode === "signup") succeed("Welcome to VAVEhub, " + nm.split(" ")[0] + "!", "Your account is verified and ready.", nm, pending.email);
+      else succeed("You're in!", "Signed in with a one-time code.", nm, pending.email);
       pending = null; return;
     }
     const accts = store.accounts();
@@ -262,14 +276,61 @@
       accts[pending.email.toLowerCase()] = { name: pending.name, email: pending.email, pass: hash(pending.pass), created: Date.now() };
       store.saveAccounts(accts);
       succeed("Welcome to VAVEhub, " + pending.name.split(" ")[0] + "!", "Your account is verified and ready.", pending.name);
-    } else if (pending.mode === "reset") {
-      succeed("Email verified", "You can now set a new password from your account. For now, you're signed in.", pending.email.split("@")[0]);
     } else { // signin via otp
       const acc = accts[pending.email.toLowerCase()];
-      succeed("You're in!", "Signed in with a one-time code.", acc ? acc.name : pending.email.split("@")[0]);
+      succeed("You're in!", "Signed in with a one-time code.", acc ? acc.name : pending.email.split("@")[0], pending.email);
     }
     pending = null;
   }
+
+  /* ── SET NEW PASSWORD (reset flow, after OTP verified) ── */
+  $("#form-newpass").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const p1 = $("#np-pass").value, p2 = $("#np-pass2").value;
+    fieldError($("#np-pass"), p1.length < 8);
+    fieldError($("#np-pass2"), p1 !== p2);
+    if (p1.length < 8 || p1 !== p2) return;
+    if (!pending || pending.mode !== "reset") { show("signin"); return; }
+    loading(e.target, true);
+    const email = pending.email;
+    if (LIVE) {
+      try {
+        // OTP verification signed the user in, so updateUser can set the password
+        const { error } = await (await supaReady()).auth.updateUser({ password: p1 });
+        loading(e.target, false);
+        if (error) return banner("newpass-banner", error.message, "err");
+        succeed("Password updated", "Your new password is saved — and you're signed in.", email.split("@")[0], email);
+        pending = null;
+      } catch (err) { loading(e.target, false); banner("newpass-banner", "Could not save the password — try again.", "err"); }
+      return;
+    }
+    setTimeout(() => {
+      loading(e.target, false);
+      const accts = store.accounts();
+      const acc = accts[email.toLowerCase()];
+      if (!acc) return banner("newpass-banner", "Account not found — please sign up instead.", "err");
+      acc.pass = hash(p1);
+      store.saveAccounts(accts);
+      succeed("Password updated", "Your new password is saved — and you're signed in.", acc.name, email);
+      pending = null;
+    }, 500);
+  });
+
+  /* ── already signed in? offer to continue instead of re-asking ── */
+  (async function detectSession() {
+    let name = null;
+    if (LIVE && window.VHCloud) { try { name = await VHCloud.displayName(); } catch (e) {} }
+    else { const sess = store.session(); if (sess && sess.name) name = sess.name; }
+    if (!name) return;
+    const noteEl = $("#signed-note");
+    $("#sn-name").textContent = name;
+    $("#sn-avatar").textContent = name.trim().charAt(0).toUpperCase();
+    noteEl.hidden = false;
+    $("#sn-signout").addEventListener("click", async () => {
+      if (window.VHCloud) await VHCloud.signOut(); else store.clearSession();
+      noteEl.hidden = true;
+    });
+  })();
 
   /* ── mode note ── */
   const note = $("#mode-note");

@@ -237,3 +237,35 @@ html[data-theme="light"] .tmod,html[data-theme="light"] .tr-sidebar{box-shadow:0
 .tpit li{font-size:.84rem;color:var(--muted);padding-left:1.2rem;position:relative}
 .tpit li::before{content:"⚠";position:absolute;left:0;color:#e58b8a;font-size:.75rem}
 html[data-theme="light"] .tpit h4,html[data-theme="light"] .tpit li::before{color:#b3403f}
+
+/* ── My Learning banner (signed-in hero state) ── */
+.my-learn{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;margin:1.4rem auto 0;max-width:760px;padding:.95rem 1.2rem;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:left;animation:mlIn .5s ease both}
+@keyframes mlIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ml-ring{position:relative;width:60px;height:60px;flex:none}
+.ml-ring svg{width:60px;height:60px;transform:rotate(-90deg)}
+.ml-ring .mlr-bg{fill:none;stroke:var(--track);stroke-width:6}
+.ml-ring .mlr-fg{fill:none;stroke:var(--acc1);stroke-width:6;stroke-linecap:round;stroke-dasharray:163.4;transition:stroke-dashoffset .8s ease}
+.ml-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 .78rem var(--font-d);color:var(--txt)}
+.ml-txt{flex:1;min-width:180px}
+.ml-txt b{display:block;font-family:var(--font-d);font-size:1.02rem;color:var(--txt);margin-bottom:.2rem}
+.ml-txt span{font-size:.8rem;color:var(--muted)}
+.ml-btn{flex:none;font-size:.82rem;padding:.6rem 1rem}
+.side-sync{margin:.7rem 0 0;font-size:.72rem;color:var(--muted);line-height:1.5}
+.side-sync a{color:var(--acc1);font-weight:600}
+
+/* ── toast (cloud sync notice etc.) ── */
+#vhToast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);background:var(--bg2);border:1px solid var(--acc1);color:var(--txt);font:600 .84rem var(--font-b);padding:.65rem 1.2rem;border-radius:999px;box-shadow:0 12px 40px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:400}
+#vhToast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ── module summary print button ── */
+.tmod-head{position:relative}
+.tmod-print{position:absolute;right:0;top:0;border:1px solid var(--line);background:none;color:var(--muted);font:600 .72rem var(--font-b);padding:.38rem .7rem;border-radius:999px;cursor:pointer;transition:color .2s,border-color .2s}
+.tmod-print:hover{color:var(--acc1);border-color:var(--acc1)}
+@media (max-width:640px){.tmod-print{position:static;margin-top:.5rem}}
+
+/* ── glossary tooltips in lessons ── */
+.gloss{border-bottom:1px dotted var(--acc1);cursor:help;position:relative}
+.gloss::after{content:attr(data-def);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%) translateY(4px);width:min(300px,72vw);background:var(--bg2);border:1px solid var(--acc1);border-radius:10px;padding:.6rem .75rem;font:400 .76rem/1.5 var(--font-b);color:var(--txt);box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;visibility:hidden;transition:opacity .18s,transform .18s;z-index:120;pointer-events:none;text-align:left}
+.gloss::before{content:"";position:absolute;left:50%;bottom:calc(100% + 3px);transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--acc1);opacity:0;visibility:hidden;transition:opacity .18s;z-index:121}
+.gloss:hover::after,.gloss:focus-visible::after,.gloss:hover::before,.gloss:focus-visible::before{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.gloss:focus-visible{outline:none;border-bottom-style:solid}

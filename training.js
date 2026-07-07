@@ -12,6 +12,18 @@
     try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
   })();
   state.done = state.done || [];
+  // Visit streak — consecutive days the learner showed up.
+  (function trackStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    const v = state.visits || {};
+    if (v.last !== today) {
+      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      v.streak = v.last === yesterday ? (v.streak || 0) + 1 : 1;
+      v.last = today;
+      state.visits = v;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    }
+  })();
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} if (window.VHCloud) VHCloud.saveProgress(state); };
   // Pull cloud progress on load (cross-device); merge completed modules & keep best exam.
   if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
@@ -21,8 +33,19 @@
     if (cloud.qc) { state.qc = Object.assign({}, cloud.qc, state.qc); }
     if (cloud.exam && (!state.exam || (cloud.exam.score || 0) > (state.exam.score || 0))) { state.exam = cloud.exam; changed = true; }
     if (cloud.role && !state.role) state.role = cloud.role;
-    if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); }
+    if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); toast("✓ Progress restored from your account"); }
   });
+
+  function toast(msg) {
+    let t = $("#vhToast");
+    if (!t) {
+      t = document.createElement("div");
+      t.id = "vhToast"; t.setAttribute("role", "status"); t.setAttribute("aria-live", "polite");
+      document.body.appendChild(t);
+    }
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 4200);
+  }
 
   /* ── Modules & sidebar ── */
   const mods = $$(".tmod");
@@ -50,6 +73,7 @@
     ["🛠", "Job Plan Master", ["m3", "m4", "m5", "m6", "m7", "m8"]],
     ["📐", "Cost Toolsmith", ["m9", "m10", "m11"]],
     ["🏛", "Programme Leader", ["m12"]],
+    ["🎯", "Cost Preventer", ["m13"]],
   ];
   function points() {
     let p = state.done.length * 100;
@@ -75,13 +99,14 @@
       const id = l.dataset.target;
       l.classList.toggle("is-done", id === "exam" ? !!(state.exam && state.exam.passed) : state.done.includes(id));
     });
+    if (acctName) renderMyLearn();
   }
 
   /* ── Role-based learning paths ── */
   const ROLE_RECS = {
-    design: ["m1", "m3", "m4", "m5", "m7", "m10"],
+    design: ["m1", "m3", "m4", "m5", "m7", "m10", "m13"],
     sourcing: ["m1", "m2", "m9", "m10", "m11"],
-    manager: ["m1", "m2", "m6", "m8", "m12"],
+    manager: ["m1", "m2", "m6", "m8", "m12", "m13"],
     all: [],
   };
   function applyRole(role) {
@@ -121,6 +146,51 @@
     const firstUnread = courseMods.find((m) => !state.done.includes(m.dataset.mod));
     show(firstUnread ? firstUnread.dataset.mod : "exam");
   });
+
+  /* ── Signed-in state: My Learning banner + cert name prefill ── */
+  let acctName = "";
+  function renderMyLearn() {
+    if (!acctName) return;
+    let box = $("#myLearn");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "myLearn"; box.className = "my-learn";
+      const hero = $(".tr-hero-inner");
+      hero.insertBefore(box, $("#trRoles"));
+    }
+    const total = courseMods.length, done = state.done.length;
+    const pct = Math.round((done / total) * 100);
+    const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
+    const streak = (state.visits && state.visits.streak) || 1;
+    const certified = state.exam && state.exam.passed;
+    const first = acctName.trim().split(/\s+/)[0];
+    box.innerHTML = `
+      <div class="ml-ring"><svg viewBox="0 0 60 60"><circle class="mlr-bg" cx="30" cy="30" r="26"/><circle class="mlr-fg" cx="30" cy="30" r="26" style="stroke-dashoffset:${Math.round(163.4 * (1 - pct / 100))}"/></svg><b>${pct}%</b></div>
+      <div class="ml-txt">
+        <b>Welcome back, ${first} 👋</b>
+        <span>${done} of ${total} modules · ${points()} pts · ${rank(points())}${streak > 1 ? " · 🔥 " + streak + "-day streak" : ""}${certified ? " · 🎓 Certified" : ""}</span>
+      </div>
+      <button class="btn btn-primary ml-btn" id="mlGo">${certified ? "View your certificate →" : next ? (done ? "Continue: " + next.dataset.title + " →" : "Start learning →") : "Take the exam →"}</button>`;
+    $("#mlGo").addEventListener("click", () => show(certified || !next ? "exam" : next.dataset.mod));
+  }
+  function onAccount(user) {
+    if (user && user.name) {
+      acctName = user.name; renderMyLearn();
+      const ss = $("#sideSync"); if (ss) ss.remove();
+    } else {
+      acctName = "";
+      const ml = $("#myLearn"); if (ml) ml.remove();
+      const foot = $(".tr-side-foot");
+      if (foot && !$("#sideSync")) {
+        const n = document.createElement("p");
+        n.id = "sideSync"; n.className = "side-sync";
+        n.innerHTML = '<a href="auth.html">Sign in</a> to sync your progress across devices.';
+        foot.appendChild(n);
+      }
+    }
+  }
+  document.addEventListener("vh-account", (e) => onAccount(e.detail));
+  if (window.VHAccount && VHAccount.user) onAccount(VHAccount.user);
 
   /* ── Exam bank: 30 questions, [question, [options], correctIndex] ── */
   const BANK = [
@@ -169,6 +239,9 @@
     ["A machine-hour rate is calculated as:", ["Machine price ÷ parts made", "(Depreciation + energy + floorspace + maintenance) ÷ (annual hours × OEE)", "Operator wage × 2", "Supplier quote ÷ cycle time"], 1],
     ["When costing a competitor's torn-down BOM you should assume:", ["Your own region, volumes and processes", "Their likely region, volumes and processes — and trust deltas more than absolutes", "Worst-case costs everywhere", "List prices for all materials"], 1],
     ["Which statement about teardown legality is correct?", ["All reverse engineering is illegal", "Analysing open-market products is lawful; misappropriated confidential data is the bright line, and copying patented solutions needs a licence or design-around", "Patents are secret documents", "Ethics only apply to hardware"], 1],
+    ["The 'value gap' in target costing is:", ["Market price minus list price", "The difference between the drifting (current-estimate) cost and the allowable cost", "Profit minus overhead", "The warranty reserve"], 1],
+    ["Kaizen costing is:", ["Setting cost targets before design begins", "Continuous incremental cost reduction after production starts — the handoff from target costing", "A European auditing standard", "A supplier penalty clause"], 1],
+    ["In design-to-cost, cost status at each design gate should be treated like:", ["A finance-only report", "Mass/weight status — a tracked engineering property with a named owner and a recovery plan when exceeded", "A marketing forecast", "An optional appendix"], 1],
   ];
   const PASS_MARK = 0.8;
   const EXAM_SIZE = 30;
@@ -181,7 +254,7 @@
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
     const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
     mount.innerHTML = `<div class="ex-gate">
-      <p>Thirty questions, drawn at random from a 45-question bank spanning all twelve modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
+      <p>Thirty questions, drawn at random from a 48-question bank spanning all thirteen modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
       to earn the <strong>VAVEhub VE Practitioner Certificate</strong>. You can retake the exam as many times as you like —
       a fresh random 30 is drawn from the bank on every attempt.</p>
       ${remaining > 0 ? `<p class="ex-warn">Heads up: ${remaining} module${remaining > 1 ? "s" : ""} not yet completed. You can still attempt the exam, but we recommend finishing the course first.</p>` : ""}
@@ -241,7 +314,7 @@
         : `You scored ${pct}%; the pass mark is ${Math.round(PASS_MARK * 100)}% (24 of 30). Review the corrections below — questions reshuffle on every attempt.`}</p>
       ${wrong.length && !passed ? `<div class="ex-review"><h4>Where you lost marks (${wrong.length})</h4>${wrong.map(([q, y, r]) =>
         `<div class="ex-review-item"><b>${q}</b><span class="wrong">✗ ${y}</span> &nbsp;→&nbsp; <span class="right">✓ ${r}</span></div>`).join("")}</div>` : ""}
-      ${passed ? `<div class="ex-name"><input id="certNameInput" maxlength="60" placeholder="Your full name, as it should appear" value="${(state.exam && state.exam.name) || ""}" /></div>` : ""}
+      ${passed ? `<div class="ex-name"><input id="certNameInput" maxlength="60" placeholder="Your full name, as it should appear" value="${((state.exam && state.exam.name) || acctName || "").replace(/"/g, "&quot;")}" /></div>` : ""}
       <div class="ex-actions">
         ${passed ? '<button class="btn btn-primary" id="genCert">🎓 Generate my certificate</button>' : ""}
         <button class="btn btn-ghost" id="exRetake">${passed ? "Retake for a better score" : "↻ Retake the exam"}</button>
@@ -296,6 +369,47 @@
     $("#certWrap").hidden = false;
   }
 
+  /* ── Printable one-page module summaries ── */
+  courseMods.forEach((mod) => {
+    const head = $(".tmod-head", mod);
+    if (!head) return;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tmod-print";
+    btn.textContent = "🖨 Module summary";
+    btn.title = "Print a one-page recap of this module";
+    btn.addEventListener("click", () => printSummary(mod));
+    head.appendChild(btn);
+  });
+
+  function printSummary(mod) {
+    const title = mod.dataset.title;
+    const tag = ($(".tmod-tag", mod) || {}).textContent || "";
+    const obj = $(".tmod-obj ul", mod), keys = $(".tkey ul", mod), doEl = $(".tdo p", mod);
+    const w = window.open("", "_blank", "width=820,height=900");
+    if (!w) return;
+    w.document.write(`<!DOCTYPE html><html><head><title>${title} — module summary · VAVEhub VE Academy</title>
+      <style>
+        body{font-family:'Segoe UI',system-ui,sans-serif;color:#1a2233;max-width:760px;margin:2rem auto;padding:0 1.2rem;line-height:1.55}
+        .brand{font-weight:800;font-size:.95rem}.brand b{color:#2563eb}
+        .tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#5a6785;margin:.9rem 0 .2rem}
+        h1{font-size:1.5rem;margin:0 0 1rem;border-bottom:2px solid #1a2233;padding-bottom:.7rem}
+        h2{font-size:.95rem;color:#2563eb;margin:1.3rem 0 .4rem}
+        ul{margin:.2rem 0 .2rem 1.2rem}li{margin-bottom:.3rem;font-size:.9rem}
+        p{font-size:.9rem}
+        .foot{margin-top:2rem;padding-top:.8rem;border-top:1px solid #dde3f0;font-size:.72rem;color:#5a6785}
+        @media print{body{margin:0 auto}}
+      </style></head><body>
+      <div class="brand">VAVE<b>hub</b> · VE Academy — module summary</div>
+      <div class="tag">${tag}</div><h1>${title}</h1>
+      ${obj ? "<h2>What this module covers</h2><ul>" + obj.innerHTML + "</ul>" : ""}
+      ${keys ? "<h2>Key takeaways</h2><ul>" + keys.innerHTML + "</ul>" : ""}
+      ${doEl ? "<h2>Hands-on assignment</h2><p>" + doEl.innerHTML + "</p>" : ""}
+      <div class="foot">© Avinash Bhosale · VAVEhub VE Academy — free educational summary, personal &amp; internal use with attribution. Full lesson, worked examples and case studies: the free course at VAVEhub.</div>
+      <script>window.print()<\/script></body></html>`);
+    w.document.close();
+  }
+
   /* ── Init ── */
   refreshProgress();
   const firstUnread = courseMods.find((m) => !state.done.includes(m.dataset.mod));
@@ -310,6 +424,18 @@
   const state = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } })();
   state.qc = state.qc || {};
   state.done = state.done || [];
+  // Visit streak — consecutive days the learner showed up.
+  (function trackStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    const v = state.visits || {};
+    if (v.last !== today) {
+      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      v.streak = v.last === yesterday ? (v.streak || 0) + 1 : 1;
+      v.last = today;
+      state.visits = v;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    }
+  })();
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
 
   const QUICK = {
@@ -361,6 +487,10 @@
       ["The savings funnel should be reviewed…", ["Annually", "Monthly — every idea has an owner, a stage and a date", "Only when savings slip", "Never, it runs itself"], 1, "Monthly cadence is what stops ideas dying quietly."],
       ["The SAVE certification ladder, in order, is…", ["CVS → AVS → VMA", "VMA → AVS → CVS", "AVS → CVS → VMA", "PVA → CVS → VMA"], 1, "Value Methodology Associate → Associate Value Specialist → Certified Value Specialist."],
     ],
+    m13: [
+      ["A product will sell at €400 and the business needs a 25% margin. Its allowable cost is…", ["€100", "€300", "€375", "€500"], 1, "Allowable cost = price − margin = 400 × (1 − 0.25) = €300 — set before design, not after."],
+      ["The 'cardinal rule' of target costing says…", ["If costs drift up, raise the price", "The target cost may never be exceeded — content trades elsewhere instead of drifting", "Suppliers absorb all overruns", "Targets are advisory until SOP"], 1, "Cooper & Slagmulder's rule: the number holds; features, design or make-buy flex around it."],
+    ],
   };
 
   $$(".qcheck").forEach((box) => {
@@ -375,7 +505,7 @@
       qs.map(([q, opts, c, expl], qiIdx) => `<div class="qc-item" data-qi="${qiIdx}">
         <div class="qc-q">${qiIdx + 1}. ${q}</div>
         <div class="qc-opts">${opts.map((o, oi) => `<button class="qc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
-        <div class="qc-expl"></div></div>`).join("");
+        <div class="qc-expl" role="status" aria-live="polite"></div></div>`).join("");
 
     function gate() {
       if (doneBtn) doneBtn.disabled = !(alreadyCleared || solved.size === qs.length);
@@ -408,5 +538,64 @@
       }
     });
     gate();
+  });
+})();
+
+/* ════════ Glossary tooltips — first mention per module gets a hover definition ════════ */
+(function () {
+  "use strict";
+  const TERMS = [
+    ["FAST", "Function Analysis System Technique — maps functions on a HOW→/←WHY logic axis between scope lines."],
+    ["Value Index", "Cost ÷ Worth for a function. Above 1.2, watch; above 2.0, attack."],
+    ["should-cost", "A bottom-up estimate of what a part ought to cost: material, cycle time, machine rates, labour, overhead, fair margin."],
+    ["cleansheet", "A fully transparent, layer-by-layer should-cost model used for fact-based negotiation."],
+    ["LPP", "Linear Performance Pricing — regressing price against a cost driver across a part family to expose outliers."],
+    ["target costing", "Market price − required margin = allowable cost, set before design starts and cascaded down."],
+    ["design-to-cost", "Managing cost as a design requirement with the same authority as mass, performance or safety."],
+    ["kaizen costing", "Continuous, incremental cost reduction during production — the running-change counterpart to target costing."],
+    ["teardown", "Systematic disassembly and costing of a product — yours or a competitor's — to harvest facts and ideas."],
+    ["DFMA", "Design for Manufacture & Assembly — minimum-part-count logic and assembly-friendly geometry, quantified."],
+    ["buy-to-fly", "Raw material bought ÷ material in the finished part. Aerospace titanium can start at 8:1."],
+    ["OEE", "Overall Equipment Effectiveness = availability × performance × quality — the denominator of machine cost per part."],
+    ["TCO", "Total Cost of Ownership — purchase price plus lifetime energy, service, warranty and disposal cost."],
+    ["PPAP", "Production Part Approval Process — the automotive gate every implemented VAVE change must clear."],
+    ["TRIZ", "Theory of Inventive Problem Solving — resolves design contradictions using 40 principles distilled from patents."],
+    ["Kano", "Model separating must-be, performance, attractive, indifferent and reverse requirements — the de-contenting compass."],
+    ["Pugh matrix", "Concept screening: score each candidate +/−/same against the current design (the datum) per criterion."],
+    ["basic function", "The reason the product exists (\"heat water\"). Remove it and the product is pointless."],
+    ["secondary function", "How this particular design happens to work — and therefore where most removable cost hides."],
+    ["gain-share", "Contractual split of verified savings with a supplier — the engine of supplier-driven VAVE."],
+  ].map(([t, d]) => [new RegExp("(^|[^\\w-])(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")($|[^\\w-])", "i"), t, d]);
+
+  document.querySelectorAll(".tmod").forEach((mod) => {
+    const used = new Set();
+    const walker = document.createTreeWalker(mod, NodeFilter.SHOW_TEXT, {
+      acceptNode(n) {
+        const p = n.parentElement;
+        if (!p || p.closest("h2, h3, h4, .gloss, .tmod-tag, .qcheck, button, a, code")) return NodeFilter.FILTER_REJECT;
+        return n.data.trim().length > 3 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      },
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((node) => {
+      for (const [re, term, def] of TERMS) {
+        if (used.has(term)) continue;
+        const m = node.data.match(re);
+        if (!m) continue;
+        const start = m.index + m[1].length;
+        const word = m[2];
+        const after = node.splitText(start);
+        after.data = after.data.slice(word.length);
+        const span = document.createElement("span");
+        span.className = "gloss";
+        span.tabIndex = 0;
+        span.setAttribute("data-def", def);
+        span.textContent = word;
+        node.parentNode.insertBefore(span, after);
+        used.add(term);
+        break; // one wrap per text node; later nodes catch the other terms
+      }
+    });
   });
 })();

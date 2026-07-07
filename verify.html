@@ -32,7 +32,7 @@
       <div class="field"><input type="text" id="cert-id" placeholder="e.g. VH-ABC123" style="text-align:center;font-family:var(--font-m);letter-spacing:.08em" /></div>
       <button type="submit" class="btn btn-primary btn-full"><span class="btn-label">Verify</span><span class="btn-spinner"></span></button>
     </form>
-    <div id="verify-result" style="margin-top:1.6rem"></div>
+    <div id="verify-result" style="margin-top:1.6rem" role="status" aria-live="polite"></div>
   </div>
 </div>
 
@@ -43,6 +43,7 @@
 
 <script src="site-config.js"></script>
 <script src="vh-cloud.js"></script>
+<script src="vh-account.js"></script>
 <script>
 (function () {
   "use strict";

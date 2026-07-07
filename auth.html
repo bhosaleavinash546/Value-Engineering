@@ -51,14 +51,14 @@
       <p class="ab-eyebrow">VE ACADEMY · MEMBER ACCESS</p>
       <h2 class="ab-head">Where cost problems<br />become <b>bright ideas.</b></h2>
       <div class="ab-rotator">
-        <span>Track your progress across all 12 modules.</span>
+        <span>Track your progress across all 13 modules.</span>
         <span>Earn a shareable VE Practitioner Certificate.</span>
         <span>Save your Value Diagnosis &amp; toolkit results.</span>
         <span>Learn the discipline the best engineers use.</span>
       </div>
       <div class="ab-stats">
-        <div><b>12</b><span>modules</span></div>
-        <div><b>45</b><span>exam bank</span></div>
+        <div><b>13</b><span>modules</span></div>
+        <div><b>48</b><span>exam bank</span></div>
         <div><b>80%</b><span>to certify</span></div>
         <div><b>Free</b><span>forever</span></div>
       </div>
@@ -77,6 +77,13 @@
       <button class="theme-toggle" data-themetoggle aria-label="Toggle light/dark theme">🌙</button>
     </div>
 
+    <div class="signed-note" id="signed-note" hidden>
+      <span class="sn-avatar" id="sn-avatar">A</span>
+      <span class="sn-text">Already signed in as <b id="sn-name">—</b></span>
+      <a class="btn btn-primary sn-btn" href="training.html">Continue →</a>
+      <button class="btn btn-ghost sn-btn" id="sn-signout" type="button">Sign out</button>
+    </div>
+
     <div class="auth-card">
 
       <!-- SIGN IN -->
@@ -84,7 +91,7 @@
         <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></div>
         <h1>Welcome back</h1>
         <p class="av-sub">Sign in to continue your Value Engineering journey.</p>
-        <div class="form-banner" id="signin-banner"></div>
+        <div class="form-banner" id="signin-banner" role="status" aria-live="polite"></div>
         <form id="form-signin" novalidate>
           <div class="field">
             <label for="si-email">Email address</label>
@@ -116,7 +123,7 @@
         <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
         <h1>Create your account</h1>
         <p class="av-sub">Free forever. Track progress, earn your certificate, keep your results.</p>
-        <div class="form-banner" id="signup-banner"></div>
+        <div class="form-banner" id="signup-banner" role="status" aria-live="polite"></div>
         <form id="form-signup" novalidate>
           <div class="field">
             <label for="su-name">Full name</label>
@@ -146,7 +153,7 @@
         <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
         <h1>Reset your password</h1>
         <p class="av-sub">Enter your email and we'll send a 6-digit code to verify it's you.</p>
-        <div class="form-banner" id="forgot-banner"></div>
+        <div class="form-banner" id="forgot-banner" role="status" aria-live="polite"></div>
         <form id="form-forgot" novalidate>
           <div class="field">
             <label for="fp-email">Email address</label>
@@ -158,12 +165,36 @@
         <p class="av-alt"><button class="link-btn" data-goto="signin">← Back to sign in</button></p>
       </section>
 
+      <!-- SET NEW PASSWORD (after reset OTP verified) -->
+      <section class="auth-view" id="view-newpass">
+        <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/><circle cx="12" cy="16" r="1"/></svg></div>
+        <h1>Set a new password</h1>
+        <p class="av-sub">Your email is verified. Choose a new password for <b id="np-target">your account</b>.</p>
+        <div class="form-banner" id="newpass-banner" role="status" aria-live="polite"></div>
+        <form id="form-newpass" novalidate>
+          <div class="field has-icon">
+            <label for="np-pass">New password</label>
+            <input type="password" id="np-pass" autocomplete="new-password" placeholder="At least 8 characters" required />
+            <button type="button" class="field-toggle" data-pwtoggle="np-pass" aria-label="Show password">👁</button>
+            <p class="field-err">Use at least 8 characters.</p>
+          </div>
+          <div class="field has-icon">
+            <label for="np-pass2">Confirm new password</label>
+            <input type="password" id="np-pass2" autocomplete="new-password" placeholder="Type it again" required />
+            <button type="button" class="field-toggle" data-pwtoggle="np-pass2" aria-label="Show password">👁</button>
+            <p class="field-err">Passwords don't match.</p>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full"><span class="btn-label">Save new password</span><span class="btn-spinner"></span></button>
+        </form>
+        <p class="av-alt"><button class="link-btn" data-goto="signin">← Back to sign in</button></p>
+      </section>
+
       <!-- OTP VERIFY -->
       <section class="auth-view" id="view-otp">
         <div class="av-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></div>
         <h1>Enter your code</h1>
         <p class="av-sub">We sent a 6-digit code to <b id="otp-target">your email</b>. It expires in 10 minutes.</p>
-        <div class="form-banner" id="otp-banner"></div>
+        <div class="form-banner" id="otp-banner" role="status" aria-live="polite"></div>
         <form id="form-otp" novalidate>
           <div class="otp-row" id="otp-row">
             <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 1" />
@@ -175,8 +206,8 @@
           </div>
           <button type="submit" class="btn btn-primary btn-full"><span class="btn-label">Verify &amp; continue</span><span class="btn-spinner"></span></button>
         </form>
-        <p class="otp-resend" id="otp-resend">Didn't get it? Resend in <b id="otp-timer">30s</b></p>
-        <div class="demo-otp" id="demo-otp"></div>
+        <p class="otp-resend" id="otp-resend">Didn't get it? Resend in <b id="otp-timer">60s</b></p>
+        <div class="demo-otp" id="demo-otp" role="status" aria-live="polite"></div>
         <p class="av-alt"><button class="link-btn" data-goto="signin">← Back to sign in</button></p>
       </section>
 
@@ -195,6 +226,7 @@
 </div>
 
 <script src="site-config.js"></script>
+<script src="vh-cloud.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>
