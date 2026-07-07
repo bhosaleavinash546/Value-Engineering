@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://bhosaleavinash546.github.io/Value-Engineering/sitemap.xml
+Sitemap: https://valueengineeringhub.com/sitemap.xml
