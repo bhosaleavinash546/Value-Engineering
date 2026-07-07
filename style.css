@@ -618,6 +618,12 @@ section[id]{scroll-margin-top:80px}
 .tool-card h4{font-size:1.08rem;margin:.65rem 0 .5rem}
 .tool-card p{font-size:.83rem;color:var(--muted)}
 .tool-card em{display:block;margin-top:1rem;font-style:normal;font-family:var(--font-m);font-size:.76rem;color:var(--acc1)}
+.tool-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;align-items:center}
+.tool-actions a{font-family:var(--font-m);font-size:.74rem;text-decoration:none;padding:.4rem .7rem;border-radius:8px;transition:background .25s,border-color .25s,color .25s}
+.tool-actions a:first-child{color:var(--acc1)}
+.tool-actions a:first-child:hover{background:color-mix(in srgb,var(--acc1) 12%,transparent)}
+.tool-xls{color:#1a7f4b!important;border:1px solid color-mix(in srgb,#1a7f4b 40%,transparent)}
+.tool-xls:hover{background:color-mix(in srgb,#1a7f4b 12%,transparent);border-color:#1a7f4b}
 .tool-cta{border-style:dashed;border-color:rgba(217,164,74,.4);background:rgba(217,164,74,.05);display:flex;flex-direction:column}
 .tool-cta .btn{margin-top:auto;align-self:flex-start}
 .tool-cta p{margin-bottom:1.2rem}
