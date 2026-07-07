@@ -649,3 +649,190 @@
     });
   });
 })();
+
+/* ════════ Module 4 interactives: FAST builder · function library · identification challenge ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ── 1. Step-by-step animated FAST diagram ── */
+  const fb = $("#fastBuilder");
+  if (fb) {
+    const CAPTIONS = [
+      "A FAST diagram starts as an empty canvas. Press <b>Next step</b> to begin.",
+      "<b>Step 1 — Draw the scope lines.</b> Two dashed lines bracket what your study covers. Everything you'll analyse lives between them. The logic axis runs left–right: moving right asks <b>HOW?</b>, moving left asks <b>WHY?</b>",
+      "<b>Step 2 — Place the basic function.</b> <i>HEAT WATER</i> goes just inside the left scope line. It's the reason the kettle exists — remove it and the product is pointless.",
+      "<b>Step 3 — Ask HOW?</b> HOW do we heat water? — by <i>generating heat</i>. The answer sits immediately to the right, connected by the logic path.",
+      "<b>Step 4 — Keep asking HOW?</b> HOW do we generate heat? — by <i>conducting current</i> through a resistive element. Each HOW? extends the chain one card to the right.",
+      "<b>Step 5 — Stop at the assumed function.</b> HOW do we conduct current? — mains electricity <i>supplies power</i>. That's outside our control, so it sits <b>outside the right scope line</b>. Our study stops here.",
+      "<b>Step 6 — Anchor the WHY? direction.</b> WHY do we heat water? — to <i>prepare a beverage</i>. That's the customer's higher purpose, so it sits <b>outside the left scope line</b>. Now read the chain backwards: every WHY? must sound right.",
+      "<b>Step 7 — Float the all-time functions.</b> <i>ENSURE SAFETY</i> and <i>CONVEY ESTEEM</i> act on the whole product all the time, so they float above the main path rather than joining the chain.",
+      "<b>Done — now validate.</b> Read it aloud both ways: \"WHY conduct current? To generate heat. WHY generate heat? To heat water. ✓\" and \"HOW to heat water? Generate heat. HOW? Conduct current. ✓\" — a sentence that sounds wrong means a card is misplaced. That read-aloud test is the whole point of FAST.",
+    ];
+    const LAST = CAPTIONS.length - 1;
+    let step = 0;
+    const stage = $("#fbStage"), cap = $("#fbCaption"), prev = $("#fbPrev"), next = $("#fbNext"), dots = $("#fbDots");
+    dots.innerHTML = CAPTIONS.map((_, i) => `<i class="fb-dot${i === 0 ? " on" : ""}"></i>`).join("");
+    function render() {
+      $$("[data-fstep]", stage).forEach((el) => el.classList.toggle("fb-in", +el.dataset.fstep <= step));
+      stage.classList.toggle("fb-validating", step === LAST);
+      cap.innerHTML = CAPTIONS[step];
+      prev.disabled = step === 0;
+      next.textContent = step === LAST ? "↻ Replay" : "Next step →";
+      $$(".fb-dot", dots).forEach((d, i) => d.classList.toggle("on", i <= step));
+    }
+    next.addEventListener("click", () => { step = step === LAST ? 0 : step + 1; render(); });
+    prev.addEventListener("click", () => { if (step > 0) { step--; render(); } });
+    render();
+  }
+
+  /* ── 2. Function library: active verb + measurable noun ── */
+  const LIB = {
+    "Mechanical": [
+      ["Transmit torque", "carry twisting force from one part to another", "driveshaft, gear, coupling"],
+      ["Support load", "hold up a weight or force without failing", "bracket, chassis, table leg"],
+      ["Absorb shock", "soak up sudden impact energy", "bumper foam, shoe sole, damper"],
+      ["Store energy", "hold energy for later release", "spring, flywheel, battery"],
+      ["Position component", "hold a part in exactly the right place", "locating pin, bracket, jig"],
+      ["Join components", "hold two or more parts together", "weld, adhesive, snap-fit, bolt"],
+      ["Increase friction", "resist sliding between surfaces", "tyre tread, rubber feet, grip tape"],
+      ["Reduce friction", "let surfaces slide or roll easily", "bearing, bushing, lubricant"],
+      ["Limit travel", "stop movement beyond a set point", "end stop, detent, snap ring"],
+      ["Guide motion", "constrain movement along a path", "rail, slot, hinge, linear guide"],
+    ],
+    "Electrical & electronic": [
+      ["Conduct current", "carry electricity from one point to another", "wire, busbar, PCB trace"],
+      ["Block current", "stop electricity going where it shouldn't", "insulation, isolator, fuse (when blown)"],
+      ["Store charge", "hold electrical energy briefly", "capacitor, battery cell"],
+      ["Convert energy", "change one energy form into another", "motor, generator, LED, heater"],
+      ["Switch circuit", "open or close an electrical path", "relay, transistor, push button"],
+      ["Regulate voltage", "hold electrical pressure steady", "regulator IC, zener diode"],
+      ["Amplify signal", "make a weak signal stronger", "op-amp, audio amplifier"],
+      ["Suppress interference", "stop unwanted electrical noise", "ferrite bead, shield can, filter"],
+    ],
+    "Thermal & fluid": [
+      ["Generate heat", "produce thermal energy on purpose", "heating element, burner"],
+      ["Dissipate heat", "move unwanted heat away", "heat sink, fan, radiator"],
+      ["Insulate heat", "slow heat passing through", "foam layer, air gap, double wall"],
+      ["Contain fluid", "keep liquid or gas inside a space", "tank, pipe, kettle body"],
+      ["Control flow", "set how much fluid passes", "valve, orifice, thermostat"],
+      ["Seal interface", "stop leaks where two parts meet", "O-ring, gasket, weld bead"],
+      ["Filter particles", "remove unwanted matter from a flow", "air filter, strainer, membrane"],
+      ["Circulate air", "move air around a space", "fan, blower, vent"],
+    ],
+    "Information & control": [
+      ["Indicate status", "show the user what state the product is in", "LED, gauge, icon"],
+      ["Sense temperature", "measure how hot or cold something is", "thermistor, thermocouple"],
+      ["Measure pressure", "quantify force per area in a system", "pressure sensor, gauge"],
+      ["Transmit signal", "send information from one place to another", "cable, antenna, optical fibre"],
+      ["Store data", "keep information for later use", "memory chip, SD card"],
+      ["Control sequence", "decide what happens and when", "controller, timer, cam"],
+      ["Emit sound", "produce an audible signal", "buzzer, speaker, chime"],
+      ["Emit light", "produce visible light", "LED, bulb, display backlight"],
+    ],
+    "Protection & durability": [
+      ["Resist corrosion", "survive attack by water or chemicals", "coating, stainless steel, anodising"],
+      ["Resist wear", "survive repeated rubbing", "hardened surface, wear plate"],
+      ["Resist flame", "not catch fire or spread fire", "FR plastic, intumescent coating"],
+      ["Protect surface", "shield a surface from damage", "paint, film, case"],
+      ["Exclude dust", "keep dirt out of a mechanism", "seal, boot, cover"],
+      ["Ensure safety", "prevent harm to the user (all-time function)", "guard, interlock, insulation"],
+      ["Damp vibration", "reduce unwanted shaking", "rubber mount, mass damper"],
+      ["Retain fastener", "stop a joint working loose", "thread-locker, lock washer, nyloc"],
+    ],
+    "Esteem & human": [
+      ["Convey quality", "make the product feel well made", "gloss finish, tight gaps, weight"],
+      ["Please eye", "look attractive to the customer", "styling line, colour, proportion"],
+      ["Convey esteem", "signal status or brand to others", "badge, chrome trim, packaging"],
+      ["Reduce effort", "make the product easier to use", "soft-touch grip, assist spring"],
+      ["Save time", "let the user finish the task faster", "quick-release, one-touch control"],
+      ["Assure user", "give confidence it is working properly", "solid click, progress light"],
+      ["Improve comfort", "make use physically pleasant", "padding, ergonomic curve"],
+      ["Aid grip", "help the hand hold the product", "knurling, rubber overmould"],
+    ],
+  };
+  const lib = $("#fnLib");
+  if (lib) {
+    const filters = $("#fnFilters"), grid = $("#fnGrid");
+    const cats = Object.keys(LIB);
+    filters.innerHTML = ['<button class="fn-chip is-on" data-cat="all">All (' + cats.reduce((n, c) => n + LIB[c].length, 0) + ')</button>']
+      .concat(cats.map((c) => `<button class="fn-chip" data-cat="${c}">${c} (${LIB[c].length})</button>`)).join("");
+    function renderLib(cat) {
+      const show = cat === "all" ? cats : [cat];
+      grid.innerHTML = show.map((c) =>
+        `<div class="fn-cat"><h5>${c}</h5>` + LIB[c].map(([fn, meaning, ex]) =>
+          `<div class="fn-item"><b>${fn}</b><span>${meaning}</span><em>e.g. ${ex}</em></div>`).join("") + "</div>").join("");
+    }
+    filters.addEventListener("click", (e) => {
+      const chip = e.target.closest(".fn-chip");
+      if (!chip) return;
+      $$(".fn-chip", filters).forEach((c) => c.classList.toggle("is-on", c === chip));
+      renderLib(chip.dataset.cat);
+    });
+    renderLib("all");
+  }
+
+  /* ── 3. Function Identification Challenge: 8 examples × 4 options ── */
+  const FNCHAL = [
+    ["The heating element inside an electric kettle", ["Provide heat", "Generate heat", "Make water hot", "Boil kettle"], 1,
+     "\"Generate heat\" — active verb, measurable noun. \"Provide\" is a banned verb; \"make water hot\" is three words and vague; \"boil kettle\" names the product, not the job."],
+    ["The rubber feet under a laptop", ["Provide stability", "Hold laptop", "Increase friction", "Stop movement"], 2,
+     "\"Increase friction\" is what the rubber physically does, and friction is measurable. \"Provide stability\" uses a banned verb; \"hold laptop\" describes the part's location, not its job; \"stop movement\" isn't measurable as stated."],
+    ["A car headlight", ["Enable driving", "Emit light", "Provide visibility", "Light road"], 1,
+     "\"Emit light\" — you can measure lumens. \"Enable\" and \"provide\" are banned verbs; \"light road\" describes where the light goes, not the function the part performs."],
+    ["The plastic insulation around a mains wire", ["Ensure protection", "Cover wire", "Make wire safe", "Block current"], 3,
+     "\"Block current\" is the measurable job — electricity must not pass through it. \"Ensure\" is banned; \"cover wire\" describes the solution's geometry; \"make wire safe\" is vague and unmeasurable."],
+    ["A water bottle cap", ["Seal container", "Close bottle", "Provide closure", "Keep water inside"], 0,
+     "\"Seal container\" — a seal is testable (pressure, leak rate). \"Close bottle\" names the product; \"provide closure\" uses a banned verb; \"keep water inside\" is four words hiding the same job."],
+    ["The handle of a hot coffee mug", ["Provide grip", "Help user", "Transmit force", "Hold mug"], 2,
+     "The handle's primary job is to \"transmit force\" — it carries the lifting force from your hand to the mug (it also performs a second function: isolate heat). \"Provide\" is banned; \"help user\" is unmeasurable; \"hold mug\" is the product in disguise."],
+    ["The spring inside a retractable ballpoint pen", ["Store energy", "Retract tip", "Provide clicking", "Make pen work"], 0,
+     "The spring itself does one job: \"store energy\" (and release it). Retracting the tip is the combined job of spring + latch mechanism; \"provide clicking\" is banned and describes a side effect; \"make pen work\" is hopelessly vague."],
+    ["The high-gloss paint on a luxury car (beyond protecting the metal)", ["Look good", "Impress people", "Convey quality", "Provide beauty"], 2,
+     "\"Convey quality\" is the standard esteem function — and it is measurable through market research and price premiums. \"Look good\" has no active verb; \"impress people\" isn't testable; \"provide beauty\" uses a banned verb with an unmeasurable noun."],
+  ];
+  const mount = $("#fncMount");
+  if (mount) {
+    let answered, score;
+    function renderChal() {
+      answered = new Array(FNCHAL.length).fill(false); score = 0;
+      mount.innerHTML = FNCHAL.map(([q, opts], qi) => `
+        <div class="fnc-item" data-qi="${qi}">
+          <div class="fnc-q"><span class="fnc-n">${qi + 1}</span>${q} — which is the correctly written function?</div>
+          <div class="fnc-opts">${opts.map((o, oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+          <div class="fnc-expl" role="status" aria-live="polite"></div>
+        </div>`).join("") +
+        `<div class="fnc-score" id="fncScore" role="status" aria-live="polite"></div>
+         <div class="fnc-actions"><button type="button" class="btn btn-ghost" id="fncReset" hidden>↻ Try the challenge again</button></div>`;
+      $("#fncReset").addEventListener("click", renderChal);
+    }
+    mount.addEventListener("click", (e) => {
+      const btn = e.target.closest(".fnc-opt");
+      if (!btn) return;
+      const item = btn.closest(".fnc-item");
+      const qi = +item.dataset.qi;
+      if (answered[qi]) return;
+      answered[qi] = true;
+      const [, , correct, expl] = FNCHAL[qi];
+      const right = +btn.dataset.oi === correct;
+      if (right) score++;
+      $$(".fnc-opt", item).forEach((o, oi) => {
+        o.disabled = true;
+        if (oi === correct) o.classList.add("is-right");
+        else if (o === btn) o.classList.add("is-wrong");
+      });
+      const ex = $(".fnc-expl", item);
+      ex.textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + expl;
+      ex.className = "fnc-expl show " + (right ? "ok" : "no");
+      if (answered.every(Boolean)) {
+        const s = $("#fncScore");
+        const msg = score === 8 ? "Perfect — you think in functions now!" : score >= 6 ? "Strong — review the ones you missed and you're there." : "Good practice — re-read section 4.3 on fake functions and try again.";
+        s.innerHTML = `You scored <b>${score} / 8</b>. ${msg}`;
+        s.classList.add("show");
+        $("#fncReset").hidden = false;
+      }
+    });
+    renderChal();
+  }
+})();

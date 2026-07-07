@@ -315,3 +315,73 @@ body.vo-off .vo-bar{display:none!important}
 .vo-master input:checked + .vo-sw{background:var(--acc2);border-color:var(--acc2)}
 .vo-master input:checked + .vo-sw::after{transform:translateX(15px);background:#fff}
 .vo-master input:focus-visible + .vo-sw{outline:2px solid var(--acc1);outline-offset:2px}
+
+/* ── Module 4: animated FAST builder ── */
+.fast-builder{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:1.2rem;margin:1.2rem 0 1.6rem}
+.fb-stage{position:relative;height:330px;border:1px dashed var(--line);border-radius:12px;background:var(--bg2);overflow:hidden}
+.fb-stage [data-fstep]{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s var(--ease-spring);pointer-events:none}
+.fb-stage .fb-in{opacity:1;transform:none}
+.fb-scope{position:absolute;top:8%;bottom:8%;width:0;border-left:2px dashed var(--acc3)}
+.fb-scope span{position:absolute;top:-2px;left:6px;font:600 .6rem var(--font-m);color:var(--acc3);letter-spacing:.08em;white-space:nowrap}
+.fb-scope-l{left:22%}.fb-scope-r{right:20%}
+.fb-axis{position:absolute;top:12px;left:0;right:0;display:flex;justify-content:space-between;padding:0 1rem;font:700 .72rem var(--font-m);color:var(--acc1)}
+.fb-axis .fb-how{margin-left:auto}
+.fb-axis .fb-why{order:-1}
+.fb-card{position:absolute;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--acc1);background:var(--card);font:700 .72rem var(--font-d);color:var(--txt);letter-spacing:.04em;box-shadow:0 8px 22px rgba(0,0,0,.25);max-width:150px;text-align:center}
+.fb-card i{display:block;font:500 .58rem var(--font-m);color:var(--muted);letter-spacing:.06em;font-style:normal;margin-bottom:.2rem}
+.fb-basic{left:25%;top:45%;border-color:var(--acc1);background:color-mix(in srgb,var(--acc1) 14%,var(--card))}
+.fb-f2{left:44%;top:45%}
+.fb-f3{left:60%;top:45%}
+.fb-assumed{right:1%;top:45%;max-width:96px;border-style:dashed;border-color:var(--muted);opacity:.95}
+.fb-ho{left:2%;top:45%;border-style:dashed;border-color:var(--acc3)}
+.fb-at1{left:34%;top:12%;border-color:var(--acc3)}
+.fb-at2{left:56%;top:12%;border-color:var(--acc3)}
+.fb-arrow{position:absolute;top:calc(45% + 26px);height:2px;background:linear-gradient(90deg,var(--acc1),var(--acc2))}
+.fb-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left-color:var(--acc2)}
+.fb-a1{left:calc(25% + 118px);width:calc(19% - 118px + 34px)}
+.fb-a2{left:calc(44% + 122px);width:calc(16% - 122px + 38px)}
+.fb-validating .fb-card{animation:fb-pulse 1.6s ease-in-out infinite alternate}
+@keyframes fb-pulse{from{box-shadow:0 8px 22px rgba(0,0,0,.25)}to{box-shadow:0 0 18px color-mix(in srgb,var(--acc1) 55%,transparent)}}
+.fb-caption{margin:1rem 0 .8rem;font-size:.88rem;color:var(--muted);line-height:1.6;min-height:3.4em}
+.fb-caption b,.fb-caption i{color:var(--txt)}
+.fb-controls{display:flex;align-items:center;gap:1rem}
+.fb-controls .btn{font-size:.8rem;padding:.5rem 1rem}
+.fb-dots{display:flex;gap:.35rem;margin:0 auto}
+.fb-dot{width:8px;height:8px;border-radius:50%;background:var(--track);transition:background .3s}
+.fb-dot.on{background:var(--acc1)}
+@media (max-width:700px){.fb-stage{height:400px}.fb-card{max-width:110px;font-size:.62rem}}
+
+/* ── Module 4: function library ── */
+.fn-lib{margin:1.1rem 0 1.6rem}
+.fn-lib-filters{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1rem}
+.fn-chip{border:1px solid var(--line);background:none;color:var(--muted);font:600 .74rem var(--font-b);padding:.4rem .8rem;border-radius:999px;cursor:pointer;transition:all .2s}
+.fn-chip:hover{border-color:var(--acc1);color:var(--acc1)}
+.fn-chip.is-on{border-color:var(--acc1);color:var(--acc1);background:color-mix(in srgb,var(--acc1) 10%,transparent)}
+.fn-cat h5{font:700 .8rem var(--font-d);color:var(--acc3);letter-spacing:.06em;text-transform:uppercase;margin:1rem 0 .5rem}
+.fn-cat{margin-bottom:.4rem}
+.fn-lib-grid .fn-cat > .fn-item{display:grid;grid-template-columns:150px 1fr 1fr;gap:.7rem;align-items:baseline;padding:.45rem .6rem;border-bottom:1px solid var(--line-soft,var(--line))}
+.fn-item b{font-family:var(--font-m);font-size:.8rem;color:var(--acc1)}
+.fn-item span{font-size:.8rem;color:var(--txt)}
+.fn-item em{font-size:.74rem;color:var(--muted);font-style:normal}
+@media (max-width:640px){.fn-lib-grid .fn-cat > .fn-item{grid-template-columns:1fr;gap:.15rem}}
+
+/* ── Module 4: function identification challenge ── */
+.fn-challenge{border:1px solid color-mix(in srgb,var(--acc1) 40%,var(--line));border-radius:16px;background:color-mix(in srgb,var(--acc1) 5%,var(--card));padding:1.4rem;margin:1.6rem 0}
+.fnc-head h4{font:700 1.05rem var(--font-d);margin-bottom:.4rem}
+.fnc-head p{font-size:.84rem;color:var(--muted);margin-bottom:1.1rem}
+.fnc-item{margin-bottom:1.2rem;padding-bottom:1.1rem;border-bottom:1px solid var(--line)}
+.fnc-q{font-size:.92rem;font-weight:600;margin-bottom:.6rem;display:flex;gap:.6rem;align-items:baseline}
+.fnc-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--acc2);color:#fff;font:700 .72rem var(--font-d);display:inline-flex;align-items:center;justify-content:center}
+.fnc-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.5rem}
+.fnc-opt{border:1px solid var(--line);background:var(--bg2);color:var(--txt);font:500 .82rem var(--font-b);padding:.55rem .7rem;border-radius:10px;cursor:pointer;text-align:left;transition:all .2s}
+.fnc-opt:hover:not(:disabled){border-color:var(--acc1)}
+.fnc-opt:disabled{cursor:default;opacity:.75}
+.fnc-opt.is-right{border-color:#34d399;background:rgba(52,211,153,.12);color:var(--txt);opacity:1;font-weight:700}
+.fnc-opt.is-wrong{border-color:#f87171;background:rgba(248,113,113,.1)}
+.fnc-expl{display:none;margin-top:.6rem;font-size:.8rem;line-height:1.55;padding:.6rem .8rem;border-radius:10px}
+.fnc-expl.show{display:block}
+.fnc-expl.ok{background:rgba(52,211,153,.08);color:var(--txt);border:1px solid rgba(52,211,153,.35)}
+.fnc-expl.no{background:rgba(248,113,113,.07);color:var(--txt);border:1px solid rgba(248,113,113,.3)}
+.fnc-score{display:none;font:700 1rem var(--font-d);margin:1rem 0 .6rem}
+.fnc-score.show{display:block}
+.fnc-score b{color:var(--acc1)}
