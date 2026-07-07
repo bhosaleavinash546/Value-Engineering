@@ -92,9 +92,11 @@
     show("otp");
     startResend();
     if (LIVE) {
-      // Real path: Supabase sends the email; no client-side code
+      // Real path: Supabase sends the email. Surface the ACTUAL error if the
+      // send fails (signInWithOtp resolves with {error}, it does not throw).
       try {
-        await (await supaReady()).auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
+        const { error } = await (await supaReady()).auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
+        if (error) banner("otp-banner", "Email couldn't be sent: " + (error.message || "unknown error") + ". Check spam, or try again shortly.", "err");
       } catch (e) { banner("otp-banner", "Could not send code: " + (e.message || "try again"), "err"); }
       $("#demo-otp").className = "demo-otp";
     } else {
