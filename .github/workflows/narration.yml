@@ -41,7 +41,9 @@ jobs:
           python3 -c "import json;d=json.load(open('$GITHUB_WORKSPACE/audio/script.json'));print('modules:',len(d),'blocks:',sum(len(m[\"blocks\"]) for m in d))"
 
       - name: Install synthesis deps
-        run: pip install edge-tts
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+          pip install edge-tts
 
       - name: Synthesize narration (en-GB-SoniaNeural)
         run: python3 .github/scripts/generate-narration.py
