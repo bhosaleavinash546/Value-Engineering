@@ -197,8 +197,8 @@
     if (!box) {
       box = document.createElement("div");
       box.id = "myLearn"; box.className = "my-learn";
-      const hero = $(".tr-hero-inner");
-      hero.insertBefore(box, $("#trRoles"));
+      const anchor = $("#trRoles");
+      anchor.parentNode.insertBefore(box, anchor);
     }
     const total = courseMods.length, done = state.done.length;
     const pct = Math.round((done / total) * 100);
@@ -835,4 +835,35 @@
     });
     renderChal();
   }
+})();
+
+
+/* ════════ Rotating quotes about Value Engineering (training hero) ════════ */
+(function () {
+  "use strict";
+  const slide = document.getElementById("tqSlide");
+  if (!slide) return;
+  const QUOTES = [
+    ["All cost is for function.", "— Lawrence D. Miles, father of Value Analysis"],
+    ["Value analysis is a potent and completely different procedure for accomplishing far greater results.", "— Lawrence D. Miles, General Electric, 1947"],
+    ["Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.", "— Antoine de Saint-Exupéry"],
+    ["Costs do not exist to be calculated. Costs exist to be reduced.", "— Taiichi Ohno, father of the Toyota Production System"],
+    ["The customer never buys a product — they buy the job it does.", "— the first principle of function thinking"],
+  ];
+  const txt = document.getElementById("tqText"), who = document.getElementById("tqWho");
+  let i = 0, paused = false;
+  const box = document.getElementById("trQuotes");
+  box.addEventListener("mouseenter", () => { paused = true; });
+  box.addEventListener("mouseleave", () => { paused = false; });
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(() => {
+    if (paused) return;
+    i = (i + 1) % QUOTES.length;
+    slide.classList.add("tq-out");
+    setTimeout(() => {
+      txt.textContent = QUOTES[i][0];
+      who.textContent = QUOTES[i][1];
+      slide.classList.remove("tq-out");
+    }, 450);
+  }, 6500);
 })();

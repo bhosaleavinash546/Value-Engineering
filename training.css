@@ -385,3 +385,43 @@ body.vo-off .vo-bar{display:none!important}
 .fnc-score{display:none;font:700 1rem var(--font-d);margin:1rem 0 .6rem}
 .fnc-score.show{display:block}
 .fnc-score b{color:var(--acc1)}
+
+/* ── training hero: two-column grid with innovation viz ── */
+@media (min-width:1140px){
+  .tr-hero-grid{display:grid;grid-template-columns:1fr 360px;gap:3rem;align-items:center;text-align:left;max-width:1200px}
+  .tr-hero-grid .tr-hero-stats,.tr-hero-grid .tr-roles{justify-content:flex-start}
+  .tr-hero-grid .tr-quotes{margin-left:0}
+}
+@media (max-width:1139px){.tr-hero-viz{display:none}}
+
+/* rotating VE quotes */
+.tr-quotes{position:relative;max-width:640px;margin:1.6rem auto 0;padding:1rem 1.2rem 1rem 2.6rem;border:1px solid var(--line);border-left:3px solid var(--acc3);border-radius:12px;background:var(--card);text-align:left}
+.tq-mark{position:absolute;left:.8rem;top:.35rem;font-family:var(--font-d);font-size:2rem;color:var(--acc3);line-height:1}
+.tq-slide{margin:0;transition:opacity .45s ease,transform .45s ease}
+.tq-slide.tq-out{opacity:0;transform:translateY(6px)}
+.tq-slide p{font-family:var(--font-d);font-size:.98rem;font-style:italic;color:var(--txt);margin:0 0 .3rem;line-height:1.5}
+.tq-slide cite{font-style:normal;font-size:.75rem;color:var(--muted);font-family:var(--font-m)}
+
+/* product-innovation animation */
+.iv-scene{position:relative;width:340px;height:340px;margin:0 auto;color:var(--acc1)}
+.iv-gear{position:absolute;opacity:.9}
+.iv-gear-big{width:170px;height:170px;left:60px;top:120px;animation:iv-spin 26s linear infinite}
+.iv-gear-small{width:96px;height:96px;left:212px;top:170px;color:var(--acc3);animation:iv-spin-r 15s linear infinite}
+@keyframes iv-spin{to{transform:rotate(360deg)}}
+@keyframes iv-spin-r{to{transform:rotate(-360deg)}}
+.iv-bulb{position:absolute;width:92px;height:92px;left:120px;top:18px;color:var(--acc1);animation:iv-bulb-glow 3.2s ease-in-out infinite alternate}
+.iv-bulb .ivb-rays line{stroke:var(--acc3);stroke-width:2.4;stroke-linecap:round;animation:iv-rays 3.2s ease-in-out infinite alternate}
+@keyframes iv-bulb-glow{from{filter:drop-shadow(0 0 4px rgba(90,162,255,.25))}to{filter:drop-shadow(0 0 18px rgba(90,162,255,.75))}}
+@keyframes iv-rays{from{opacity:.25}to{opacity:1}}
+.iv-orbit{position:absolute;inset:6px;border:1px dashed color-mix(in srgb,var(--acc1) 30%,transparent);border-radius:50%;animation:iv-spin 40s linear infinite}
+.iv-chip{position:absolute;width:44px;height:44px;border-radius:50%;background:var(--card);border:1px solid var(--acc1);display:flex;align-items:center;justify-content:center;font:700 .8rem var(--font-m);color:var(--acc1);font-style:normal;box-shadow:0 6px 18px rgba(0,0,0,.35);animation:iv-spin-r 40s linear infinite}
+.iv-chip.c1{top:-22px;left:calc(50% - 22px)}
+.iv-chip.c2{bottom:12%;left:-14px;color:var(--acc3);border-color:var(--acc3)}
+.iv-chip.c3{bottom:12%;right:-14px}
+.iv-spark{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--acc3);opacity:0;animation:iv-rise 4.4s ease-in infinite}
+.iv-spark.s1{left:36%;bottom:20%}
+.iv-spark.s2{left:58%;bottom:16%;animation-delay:1.2s}
+.iv-spark.s3{left:47%;bottom:26%;animation-delay:2.3s}
+.iv-spark.s4{left:66%;bottom:30%;animation-delay:3.1s;background:var(--acc1)}
+@keyframes iv-rise{0%{opacity:0;transform:translateY(0) scale(1)}12%{opacity:.9}100%{opacity:0;transform:translateY(-190px) scale(.4)}}
+@media (prefers-reduced-motion:reduce){.iv-scene *{animation:none!important}.tq-slide{transition:none}}
