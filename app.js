@@ -812,3 +812,18 @@
     });
   }
 })();
+
+/* ── Timeline marquee: duplicate the lane once for a seamless right→left loop ── */
+(function () {
+  "use strict";
+  const lane = document.getElementById("tlLane");
+  if (!lane) return;
+  const originals = Array.from(lane.children);
+  originals.forEach((el) => {
+    const clone = el.cloneNode(true);
+    clone.classList.add("tl-clone");
+    clone.setAttribute("aria-hidden", "true");
+    lane.appendChild(clone);
+  });
+  // Keyboard focus inside a card pauses via :focus-within (CSS); nothing else needed.
+})();
