@@ -29,9 +29,18 @@ window.VF_CONFIG = {
         (public) key here. Supabase sends real OTP emails and stores
         accounts securely. Until both are set, the login page runs in
         DEMO mode (accounts saved in the browser only). */
-  supabaseUrl: "",
-  supabaseAnonKey: "",
+  supabaseUrl: "https://pnvidzchlnlfodfnawur.supabase.co",
+  supabaseAnonKey: "sb_publishable_2dBHd481kEfJh2AIY-nFvw_yVKteCwl",
 };
+
+/* Normalise the Supabase URL: accept a pasted REST endpoint
+   (…/rest/v1/) or a trailing slash and reduce it to the base origin. */
+(function () {
+  var c = window.VF_CONFIG;
+  if (c && c.supabaseUrl) {
+    c.supabaseUrl = c.supabaseUrl.replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
+  }
+})();
 
 /* GoatCounter loader — privacy-friendly, no cookies */
 (function () {
