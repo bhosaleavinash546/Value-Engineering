@@ -291,3 +291,26 @@ html[data-theme="light"] .tpit h4,html[data-theme="light"] .tpit li::before{colo
 .mod-link.is-locked .mtxt b{opacity:.72}
 .mod-link.is-locked::after{content:"🔒";position:absolute;right:.7rem;top:50%;transform:translateY(-50%);font-size:.72rem;opacity:.65}
 .mod-link.is-locked.is-active::after{opacity:.9}
+
+/* ── lesson voiceover player ── */
+.vo-bar{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin:0 0 1.4rem;padding:.5rem .7rem;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:.8rem}
+.vo-bar button{border:1px solid var(--line);background:none;color:var(--txt);font:600 .78rem var(--font-b);padding:.42rem .8rem;border-radius:999px;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.vo-bar button:hover{border-color:var(--acc1);color:var(--acc1)}
+.vo-play.is-playing{border-color:var(--acc1);color:var(--acc1);background:color-mix(in srgb,var(--acc1) 10%,transparent)}
+.vo-stop{padding:.42rem .6rem}
+.vo-bar select{border:1px solid var(--line);background:var(--bg2);color:var(--txt);font:500 .74rem var(--font-b);padding:.35rem .45rem;border-radius:8px;max-width:170px}
+.vo-status{font-family:var(--font-m);font-size:.72rem;color:var(--muted);margin-left:auto}
+body.vo-off .vo-bar{display:none!important}
+
+/* paragraph being read */
+.is-reading{background:color-mix(in srgb,var(--acc1) 13%,transparent);border-radius:6px;box-shadow:0 0 0 5px color-mix(in srgb,var(--acc1) 13%,transparent);transition:background .3s,box-shadow .3s}
+
+/* master switch in the sidebar */
+.vo-master{display:flex;align-items:center;gap:.5rem;margin-top:.8rem;font-size:.78rem;color:var(--muted);cursor:pointer;user-select:none}
+.vo-master span{flex:1}
+.vo-master input{position:absolute;opacity:0;pointer-events:none}
+.vo-sw{width:34px;height:19px;border-radius:999px;background:var(--track);border:1px solid var(--line);position:relative;transition:background .25s;flex:none}
+.vo-sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--muted);transition:transform .25s,background .25s}
+.vo-master input:checked + .vo-sw{background:var(--acc2);border-color:var(--acc2)}
+.vo-master input:checked + .vo-sw::after{transform:translateX(15px);background:#fff}
+.vo-master input:focus-visible + .vo-sw{outline:2px solid var(--acc1);outline-offset:2px}
