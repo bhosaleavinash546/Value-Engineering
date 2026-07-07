@@ -12,6 +12,7 @@
     try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
   })();
   state.done = state.done || [];
+  let acctName = "";
   // Visit streak — consecutive days the learner showed up.
   (function trackStreak() {
     const today = new Date().toISOString().slice(0, 10);
@@ -59,11 +60,53 @@
       <span class="mtxt"><b>${isExam ? "🎓 " : ""}${m.dataset.title}</b><span>${m.dataset.time}</span></span></button>`;
   }).join("");
 
+  /* ── Access gate: Module 1 is a free preview; the rest of the Academy
+        (Modules 2–13, the exam and the certificate) requires an account. ── */
+  const FREE = new Set(["m1"]);
+  function gated(id) { return (id === "exam" || /^m\d+$/.test(id)) && !FREE.has(id); }
+  let currentId = null, gateEl = null;
+
+  function renderGate(id, scroll) {
+    currentId = id;
+    mods.forEach((m) => m.classList.remove("is-visible"));
+    $$(".mod-link", modNav).forEach((l) => l.classList.toggle("is-active", l.dataset.target === id));
+    const mod = mods.find((m) => m.dataset.mod === id);
+    const what = id === "exam" ? "the final exam &amp; certificate"
+      : (mod ? "Module " + id.slice(1) + " — " + mod.dataset.title : "this module");
+    const next = encodeURIComponent("training.html?open=" + id);
+    if (!gateEl) { gateEl = document.createElement("section"); gateEl.className = "tmod auth-gate"; gateEl.id = "authGate"; $("#trMain").appendChild(gateEl); }
+    gateEl.innerHTML = `
+      <div class="gate-card">
+        <div class="gate-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h2>Sign in to unlock ${what}</h2>
+        <p>Module&nbsp;1 is a free preview. Create your free account to open the rest of the VE Academy — your progress, quick-checks, exam attempts and certificate all save to your account and sync across devices.</p>
+        <ul class="gate-list">
+          <li>All 13 modules &amp; the full 48-question exam bank</li>
+          <li>Your VE Practitioner Certificate, shareable on LinkedIn</li>
+          <li>Progress, points, streak &amp; badges saved to your account</li>
+        </ul>
+        <div class="gate-actions">
+          <a class="btn btn-primary btn-lg" href="auth.html?view=signup&amp;next=${next}">Create a free account →</a>
+          <a class="btn btn-ghost" href="auth.html?view=signin&amp;next=${next}">I already have an account</a>
+        </div>
+        <p class="gate-foot">Free forever · no card required · <a href="index.html">explore the public site</a></p>
+      </div>`;
+    gateEl.classList.add("is-visible");
+    if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function show(id, scroll) {
+    if (gated(id) && !acctName) { renderGate(id, scroll); return; }
+    currentId = id;
+    if (gateEl) gateEl.classList.remove("is-visible");
     mods.forEach((m) => m.classList.toggle("is-visible", m.dataset.mod === id));
     $$(".mod-link", modNav).forEach((l) => l.classList.toggle("is-active", l.dataset.target === id));
     if (id === "exam") renderExamGate();
     if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function updateLocks() {
+    $$(".mod-link", modNav).forEach((l) => l.classList.toggle("is-locked", !acctName && gated(l.dataset.target)));
   }
 
   /* ── Gamification: points, ranks, milestone badges ── */
@@ -148,7 +191,6 @@
   });
 
   /* ── Signed-in state: My Learning banner + cert name prefill ── */
-  let acctName = "";
   function renderMyLearn() {
     if (!acctName) return;
     let box = $("#myLearn");
@@ -184,10 +226,12 @@
       if (foot && !$("#sideSync")) {
         const n = document.createElement("p");
         n.id = "sideSync"; n.className = "side-sync";
-        n.innerHTML = '<a href="auth.html">Sign in</a> to sync your progress across devices.';
+        n.innerHTML = '<a href="auth.html">Sign in</a> to unlock the full Academy &amp; sync across devices.';
         foot.appendChild(n);
       }
     }
+    updateLocks();
+    if (currentId) show(currentId, false); // re-gate or reveal now that auth changed
   }
   document.addEventListener("vh-account", (e) => onAccount(e.detail));
   if (window.VHAccount && VHAccount.user) onAccount(VHAccount.user);
@@ -412,8 +456,13 @@
 
   /* ── Init ── */
   refreshProgress();
+  updateLocks();
   const firstUnread = courseMods.find((m) => !state.done.includes(m.dataset.mod));
-  show(state.exam && state.exam.passed ? "exam" : (firstUnread ? firstUnread.dataset.mod : "exam"), false);
+  const startId = acctName
+    ? (state.exam && state.exam.passed ? "exam" : (firstUnread ? firstUnread.dataset.mod : "exam"))
+    : "m1";
+  const openParam = new URLSearchParams(location.search).get("open");
+  show(openParam || startId, false);
 })();
 
 /* ════════ Per-module quick checks (gate module completion) ════════ */
@@ -424,6 +473,7 @@
   const state = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } })();
   state.qc = state.qc || {};
   state.done = state.done || [];
+  let acctName = "";
   // Visit streak — consecutive days the learner showed up.
   (function trackStreak() {
     const today = new Date().toISOString().slice(0, 10);

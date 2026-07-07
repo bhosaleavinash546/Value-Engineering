@@ -341,4 +341,13 @@
   /* ── deep-link: auth.html?view=signup ── */
   const wanted = new URLSearchParams(location.search).get("view");
   if (wanted && $("#view-" + wanted)) show(wanted);
+
+  /* ── ?next= : after auth, return where the user came from (same-site only) ── */
+  const nextRaw = new URLSearchParams(location.search).get("next");
+  if (nextRaw && !/^(https?:|\/\/|javascript:)/i.test(nextRaw)) {
+    const goBtn = $("#view-success a.btn-primary");
+    if (goBtn) { goBtn.setAttribute("href", nextRaw); goBtn.querySelector(".btn-label") ? 0 : (goBtn.textContent = "Continue →"); }
+    const contBtn = $(".signed-note a.btn-primary");
+    if (contBtn) contBtn.setAttribute("href", nextRaw);
+  }
 })();
