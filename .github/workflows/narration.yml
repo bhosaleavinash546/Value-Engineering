@@ -1,0 +1,55 @@
+name: Generate narration audio
+# Produces studio narration for the VE Academy with a Microsoft neural
+# voice (en-GB-SoniaNeural): one MP3 per module + timings.json for the
+# follow-along highlighting, committed back to the repo. Run manually
+# (workflow_dispatch) after any module content change.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: narration
+  cancel-in-progress: false
+
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install extraction deps (Playwright)
+        run: |
+          mkdir -p /tmp/ext && cd /tmp/ext
+          npm init -y > /dev/null
+          npm i playwright > /dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Extract narration script from the live pages
+        run: |
+          cp .github/scripts/extract-narration.mjs /tmp/ext/
+          cd /tmp/ext && node extract-narration.mjs "$GITHUB_WORKSPACE"
+          python3 -c "import json;d=json.load(open('$GITHUB_WORKSPACE/audio/script.json'));print('modules:',len(d),'blocks:',sum(len(m[\"blocks\"]) for m in d))"
+
+      - name: Install synthesis deps
+        run: pip install edge-tts
+
+      - name: Synthesize narration (en-GB-SoniaNeural)
+        run: python3 .github/scripts/generate-narration.py
+
+      - name: Commit audio to the repository
+        run: |
+          git config user.name "vavehub-narration"
+          git config user.email "actions@users.noreply.github.com"
+          git add audio
+          git commit -m "Add studio narration audio (en-GB-SoniaNeural neural voice)" || { echo "nothing to commit"; exit 0; }
+          git push

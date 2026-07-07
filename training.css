@@ -298,8 +298,9 @@ html[data-theme="light"] .tpit h4,html[data-theme="light"] .tpit li::before{colo
 .vo-bar button:hover{border-color:var(--acc1);color:var(--acc1)}
 .vo-play.is-playing{border-color:var(--acc1);color:var(--acc1);background:color-mix(in srgb,var(--acc1) 10%,transparent)}
 .vo-stop{padding:.42rem .6rem}
-.vo-bar select{border:1px solid var(--line);background:var(--bg2);color:var(--txt);font:500 .74rem var(--font-b);padding:.35rem .45rem;border-radius:8px;max-width:170px}
-.vo-status{font-family:var(--font-m);font-size:.72rem;color:var(--muted);margin-left:auto}
+.vo-bar select{border:1px solid var(--line);background:var(--bg2);color:var(--txt);font:500 .74rem var(--font-b);padding:.35rem .45rem;border-radius:8px}
+.vo-seek{flex:1;min-width:120px;accent-color:var(--acc1);height:4px;cursor:pointer}
+.vo-time{font-family:var(--font-m);font-size:.72rem;color:var(--muted);white-space:nowrap}
 body.vo-off .vo-bar{display:none!important}
 
 /* paragraph being read */
