@@ -82,7 +82,7 @@
         <p>Module&nbsp;1 is a free preview. Create your free account to open the rest of the VE Academy — your progress, quick-checks, exam attempts and certificate all save to your account and sync across devices.</p>
         <ul class="gate-list">
           <li>All 13 modules &amp; the full 48-question exam bank</li>
-          <li>Your VE Practitioner Certificate, shareable on LinkedIn</li>
+          <li>Your Certificate of Completion, shareable on LinkedIn</li>
           <li>Progress, points, streak &amp; badges saved to your account</li>
         </ul>
         <div class="gate-actions">
@@ -300,7 +300,7 @@
     const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
     mount.innerHTML = `<div class="ex-gate">
       <p>Thirty questions, drawn at random from a 48-question bank spanning all thirteen modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
-      to earn the <strong>VAVEhub VE Practitioner Certificate</strong>. You can retake the exam as many times as you like —
+      to earn the <strong>VAVEhub Certificate of Completion</strong>. You can retake the exam as many times as you like —
       a fresh random 30 is drawn from the bank on every attempt.</p>
       ${remaining > 0 ? `<p class="ex-warn">Heads up: ${remaining} module${remaining > 1 ? "s" : ""} not yet completed. You can still attempt the exam, but we recommend finishing the course first.</p>` : ""}
       <button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>
@@ -390,13 +390,13 @@
     const shareUrl = new URL("certificate.html?c=" + certToken(e), location.href).toString();
     const li = new URL("https://www.linkedin.com/profile/add");
     li.searchParams.set("startTask", "CERTIFICATION_NAME");
-    li.searchParams.set("name", "Value Engineering 360° Practitioner — VAVEhub VE Academy");
+    li.searchParams.set("name", "Value Engineering 360° — Certificate of Completion (VAVEhub VE Academy)");
     li.searchParams.set("organizationName", "VAVEhub VE Academy");
     li.searchParams.set("issueYear", e.date.slice(0, 4));
     li.searchParams.set("issueMonth", String(+e.date.slice(5, 7)));
     li.searchParams.set("certUrl", shareUrl);
     li.searchParams.set("certId", e.id);
-    mount.innerHTML = `<div class="ex-gate"><p><strong style="color:#34d399">✓ Certified.</strong> Your VE Practitioner Certificate is below —
+    mount.innerHTML = `<div class="ex-gate"><p><strong style="color:#34d399">✓ Certified.</strong> Your Certificate of Completion is below —
       add it to LinkedIn, share the link, or save it as a PDF. It's stored in this browser, so you can come back anytime.</p>
       <div class="ex-actions" style="margin-bottom:.6rem">
         <a class="btn btn-primary" href="${li.toString()}" target="_blank" rel="noopener">in&nbsp; Add to LinkedIn profile</a>

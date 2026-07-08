@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
-<title>VE Practitioner Certificate — VAVEhub VE Academy</title>
-<meta name="description" content="A VAVEhub VE Academy certificate of achievement in Value Engineering." />
+<title>Certificate of Completion — VAVEhub VE Academy</title>
+<meta name="description" content="A VAVEhub VE Academy certificate of completion in Value Engineering." />
 <meta name="robots" content="noindex,follow" />
 <link rel="manifest" href="manifest.webmanifest" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -29,7 +29,7 @@
     <div class="cert" id="cert">
       <div class="cert-border">
         <div class="cert-brand">VAVE<span>hub</span> · VE ACADEMY</div>
-        <div class="cert-title">Certificate of Achievement</div>
+        <div class="cert-title">Certificate of Completion</div>
         <div class="cert-sub">This certifies that</div>
         <div class="cert-name" id="certName">—</div>
         <div class="cert-body">has successfully completed the <b>Value Engineering 360° Practitioner Course</b> —
@@ -93,10 +93,10 @@
   document.getElementById("certId").textContent = data.id;
   const d = new Date(data.d || Date.now());
   document.getElementById("certDate").textContent = d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-  document.title = data.n + " — VE Practitioner Certificate | VAVEhub";
+  document.title = data.n + " — Certificate of Completion | VAVEhub";
   const li = new URL("https://www.linkedin.com/profile/add");
   li.searchParams.set("startTask", "CERTIFICATION_NAME");
-  li.searchParams.set("name", "Value Engineering 360° Practitioner — VAVEhub VE Academy");
+  li.searchParams.set("name", "Value Engineering 360° — Certificate of Completion (VAVEhub VE Academy)");
   li.searchParams.set("organizationName", "VAVEhub VE Academy");
   li.searchParams.set("issueYear", String(d.getFullYear()));
   li.searchParams.set("issueMonth", String(d.getMonth() + 1));
