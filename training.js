@@ -897,7 +897,7 @@
     const index = [];
     mods.forEach((mod) => {
       $$("h3, h4, p, li", mod).forEach((el) => {
-        if (el.closest(".qcheck, button, .vo-bar, .fn-challenge, .fast-builder, .fn-lib, .ve-lab")) return;
+        if (el.closest(".qcheck, button, .vo-bar, .fn-challenge, .fast-builder, .fn-lib, .ve-lab, .concept-viz")) return;
         const text = el.textContent.replace(/\s+/g, " ").trim();
         if (text.length > 8) index.push({ mod: mod.dataset.mod, title: mod.dataset.title, el, text, low: text.toLowerCase() });
       });

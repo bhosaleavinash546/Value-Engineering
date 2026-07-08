@@ -240,6 +240,32 @@
       (OMB Circular A-131), and federal-aid highway projects above statutory thresholds must undergo VE analysis before
       construction approval.</p>
 
+    <div class="concept-viz jobmap">
+      <div class="cv-head"><h4>Why Value Engineering pays most when it starts early</h4>
+      <p>Cost is <em>committed</em> long before it is <em>spent</em> — most of it locked in by the early design phases. The gap between the two curves is where VE has its leverage.</p></div>
+      <div class="jm-plot">
+        <svg viewBox="0 0 960 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cost committed rises fast in early phases while cost spent rises late">
+          <g class="jm-grid">
+            <line x1="120" y1="40" x2="900" y2="40"/><line x1="120" y1="160" x2="900" y2="160"/><line x1="120" y1="280" x2="900" y2="280"/>
+          </g>
+          <g class="jm-ylab"><text x="106" y="44">100%</text><text x="106" y="164">50%</text><text x="106" y="284">0%</text></g>
+          <polygon class="jm-gap" points="120,244 276,148 432,88 588,68.8 744,54.4 900,40 900,40 744,124 588,208 432,244 276,260.8 120,272.8"/>
+          <polyline class="jm-curve jm-committed" pathLength="1" points="120,244 276,148 432,88 588,68.8 744,54.4 900,40"/>
+          <polyline class="jm-curve jm-spent" pathLength="1" points="120,272.8 276,260.8 432,244 588,208 744,124 900,40"/>
+          <g class="jm-clab"><text x="470" y="70" class="jm-c-committed">Cost committed</text><text x="500" y="232" class="jm-c-spent">Cost spent</text></g>
+        </svg>
+      </div>
+      <ol class="jm-phases">
+        <li style="--d:0"><b>1</b><span>Information</span></li>
+        <li style="--d:1"><b>2</b><span>Function Analysis</span></li>
+        <li style="--d:2"><b>3</b><span>Creative</span></li>
+        <li style="--d:3"><b>4</b><span>Evaluation</span></li>
+        <li style="--d:4"><b>5</b><span>Development</span></li>
+        <li style="--d:5"><b>6</b><span>Presentation</span></li>
+      </ol>
+      <p class="jm-foot">~80% of lifecycle cost is committed by the end of <b>Function Analysis</b> — which is why a pound of VE effort at a design gate returns what ten return after launch.</p>
+    </div>
+
       <div class="tex"><h4>Worked example</h4><p>A commodity kettle and a premium kettle both <em>heat water</em> identically. The commodity unit costs £9.80 to make;
 a rival's equivalent costs £12.40 — same functions, higher cost, so <strong>lower value</strong>. The premium kettle costs £18
 but adds real esteem value customers pay £35 for — <strong>higher value too</strong>. Value judges the ratio, not the price tag.</p></div>
@@ -361,6 +387,18 @@ Use the pre-workshop checklist in the <a href="toolkit/save-workshop-agenda.html
       a simple part look expensive and an expensive process look cheap. Compute <strong>cost density</strong> metrics —
       £/kg against material benchmarks, £ per function against the worth estimates coming in Phase 2 — because density
       exposes outliers that absolute Paretos hide.</p>
+      <div class="concept-viz valuegap">
+        <div class="cv-head"><h4>Cost vs worth: the value gap you're hunting</h4>
+        <p>For each function, put what it <em>costs</em> today next to what it's <em>worth</em> — the cheapest reliable way to do the same job. The taller the gap, and the higher the value index (VI&nbsp;=&nbsp;cost&nbsp;÷&nbsp;worth), the bigger the prize.</p></div>
+        <div class="vg-legend"><span class="vg-k vg-cost">Cost today</span><span class="vg-k vg-worth">Worth</span></div>
+        <div class="vg-chart">
+          <div class="vg-group is-target" style="--c:26.1;--w:6.5"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£0.60</span></div><div class="vg-bar vg-b-worth"><span>£0.15</span></div></div><div class="vg-name">Indicate status<b class="vg-vi">VI 4.0</b></div></div>
+          <div class="vg-group" style="--c:100;--w:47.8"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£2.30</span></div><div class="vg-bar vg-b-worth"><span>£1.10</span></div></div><div class="vg-name">Transmit torque<b class="vg-vi">VI 2.1</b></div></div>
+          <div class="vg-group" style="--c:39.1;--w:23.9"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£0.90</span></div><div class="vg-bar vg-b-worth"><span>£0.55</span></div></div><div class="vg-name">Contain water<b class="vg-vi">VI 1.6</b></div></div>
+          <div class="vg-group" style="--c:52.2;--w:39.1"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£1.20</span></div><div class="vg-bar vg-b-worth"><span>£0.90</span></div></div><div class="vg-name">Support load<b class="vg-vi">VI 1.3</b></div></div>
+        </div>
+        <p class="vg-foot"><b>Indicate status</b> is the prime target: it costs 4&times; its worth. A neon lamp signals status for £0.15 — so every £0.45 above that is cost the customer never asked to pay.</p>
+      </div>
       <h3>3.5 · The Kano model in five minutes</h3>
       <ul class="tlist">
         <li><b>Must-be</b> — expected silently (brakes work). Absence enrages; excellence earns nothing. Deliver at minimum adequate cost.</li>
@@ -894,6 +932,20 @@ argues with your gut — that argument is the point. The columns are in the
       validation, engineering hours), what could go wrong, and when it lands. An idea with those five answers is a
       business decision; without them it's still a sticky note.</p>
 
+      <div class="concept-viz costwalk">
+        <div class="cv-head"><h4>The cost walk: current &rarr; target, one lever at a time</h4>
+        <p>Development turns validated ideas into a staircase from today's cost to the target. Every step is a named lever — and the blocks must add up, or the target is fiction.</p></div>
+        <div class="cw-chart">
+          <div class="cw-col cw-anchor" style="--base:0;--h:100;--i:0"><b class="cw-val">100</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Current</span></div>
+          <div class="cw-col cw-step" style="--base:92;--h:8;--i:1"><b class="cw-val">-8</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Design</span></div>
+          <div class="cw-col cw-step" style="--base:88;--h:4;--i:2"><b class="cw-val">-4</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Material</span></div>
+          <div class="cw-col cw-step" style="--base:84;--h:4;--i:3"><b class="cw-val">-4</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Manufacturing</span></div>
+          <div class="cw-col cw-step" style="--base:79;--h:5;--i:4"><b class="cw-val">-5</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Sourcing</span></div>
+          <div class="cw-col cw-step" style="--base:77;--h:2;--i:5"><b class="cw-val">-2</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Logistics</span></div>
+          <div class="cw-col cw-anchor cw-target" style="--base:0;--h:77;--i:6"><b class="cw-val">77</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Target</span></div>
+        </div>
+        <p class="cw-foot">A 23-point cost-out, built bottom-up from validated ideas. Each block has an owner and a date — without those, a cost walk is a poster, not a plan.</p>
+      </div>
       <h3>7.2 · Engineering validation</h3>
       <p>De-risk before you commit: <strong>CAE simulation</strong> to verify a thinner wall or relaxed safety factor,
       <strong>design FMEA</strong> to expose new failure modes, a <strong>DVP&amp;R</strong> (design verification plan
@@ -969,6 +1021,18 @@ compute payback in months. If it's under 12, you'd take it to a real board.</p><
       date — or it is killed. Savings only "count" at L4, audited against the <strong>frozen baseline</strong> so
       inflation and mix changes can't blur the result.</p>
 
+      <div class="concept-viz sfunnel">
+        <div class="cv-head"><h4>The savings funnel: why 380 ideas become a dozen wins</h4>
+        <p>Ideas only "count" when they reach L4 &mdash; implemented and audited against the frozen baseline. The attrition below is normal, and healthy: it means the screen is working.</p></div>
+        <ul class="sf-stages">
+          <li style="--w:100;--i:0"><i class="sf-bar"></i><b class="sf-num" data-countup="380">0</b><span>Raw ideas</span></li>
+          <li style="--w:56;--i:1"><i class="sf-bar"></i><b class="sf-num" data-countup="120">0</b><span>Triaged &mdash; go / grow</span></li>
+          <li style="--w:40;--i:2"><i class="sf-bar"></i><b class="sf-num" data-countup="60">0</b><span>Screened concepts</span></li>
+          <li style="--w:26;--i:3"><i class="sf-bar"></i><b class="sf-num" data-countup="25">0</b><span>Developed proposals</span></li>
+          <li style="--w:22;--i:4"><i class="sf-bar sf-win"></i><b class="sf-num sf-win-num" data-countup="18">0</b><span>Implemented &middot; L4</span></li>
+        </ul>
+        <p class="sf-foot">Roughly 1 idea in 8 survives to L4 &mdash; and only L4 savings, audited against the frozen baseline, are ever reported as real.</p>
+      </div>
       <h3>8.3 · Close the loop</h3>
       <p>Post-implementation, feed the lessons back: update design guidelines, cost standards, preferred-parts lists and
       the idea bank. This institutional memory is what makes wave two cheaper and faster than wave one — and what
@@ -1503,6 +1567,7 @@ value board. If you can't name the people, that's your first action.</p></div>
 <script src="vh-cloud.js"></script>
 <script src="vh-account.js"></script>
 <script src="training.js"></script>
+<script src="vh-diagrams.js"></script>
 <script src="vh-voice.js"></script>
 </body>
 </html>

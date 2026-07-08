@@ -21,7 +21,7 @@
      so the audio blocks always match this exact collection. */
   function collect(mod) {
     return $$("h2, h3, h4, p, li", mod).filter((el) => {
-      if (el.closest(".qcheck, button, .vo-bar, .gate-card, .fast-builder, .fn-lib, .fn-challenge, .ve-lab")) return false;
+      if (el.closest(".qcheck, button, .vo-bar, .gate-card, .fast-builder, .fn-lib, .fn-challenge, .ve-lab, .concept-viz")) return false;
       if ($$("p, li", el).length) return false; // containers — children are read instead
       return el.textContent.trim().length > 2;
     });
