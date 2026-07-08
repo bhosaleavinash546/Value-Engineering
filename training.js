@@ -246,7 +246,7 @@
     ["In function analysis, every function is expressed as:", ["A full sentence", "A verb + noun pair", "A noun + adjective pair", "A cost code"], 1],
     ["The basic function of an electric kettle is:", ["Indicate status", "Contain water", "Heat water", "Convey esteem"], 2],
     ["On a FAST diagram, moving to the right answers which question?", ["WHY?", "WHEN?", "HOW?", "WHO?"], 2],
-    ["A function has cost €2.00 and worth €0.50. Its Value Index is:", ["0.25 — healthy", "1.0 — balanced", "2.5 — watch list", "4.0 — a prime creative-phase target"], 3],
+    ["A function has cost £2.00 and worth £0.50. Its Value Index is:", ["0.25 — healthy", "1.0 — balanced", "2.5 — watch list", "4.0 — a prime creative-phase target"], 3],
     ["'Worth' of a function is best defined as:", ["What the customer says they'd pay", "The lowest cost that could still reliably achieve the function", "The supplier's quoted price", "The competitor's retail price"], 1],
     ["During the Creative Phase, judgement of ideas must be:", ["Applied immediately to save time", "Deferred — evaluation has its own phase", "Left to the most senior engineer", "Done by the finance representative"], 1],
     ["Brainwriting 6-3-5 means:", ["6 rounds, 3 hours, 5 breaks", "6 people write 3 ideas in 5 minutes, then pass the sheet", "6 ideas ranked on 3 criteria by 5 judges", "6 functions, 3 costs, 5 worths"], 1],
@@ -506,7 +506,7 @@
     ],
     m4: [
       ["'Fasten flange' vs. 'join components' — the better function statement is…", ["Fasten flange — it's specific", "Join components — abstraction opens the solution space", "Both are equal", "Neither is valid"], 1, "'Fasten flange' locks you into bolts; 'join components' opens welding, adhesives, snap-fits and integration."],
-      ["A function costs €1.00 and its worth is €0.80. Its Value Index is…", ["0.80 — healthy", "1.25 — watch list", "2.00 — attack", "8.00 — attack"], 1, "VI = Cost ÷ Worth = 1.00/0.80 = 1.25, in the 1.2–2.0 watch zone."],
+      ["A function costs £1.00 and its worth is £0.80. Its Value Index is…", ["0.80 — healthy", "1.25 — watch list", "2.00 — attack", "8.00 — attack"], 1, "VI = Cost ÷ Worth = 1.00/0.80 = 1.25, in the 1.2–2.0 watch zone."],
     ],
     m5: [
       ["Mid-brainstorm, a manager says 'that will never work'. The facilitator should…", ["Open a debate", "Defer the judgement — criticism waits for the Evaluation Phase", "Delete the idea", "End the session"], 1, "Osborn's first rule: defer judgement absolutely. Evaluation has its own phase."],
@@ -517,7 +517,7 @@
       ["Parked ideas should be…", ["Deleted to keep things tidy", "Kept — they seed future waves", "Emailed to everyone", "Patented immediately"], 1, "Today's 'not yet' is next year's scenario — park, don't purge."],
     ],
     m7: [
-      ["A change saves €0.30/unit on 300,000 units/yr and costs €45k one-time. Payback?", ["1.5 months", "6 months", "18 months", "3 years"], 1, "Annual saving €90k; 45k ÷ 90k = 0.5 years = 6 months."],
+      ["A change saves £0.30/unit on 300,000 units/yr and costs £45k one-time. Payback?", ["1.5 months", "6 months", "18 months", "3 years"], 1, "Annual saving £90k; 45k ÷ 90k = 0.5 years = 6 months."],
       ["Before shaving a legacy safety factor, you should…", ["Just do it — margins are waste", "Validate with CAE / testing and check the applicable standards", "Ask the supplier's opinion", "Raise the price instead"], 1, "De-risking with simulation and standards is what makes the saving real and safe."],
     ],
     m8: [
@@ -530,7 +530,7 @@
     ],
     m10: [
       ["The FIRST step of a teardown is…", ["Disassemble as fast as possible", "Photograph, weigh and measure everything", "Send parts out for quotes", "Scan to CAD"], 1, "Document before disassembly — you only get one first teardown."],
-      ["Functional benchmarking compares…", ["Absolute performance only", "Performance per euro (torque/€, lumens/€)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not absolutes — that's the VE lens on benchmarking."],
+      ["Functional benchmarking compares…", ["Absolute performance only", "Performance per pound (torque/£, lumens/£)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not absolutes — that's the VE lens on benchmarking."],
     ],
     m11: [
       ["The right division of labour with AI in VAVE is…", ["AI replaces the workshop team", "AI diverges and drafts; humans judge, validate and decide", "AI sets the prices", "AI signs supplier contracts"], 1, "AI compresses analysis and idea volume; judgement and validation stay human."],
@@ -541,7 +541,7 @@
       ["The SAVE certification ladder, in order, is…", ["CVS → AVS → VMA", "VMA → AVS → CVS", "AVS → CVS → VMA", "PVA → CVS → VMA"], 1, "Value Methodology Associate → Associate Value Specialist → Certified Value Specialist."],
     ],
     m13: [
-      ["A product will sell at €400 and the business needs a 25% margin. Its allowable cost is…", ["€100", "€300", "€375", "€500"], 1, "Allowable cost = price − margin = 400 × (1 − 0.25) = €300 — set before design, not after."],
+      ["A product will sell at £400 and the business needs a 25% margin. Its allowable cost is…", ["£100", "£300", "£375", "£500"], 1, "Allowable cost = price − margin = 400 × (1 − 0.25) = £300 — set before design, not after."],
       ["The 'cardinal rule' of target costing says…", ["If costs drift up, raise the price", "The target cost may never be exceeded — content trades elsewhere instead of drifting", "Suppliers absorb all overruns", "Targets are advisory until SOP"], 1, "Cooper & Slagmulder's rule: the number holds; features, design or make-buy flex around it."],
     ],
   };
@@ -1064,11 +1064,11 @@
       "Weight|Strength / stiffness": [[1, "Segmentation", "honeycomb or lattice core carries the load at a fraction of the mass"], [35, "Parameter change", "switch material state or grade — HSLA steel, thinner gauge"], [8, "Anti-weight", "let another part or structure carry part of the load"]],
       "Speed / cycle time|Reliability": [[10, "Preliminary action", "pre-position, pre-heat or pre-assemble before the fast step"], [11, "Cushion in advance", "add a self-check or backup so speed can't cause a failure"], [28, "Replace mechanical system", "sensor + servo instead of a rushed mechanical linkage"]],
       "Reliability|Cost to make": [[6, "Universality", "one part doing two jobs fails in fewer interfaces"], [25, "Self-service", "the part maintains itself — self-locking, self-cleaning"], [2, "Taking out", "remove the fragile function from the harsh zone entirely"]],
-      "Cost to make|Reliability": [[27, "Cheap short-lived object", "a replaceable €0.10 wear insert instead of a €5 hardened part"], [1, "Segmentation", "isolate the wear zone into a small replaceable element"], [35, "Parameter change", "cheaper grade plus a local coating where it matters"]],
+      "Cost to make|Reliability": [[27, "Cheap short-lived object", "a replaceable £0.10 wear insert instead of a £5 hardened part"], [1, "Segmentation", "isolate the wear zone into a small replaceable element"], [35, "Parameter change", "cheaper grade plus a local coating where it matters"]],
       "Cost to make|Strength / stiffness": [[1, "Segmentation", "stamped and folded sheet replaces a machined billet"], [40, "Composite materials", "over-mould a cheap core with a strong skin"], [10, "Preliminary action", "work-harden or form features in the same press stroke"]],
       "Ease of assembly|Reliability": [[13, "The other way round", "assemble from the other direction — gravity holds it"], [26, "Copying", "one snap-fit geometry copied everywhere: nothing to mix up"], [3, "Local quality", "add a lead-in chamfer — the part aligns itself"]],
       "Ease of assembly|Cost to make": [[6, "Universality", "one fastener family for the whole product"], [1, "Segmentation", "modules assembled offline, mated in one motion"], [2, "Taking out", "eliminate the fastener — snap-fit is the ideal final result"]],
-      "Weight|Cost to make": [[35, "Parameter change", "thinner high-strength grade — less material at slightly higher €/kg"], [2, "Taking out", "delete the part: can a neighbour perform its function?"], [31, "Porous materials", "foamed core where solid adds only weight"]],
+      "Weight|Cost to make": [[35, "Parameter change", "thinner high-strength grade — less material at slightly higher £/kg"], [2, "Taking out", "delete the part: can a neighbour perform its function?"], [31, "Porous materials", "foamed core where solid adds only weight"]],
       "Speed / cycle time|Cost to make": [[10, "Preliminary action", "combine operations into one tool stroke"], [5, "Merging", "process parts in parallel, not sequence"], [28, "Replace mechanical system", "cure with UV instead of a 20-minute oven"]],
       "Strength / stiffness|Cost to make": [[3, "Local quality", "harden or thicken only the loaded zone"], [17, "Another dimension", "a bend or flange adds stiffness for free"], [40, "Composite materials", "selective reinforcement only along the load path"]],
       "Reliability|Weight": [[11, "Cushion in advance", "small redundant element instead of oversizing everything"], [3, "Local quality", "reinforce the failure point only"], [24, "Intermediary", "sacrificial element takes the abuse"]],
@@ -1136,7 +1136,7 @@
     if (!rows) return;
     const F = ["scMass", "scYield", "scMat", "scCycle", "scRate", "scOps", "scWage", "scScrap", "scOh", "scSga", "scMargin", "scQuote", "scVol"]
       .reduce((o, id) => (o[id] = $("#" + id), o), {});
-    const eur = (v) => "€" + v.toFixed(2);
+    const eur = (v) => "£" + v.toFixed(2);
     const COLORS = ["#5aa2ff", "#7ec4ff", "#34d399", "#fbbf24", "#f59e0b", "#a78bfa", "#f472b6"];
     function calc() {
       const v = (id) => Math.max(0, parseFloat(F[id].value) || 0);
@@ -1162,7 +1162,7 @@
         const pc = (gap / total * 100).toFixed(0);
         gapEl.className = "sc-gap sc-gap-over";
         gapEl.innerHTML = `Quote ${eur(q)} vs should-cost <b>${eur(total)}</b> → gap <b>${eur(gap)}</b> per part (${pc}% above should).` +
-          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} pcs/year that's <b>€${Math.round(gap * vol).toLocaleString("en-GB")}</b> on the table.` : "");
+          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} pcs/year that's <b>£${Math.round(gap * vol).toLocaleString("en-GB")}</b> on the table.` : "");
       } else {
         gapEl.className = "sc-gap sc-gap-ok";
         gapEl.innerHTML = `Quote ${eur(q)} is at or below the should-cost of <b>${eur(total)}</b> — either your buyer is excellent or an assumption is off. Check the machine-rate utilisation first.`;
@@ -1179,7 +1179,7 @@
     const cap = $("#tdCaption"), dots = $("#tdDots"), next = $("#tdNext"), prev = $("#tdPrev");
     const STEPS = [
       { t: "Two mice on the bench — the competitor's next to yours. Nothing has been touched yet; the first move is a camera, not a screwdriver.",
-        cards: [["🖱️", "Theirs", "€24 retail"], ["🖱️", "Ours", "€29 retail"]] },
+        cards: [["🖱️", "Theirs", "£24 retail"], ["🖱️", "Ours", "£29 retail"]] },
       { t: "Step 1 — Acquire & document. Photograph, weigh and measure everything before the first screw turns. You only get one first teardown.",
         cards: [["📷", "48 photos", "every face, every label"], ["⚖️", "87 g vs 112 g", "theirs is 22% lighter"], ["📏", "Dimensions logged", "against a scale reference"]] },
       { t: "Step 2 — Systematic disassembly, level by level, with a stopwatch. Disassembly sequence in reverse is their assembly cost in disguise.",
@@ -1187,9 +1187,9 @@
       { t: "Step 3 — Digital BOM capture. Every part logged: material, mass, process evidence, supplier marks, fastener count.",
         cards: [["📋", "9 parts vs 14", "five fewer things to buy, fit and fail"], ["🏷", "PCB supplier mark", "same board house as our B-supplier"], ["🔧", "Tool marks", "2-cavity mould, mid-volume strategy"]] },
       { t: "Step 4 — Should-cost each part at THEIR assumptions: their region, their volumes, their processes. Band every estimate; deltas are robust where absolutes are fragile.",
-        cards: [["💶", "Their BOM ≈ €3.10", "±15% banded estimate"], ["💶", "Our BOM ≈ €4.60", "same method, same bands"], ["Δ", "Top shell −€0.60", "biggest single-part delta"]] },
+        cards: [["💶", "Their BOM ≈ £3.10", "±15% banded estimate"], ["💶", "Our BOM ≈ £4.60", "same method, same bands"], ["Δ", "Top shell −£0.60", "biggest single-part delta"]] },
       { t: "Step 5 — Harvest & transfer. Findings become creative-phase inputs with owners and dates — that's the difference between a teardown and teardown tourism.",
-        cards: [["💡", "Snap-fit chassis", "adopt — delete 4 screws"], ["💡", "Single-screw service path", "adapt to our architecture"], ["🧱", "Cost walk: −€1.50", "design −0.9 · sourcing −0.4 · assembly −0.2"]] },
+        cards: [["💡", "Snap-fit chassis", "adopt — delete 4 screws"], ["💡", "Single-screw service path", "adapt to our architecture"], ["🧱", "Cost walk: −£1.50", "design −0.9 · sourcing −0.4 · assembly −0.2"]] },
     ];
     let s = 0;
     dots.innerHTML = STEPS.map((_, i) => `<i data-d="${i}"></i>`).join("");
