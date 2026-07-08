@@ -289,6 +289,7 @@
   ];
   const PASS_MARK = 0.8;
   const EXAM_SIZE = 30;
+  window.VH_BANK = BANK; // read-only handle for the review engine
 
   /* ── Exam flow ── */
   const mount = $("#examMount");
@@ -340,12 +341,14 @@
 
   function finishExam() {
     const wrong = [];
+    const missedIdx = [];
     let score = 0;
     order.forEach((bi) => {
       const [q, opts, c] = BANK[bi];
       if (picks[bi] === c) score++;
-      else wrong.push([q, opts[picks[bi]] ?? "—", opts[c]]);
+      else { wrong.push([q, opts[picks[bi]] ?? "—", opts[c]]); missedIdx.push(bi); }
     });
+    state.review = missedIdx; save(); // feed the review-mistakes mode
     const pct = Math.round((score / EXAM_SIZE) * 100);
     const passed = score >= Math.ceil(EXAM_SIZE * PASS_MARK);
     const color = passed ? "#34d399" : "#f87171";
@@ -616,6 +619,7 @@
     ["secondary function", "How this particular design happens to work — and therefore where most removable cost hides."],
     ["gain-share", "Contractual split of verified savings with a supplier — the engine of supplier-driven VAVE."],
   ].map(([t, d]) => [new RegExp("(^|[^\\w-])(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")($|[^\\w-])", "i"), t, d]);
+  window.VH_TERMS = TERMS.map((t) => [t[1], t[2]]); // flashcard deck
 
   document.querySelectorAll(".tmod").forEach((mod) => {
     const used = new Set();
@@ -866,4 +870,179 @@
       slide.classList.remove("tq-out");
     }, 450);
   }, 6500);
+})();
+
+/* ════════ Academy extras: cert counter · course search · review mode · community ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+  const cfg = window.VF_CONFIG || {};
+  const KEY = "vf-academy";
+  const getState = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+
+  /* ── 1. live certificates-issued counter (social proof) ── */
+  if (window.VHCloud && VHCloud.live && VHCloud.certCount) {
+    VHCloud.certCount().then((n) => {
+      if (!n || n < 1) return;
+      const tile = $("#certCountStat");
+      if (tile) { $("#certCountNum").textContent = n; tile.hidden = false; }
+    });
+  }
+
+  /* ── 2. course search across all modules ── */
+  const input = $("#courseSearch"), results = $("#searchResults");
+  if (input && results) {
+    const mods = $$(".tmod").filter((m) => m.dataset.mod !== "exam");
+    const index = [];
+    mods.forEach((mod) => {
+      $$("h3, h4, p, li", mod).forEach((el) => {
+        if (el.closest(".qcheck, button, .vo-bar, .fn-challenge, .fast-builder, .fn-lib")) return;
+        const text = el.textContent.replace(/\s+/g, " ").trim();
+        if (text.length > 8) index.push({ mod: mod.dataset.mod, title: mod.dataset.title, el, text, low: text.toLowerCase() });
+      });
+    });
+    function esc(t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+    function run(q) {
+      q = q.trim().toLowerCase();
+      if (q.length < 3) { results.hidden = true; results.innerHTML = ""; return; }
+      const hits = index.filter((e) => e.low.includes(q)).slice(0, 8);
+      if (!hits.length) { results.innerHTML = '<div class="sr-none">No match — try a shorter word.</div>'; results.hidden = false; return; }
+      results.innerHTML = hits.map((h, i) => {
+        const at = h.low.indexOf(q);
+        const snippet = esc(h.text.slice(Math.max(0, at - 30), at)) + "<mark>" + esc(h.text.substr(at, q.length)) + "</mark>" + esc(h.text.substr(at + q.length, 46));
+        return `<button type="button" class="sr-hit" data-i="${i}"><b>${h.title}</b><span>…${snippet}…</span></button>`;
+      }).join("");
+      results.hidden = false;
+      $$(".sr-hit", results).forEach((btn) => btn.addEventListener("click", () => {
+        const h = hits[+btn.dataset.i];
+        results.hidden = true; input.value = "";
+        const link = $(`.mod-link[data-target="${h.mod}"]`);
+        if (link) link.click();
+        setTimeout(() => {
+          try { h.el.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) {}
+          h.el.classList.add("search-hit");
+          setTimeout(() => h.el.classList.remove("search-hit"), 2600);
+        }, 350);
+      }));
+    }
+    input.addEventListener("input", () => run(input.value));
+    document.addEventListener("click", (e) => { if (!e.target.closest(".course-search-wrap")) results.hidden = true; });
+    input.addEventListener("keydown", (e) => { if (e.key === "Escape") { results.hidden = true; input.blur(); } });
+  }
+
+  /* ── 3. review mode: missed exam questions + glossary flashcards ── */
+  const foot = $(".tr-side-foot");
+  if (foot) {
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "btn btn-ghost rev-btn"; btn.id = "revBtn";
+    btn.textContent = "↻ Review & flashcards";
+    foot.appendChild(btn);
+    btn.addEventListener("click", openReview);
+  }
+
+  function openReview() {
+    const st = getState();
+    const missed = (st.review || []).filter((i) => window.VH_BANK && window.VH_BANK[i]);
+    const terms = window.VH_TERMS || [];
+    let modal = $("#revModal");
+    if (modal) modal.remove();
+    modal = document.createElement("div");
+    modal.id = "revModal"; modal.className = "rev-modal";
+    modal.innerHTML = `
+      <div class="rev-card" role="dialog" aria-label="Review and flashcards">
+        <button type="button" class="rev-close" aria-label="Close">✕</button>
+        <div class="rev-tabs">
+          <button type="button" class="rev-tab is-on" data-tab="missed">Missed questions (${missed.length})</button>
+          <button type="button" class="rev-tab" data-tab="cards">Flashcards (${terms.length})</button>
+        </div>
+        <div class="rev-pane" id="revMissed"></div>
+        <div class="rev-pane" id="revCards" hidden></div>
+      </div>`;
+    document.body.appendChild(modal);
+    $(".rev-close", modal).addEventListener("click", () => modal.remove());
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+    document.addEventListener("keydown", function escClose(e) { if (e.key === "Escape") { modal.remove(); document.removeEventListener("keydown", escClose); } });
+    $$(".rev-tab", modal).forEach((t) => t.addEventListener("click", () => {
+      $$(".rev-tab", modal).forEach((x) => x.classList.toggle("is-on", x === t));
+      $("#revMissed").hidden = t.dataset.tab !== "missed";
+      $("#revCards").hidden = t.dataset.tab !== "cards";
+    }));
+
+    // missed-questions pane: requiz with instant feedback
+    const mp = $("#revMissed", modal);
+    if (!missed.length) {
+      mp.innerHTML = '<p class="rev-empty">No missed exam questions to review — either you haven\'t taken the exam yet, or you got everything right. 🎉</p>';
+    } else {
+      mp.innerHTML = missed.map((bi, n) => {
+        const [q, opts] = window.VH_BANK[bi];
+        return `<div class="rev-q" data-bi="${bi}"><div class="rev-qt">${n + 1}. ${q}</div>
+          <div class="rev-opts">${opts.map((o, oi) => `<button type="button" class="rev-opt" data-oi="${oi}">${o}</button>`).join("")}</div></div>`;
+      }).join("");
+      mp.addEventListener("click", (e) => {
+        const ob = e.target.closest(".rev-opt");
+        if (!ob) return;
+        const qEl = ob.closest(".rev-q");
+        const [, , correct] = window.VH_BANK[+qEl.dataset.bi];
+        $$(".rev-opt", qEl).forEach((o, oi) => {
+          o.disabled = true;
+          if (oi === correct) o.classList.add("is-right");
+          else if (o === ob) o.classList.add("is-wrong");
+        });
+      });
+    }
+
+    // flashcards pane
+    const cp = $("#revCards", modal);
+    let ci = 0, flipped = false;
+    const deck = terms.slice().sort(() => Math.random() - 0.5);
+    function renderCard() {
+      const [term, def] = deck[ci] || ["—", "—"];
+      cp.innerHTML = `
+        <div class="fc-card${flipped ? " is-flipped" : ""}" id="fcCard" role="button" tabindex="0" aria-label="Flashcard — click to flip">
+          <div class="fc-face fc-front"><span>${term}</span><em>tap to reveal</em></div>
+          <div class="fc-face fc-back"><span>${def}</span></div>
+        </div>
+        <div class="fc-nav">
+          <button type="button" class="btn btn-ghost" id="fcPrev" ${ci === 0 ? "disabled" : ""}>← Prev</button>
+          <span class="fc-count">${ci + 1} / ${deck.length}</span>
+          <button type="button" class="btn btn-primary" id="fcNext" ${ci === deck.length - 1 ? "disabled" : ""}>Next →</button>
+        </div>`;
+      const card = $("#fcCard", cp);
+      const flip = () => { flipped = !flipped; card.classList.toggle("is-flipped", flipped); };
+      card.addEventListener("click", flip);
+      card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+      $("#fcPrev", cp).addEventListener("click", () => { if (ci > 0) { ci--; flipped = false; renderCard(); } });
+      $("#fcNext", cp).addEventListener("click", () => { if (ci < deck.length - 1) { ci++; flipped = false; renderCard(); } });
+    }
+    renderCard();
+  }
+
+  /* ── 4. community discussion (Giscus) — appears once configured ── */
+  if (cfg.giscusRepo && cfg.giscusRepoId && cfg.giscusCategory && cfg.giscusCategoryId) {
+    const sec = $("#community");
+    if (sec) {
+      sec.hidden = false;
+      const dark = document.documentElement.dataset.theme !== "light";
+      const s = document.createElement("script");
+      s.src = "https://giscus.app/client.js";
+      s.async = true; s.crossOrigin = "anonymous";
+      s.setAttribute("data-repo", cfg.giscusRepo);
+      s.setAttribute("data-repo-id", cfg.giscusRepoId);
+      s.setAttribute("data-category", cfg.giscusCategory);
+      s.setAttribute("data-category-id", cfg.giscusCategoryId);
+      s.setAttribute("data-mapping", "specific");
+      s.setAttribute("data-term", "VE Academy — course discussion");
+      s.setAttribute("data-strict", "0");
+      s.setAttribute("data-reactions-enabled", "1");
+      s.setAttribute("data-input-position", "top");
+      s.setAttribute("data-theme", dark ? "transparent_dark" : "light");
+      s.setAttribute("data-lang", "en");
+      $("#giscusMount").appendChild(s);
+      document.addEventListener("vf-themechange", () => {
+        const frame = document.querySelector("iframe.giscus-frame");
+        if (frame) frame.contentWindow.postMessage({ giscus: { setConfig: { theme: document.documentElement.dataset.theme === "light" ? "light" : "transparent_dark" } } }, "https://giscus.app");
+      });
+    }
+  }
 })();

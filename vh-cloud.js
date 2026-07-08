@@ -75,6 +75,15 @@ window.VHCloud = (function () {
         });
       } catch (e) {}
     },
+    // total certificates issued — public count for social proof
+    async certCount() {
+      if (!LIVE) return null;
+      await ready; if (!client) return null;
+      try {
+        const { count, error } = await client.from("certificates").select("id", { count: "exact", head: true });
+        return error ? null : count;
+      } catch (e) { return null; }
+    },
     async verifyCertificate(id) {
       if (!LIVE) return { status: "demo" };
       await ready; if (!client) return { status: "demo" };

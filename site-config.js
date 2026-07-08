@@ -31,6 +31,15 @@ window.VF_CONFIG = {
         DEMO mode (accounts saved in the browser only). */
   supabaseUrl: "https://pnvidzchlnlfodfnawur.supabase.co",
   supabaseAnonKey: "sb_publishable_2dBHd481kEfJh2AIY-nFvw_yVKteCwl",
+
+  /* 6) COMMUNITY DISCUSSION (Giscus) — enable GitHub Discussions on the
+        repo, install the giscus app (github.com/apps/giscus), then copy
+        the four values from giscus.app. Until set, the discussion panel
+        stays hidden. */
+  giscusRepo: "",
+  giscusRepoId: "",
+  giscusCategory: "",
+  giscusCategoryId: "",
 };
 
 /* Normalise the Supabase URL: accept a pasted REST endpoint
@@ -72,4 +81,13 @@ window.VF_CONFIG = {
     });
   });
   icons();
+})();
+
+/* ── PWA: register the service worker (offline shell + audio cache) ── */
+(function () {
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
 })();

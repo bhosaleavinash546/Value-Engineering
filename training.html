@@ -7,6 +7,7 @@
 <meta name="description" content="Free 360° Value Engineering training: 13 modules covering the SAVE 6-phase job plan, function analysis, FAST, should-costing, teardown benchmarking and AI techniques — with a 30-question exam and certificate at 80% pass." />
 <meta name="robots" content="index,follow" />
 <link rel="canonical" href="https://valueengineeringhub.com/training.html" />
+<link rel="manifest" href="manifest.webmanifest" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -46,6 +47,7 @@
       <div><b>92 min</b><span>studio narration</span></div>
       <div><b>30</b><span>exam questions</span></div>
       <div><b>80%</b><span>to earn the certificate</span></div>
+      <div id="certCountStat" hidden><b id="certCountNum">—</b><span>certificates issued</span></div>
     </div>
     <div class="tr-quotes" id="trQuotes" aria-label="Quotes about Value Engineering">
       <span class="tq-mark" aria-hidden="true">“</span>
@@ -97,6 +99,10 @@
 <div class="tr-layout" id="trLayout">
   <aside class="tr-sidebar" id="trSidebar">
     <div class="tr-side-head">Course content</div>
+    <div class="course-search-wrap">
+      <input type="search" id="courseSearch" class="course-search" placeholder="🔍 Search the course…" aria-label="Search course content" autocomplete="off" />
+      <div id="searchResults" class="search-results" hidden></div>
+    </div>
     <nav id="modNav"></nav>
     <div class="tr-side-foot">
       <div class="tr-side-prog"><div class="tr-side-bar"><i id="sideProgFill"></i></div><span id="sideProgText">0 / 13 modules</span></div>
@@ -1167,11 +1173,20 @@ value board. If you can't name the people, that's your first action.</p></div>
   </main>
 </div>
 
+<section class="tr-community" id="community" hidden>
+  <div class="tr-community-inner">
+    <h2>💬 Course discussion</h2>
+    <p>Questions about a module, ideas from your own VE projects, or feedback on the course — join the conversation.
+    Sign in with GitHub to post.</p>
+    <div id="giscusMount"></div>
+  </div>
+</section>
+
 <footer class="tr-footer">
   <p>VAVEhub VE Academy · free educational certification · an independent programme, not affiliated with,
   accredited by, or endorsed by SAVE International® or any certification body. SAVE International®, TRIZ® and other
   marks are trademarks of their respective owners.</p>
-  <p>© Avinash Bhosale · VAVEhub — course content, exam and certificate design.</p>
+  <p>© Avinash Bhosale · VAVEhub · <a href="privacy.html">Privacy</a> — course content, exam and certificate design.</p>
   <p>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b>Avinash Bhosale</b></a></p>
 </footer>
 
