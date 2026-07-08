@@ -171,28 +171,56 @@
       </div>
     </div>
 
-    <div class="triad" data-stagger>
-      <article class="card tilt" data-reveal>
-        <div class="card-num">VA</div>
-        <h3>Value Analysis</h3>
-        <p>Applied to <strong>existing products</strong> in production. Tear down what ships today, question every function,
-        every spec, every part — and remove the cost that customers never asked to pay for.</p>
-        <ul class="mini-list"><li>Current BOM &amp; process as baseline</li><li>Teardown + should-cost gap analysis</li><li>Fast paybacks, running-change friendly</li></ul>
+    <div class="vave-solo" data-reveal>
+      <article class="card vave-card">
+        <div class="card-num">VAVE</div>
+        <h3>Value Analysis &amp; Value Engineering — one method, two moments</h3>
+        <p>VA and VE are the <strong>same function-first discipline</strong>; only the starting point differs.
+        Applied to <strong>existing products</strong> in production, it tears down what ships today, questions every
+        function and every part, and removes the cost customers never asked to pay for. Applied
+        <strong>during design</strong>, it sets function and cost targets before ~80% of cost is locked in — where a
+        pound of effort returns ten. Same job plan, same tools, one continuous practice: <strong>VAVE</strong>.</p>
+        <div class="vave-cols">
+          <div>
+            <h5>⚙ On existing products</h5>
+            <ul class="mini-list"><li>Current BOM &amp; process as baseline</li><li>Teardown + should-cost gap analysis</li><li>Fast paybacks, running-change friendly</li></ul>
+          </div>
+          <div>
+            <h5>✏ During design</h5>
+            <ul class="mini-list"><li>Design-to-cost targets cascaded to subsystems</li><li>Function-first concept selection</li><li>Cost avoidance, not just cost reduction</li></ul>
+          </div>
+        </div>
       </article>
-      <article class="card tilt" data-reveal>
-        <div class="card-num">VE</div>
-        <h3>Value Engineering</h3>
-        <p>Applied <strong>during design</strong> — before cost is locked in. Since ~80% of cost is committed by early
-        design decisions, this is where a pound of effort returns ten.</p>
-        <ul class="mini-list"><li>Design-to-cost targets cascaded to subsystems</li><li>Function-first concept selection</li><li>Cost avoidance, not just cost reduction</li></ul>
-      </article>
-      <article class="card tilt" data-reveal>
-        <div class="card-num">VM</div>
-        <h3>Value Management</h3>
-        <p>The <strong>governance layer</strong>: a permanent operating system of value targets, idea pipelines, tracking
-        funnels and capability building — so VAVE is a habit, not a one-time project.</p>
-        <ul class="mini-list"><li>Savings funnel: idea → validated → implemented</li><li>Cross-functional value teams</li><li>Annual cost roadmaps per product line</li></ul>
-      </article>
+      <div class="vave-viz" aria-hidden="true">
+        <div class="vv-scene">
+          <div class="vv-halo"></div>
+          <svg class="vv-ring-svg" viewBox="0 0 360 360" fill="none">
+            <g class="vv-ring"><circle cx="180" cy="180" r="128" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 12"/></g>
+            <circle cx="180" cy="180" r="128" stroke="currentColor" stroke-width="6" opacity=".08"/>
+            <polygon class="vv-arr" points="278,74 292,92 270,94" fill="currentColor"/>
+            <polygon class="vv-arr" points="82,286 68,268 90,266" fill="currentColor"/>
+          </svg>
+          <div class="vv-node vv-node-design">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="10" width="26" height="30" rx="3"/>
+              <path d="M14 18 h10 M14 24 h7 M14 30 h9"/>
+              <path d="M40 14 L27 27 l-1.6 5.6 L31 31 L44 18 Z" fill="var(--bg2)"/>
+              <path d="M36 18 l4 4"/>
+            </svg>
+            <span>During<br />design</span>
+          </div>
+          <div class="vv-node vv-node-prod">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <circle cx="24" cy="24" r="9.5"/><circle cx="24" cy="24" r="3.4"/>
+              <path d="M24 8 v6 M24 34 v6 M8 24 h6 M34 24 h6 M12.7 12.7 l4.2 4.2 M31.1 31.1 l4.2 4.2 M35.3 12.7 l-4.2 4.2 M16.9 31.1 l-4.2 4.2"/>
+            </svg>
+            <span>In<br />production</span>
+          </div>
+          <div class="vv-core"><b>V</b><i>=</i><em>F<u></u>C</em></div>
+          <i class="vv-dust v1"></i><i class="vv-dust v2"></i><i class="vv-dust v3"></i>
+          <i class="vv-dust v4"></i><i class="vv-dust v5"></i><i class="vv-dust v6"></i>
+        </div>
+      </div>
     </div>
 
     <div class="value-types" data-reveal>

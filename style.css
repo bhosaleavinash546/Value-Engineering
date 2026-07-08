@@ -917,3 +917,44 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
 }
+
+/* ── VAVE merged section: card + cycle hologram ── */
+.vave-solo{display:grid;gap:1.6rem;margin-bottom:3rem}
+@media (min-width:960px){.vave-solo{grid-template-columns:1fr 400px;align-items:center}}
+.vave-card h3{font-size:1.25rem}
+.vave-cols{display:grid;gap:1.4rem;margin-top:1.2rem}
+@media (min-width:640px){.vave-cols{grid-template-columns:1fr 1fr}}
+.vave-cols h5{font:700 .78rem var(--font-m);letter-spacing:.12em;text-transform:uppercase;color:var(--acc1);margin-bottom:.5rem}
+.vave-viz{display:flex;justify-content:center}
+.vv-scene{position:relative;width:340px;height:340px;color:var(--acc1)}
+.vv-halo{position:absolute;left:50%;top:50%;width:280px;height:280px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(90,162,255,.22),rgba(90,162,255,.06) 45%,transparent 72%);filter:blur(8px);animation:vv-halo 4.5s ease-in-out infinite alternate}
+@keyframes vv-halo{from{opacity:.5;transform:translate(-50%,-50%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
+.vv-ring-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 6px rgba(90,162,255,.5))}
+.vv-ring{animation:vv-spin 26s linear infinite;transform-origin:180px 180px}
+@keyframes vv-spin{to{transform:rotate(360deg)}}
+.vv-arr{animation:vv-arr 3.2s ease-in-out infinite alternate}
+@keyframes vv-arr{from{opacity:.5}to{opacity:1}}
+.vv-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:.45rem;width:100px;transform:translate(-50%,-50%);animation:vv-bob 4.4s ease-in-out infinite alternate}
+.vv-node-design{left:25%;top:25%}
+.vv-node-prod{left:75%;top:75%;animation-delay:1.6s}
+@keyframes vv-bob{from{margin-top:-5px}to{margin-top:5px}}
+.vv-node svg{width:74px;height:74px;padding:14px;border-radius:50%;border:1px solid color-mix(in srgb,var(--acc1) 45%,transparent);background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--acc1) 22%,transparent),color-mix(in srgb,var(--acc1) 6%,transparent));filter:drop-shadow(0 0 9px rgba(90,162,255,.55))}
+.vv-node span{font:700 .64rem var(--font-m);letter-spacing:.14em;text-transform:uppercase;text-align:center;line-height:1.5;color:var(--txt);text-shadow:0 0 12px color-mix(in srgb,var(--acc1) 65%,transparent)}
+.vv-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:.55rem;font-family:var(--font-d);color:var(--txt);text-shadow:0 0 16px color-mix(in srgb,var(--acc1) 80%,transparent),0 0 40px color-mix(in srgb,var(--acc1) 35%,transparent);animation:vv-core 3.4s ease-in-out infinite alternate}
+@keyframes vv-core{from{opacity:.75}to{opacity:1}}
+.vv-core b{font-size:2.5rem;font-weight:800}
+.vv-core i{font-style:normal;font-size:1.5rem;color:var(--acc1)}
+.vv-core em{font-style:normal;display:flex;flex-direction:column;align-items:center;font-size:1.15rem;font-weight:700;line-height:1.35}
+.vv-core em u{display:block;width:26px;border-top:2px solid var(--acc1);margin:.15rem 0}
+.vv-dust{position:absolute;width:4px;height:4px;border-radius:50%;background:#a8cbff;box-shadow:0 0 7px rgba(140,185,255,.9);opacity:0;animation:vv-drift 5.5s linear infinite}
+.vv-dust.v1{left:22%;bottom:24%}
+.vv-dust.v2{left:48%;bottom:12%;animation-delay:1.2s}
+.vv-dust.v3{left:68%;bottom:30%;animation-delay:2.3s;width:3px;height:3px}
+.vv-dust.v4{left:34%;bottom:44%;animation-delay:3.5s;width:3px;height:3px}
+.vv-dust.v5{left:80%;bottom:52%;animation-delay:.7s}
+.vv-dust.v6{left:14%;bottom:58%;animation-delay:2.9s;width:3px;height:3px}
+@keyframes vv-drift{0%{opacity:0;transform:translateY(0) scale(1)}12%{opacity:.9}100%{opacity:0;transform:translateY(-150px) scale(.35)}}
+html[data-theme="light"] .vv-node svg,html[data-theme="light"] .vv-ring-svg{filter:drop-shadow(0 0 5px rgba(46,111,232,.3))}
+html[data-theme="light"] .vv-node span,html[data-theme="light"] .vv-core{text-shadow:none}
+html[data-theme="light"] .vv-dust{background:#5aa2ff;box-shadow:0 0 5px rgba(46,111,232,.5)}
+@media (prefers-reduced-motion:reduce){.vv-scene *{animation:none!important}}
