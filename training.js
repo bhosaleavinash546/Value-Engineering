@@ -205,7 +205,7 @@
     const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
     const streak = (state.visits && state.visits.streak) || 1;
     const certified = state.exam && state.exam.passed;
-    const first = acctName.trim().split(/\s+/)[0];
+    const first = acctName.trim().split(/\s+/)[0].replace(/[<>&"]/g, "");
     box.innerHTML = `
       <div class="ml-ring"><svg viewBox="0 0 60 60"><circle class="mlr-bg" cx="30" cy="30" r="26"/><circle class="mlr-fg" cx="30" cy="30" r="26" style="stroke-dashoffset:${Math.round(163.4 * (1 - pct / 100))}"/></svg><b>${pct}%</b></div>
       <div class="ml-txt">

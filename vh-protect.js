@@ -8,6 +8,14 @@
 (function () {
   "use strict";
 
+  /* clickjacking defence — GitHub Pages cannot send X-Frame-Options,
+     so refuse to run inside another site's iframe */
+  try {
+    if (window.top !== window.self) { window.top.location = window.self.location; }
+  } catch (e) {
+    document.documentElement.style.display = "none"; // cross-origin frame we can't escape: hide instead
+  }
+
   var NOTICE = "Content © VAVEhub — free to read at https://valueengineeringhub.com";
 
   /* selection off everywhere except things the user must type in */

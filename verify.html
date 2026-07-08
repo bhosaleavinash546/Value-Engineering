@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>Verify a Certificate · VAVEhub VE Academy</title>
 <meta name="description" content="Verify the authenticity of a VAVEhub VE Academy certificate by its ID." />
 <meta name="robots" content="index,follow" />
@@ -57,6 +59,11 @@
     try { return JSON.parse(decodeURIComponent(escape(atob(t.replace(/-/g, "+").replace(/_/g, "/"))))); } catch { return null; }
   }
 
+  // escape anything user- or database-controlled before it enters innerHTML
+  function esc(v) {
+    return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
   function card(kind, title, body) {
     const colors = { ok: ["#34d399", "rgba(52,211,153,.1)", "rgba(52,211,153,.4)"], no: ["#f87171", "rgba(248,113,113,.1)", "rgba(248,113,113,.4)"], info: ["#d9a44a", "rgba(217,164,74,.1)", "rgba(217,164,74,.4)"] }[kind];
     out.innerHTML = '<div style="border:1px solid ' + colors[2] + ';background:' + colors[1] + ';border-radius:14px;padding:1.4rem">' +
@@ -75,15 +82,15 @@
     btn.classList.remove("is-loading"); btn.disabled = false;
     if (res.status === "valid") {
       const c = res.cert, d = new Date(c.issued_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-      card("ok", "✓ Valid certificate", "<b style='color:var(--txt)'>" + c.full_name + "</b> passed the Value Engineering 360° Practitioner exam with a score of <b style='color:var(--txt)'>" + c.score + "%</b>, issued " + d + ". ID " + c.id + ".");
+      card("ok", "✓ Valid certificate", "<b style='color:var(--txt)'>" + esc(c.full_name) + "</b> passed the Value Engineering 360° Practitioner exam with a score of <b style='color:var(--txt)'>" + esc(c.score) + "%</b>, issued " + esc(d) + ". ID " + esc(c.id) + ".");
     } else if (res.status === "notfound") {
-      card("no", "✗ Not found", "No certificate with ID <b style='color:var(--txt)'>" + id + "</b> was found in our records. Check the ID, or ask the holder to re-share their certificate link.");
+      card("no", "✗ Not found", "No certificate with ID <b style='color:var(--txt)'>" + esc(id) + "</b> was found in our records. Check the ID, or ask the holder to re-share their certificate link.");
     } else {
       // demo/offline: try decoding a token pasted from a share link
       const t = decodeToken(id);
       if (t && t.n && t.id) {
         const d = new Date(t.d).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-        card("info", "Certificate details (unverified)", "<b style='color:var(--txt)'>" + t.n + "</b> · score <b style='color:var(--txt)'>" + t.s + "%</b> · issued " + d + " · ID " + t.id + ".<br><span style='font-size:.8rem'>Central verification isn't enabled yet — these details are read from the share link itself.</span>");
+        card("info", "Certificate details (unverified)", "<b style='color:var(--txt)'>" + esc(t.n) + "</b> · score <b style='color:var(--txt)'>" + esc(t.s) + "%</b> · issued " + esc(d) + " · ID " + esc(t.id) + ".<br><span style='font-size:.8rem'>Central verification isn't enabled yet — these details are read from the share link itself.</span>");
       } else {
         card("info", "Verification not available", "Central verification is not enabled on this deployment yet. Paste the full certificate share link to read its details, or contact VAVEhub with the ID.");
       }

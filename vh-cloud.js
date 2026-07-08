@@ -17,7 +17,7 @@ window.VHCloud = (function () {
     return new Promise((resolve) => {
       if (window.supabase) { resolve(mk()); return; }
       const s = document.createElement("script");
-      s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      s.src = "vendor/supabase-2.110.1.min.js"; // self-hosted, pinned — no third-party CDN
       s.onload = () => resolve(mk());
       s.onerror = () => resolve(null); // fall back silently
       document.head.appendChild(s);

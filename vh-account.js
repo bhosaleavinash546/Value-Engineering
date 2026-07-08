@@ -9,8 +9,22 @@ window.VHAccount = (function () {
   "use strict";
   const $ = (s, c) => (c || document).querySelector(s);
 
+  const SESSION_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // demo sessions expire after 30 days
+
   function localSession() {
-    try { return JSON.parse(localStorage.getItem("vh-session")); } catch { return null; }
+    try {
+      const s = JSON.parse(localStorage.getItem("vh-session"));
+      if (s && s.at && Date.now() - s.at > SESSION_MAX_AGE) {
+        localStorage.removeItem("vh-session");
+        return null;
+      }
+      return s;
+    } catch { return null; }
+  }
+
+  // escape user-controlled values before they enter innerHTML
+  function esc(v) {
+    return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
   async function current() {
@@ -50,9 +64,9 @@ window.VHAccount = (function () {
     wrap.className = "acct-chip";
     wrap.innerHTML =
       '<button class="acct-btn" type="button" aria-haspopup="true" aria-expanded="false">' +
-        '<span class="acct-avatar">' + initial + '</span><span class="acct-name">' + first + '</span><span class="acct-caret">▾</span></button>' +
+        '<span class="acct-avatar">' + esc(initial) + '</span><span class="acct-name">' + esc(first) + '</span><span class="acct-caret">▾</span></button>' +
       '<div class="acct-menu" hidden>' +
-        '<div class="acct-who">Signed in as<br><b>' + user.name + '</b>' + (user.email ? '<span>' + user.email + '</span>' : '') + '</div>' +
+        '<div class="acct-who">Signed in as<br><b>' + esc(user.name) + '</b>' + (user.email ? '<span>' + esc(user.email) + '</span>' : '') + '</div>' +
         '<a href="training.html">🎓 My learning</a>' +
         '<a href="index.html#toolkit">🧰 Toolkit</a>' +
         '<button type="button" data-signout>Sign out</button>' +

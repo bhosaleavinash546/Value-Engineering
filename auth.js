@@ -155,7 +155,7 @@
     if (_supa) return _supa;
     if (!window.supabase) await new Promise((res) => {
       const sdk = document.createElement("script");
-      sdk.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      sdk.src = "vendor/supabase-2.110.1.min.js"; // self-hosted, pinned — no third-party CDN
       sdk.onload = res; sdk.onerror = res;
       document.head.appendChild(sdk);
     });
