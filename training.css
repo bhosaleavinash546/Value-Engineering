@@ -560,3 +560,45 @@ body.vo-off .vo-bar{display:none!important}
 .td-dots i{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .25s}
 .td-dots i.is-on{background:var(--acc1)}
 @media (prefers-reduced-motion:reduce){.td-card.td-in{animation:none}.sprint-clock.is-low{animation:none}.sc-bar i{transition:none}}
+
+/* ── hero hologram v2: innovation bulb + orbit swirls + side icons ── */
+.qcv-v2 .qcv-arrow svg{width:112px;height:290px}
+.qcv-v2 .qcv-up{left:96px;top:212px;animation-duration:5s}
+.qcv-v2 .qcv-down{right:96px;top:236px;animation-duration:5s}
+.qcv-v2 .qcv-label{font-size:.92rem}
+.qcv-v2 .qcv-pct{position:absolute;left:0;right:0;text-align:center;font-size:1.55rem}
+.qcv-v2 .qcv-up .qcv-pct{top:44%}
+.qcv-v2 .qcv-down .qcv-pct{top:34%}
+.qcv-v2 .qcv-halo{top:56%}
+.qcv-title{position:absolute;top:6px;left:0;right:0;text-align:center;font:700 1rem var(--font-d);letter-spacing:.42em;text-transform:uppercase;text-indent:.42em;color:#eef4ff;text-shadow:0 0 14px rgba(122,176,255,.95),0 0 38px rgba(90,162,255,.5);animation:qcv-title 4.6s ease-in-out infinite alternate}
+@keyframes qcv-title{from{opacity:.72}to{opacity:1}}
+.qcv-bulb{position:absolute;top:32px;left:50%;transform:translateX(-50%);width:150px;color:#cfe2ff}
+.qcv-bulb svg{width:150px;height:182px;filter:drop-shadow(0 0 8px rgba(120,175,255,.65)) drop-shadow(0 0 26px rgba(90,162,255,.3));animation:qcv-glow 3.8s ease-in-out infinite alternate}
+.qcv-core{filter:blur(1px);animation:qcv-core 2.6s ease-in-out infinite alternate}
+@keyframes qcv-core{from{opacity:.55}to{opacity:1}}
+.qcv-orbits{position:absolute;left:50%;top:248px;transform:translateX(-50%);width:470px;height:306px;overflow:visible}
+.qcv-orb ellipse{stroke:#8ebcff;stroke-width:1.6;stroke-linecap:round;stroke-dasharray:2 10;opacity:.75;animation:qcv-flow 9s linear infinite}
+.qcv-orb .qcv-orb-soft{stroke-dasharray:none;stroke-width:5;opacity:.10;filter:blur(3px);animation:none}
+.qcv-orb1{transform:rotate(-14deg);transform-origin:230px 150px}
+.qcv-orb2{transform:rotate(14deg);transform-origin:230px 150px}
+.qcv-orb2 ellipse{animation-direction:reverse;animation-duration:12s}
+@keyframes qcv-flow{to{stroke-dashoffset:-120}}
+.qcv-ico{position:absolute;color:#a9ccff;filter:drop-shadow(0 0 7px rgba(120,175,255,.8));opacity:.9;animation:qcv-ico 4.4s ease-in-out infinite alternate}
+.qcv-ico svg{display:block}
+@keyframes qcv-ico{from{transform:translateY(5px);opacity:.6}to{transform:translateY(-5px);opacity:1}}
+.qcv-ico.i-brain{left:6px;top:322px;width:44px}.qcv-ico.i-brain svg{width:44px;height:44px}
+.qcv-ico.i-gears{left:52px;top:262px;width:40px;animation-delay:1.2s}.qcv-ico.i-gears svg{width:40px;height:40px}
+.qcv-ico.i-target{left:26px;top:462px;width:42px;animation-delay:2.1s}.qcv-ico.i-target svg{width:42px;height:42px}
+.qcv-ico.i-rocket{right:14px;top:282px;width:44px;animation-delay:.6s}.qcv-ico.i-rocket svg{width:44px;height:44px}
+.qcv-ico.i-cloud{right:22px;top:452px;width:46px;animation-delay:2.8s}.qcv-ico.i-cloud svg{width:46px;height:42px}
+
+/* light theme: solid blues instead of white glow */
+[data-theme="light"] .qcv-title{color:#1d4fd7;text-shadow:0 0 12px rgba(46,111,232,.3)}
+[data-theme="light"] .qcv-bulb{color:#2e6fe8}
+[data-theme="light"] .qcv-bulb svg{filter:drop-shadow(0 0 6px rgba(46,111,232,.3))}
+[data-theme="light"] .qcv-label{color:#1d3f8f;text-shadow:0 0 10px rgba(46,111,232,.25)}
+[data-theme="light"] .qcv-pct{color:#163a8e;text-shadow:0 0 10px rgba(46,111,232,.3)}
+[data-theme="light"] .qcv-orb ellipse{stroke:#2e6fe8}
+[data-theme="light"] .qcv-ico{color:#2e6fe8;filter:drop-shadow(0 0 4px rgba(46,111,232,.25))}
+[data-theme="light"] .qcv-dust{background:#5aa2ff;box-shadow:0 0 6px rgba(46,111,232,.55)}
+[data-theme="light"] .qcv-halo{opacity:.45}
