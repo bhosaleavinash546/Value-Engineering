@@ -1207,3 +1207,192 @@
     render();
   })();
 })();
+
+
+/* ════════ Module 5 & 6 rebuild interactives: SCAMPER · technique challenges · weighted-matrix sandbox ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ── shared challenge builder (mirrors the Module-4 FNCHAL pattern) ── */
+  function buildChallenge(mountSel, questions, closingMsg) {
+    const mount = $(mountSel);
+    if (!mount) return;
+    let answered, score;
+    const N = questions.length;
+    function render() {
+      answered = new Array(N).fill(false); score = 0;
+      mount.innerHTML = questions.map(([q, opts], qi) => `
+        <div class="fnc-item" data-qi="${qi}">
+          <div class="fnc-q"><span class="fnc-n">${qi + 1}</span>${q}</div>
+          <div class="fnc-opts">${opts.map((o, oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+          <div class="fnc-expl" role="status" aria-live="polite"></div>
+        </div>`).join("") +
+        `<div class="fnc-score" role="status" aria-live="polite"></div>
+         <div class="fnc-actions"><button type="button" class="btn btn-ghost fncReset" hidden>↻ Try the challenge again</button></div>`;
+      $(".fncReset", mount).addEventListener("click", render);
+    }
+    mount.addEventListener("click", (e) => {
+      const btn = e.target.closest(".fnc-opt");
+      if (!btn) return;
+      const item = btn.closest(".fnc-item");
+      const qi = +item.dataset.qi;
+      if (answered[qi]) return;
+      answered[qi] = true;
+      const [, , correct, expl] = questions[qi];
+      const right = +btn.dataset.oi === correct;
+      if (right) score++;
+      $$(".fnc-opt", item).forEach((o, oi) => {
+        o.disabled = true;
+        if (oi === correct) o.classList.add("is-right");
+        else if (o === btn) o.classList.add("is-wrong");
+      });
+      const ex = $(".fnc-expl", item);
+      ex.textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + expl;
+      ex.className = "fnc-expl show " + (right ? "ok" : "no");
+      if (answered.every(Boolean)) {
+        const s = $(".fnc-score", mount);
+        const msg = score === N ? "Perfect — you've got the judgement, not just the vocabulary!" : score >= N - 2 ? "Strong — review the ones you missed and you're there." : closingMsg;
+        s.innerHTML = `You scored <b>${score} / ${N}</b>. ${msg}`;
+        s.classList.add("show");
+        $(".fncReset", mount).hidden = false;
+      }
+    });
+    render();
+  }
+
+  /* ── 1 · SCAMPER explorer (Module 5) ── */
+  (function () {
+    const row = $("#scamperRow"), panel = $("#scamperPanel");
+    if (!row) return;
+    const SC = [
+      ["S", "Substitute", "What could you swap out — the material, a part, the energy source, the process?",
+       "Swap the machined aluminium body for a glass-filled nylon moulding: two-thirds lighter, a third of the cost, and colour moulded in so no anodising step."],
+      ["C", "Combine", "What if two parts, features or steps became one?",
+       "Combine the reflector and the lens into a single moulded optic — one part instead of two, and no alignment step on the line."],
+      ["A", "Adapt", "Who else has solved this? What can you borrow from another product or industry?",
+       "Adapt the bayonet mount from a camera lens so the head twists on in a quarter-turn — no threads to cross-thread, faster assembly."],
+      ["M", "Modify / Magnify", "What if you made a feature bigger, smaller, or changed its shape?",
+       "Magnify the knurling into a full-length grip pattern that doubles as the heat sink — better hold and better cooling from one feature."],
+      ["P", "Put to other use", "Could the part do a second job, or serve a different user?",
+       "Put the tail-cap to other use as a magnetic base, so the torch sticks to a car bonnet hands-free — new function, near-zero cost."],
+      ["E", "Eliminate", "What if this part simply didn't exist? Which neighbour could do its job?",
+       "Eliminate the separate on/off switch: a twist of the head completes the circuit. One fewer part, one fewer seal, one fewer thing to fail. (The strongest SCAMPER move in VE.)"],
+      ["R", "Reverse", "What if you flipped the order, turned it inside out, or ran it backwards?",
+       "Reverse the battery loading — load from the front behind the head instead of the tail — so the tail becomes a solid sealed grip and waterproofing gets easier."],
+    ];
+    row.innerHTML = SC.map(([l, name], i) =>
+      `<button type="button" class="scamper-key${i === 0 ? " is-on" : ""}" data-i="${i}"><b>${l}</b><span>${name}</span></button>`).join("");
+    function show(i) {
+      const [l, name, q, ex] = SC[i];
+      $$(".scamper-key", row).forEach((k) => k.classList.toggle("is-on", +k.dataset.i === i));
+      panel.innerHTML = `<div class="sc-letter">${l}</div><div class="sc-body"><h5>${name}</h5><p class="sc-q">${q}</p><p class="sc-ex"><b>On the torch →</b> ${ex}</p></div>`;
+    }
+    row.addEventListener("click", (e) => { const k = e.target.closest(".scamper-key"); if (k) show(+k.dataset.i); });
+    show(0);
+  })();
+
+  /* ── 2 · Module 5 technique challenge ── */
+  buildChallenge("#m5ChalMount", [
+    ["Your team keeps proposing small tweaks to the current bracket instead of fresh concepts. What's the fix?",
+     ["Write the function on the board and ideate on that, not the part", "Invite more senior engineers", "Give everyone longer to think", "Use a bigger whiteboard"], 0,
+     "The existing part anchors everyone. Naming the function — 'support load' — and hiding the current design reopens the whole solution space."],
+    ["Two people dominate every brainstorm and the quiet experts never get a word in. Best technique?",
+     ["Classic brainstorming, but firmer", "Brainwriting 6-3-5", "Cancel the session", "Let the manager decide"], 1,
+     "6-3-5 is silent and written: everyone contributes exactly three ideas per round, so the loudest voice and the quietest expert get equal airtime."],
+    ["You're stuck on 'make it stiffer, but it keeps getting heavier'. Which tool is built for exactly this?",
+     ["SCAMPER", "Analogy", "TRIZ contradiction matrix", "A show of hands"], 2,
+     "'Improve A, worsen B' is a textbook technical contradiction — TRIZ's matrix returns the inventive principles that historically resolved it."],
+    ["The flow has dried up and the room is tired, but you still need twenty more ideas. What keeps the pump running?",
+     ["End the session early", "Run SCAMPER letter by letter", "Repeat the same question louder", "Break for two hours"], 1,
+     "SCAMPER is a mechanical checklist — Substitute, Combine, Adapt… — that keeps producing even when spontaneous flow has stopped."],
+    ["A torch has three sub-functions with several options each, and you suspect the winning combination has never been built. Which technique?",
+     ["Morphological analysis", "Classic brainstorming", "Pugh matrix", "Pick the cheapest option"], 0,
+     "Morphological analysis lists every option per sub-function and combines them systematically — ideal for surfacing untried combinations."],
+    ["Someone says 'make the bracket out of cardboard' and the room laughs. What should the facilitator do?",
+     ["Write it down without judging it", "Explain why it can't work", "Ask them to be serious", "Move on quickly"], 0,
+     "Defer all judgement. Wild ideas stretch the space — 'cardboard bracket' provokes 'how much load does this really see?', which finds the real weight saving."],
+    ["You want to deliver 'contain fluid' at a tenth of today's cost. Where do you look first?",
+     ["The internal cost database", "Another industry or nature (analogy & biomimicry)", "The current supplier's quote", "Last year's report"], 1,
+     "Analogy and biomimicry steal solutions from other worlds — a drinks carton contains fluid for pennies; nature is full of cheap containment."],
+    ["The boss shares their favourite idea first and the room's thinking narrows around it. What went wrong?",
+     ["Nothing — leaders should lead", "Anchoring — the senior voice should speak last", "Not enough ideas were on the board", "The boss happened to be right"], 1,
+     "Whatever the senior person says first becomes the anchor everyone rearranges around. In ideation, the most senior person speaks last."],
+  ], "Good practice — re-read section 5.2 on Osborn's rules and 5.11 on sequencing the tools, then try again.");
+
+  /* ── 3 · Module 6 weighted-matrix sandbox ── */
+  (function () {
+    const wrap = $("#wmWeights"), table = $("#wmTable"), note = $("#wmNote");
+    if (!wrap) return;
+    const CRIT = [
+      { key: "sav", label: "Net savings", w: 40 },
+      { key: "risk", label: "Low technical risk", w: 30 },
+      { key: "speed", label: "Fast to implement", w: 20 },
+      { key: "inv", label: "Low investment", w: 10 },
+    ];
+    const CONCEPTS = [
+      { name: "Spline shaft", s: [8, 7, 9, 8] },
+      { name: "Integrated forging", s: [9, 4, 3, 4] },
+      { name: "Plastic overmould", s: [9, 5, 6, 5] },
+      { name: "Polygon shaft", s: [7, 8, 8, 7] },
+    ];
+    const DEFAULT_WINNER = "Spline shaft";
+    wrap.innerHTML = CRIT.map((c, i) =>
+      `<label class="wm-w"><span>${c.label}</span>
+        <input type="range" min="0" max="100" step="5" value="${c.w}" data-i="${i}" />
+        <b class="wm-pct" data-i="${i}">${c.w}%</b></label>`).join("");
+    function calc() {
+      const raw = CRIT.map((_, i) => +$(`input[data-i="${i}"]`, wrap).value);
+      const sum = raw.reduce((a, b) => a + b, 0) || 1;
+      CRIT.forEach((_, i) => { $(`.wm-pct[data-i="${i}"]`, wrap).textContent = Math.round(raw[i] / sum * 100) + "%"; });
+      const scored = CONCEPTS.map((c) => ({
+        name: c.name, s: c.s,
+        total: c.s.reduce((acc, v, i) => acc + v * raw[i], 0) / sum,
+      })).sort((a, b) => b.total - a.total);
+      const best = scored[0].total;
+      table.innerHTML =
+        `<thead><tr><th>Concept</th>${CRIT.map((c) => `<th>${c.label.replace("Low ", "").replace("Fast to i", "I").replace("Net s", "S")}</th>`).join("")}<th>Score</th></tr></thead>` +
+        "<tbody>" + scored.map((c, r) =>
+          `<tr class="${r === 0 ? "wm-win" : ""}"><td>${c.name}${r === 0 ? " 🏆" : ""}</td>${c.s.map((v) => `<td>${v}</td>`).join("")}<td><b>${c.total.toFixed(2)}</b></td></tr>`).join("") +
+        "</tbody>";
+      if (scored[0].name !== DEFAULT_WINNER) {
+        note.className = "wm-note wm-flip";
+        note.innerHTML = `⚠ Winner flipped to <b>${scored[0].name}</b> (was ${DEFAULT_WINNER} at the default weights). A ranking that changes when you nudge a weight means the decision depends on your appetite — <b>report that sensitivity to the sponsor, don't hide it.</b>`;
+      } else {
+        note.className = "wm-note";
+        note.innerHTML = `At these weights the winner is <b>${scored[0].name}</b> (${best.toFixed(2)}). Drag <em>Net savings</em> up and <em>Low technical risk</em> down and watch a riskier, higher-saving concept overtake it.`;
+      }
+    }
+    wrap.addEventListener("input", calc);
+    calc();
+  })();
+
+  /* ── 4 · Module 6 evaluation challenge ── */
+  buildChallenge("#m6ChalMount", [
+    ["You have 380 raw ideas from the creative day. What's the very first move?",
+     ["Deep-analyse every single one", "Fast triage into go / grow / park", "Let the chief engineer pick favourites", "Build the top three immediately"], 1,
+     "Never deep-study 380 ideas — you'll stall by idea 60. Triage is a shallow, fast first pass: go / grow / park."],
+    ["An idea saves £3 per unit but breaks a homologation rule. Where does it belong in the matrix?",
+     ["Give it a low risk score", "Knock it out — it fails a non-negotiable screen", "Average it with the rest", "Hand it to a champion"], 1,
+     "Safety and regulatory compliance are knockout screens, not scored criteria. No saving can trade against them — it's out."],
+    ["Your weighted matrix uses BOTH 'annual savings' and 'payback period' as criteria. What's the problem?",
+     ["Nothing — more criteria is better", "Double counting — both measure money", "Too few criteria overall", "Weights don't matter anyway"], 1,
+     "Both criteria measure money, so money is counted twice and dominates unfairly. Pick one and pair it with investment."],
+    ["Early concepts are too foggy to score honestly on a 1–9 scale. Which tool fits?",
+     ["A weighted matrix with guessed numbers", "A Pugh matrix (+ / S / − versus a datum)", "The effort–impact grid", "A coin flip"], 1,
+     "When precise scores would be false precision, Pugh compares each concept against a datum with just better / same / worse — honest and fast."],
+    ["A tiny change to one criterion's weight flips your top-ranked concept. What should you do?",
+     ["Hide it and keep the original winner", "Report the sensitivity to the sponsor", "Delete the criterion", "Stop using weights"], 1,
+     "A winner that flips on a small weight change means the choice depends on appetite — that's precisely the conversation the sponsor must have, not something to bury."],
+    ["When should the evaluation criteria be fixed?",
+     ["After seeing the idea list", "Before anyone sees the ideas", "During the final vote", "It makes no difference"], 1,
+     "Criteria chosen after the ideas appear get bent toward someone's favourite. Agree them with the sponsor before the list is revealed."],
+    ["You want to separate quick wins from money pits in about ten minutes. Which tool?",
+     ["A full FMEA", "The effort–impact 2×2 grid", "A weighted matrix", "A Pugh matrix"], 1,
+     "The effort–impact grid is the crude, fast first ranking: high impact + low effort = quick wins; low impact + high effort = money pits to park."],
+    ["Evaluation is done and the ideas are ranked. What must every survivor leave with?",
+     ["A patent application", "A named champion and a gate date", "A press release", "A budget code"], 1,
+     "Ideas handed to 'the team' reappear untouched next year. Every survivor needs one named champion to carry it into development, plus a date."],
+  ], "Good practice — re-read sections 6.2–6.7 on the funnel and the ranking tools, then try again.");
+})();

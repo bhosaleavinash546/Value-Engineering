@@ -14,6 +14,8 @@ import subprocess
 import sys
 import wave
 
+import os
+
 import edge_tts
 
 VOICE = "en-GB-SoniaNeural"
@@ -25,6 +27,16 @@ TMP = pathlib.Path("/tmp/narration")
 TMP.mkdir(parents=True, exist_ok=True)
 
 script = json.loads((AUDIO / "script.json").read_text())
+
+# Optional filter: MODULES="m5,m6" synthesizes only those modules and
+# merges their new timings into the existing timings.json, leaving all
+# other modules' audio untouched.
+only = [m.strip() for m in os.environ.get("MODULES", "").split(",") if m.strip()]
+if only:
+    script = [m for m in script if m["id"] in only]
+    if not script:
+        raise SystemExit(f"MODULES={only} matched nothing")
+    print("filtered to:", ", ".join(m["id"] for m in script), flush=True)
 
 
 def run(cmd):
@@ -58,6 +70,8 @@ run(["ffmpeg", "-y", "-f", "lavfi", "-i", f"anullsrc=r={RATE}:cl=mono",
      "-t", str(GAP), "-c:a", "pcm_s16le", str(silence)])
 
 timings = {}
+if only and (AUDIO / "timings.json").exists():
+    timings = json.loads((AUDIO / "timings.json").read_text())  # keep other modules
 total_blocks = sum(len(m["blocks"]) for m in script)
 done = 0
 

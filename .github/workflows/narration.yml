@@ -5,6 +5,11 @@ name: Generate narration audio
 # (workflow_dispatch) after any module content change.
 on:
   workflow_dispatch:
+    inputs:
+      modules:
+        description: 'Only regenerate these modules (e.g. "m5,m6"); empty = all'
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -46,6 +51,8 @@ jobs:
           pip install edge-tts
 
       - name: Synthesize narration (en-GB-SoniaNeural)
+        env:
+          MODULES: ${{ inputs.modules }}
         run: python3 .github/scripts/generate-narration.py
 
       - name: Commit audio to the repository
