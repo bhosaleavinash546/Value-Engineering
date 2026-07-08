@@ -1,11 +1,17 @@
-/* VAVEhub service worker — offline shell + narration audio cache.
-   Strategy: network-first for pages (always fresh after deploys),
-   stale-while-revalidate for same-origin assets, cache-first for
-   narration MP3s (large, immutable per generation). */
-const VERSION = "vh-v1";
-const AUDIO_CACHE = "vh-audio-v1";
+/* VAVEhub service worker — offline shell + narration cache.
+   Strategy:
+     • pages (HTML/navigation)         → network-first, cache fallback
+     • narration audio + timings/script → network-first, cache fallback
+       (MUST stay in lock-step with the page: a cache-first audio file
+        would drift out of sync the moment narration is regenerated —
+        old audio played against new text. Network-first revalidates
+        cheaply via ETag and always matches the current timings.)
+     • other same-origin assets (css/js/img) → stale-while-revalidate
+   Bump VERSION / AUDIO_CACHE to purge previously cached responses. */
+const VERSION = "vh-v2";
+const AUDIO_CACHE = "vh-audio-v2";
 
-self.addEventListener("install", (e) => self.skipWaiting());
+self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys().then((keys) =>
@@ -14,37 +20,34 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+/* network-first: fresh when online, cached copy when offline.
+   Only full (200) responses are cached — range (206) replies for audio
+   seeking are passed straight through to the media element. */
+function networkFirst(request, cacheName) {
+  return fetch(request)
+    .then((res) => {
+      if (res && res.status === 200) {
+        const copy = res.clone();
+        caches.open(cacheName).then((c) => c.put(request, copy));
+      }
+      return res;
+    })
+    .catch(() => caches.match(request));
+}
+
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
 
-  // narration audio: cache-first (immutable until regenerated)
-  if (url.pathname.includes("/audio/") && url.pathname.endsWith(".mp3")) {
-    e.respondWith(
-      caches.open(AUDIO_CACHE).then(async (cache) => {
-        const hit = await cache.match(e.request);
-        if (hit) return hit;
-        const res = await fetch(e.request);
-        if (res.ok && (res.status === 200 || res.status === 206)) {
-          if (res.status === 200) cache.put(e.request, res.clone());
-        }
-        return res;
-      })
-    );
+  // narration audio + its timing/script sidecars — keep in lock-step
+  if (url.pathname.includes("/audio/") && (url.pathname.endsWith(".mp3") || url.pathname.endsWith(".json"))) {
+    e.respondWith(networkFirst(e.request, AUDIO_CACHE));
     return;
   }
 
   // pages: network-first with offline fallback to cache
   if (e.request.mode === "navigate" || url.pathname.endsWith(".html")) {
-    e.respondWith(
-      fetch(e.request)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put(e.request, copy));
-          return res;
-        })
-        .catch(() => caches.match(e.request))
-    );
+    e.respondWith(networkFirst(e.request, VERSION));
     return;
   }
 
