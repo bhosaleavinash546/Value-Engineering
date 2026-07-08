@@ -391,6 +391,7 @@ body.vo-off .vo-bar{display:none!important}
   .tr-hero-grid{display:grid;grid-template-columns:1fr 470px;gap:3rem;align-items:center;text-align:left;max-width:1260px}
   .tr-hero-grid .tr-hero-stats,.tr-hero-grid .tr-roles{justify-content:flex-start}
   .tr-hero-grid .tr-quotes{margin-left:0}
+  .tr-hero-grid .tr-hero-viz{align-self:start;margin-top:-1.6rem}
 }
 @media (max-width:1139px){.tr-hero-viz{display:none}}
 
