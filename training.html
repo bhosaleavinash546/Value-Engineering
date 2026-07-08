@@ -524,6 +524,36 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
       condition. And the north star is <strong>ideality</strong> — the Ideal Final Result asks: "how would this function
       perform <em>itself</em>, with no part, no cost, no harm?" Snap-fits are the IFR of fastening; that question alone
       generates ideas.</p>
+
+      <div class="ve-lab" id="trizLab" data-lab="m5">
+        <div class="lab-head"><span class="lab-tag">🧪 Interactive lab</span><h4>TRIZ contradiction navigator &amp; idea sprint</h4>
+        <p>Try TRIZ on a real trade-off, then run a timed solo idea sprint — the two muscles this phase trains.</p></div>
+
+        <div class="lab-part">
+          <h5>1 · Pick your contradiction</h5>
+          <p class="lab-hint">Choose what you want to improve and what gets worse — the navigator returns the inventive principles engineers historically used, with a product idea for each.</p>
+          <div class="triz-row">
+            <label>Improve <select id="trizImp"></select></label>
+            <span class="triz-vs">but this worsens…</span>
+            <label>Worsens <select id="trizWor"></select></label>
+          </div>
+          <div id="trizOut" class="triz-out" hidden></div>
+        </div>
+
+        <div class="lab-part">
+          <h5>2 · Three-minute idea sprint (solo 6-3-5)</h5>
+          <p class="lab-hint">Pick a function, hit start, and type one idea per line. No judging, no deleting — quantity is the goal. Nine or more ideas in three minutes is workshop pace.</p>
+          <div class="sprint-row">
+            <select id="sprintFn"></select>
+            <button type="button" class="btn btn-primary" id="sprintGo">▶ Start 3:00</button>
+            <span class="sprint-clock" id="sprintClock">3:00</span>
+            <span class="sprint-count" id="sprintCount">0 ideas</span>
+          </div>
+          <textarea id="sprintPad" class="sprint-pad" rows="6" placeholder="One idea per line — start the timer first…" disabled></textarea>
+          <div id="sprintVerdict" class="sprint-verdict" hidden></div>
+        </div>
+      </div>
+
       <h3>5.5 · The techniques are a toolkit, not a menu</h3>
       <p>Sequence them: open with <strong>brainwriting 6-3-5</strong> (silent, equal, fast volume), move to
       <strong>function-prompted brainstorming</strong> to build on the written seeds, apply <strong>SCAMPER</strong> to
@@ -802,6 +832,41 @@ with your ideas at L1 — owner, saving, next gate date for each. Diary a 30-min
       hug the line; bracket D sits 18% above it, bracket F 25%. Before celebrating, check specs — F has a special
       coating (justified); D doesn't (target). One hour with data you already own produced a negotiation list worth
       more than a month of meetings. That's LPP: cheap, fast, and brutally objective.</p>
+
+      <div class="ve-lab" id="scLab" data-lab="m9">
+        <div class="lab-head"><span class="lab-tag">🧪 Interactive lab</span><h4>Build a live should-cost</h4>
+        <p>This is the stamped bracket from the worked example. Move any number and watch the seven layers,
+        the should-cost and the negotiation gap recalculate — exactly what a cleansheet tool does, in miniature.</p></div>
+
+        <div class="sc-grid">
+          <div class="sc-inputs">
+            <h5>Material</h5>
+            <label>Net mass (kg) <input type="number" id="scMass" value="0.58" min="0.01" max="50" step="0.01" /></label>
+            <label>Process yield (%) <input type="number" id="scYield" value="88" min="30" max="100" step="1" /></label>
+            <label>Steel price (€/kg) <input type="number" id="scMat" value="1.00" min="0.1" max="30" step="0.05" /></label>
+            <h5>Process &amp; labour</h5>
+            <label>Cycle time (s) <input type="number" id="scCycle" value="4.5" min="0.5" max="600" step="0.5" /></label>
+            <label>Machine rate (€/h) <input type="number" id="scRate" value="248" min="10" max="2000" step="1" /></label>
+            <label>Operators per machine <input type="number" id="scOps" value="1" min="0" max="6" step="0.05" /></label>
+            <label>Loaded wage (€/h) <input type="number" id="scWage" value="26" min="2" max="120" step="1" /></label>
+            <h5>The percentage layers</h5>
+            <label>Scrap (%) <input type="number" id="scScrap" value="4" min="0" max="30" step="0.5" /></label>
+            <label>Overhead (%) <input type="number" id="scOh" value="24" min="0" max="80" step="1" /></label>
+            <label>SG&amp;A (%) <input type="number" id="scSga" value="6" min="0" max="30" step="0.5" /></label>
+            <label>Fair margin (%) <input type="number" id="scMargin" value="5" min="0" max="30" step="0.5" /></label>
+            <h5>The negotiation</h5>
+            <label>Quoted price (€) <input type="number" id="scQuote" value="1.85" min="0.01" max="10000" step="0.01" /></label>
+            <label>Annual volume (pcs) <input type="number" id="scVol" value="250000" min="1" max="100000000" step="1000" /></label>
+          </div>
+          <div class="sc-result">
+            <div class="sc-bar" id="scBar" aria-hidden="true"></div>
+            <table class="sc-table"><tbody id="scRows"></tbody>
+              <tfoot><tr><th>Should-cost</th><th id="scTotal">—</th></tr></tfoot></table>
+            <div class="sc-gap" id="scGap"></div>
+          </div>
+        </div>
+      </div>
+
       <h3>9.6 · Negotiation choreography</h3>
       <p>Never email a cleansheet with "explain the gap" — that's how you get a defensive supplier and a worse
       relationship. Instead: share the <em>method</em>, invite them to a joint workshop, walk the layers together, and
@@ -860,7 +925,20 @@ Which layer would you challenge first, and with what fact?</p></div>
       complexity −2, on a 100 base). Real walks are built bottom-up from validated ideas — each block has owners and
       dates, or it is decoration.</p>
 
-      
+      <div class="ve-lab" id="tdLab" data-lab="m10">
+        <div class="lab-head"><span class="lab-tag">🧪 Interactive lab</span><h4>Walk a real teardown, step by step</h4>
+        <p>A competitor's computer mouse lands on your bench next to your own model. Step through the five-step
+        process and watch the evidence — and the findings — accumulate.</p></div>
+        <div class="td-stage" id="tdStage" aria-live="polite"></div>
+        <p class="td-caption" id="tdCaption"></p>
+        <div class="td-nav">
+          <button type="button" class="btn btn-ghost" id="tdPrev" disabled>← Back</button>
+          <div class="td-dots" id="tdDots"></div>
+          <button type="button" class="btn btn-primary" id="tdNext">Begin the teardown →</button>
+        </div>
+      </div>
+
+
       <h3>10.4 · Running a proper teardown lab</h3>
       <p>You need less than you think: a bench, calibrated scales, torque drivers, callipers, a lightbox with a scale
       reference in every photo, and — non-negotiable — a <strong>data schema</strong> agreed before the first screw:

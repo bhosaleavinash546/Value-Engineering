@@ -897,7 +897,7 @@
     const index = [];
     mods.forEach((mod) => {
       $$("h3, h4, p, li", mod).forEach((el) => {
-        if (el.closest(".qcheck, button, .vo-bar, .fn-challenge, .fast-builder, .fn-lib")) return;
+        if (el.closest(".qcheck, button, .vo-bar, .fn-challenge, .fast-builder, .fn-lib, .ve-lab")) return;
         const text = el.textContent.replace(/\s+/g, " ").trim();
         if (text.length > 8) index.push({ mod: mod.dataset.mod, title: mod.dataset.title, el, text, low: text.toLowerCase() });
       });
@@ -1045,4 +1045,165 @@
       });
     }
   }
+})();
+
+/* ════════ Module labs: TRIZ navigator & idea sprint (m5) · should-cost calculator (m9) · teardown walkthrough (m10) ════════ */
+(function () {
+  "use strict";
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  /* ── m5 · TRIZ contradiction navigator ── */
+  (function () {
+    const imp = $("#trizImp"), wor = $("#trizWor"), out = $("#trizOut");
+    if (!imp) return;
+    const PARAMS = ["Weight", "Strength / stiffness", "Speed / cycle time", "Reliability", "Cost to make", "Ease of assembly"];
+    // curated pairs from the classic contradiction matrix, with a concrete idea each
+    const M = {
+      "Strength / stiffness|Weight": [[1, "Segmentation", "ribbed or hollow sections — an I-beam is TRIZ before TRIZ"], [40, "Composite materials", "glass-filled polymer instead of solid metal"], [15, "Dynamics", "stiff only where and when the load is — variable wall thickness"]],
+      "Weight|Strength / stiffness": [[1, "Segmentation", "honeycomb or lattice core carries the load at a fraction of the mass"], [35, "Parameter change", "switch material state or grade — HSLA steel, thinner gauge"], [8, "Anti-weight", "let another part or structure carry part of the load"]],
+      "Speed / cycle time|Reliability": [[10, "Preliminary action", "pre-position, pre-heat or pre-assemble before the fast step"], [11, "Cushion in advance", "add a self-check or backup so speed can't cause a failure"], [28, "Replace mechanical system", "sensor + servo instead of a rushed mechanical linkage"]],
+      "Reliability|Cost to make": [[6, "Universality", "one part doing two jobs fails in fewer interfaces"], [25, "Self-service", "the part maintains itself — self-locking, self-cleaning"], [2, "Taking out", "remove the fragile function from the harsh zone entirely"]],
+      "Cost to make|Reliability": [[27, "Cheap short-lived object", "a replaceable €0.10 wear insert instead of a €5 hardened part"], [1, "Segmentation", "isolate the wear zone into a small replaceable element"], [35, "Parameter change", "cheaper grade plus a local coating where it matters"]],
+      "Cost to make|Strength / stiffness": [[1, "Segmentation", "stamped and folded sheet replaces a machined billet"], [40, "Composite materials", "over-mould a cheap core with a strong skin"], [10, "Preliminary action", "work-harden or form features in the same press stroke"]],
+      "Ease of assembly|Reliability": [[13, "The other way round", "assemble from the other direction — gravity holds it"], [26, "Copying", "one snap-fit geometry copied everywhere: nothing to mix up"], [3, "Local quality", "add a lead-in chamfer — the part aligns itself"]],
+      "Ease of assembly|Cost to make": [[6, "Universality", "one fastener family for the whole product"], [1, "Segmentation", "modules assembled offline, mated in one motion"], [2, "Taking out", "eliminate the fastener — snap-fit is the ideal final result"]],
+      "Weight|Cost to make": [[35, "Parameter change", "thinner high-strength grade — less material at slightly higher €/kg"], [2, "Taking out", "delete the part: can a neighbour perform its function?"], [31, "Porous materials", "foamed core where solid adds only weight"]],
+      "Speed / cycle time|Cost to make": [[10, "Preliminary action", "combine operations into one tool stroke"], [5, "Merging", "process parts in parallel, not sequence"], [28, "Replace mechanical system", "cure with UV instead of a 20-minute oven"]],
+      "Strength / stiffness|Cost to make": [[3, "Local quality", "harden or thicken only the loaded zone"], [17, "Another dimension", "a bend or flange adds stiffness for free"], [40, "Composite materials", "selective reinforcement only along the load path"]],
+      "Reliability|Weight": [[11, "Cushion in advance", "small redundant element instead of oversizing everything"], [3, "Local quality", "reinforce the failure point only"], [24, "Intermediary", "sacrificial element takes the abuse"]],
+    };
+    const FALLBACK = [[1, "Segmentation", "divide the part or process and treat each piece separately"], [2, "Taking out", "remove the troublesome property or part from the zone"], [10, "Preliminary action", "do part of the job before it's needed"], [35, "Parameter change", "change a material property, state or concentration"]];
+    PARAMS.forEach((p) => { imp.add(new Option(p, p)); wor.add(new Option(p, p)); });
+    imp.value = "Strength / stiffness"; wor.value = "Weight";
+    function show() {
+      if (imp.value === wor.value) {
+        out.innerHTML = '<p class="triz-same">Improving and worsening the <em>same</em> parameter isn\'t a contradiction — pick two different ones.</p>';
+        out.hidden = false; return;
+      }
+      const rec = M[imp.value + "|" + wor.value] || FALLBACK;
+      const generic = !M[imp.value + "|" + wor.value];
+      out.innerHTML = (generic ? '<p class="triz-note">No curated cell for this exact pair — these four universal principles resolve most contradictions:</p>' : "") +
+        rec.map((r) => `<div class="triz-p"><span class="triz-n">${r[0]}</span><div><b>${r[1]}</b><p>${r[2]}</p></div></div>`).join("");
+      out.hidden = false;
+    }
+    imp.addEventListener("change", show);
+    wor.addEventListener("change", show);
+    show();
+  })();
+
+  /* ── m5 · three-minute idea sprint ── */
+  (function () {
+    const go = $("#sprintGo"), clock = $("#sprintClock"), count = $("#sprintCount"),
+      pad = $("#sprintPad"), verdict = $("#sprintVerdict"), fnSel = $("#sprintFn");
+    if (!go) return;
+    ["Transmit torque", "Contain fluid", "Conduct current", "Protect contents", "Position panel", "Dissipate heat"]
+      .forEach((f) => fnSel.add(new Option(f, f)));
+    let t = null, left = 180;
+    const ideas = () => pad.value.split("\n").map((l) => l.trim()).filter((l) => l.length > 2).length;
+    const fmt = (s) => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+    function tick() {
+      left--; clock.textContent = fmt(left);
+      if (left <= 30) clock.classList.add("is-low");
+      if (left <= 0) stop();
+    }
+    function stop() {
+      clearInterval(t); t = null;
+      pad.disabled = true;
+      go.textContent = "▶ Start 3:00";
+      const n = ideas();
+      verdict.hidden = false;
+      verdict.innerHTML = n >= 9
+        ? `<b>${n} ideas — workshop pace. 🎉</b> That's the 6-3-5 rhythm: three ideas every five minutes, sustained. Now imagine six people doing this simultaneously.`
+        : n >= 5
+          ? `<b>${n} ideas — solid.</b> The last few before the buzzer are usually the interesting ones; run it again on the same function and you'll pass nine.`
+          : `<b>${n} ideas.</b> Normal for a first sprint — the censor in your head is still on. Rules: no judging, no deleting, write the silly ones too.`;
+    }
+    go.addEventListener("click", () => {
+      if (t) { stop(); return; }
+      left = 180; clock.textContent = fmt(left); clock.classList.remove("is-low");
+      verdict.hidden = true; pad.disabled = false; pad.value = ""; pad.focus();
+      count.textContent = "0 ideas";
+      go.textContent = "■ Stop early";
+      t = setInterval(tick, 1000);
+    });
+    pad.addEventListener("input", () => { count.textContent = ideas() + (ideas() === 1 ? " idea" : " ideas"); });
+  })();
+
+  /* ── m9 · live should-cost calculator ── */
+  (function () {
+    const rows = $("#scRows");
+    if (!rows) return;
+    const F = ["scMass", "scYield", "scMat", "scCycle", "scRate", "scOps", "scWage", "scScrap", "scOh", "scSga", "scMargin", "scQuote", "scVol"]
+      .reduce((o, id) => (o[id] = $("#" + id), o), {});
+    const eur = (v) => "€" + v.toFixed(2);
+    const COLORS = ["#5aa2ff", "#7ec4ff", "#34d399", "#fbbf24", "#f59e0b", "#a78bfa", "#f472b6"];
+    function calc() {
+      const v = (id) => Math.max(0, parseFloat(F[id].value) || 0);
+      const yieldPc = Math.min(100, Math.max(1, v("scYield")));
+      const mat = (v("scMass") / (yieldPc / 100)) * v("scMat");
+      const proc = (v("scCycle") / 3600) * v("scRate");
+      const lab = (v("scCycle") / 3600) * v("scOps") * v("scWage");
+      const scrap = (mat + proc + lab) * v("scScrap") / 100;
+      const oh = (mat + proc + lab + scrap) * v("scOh") / 100;
+      const sub = mat + proc + lab + scrap + oh;
+      const sga = sub * v("scSga") / 100;
+      const margin = (sub + sga) * v("scMargin") / 100;
+      const total = sub + sga + margin;
+      const layers = [["Raw material", mat], ["Process & machine", proc], ["Direct labour", lab], ["Scrap & yield", scrap], ["Overhead", oh], ["SG&A", sga], ["Fair margin", margin]];
+      rows.innerHTML = layers.map((l, i) =>
+        `<tr><td><i class="sc-dot" style="background:${COLORS[i]}"></i>${l[0]}</td><td>${eur(l[1])}</td></tr>`).join("");
+      $("#scTotal").textContent = eur(total);
+      $("#scBar").innerHTML = total > 0 ? layers.map((l, i) =>
+        `<i style="width:${(l[1] / total * 100).toFixed(1)}%;background:${COLORS[i]}" title="${l[0]} ${eur(l[1])}"></i>`).join("") : "";
+      const q = v("scQuote"), vol = v("scVol"), gap = q - total, gapEl = $("#scGap");
+      if (q <= 0) { gapEl.innerHTML = ""; return; }
+      if (gap > 0.005) {
+        const pc = (gap / total * 100).toFixed(0);
+        gapEl.className = "sc-gap sc-gap-over";
+        gapEl.innerHTML = `Quote ${eur(q)} vs should-cost <b>${eur(total)}</b> → gap <b>${eur(gap)}</b> per part (${pc}% above should).` +
+          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} pcs/year that's <b>€${Math.round(gap * vol).toLocaleString("en-GB")}</b> on the table.` : "");
+      } else {
+        gapEl.className = "sc-gap sc-gap-ok";
+        gapEl.innerHTML = `Quote ${eur(q)} is at or below the should-cost of <b>${eur(total)}</b> — either your buyer is excellent or an assumption is off. Check the machine-rate utilisation first.`;
+      }
+    }
+    Object.values(F).forEach((el) => el.addEventListener("input", calc));
+    calc();
+  })();
+
+  /* ── m10 · teardown walkthrough stepper ── */
+  (function () {
+    const stage = $("#tdStage");
+    if (!stage) return;
+    const cap = $("#tdCaption"), dots = $("#tdDots"), next = $("#tdNext"), prev = $("#tdPrev");
+    const STEPS = [
+      { t: "Two mice on the bench — the competitor's next to yours. Nothing has been touched yet; the first move is a camera, not a screwdriver.",
+        cards: [["🖱️", "Theirs", "€24 retail"], ["🖱️", "Ours", "€29 retail"]] },
+      { t: "Step 1 — Acquire & document. Photograph, weigh and measure everything before the first screw turns. You only get one first teardown.",
+        cards: [["📷", "48 photos", "every face, every label"], ["⚖️", "87 g vs 112 g", "theirs is 22% lighter"], ["📏", "Dimensions logged", "against a scale reference"]] },
+      { t: "Step 2 — Systematic disassembly, level by level, with a stopwatch. Disassembly sequence in reverse is their assembly cost in disguise.",
+        cards: [["⏱", "48 s to open", "ours takes 92 s"], ["🔩", "2 screws", "ours has 6 + 2 clip types"], ["🧩", "Snap-fit chassis", "one moulding holds everything"]] },
+      { t: "Step 3 — Digital BOM capture. Every part logged: material, mass, process evidence, supplier marks, fastener count.",
+        cards: [["📋", "9 parts vs 14", "five fewer things to buy, fit and fail"], ["🏷", "PCB supplier mark", "same board house as our B-supplier"], ["🔧", "Tool marks", "2-cavity mould, mid-volume strategy"]] },
+      { t: "Step 4 — Should-cost each part at THEIR assumptions: their region, their volumes, their processes. Band every estimate; deltas are robust where absolutes are fragile.",
+        cards: [["💶", "Their BOM ≈ €3.10", "±15% banded estimate"], ["💶", "Our BOM ≈ €4.60", "same method, same bands"], ["Δ", "Top shell −€0.60", "biggest single-part delta"]] },
+      { t: "Step 5 — Harvest & transfer. Findings become creative-phase inputs with owners and dates — that's the difference between a teardown and teardown tourism.",
+        cards: [["💡", "Snap-fit chassis", "adopt — delete 4 screws"], ["💡", "Single-screw service path", "adapt to our architecture"], ["🧱", "Cost walk: −€1.50", "design −0.9 · sourcing −0.4 · assembly −0.2"]] },
+    ];
+    let s = 0;
+    dots.innerHTML = STEPS.map((_, i) => `<i data-d="${i}"></i>`).join("");
+    function render() {
+      const st = STEPS[s];
+      stage.innerHTML = st.cards.map((c, i) =>
+        `<div class="td-card td-in" style="animation-delay:${i * 0.12}s"><span class="td-ico">${c[0]}</span><b>${c[1]}</b><small>${c[2]}</small></div>`).join("");
+      cap.textContent = st.t;
+      $$("#tdDots i").forEach((d, i) => d.classList.toggle("is-on", i <= s));
+      prev.disabled = s === 0;
+      next.textContent = s === 0 ? "Begin the teardown →" : s === STEPS.length - 1 ? "↺ Replay" : "Next step →";
+    }
+    next.addEventListener("click", () => { s = s === STEPS.length - 1 ? 0 : s + 1; render(); });
+    prev.addEventListener("click", () => { if (s > 0) { s--; render(); } });
+    render();
+  })();
 })();

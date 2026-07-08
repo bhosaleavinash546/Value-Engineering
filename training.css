@@ -493,3 +493,70 @@ body.vo-off .vo-bar{display:none!important}
 .tr-community-inner{max-width:860px;margin:0 auto;padding:3rem 1.5rem 3.4rem}
 .tr-community-inner h2{font-family:var(--font-d);font-size:1.45rem;margin-bottom:.5rem}
 .tr-community-inner>p{color:var(--muted);font-size:.9rem;line-height:1.65;margin-bottom:1.6rem;max-width:640px}
+
+/* ════════ Module labs (m5 TRIZ · m9 should-cost · m10 teardown) ════════ */
+.ve-lab{margin:1.8rem 0;padding:1.4rem 1.5rem 1.6rem;border:1px solid color-mix(in srgb,var(--acc1) 35%,var(--line));border-radius:16px;background:linear-gradient(160deg,color-mix(in srgb,var(--acc1) 7%,transparent),transparent 55%),var(--card)}
+.lab-head{margin-bottom:1.1rem}
+.lab-tag{display:inline-block;font:700 .64rem var(--font-m);letter-spacing:.16em;text-transform:uppercase;color:var(--acc1);border:1px solid color-mix(in srgb,var(--acc1) 45%,transparent);border-radius:999px;padding:.25rem .7rem;margin-bottom:.6rem}
+.lab-head h4{font-family:var(--font-d);font-size:1.08rem;margin:.2rem 0 .35rem}
+.lab-head p{font-size:.84rem;color:var(--muted);line-height:1.6;margin:0;max-width:620px}
+.lab-part{margin-top:1.3rem;padding-top:1.2rem;border-top:1px dashed var(--line)}
+.lab-part h5{font:700 .8rem var(--font-d);margin-bottom:.35rem}
+.lab-hint{font-size:.78rem;color:var(--muted);line-height:1.55;margin-bottom:.8rem;max-width:600px}
+
+/* TRIZ navigator */
+.triz-row{display:flex;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.triz-row label{display:flex;flex-direction:column;gap:.3rem;font:600 .68rem var(--font-m);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.triz-row select,.sprint-row select{padding:.5rem .7rem;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--txt);font:500 .82rem var(--font-b);cursor:pointer}
+.triz-vs{font-size:.78rem;color:var(--muted);padding-bottom:.6rem}
+.triz-out{display:grid;gap:.6rem}
+.triz-p{display:flex;gap:.8rem;align-items:flex-start;border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:.7rem .85rem}
+.triz-n{flex:0 0 auto;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:color-mix(in srgb,var(--acc1) 16%,transparent);color:var(--acc1);font:700 .9rem var(--font-d)}
+.triz-p b{font-size:.84rem}
+.triz-p p{font-size:.78rem;color:var(--muted);line-height:1.5;margin:.15rem 0 0}
+.triz-note,.triz-same{font-size:.78rem;color:var(--muted);font-style:italic}
+
+/* idea sprint */
+.sprint-row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.7rem}
+.sprint-clock{font:700 1.15rem var(--font-m);color:var(--acc1);min-width:56px}
+.sprint-clock.is-low{color:#f87171;animation:sprint-pulse 1s ease-in-out infinite}
+@keyframes sprint-pulse{50%{opacity:.45}}
+.sprint-count{font:600 .78rem var(--font-m);color:var(--muted)}
+.sprint-pad{width:100%;padding:.7rem .85rem;border:1px solid var(--line);border-radius:12px;background:var(--bg2);color:var(--txt);font:500 .85rem var(--font-b);line-height:1.7;resize:vertical}
+.sprint-pad:disabled{opacity:.55}
+.sprint-pad:focus{outline:none;border-color:var(--acc1)}
+.sprint-verdict{margin-top:.8rem;font-size:.84rem;line-height:1.6;padding:.75rem .9rem;border:1px solid color-mix(in srgb,var(--acc1) 35%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--acc1) 7%,transparent)}
+
+/* should-cost calculator */
+.sc-grid{display:grid;gap:1.4rem}
+@media (min-width:860px){.sc-grid{grid-template-columns:minmax(0,340px) 1fr;align-items:start}}
+.sc-inputs h5{font:700 .68rem var(--font-m);letter-spacing:.14em;text-transform:uppercase;color:var(--acc1);margin:.9rem 0 .4rem}
+.sc-inputs h5:first-child{margin-top:0}
+.sc-inputs label{display:flex;align-items:center;justify-content:space-between;gap:.7rem;font-size:.78rem;color:var(--muted);margin-bottom:.35rem}
+.sc-inputs input{width:110px;padding:.38rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--txt);font:600 .8rem var(--font-m);text-align:right}
+.sc-inputs input:focus{outline:none;border-color:var(--acc1)}
+.sc-bar{display:flex;height:26px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:.9rem}
+.sc-bar i{display:block;height:100%;transition:width .35s ease;min-width:2px}
+.sc-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.sc-table td,.sc-table th{padding:.35rem .2rem;border-bottom:1px solid var(--line);text-align:left}
+.sc-table td:last-child,.sc-table th:last-child{text-align:right;font-family:var(--font-m)}
+.sc-table tfoot th{border-top:2px solid color-mix(in srgb,var(--acc1) 45%,var(--line));border-bottom:none;font:700 .9rem var(--font-d);color:var(--acc1);padding-top:.55rem}
+.sc-dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:.5rem;vertical-align:baseline}
+.sc-gap{margin-top:1rem;font-size:.84rem;line-height:1.6;padding:.75rem .9rem;border-radius:12px}
+.sc-gap-over{border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.08)}
+.sc-gap-ok{border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.07)}
+
+/* teardown walkthrough */
+.td-stage{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.7rem;min-height:120px;margin-bottom:.9rem}
+.td-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;text-align:center;border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:.9rem .7rem}
+.td-card.td-in{animation:td-in .45s ease backwards}
+@keyframes td-in{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.td-ico{font-size:1.5rem}
+.td-card b{font-size:.86rem}
+.td-card small{font-size:.72rem;color:var(--muted);line-height:1.4}
+.td-caption{font-size:.85rem;line-height:1.65;color:var(--txt);min-height:3.2em;margin-bottom:.8rem}
+.td-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.td-dots{display:flex;gap:.4rem}
+.td-dots i{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .25s}
+.td-dots i.is-on{background:var(--acc1)}
+@media (prefers-reduced-motion:reduce){.td-card.td-in{animation:none}.sprint-clock.is-low{animation:none}.sc-bar i{transition:none}}
