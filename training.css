@@ -132,7 +132,9 @@
 .cert-meta>div{text-align:center}
 .cert-meta b{display:block;font-family:var(--font-m);font-size:.9rem;color:#0f172a}
 .cert-meta span{font-size:.68rem;color:#64748b;letter-spacing:.1em;text-transform:uppercase}
-.cert-seal{width:74px;height:74px;border-radius:50%;border:3px solid #1d4ed8;display:grid;place-items:center;font-family:var(--font-d);font-weight:700;font-size:1.5rem;color:#1d4ed8;background:rgba(29,78,216,.06)}
+.cert-seal{display:grid;place-items:center}
+.cert-seal-img{width:118px;height:auto;display:block;object-fit:contain}
+@media print{.cert-seal-img{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 .cert-sign{margin-top:.6rem}
 .cert-sign b{display:block;font-family:'Segoe Script','Brush Script MT',cursive;font-size:1.4rem;color:#0f172a}
 .cert-sign span{font-size:.7rem;color:#64748b}
