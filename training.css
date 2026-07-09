@@ -125,7 +125,7 @@
 .cert-brand span{color:#1d4ed8}
 .cert-title{font-family:var(--font-d);font-size:2.3rem;font-weight:700;color:#0f172a;margin:1.2rem 0 .4rem}
 .cert-sub{font-size:.85rem;color:#64748b;letter-spacing:.12em;text-transform:uppercase}
-.cert-name{font-family:var(--font-d);font-size:2rem;font-weight:700;color:#1d4ed8;margin:.8rem 0;border-bottom:1.5px solid #cbd5e1;display:inline-block;padding:0 2.5rem .4rem}
+.cert-name{font-family:"Pinyon Script",cursive;font-size:3.1rem;font-weight:400;color:#1d4ed8;margin:.3rem 0 .5rem;border-bottom:1.5px solid #cbd5e1;display:inline-block;padding:0 2.5rem .2rem;line-height:1.15}
 .cert-body{max-width:620px;margin:0 auto;font-size:.9rem;color:#334155;line-height:1.7}
 .cert-body b{color:#0f172a}
 .cert-meta{display:flex;justify-content:space-between;align-items:center;max-width:620px;margin:2.2rem auto 1.4rem}
@@ -139,7 +139,7 @@
 .cert-sign b{display:block;font-family:'Segoe Script','Brush Script MT',cursive;font-size:1.4rem;color:#0f172a}
 .cert-sign span{font-size:.7rem;color:#64748b}
 .cert-actions{display:flex;gap:.8rem;justify-content:center;margin-top:1.6rem;flex-wrap:wrap}
-@media (max-width:640px){.cert-border{padding:2rem 1.2rem}.cert-title{font-size:1.6rem}.cert-name{font-size:1.4rem}}
+@media (max-width:640px){.cert-border{padding:2rem 1.2rem}.cert-title{font-size:1.6rem}.cert-name{font-size:2.2rem}}
 
 /* ── Footer ── */
 .tr-footer{border-top:1px solid var(--line);padding:2rem 4vw;text-align:center;background:var(--bg2)}
