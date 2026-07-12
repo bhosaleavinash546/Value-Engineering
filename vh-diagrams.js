@@ -87,7 +87,8 @@
       var f = it[0] === "wheel2" ? "wheel" : it[0];
       var a = it[3], s1 = it[4], s2 = it[5];
       var tuck = it[0] === "biw" ? "" : ";--o0:0;--k0:.35";
-      return '<div class="xp-item" style="--d:' + it[2] +
+      var pd = ({bonnet:0,"door-f":1,"door-r":2,tailgate:3,dash:0,seat:1,strut:0,"strut-r":1,wheel:2,wheel2:3})[it[0]] || 0;
+      return '<div class="xp-item" style="--d:' + it[2] + ';--pd:' + pd +
         ';--x0:' + a[0] + '%;--y0:' + a[1] + '%;--w0:' + a[2] +
         '%;--x1:' + s1[0] + '%;--y1:' + s1[1] + '%;--w1:' + s1[2] +
         '%;--x2:' + s2[0] + '%;--y2:' + s2[1] + '%;--w2:' + s2[2] + "%" + tuck +

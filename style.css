@@ -1008,7 +1008,7 @@ html[data-theme="light"] .xp-stage{background:radial-gradient(90% 70% at 50% 30%
   transition-delay:calc(var(--d,0)*.22s)}
 .xp-item img{width:100%;height:auto;display:block;filter:drop-shadow(0 10px 14px rgba(25,32,50,.25));user-select:none;-webkit-user-drag:none}
 .xp-s1 .xp-item{left:var(--x1);top:var(--y1);width:var(--w1);transform:translate(-50%,-50%) scale(1);opacity:1}
-.xp-s2 .xp-item{left:var(--x2);top:var(--y2);width:var(--w2)}
+.xp-s2 .xp-item{left:var(--x2);top:var(--y2);width:var(--w2);transition-delay:calc(var(--pd,0)*.18s)}
 .xp-lab{position:absolute;transform:translate(-50%,-50%);font:700 clamp(.55rem,1.4vw,.78rem) var(--font-m);
   letter-spacing:.06em;text-transform:uppercase;color:#39425a;background:rgba(255,255,255,.72);
   padding:.18em .6em;border-radius:999px;border:1px solid rgba(57,66,90,.22);white-space:nowrap;
