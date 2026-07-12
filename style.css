@@ -1022,4 +1022,15 @@ html[data-theme="light"] .xp-stage{background:radial-gradient(90% 70% at 50% 30%
 .xv-st:hover{color:var(--txt)}
 .xv-st.is-on{background:color-mix(in srgb,var(--acc1) 16%,transparent);border-color:var(--acc1);color:var(--txt)}
 .xv-cap{margin:.7rem 0 0;font-size:.82rem;line-height:1.6;color:var(--muted);min-height:2.6em;max-width:760px}
+/* scroll-driven mode: snappier flights so stages track the scroll */
+.xp-live .xp-item{transition-duration:1.15s;transition-delay:calc(var(--d,0)*.09s)}
+.xp-live.xp-s2 .xp-item{transition-delay:calc(var(--pd,0)*.09s)}
+.xp-live .xp-lab{transition-delay:.9s}
+.xv-scrolltog{display:inline-flex;align-items:center;gap:.45rem;font:600 .74rem var(--font-b);color:var(--muted);cursor:pointer;user-select:none}
+.xv-scrolltog input{position:absolute;opacity:0;pointer-events:none}
+.xv-scrolltog .xv-sw{width:30px;height:17px;border-radius:999px;background:var(--line);position:relative;transition:background .2s;flex:0 0 auto}
+.xv-scrolltog .xv-sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--muted);transition:all .2s}
+.xv-scrolltog input:checked + .xv-sw{background:color-mix(in srgb,var(--acc1) 55%,transparent)}
+.xv-scrolltog input:checked + .xv-sw::after{left:15px;background:#fff}
+.xv-scrolltog:hover{color:var(--txt)}
 @media (prefers-reduced-motion:reduce){.xp-item,.xp-lab{transition:none!important}}

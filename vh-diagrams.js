@@ -106,7 +106,9 @@
     '<button type="button" class="xv-st is-on" data-stage="0">Assembled</button>' +
     '<button type="button" class="xv-st" data-stage="1">Stage 1 · Subassemblies</button>' +
     '<button type="button" class="xv-st" data-stage="2">Stage 2 · Full teardown</button>' +
-    "</div></div><p class='xv-cap'></p>";
+    "</div>" +
+    '<label class="xv-scrolltog"><input type="checkbox" /> <i class="xv-sw"></i> Scroll explode</label>' +
+    "</div><p class='xv-cap'></p>";
 
   var CAPS = [
     "The vehicle as the bench receives it — parts nested inside the body-in-white.",
@@ -114,23 +116,45 @@
     "Clusters open into individual components — doors, bonnet and tailgate apart; dash from seat; struts from wheels. Every part is now countable, weighable and costable: a digital BOM in one picture.",
   ];
 
+  /* scroll-explode preference: ON by default, explicit toggle persists */
+  var SKEY = "vh-xv-scroll";
+  function scrollPref() {
+    try { var v = localStorage.getItem(SKEY); return v === null ? true : v === "1"; } catch (e) { return true; }
+  }
+
+  var widgets = [];
+
   mounts.forEach(function (mount) {
     mount.insertAdjacentHTML("beforeend", '<div class="xv-scene xp">' + SCENE + "</div>" + CONTROLS);
     var scene = mount.querySelector(".xv-scene");
     var cap = mount.querySelector(".xv-cap");
     var sts = mount.querySelectorAll(".xv-st");
+    var tog = mount.querySelector(".xv-scrolltog input");
     var playing = null;
+    var w = { scene: scene, on: scrollPref(), paused: false, stage: -1 };
     function setStage(n) {
+      if (n === w.stage) return;
+      w.stage = n;
       scene.classList.toggle("xp-s1", n >= 1);
       scene.classList.toggle("xp-s2", n >= 2);
       sts.forEach(function (b) { b.classList.toggle("is-on", +b.dataset.stage === n); });
       cap.textContent = CAPS[n];
     }
+    w.setStage = setStage;
+    tog.checked = w.on;
+    scene.classList.toggle("xp-live", w.on);
+    tog.addEventListener("change", function () {
+      w.on = tog.checked; w.paused = false;
+      scene.classList.toggle("xp-live", w.on);
+      try { localStorage.setItem(SKEY, w.on ? "1" : "0"); } catch (e) {}
+      onScroll();
+    });
     sts.forEach(function (b) {
-      b.addEventListener("click", function () { clearTimeout(playing); setStage(+b.dataset.stage); });
+      b.addEventListener("click", function () { clearTimeout(playing); w.paused = true; setStage(+b.dataset.stage); });
     });
     mount.querySelector(".xv-play").addEventListener("click", function () {
       clearTimeout(playing);
+      w.paused = true;
       setStage(0);
       playing = setTimeout(function () {
         setStage(1);
@@ -138,5 +162,29 @@
       }, 450);
     });
     setStage(0);
+    widgets.push(w);
   });
+
+  /* scroll driver: assembled at viewport edges, stage 1 approaching centre,
+     full teardown at centre — reassembles as the widget scrolls away.
+     Manual control pauses driving until the widget leaves the viewport. */
+  var ticking = false;
+  function drive() {
+    ticking = false;
+    var vh = window.innerHeight || 1;
+    widgets.forEach(function (w) {
+      if (!w.on) return;
+      var r = w.scene.getBoundingClientRect();
+      if (r.bottom < -40 || r.top > vh + 40) { w.paused = false; return; } // off-screen: reset pause
+      if (w.paused) return;
+      var d = Math.abs((r.top + r.height / 2) - vh / 2) / vh; // 0 = centred
+      w.setStage(d <= 0.34 ? 2 : d <= 0.62 ? 1 : 0);
+    });
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(drive); }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  drive();
 })();
