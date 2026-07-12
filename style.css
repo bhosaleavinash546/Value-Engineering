@@ -993,3 +993,36 @@ html[data-theme="light"] .concept-viz{--dv-blue:#2e6fe8;--dv-green:#0f9d6b;--dv-
 .jm-phases span{font-size:.66rem;line-height:1.25;color:var(--muted)}
 @media (max-width:640px){.jm-phases{flex-wrap:wrap}.jm-phases li{flex:1 1 28%}}
 @media (prefers-reduced-motion:reduce){.jm-curve{transition:none;stroke-dashoffset:0}.jm-gap{opacity:.13;transition:none}.jm-phases li{opacity:1;transform:none;transition:none}}
+
+/* ════════ Exploded-view SUV teardown widget ════════ */
+[data-xview]{--xv-ink:#a9c6f5;--xv-dim:#5e739c;--xv-glow:rgba(90,162,255,.4);
+  margin:2rem 0;padding:1.4rem 1.5rem 1.5rem;border:1px solid var(--line);border-radius:16px;
+  background:linear-gradient(165deg,rgba(90,162,255,.05),transparent 55%),var(--card)}
+html[data-theme="light"] [data-xview]{--xv-ink:#2e5eb8;--xv-dim:#7c8bab;--xv-glow:rgba(46,111,232,.2)}
+.xv-scene{width:100%;max-width:900px;margin:0 auto;overflow:hidden}
+.xv-svg{width:100%;height:auto;display:block}
+.xv-svg *{vector-effect:non-scaling-stroke}
+.xv-svg g[data-sub]{fill:none;stroke:var(--xv-ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform 2.6s cubic-bezier(.4,0,.15,1);transition-delay:calc(var(--d,0)*.28s);
+  filter:drop-shadow(0 0 4px var(--xv-glow))}
+.xv-s1 g[data-sub]{transform:translate(var(--s1x,0px),var(--s1y,0px))}
+.xv-svg [data-part]{transition:transform 2s cubic-bezier(.4,0,.15,1);transition-delay:calc(var(--pd,0)*.22s + .15s)}
+.xv-s2 [data-part]{transform:translate(var(--s2x,0px),var(--s2y,0px))}
+.xv-tyre{fill:color-mix(in srgb,var(--xv-ink) 12%,transparent)}
+.xv-hub{fill:color-mix(in srgb,var(--xv-ink) 22%,transparent)}
+.xv-shadow{fill:rgba(0,0,0,.28);stroke:none;transition:opacity 2s ease}
+html[data-theme="light"] .xv-shadow{fill:rgba(30,45,80,.14)}
+.xv-s1 .xv-shadow{opacity:.35}
+.xv-lab{opacity:0;transition:opacity .7s ease 2.2s}
+.xv-lab line{stroke:var(--xv-dim);stroke-width:1}
+.xv-lab text{fill:var(--txt);stroke:none;font:600 15px var(--font-m);letter-spacing:.04em}
+.xv-s1 .xv-lab{opacity:1}
+.xv-bar{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.8rem}
+.xv-play{font-size:.82rem}
+.xv-stages{display:flex;gap:.4rem;flex-wrap:wrap}
+.xv-st{border:1px solid var(--line);background:var(--bg2);color:var(--muted);font:600 .74rem var(--font-b);
+  padding:.45rem .8rem;border-radius:999px;cursor:pointer;transition:all .2s}
+.xv-st:hover{color:var(--txt)}
+.xv-st.is-on{background:color-mix(in srgb,var(--acc1) 16%,transparent);border-color:var(--acc1);color:var(--txt)}
+.xv-cap{margin:.7rem 0 0;font-size:.82rem;line-height:1.6;color:var(--muted);min-height:2.6em;max-width:760px}
+@media (prefers-reduced-motion:reduce){.xv-svg g[data-sub],.xv-svg [data-part],.xv-lab,.xv-shadow{transition:none!important}}
