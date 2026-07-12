@@ -290,6 +290,22 @@
     ["Why are cost DELTAS between your part and a competitor's more useful than absolute estimates?", ["They are quicker to calculate", "Deltas remain robust even when both estimates carry error bands", "Absolutes are confidential", "Deltas ignore material cost"], 1],
     ["When cleansheeting a competitor's part, the correct assumptions are:", ["Your own region and volumes", "The competitor's likely region, volumes and evidenced processes", "Whichever produce the largest gap", "Global average rates"], 1],
     ["Which of these is a bright-line rule of teardown ethics?", ["Never study patented designs", "Never buy competitor products", "Never use misappropriated confidential information such as a rival's drawings", "Never photograph disassembled parts"], 2],
+    ["Which is NOT one of Miles' founding Information-Phase questions?", ["What is it?", "What does it do?", "What is the competitor's profit margin?", "What else could do the job?"], 2],
+    ["Price, cost and value relate as follows:", ["They are three words for the same thing", "The market caps the price, your design sets the cost, and value is the ratio the customer experiences", "Price is always cost plus 30%", "Value equals price minus cost"], 1],
+    ["The VE facilitator should be:", ["The product's chief engineer — the deepest expert", "A process owner who is deliberately NOT the deepest product expert", "The most senior manager present", "Someone from the supplier"], 1],
+    ["A workshop where creative thinking and evaluation happen in the same session will:", ["Save valuable time", "Kill both — judgement suffocates divergence, so the phases must stay separate", "Produce better ideas faster", "Comply with the SAVE standard"], 1],
+    ["Fact-based negotiation with a cleansheet typically recovers what share of quoted prices?", ["0–1%", "5–15%", "30–50%", "Over 60%"], 1],
+    ["In cleansheet negotiation choreography, the raw-material layer is usually:", ["Squeezed hardest", "Indexed in the contract — nobody negotiates the copper price", "Ignored", "Paid in advance"], 1],
+    ["An LPP outlier sitting 25% above the regression line should FIRST be:", ["Given a 25% price-cut demand", "Checked for specification differences that might justify the premium", "Resourced to another supplier", "Removed from the analysis"], 1],
+    ["Why share the cleansheet METHOD with a supplier rather than emailing the gap?", ["It's legally required", "Suppliers who feel audited hide information; suppliers who feel partnered volunteer it", "It shortens the meeting", "It hides your assumptions"], 1],
+    ["A proposal saves £50,000/year and needs £60,000 one-time. Its payback is roughly:", ["6 months", "14 months", "24 months", "3 months"], 1],
+    ["'Pre-wiring' a Phase 6 decision meeting means:", ["Installing the projector early", "Walking the most sceptical stakeholders through proposals before the meeting", "Emailing slides the night before", "Rehearsing the presentation"], 1],
+    ["A value proposal without an implementation date has a business case of:", ["Whatever finance estimates", "Zero — savings start at the implementation date, not the approval date", "Half its gross value", "Its gross annual saving"], 1],
+    ["The validation ladder rule is:", ["Validate everything to maximum rigour", "Climb only as high as the risk class demands — over-validation quietly kills paybacks", "Skip validation for small changes", "Always end with a field pilot"], 1],
+    ["AI should-cost engine outputs are best treated as:", ["Contractual target prices", "Directional estimates for ranking options and preparing negotiations", "Exact replacements for supplier quotes", "Marketing material"], 1],
+    ["The reliable LLM ideation prompt pattern for VAVE is:", ["A single short question", "Role + function + constraints + quantity + ranking", "Maximum temperature, no constraints", "Pasting the full BOM and asking for savings"], 1],
+    ["Which is a hard rule for LLMs in cost work?", ["Never use them for ideation", "Verify every number they output and keep confidential data out of public tools", "Trust figures above 90% model confidence", "Only use them after Phase 6"], 1],
+    ["The right SEQUENCE for building a digital cost stack is:", ["Buy the full AI suite first", "Crawl (spend cube + LPP on owned data) → walk (should-cost engine pilot) → run (LLM copilots, CT, knowledge graph)", "Start with CT scanning", "Whatever IT recommends"], 1],
   ];
   const PASS_MARK = 0.8;
   const EXAM_SIZE = 30;
@@ -303,7 +319,7 @@
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
     const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
     mount.innerHTML = `<div class="ex-gate">
-      <p>Thirty questions, drawn at random from a 52-question bank spanning all thirteen modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
+      <p>Thirty questions, drawn at random from a 68-question bank spanning all thirteen modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
       to earn the <strong>VAVEhub Certificate of Completion</strong>. You can retake the exam as many times as you like —
       a fresh random 30 is drawn from the bank on every attempt.</p>
       ${remaining > 0 ? `<p class="ex-warn">Heads up: ${remaining} module${remaining > 1 ? "s" : ""} not yet completed. You can still attempt the exam, but we recommend finishing the course first.</p>` : ""}
@@ -1176,6 +1192,53 @@
     calc();
   })();
 
+  /* ── m7 · business-case builder ── */
+  (function () {
+    const cards = $("#bcCards");
+    if (!cards) return;
+    const F = ["bcSave", "bcVol", "bcTool", "bcTest", "bcEng", "bcRate", "bcDelay", "bcLife"]
+      .reduce((o, id) => (o[id] = $("#" + id), o), {});
+    const gbp = (v) => "£" + Math.round(v).toLocaleString("en-GB");
+    function calc() {
+      const v = (id) => Math.max(0, parseFloat(F[id].value) || 0);
+      const annual = v("bcSave") * v("bcVol");
+      const oneTime = v("bcTool") + v("bcTest") + v("bcEng") * v("bcRate");
+      const delayM = v("bcDelay"), lifeY = Math.max(0.1, v("bcLife"));
+      const payback = annual > 0 ? (oneTime / annual) * 12 : Infinity;
+      const harvestY = Math.max(0, lifeY - delayM / 12);
+      const lifetimeNet = annual * harvestY - oneTime;
+      const delayCost = annual / 12;
+      cards.innerHTML = [
+        [gbp(annual) + "/yr", "gross annual saving"],
+        [gbp(oneTime), "one-time cost — tooling + validation + engineering"],
+        [isFinite(payback) ? payback.toFixed(1) + " mo" : "—", "payback, from implementation"],
+        [gbp(lifetimeNet), "lifetime net over " + harvestY.toFixed(1) + " harvest years"],
+      ].map((c) => `<div class="bc-card"><b>${c[0]}</b><span>${c[1]}</span></div>`).join("");
+      const verdict = $("#bcVerdict");
+      if (annual <= 0) {
+        verdict.className = "bc-verdict bc-no";
+        verdict.innerHTML = "No saving, no case. Every business case starts with a per-unit saving and a volume.";
+      } else if (payback <= 12 && lifetimeNet > 0) {
+        verdict.className = "bc-verdict bc-go";
+        verdict.innerHTML = `<b>Board-ready.</b> Payback in ${payback.toFixed(1)} months is inside the 12-month bar for running
+          changes, and the proposal nets ${gbp(lifetimeNet)} over the product's remaining life. Every month of delay
+          still costs ${gbp(delayCost)} — date it and move.`;
+      } else if (payback <= 24 && lifetimeNet > 0) {
+        verdict.className = "bc-verdict bc-mid";
+        verdict.innerHTML = `<b>Marginal.</b> ${payback.toFixed(1)} months payback is beyond the usual 12-month bar for a
+          running change. Cut the one-time cost, bundle it with neighbouring changes to share validation cost, or hold
+          it for the next planned design refresh.`;
+      } else {
+        verdict.className = "bc-verdict bc-no";
+        verdict.innerHTML = `<b>Not investable as a running change.</b> ${isFinite(payback) ? "Payback of " + payback.toFixed(1) + " months " : "This cost structure "}
+          ${lifetimeNet <= 0 ? "never returns the one-time cost within the product's remaining life" : "is far beyond any running-change bar"}.
+          Park it as a requirement for the next-generation design, where the tooling is being bought anyway.`;
+      }
+    }
+    Object.values(F).forEach((el) => el.addEventListener("input", calc));
+    calc();
+  })();
+
   /* ── m10 · teardown walkthrough stepper ── */
   (function () {
     const stage = $("#tdStage");
@@ -1427,4 +1490,116 @@
      ["They build it 20% cheaper", "Almost nothing — they might be buying share at negative margin", "Their quality is 20% lower", "Their labour is offshore"], 1,
      "Price alone tells you almost nothing. That's why benchmarking runs six dimensions — cost, functional, design, process, feature and patent/IP — together."],
   ], "Good practice — re-read sections 10.3–10.7 on the five steps and 10.11 on the bright lines, then try again.");
+
+  /* ── 6 · Modules 1–3 foundations challenge ── */
+  buildChallenge("#m3ChalMount", [
+    ["Marketing calls a product 'too expensive to build'. The VE translation is:",
+     ["Cut the costliest part", "The functions' cost exceeds what the market pays for them — an engineering problem with levers", "Raise the price", "Outsource production"], 1,
+     "Price is capped by the market; cost is set by your design choices. Restating the complaint in function-and-cost language turns a budget moan into solvable engineering."],
+    ["A rival's kettle has identical functions to yours but costs £2.60 less to make. In VE terms, your kettle has:",
+     ["Lower quality", "Lower value — same function at higher cost", "Higher esteem value", "A pricing problem, not an engineering one"], 1,
+     "Value = Function ÷ Cost. Same function delivered at higher cost is, by definition, lower value — and physical proof that the gap is closable."],
+    ["Someone proposes deleting the brushed-metal finish customers love, to save £0.80. Which value type is being ignored?",
+     ["Use value", "Esteem value — customers pay for desirability", "Exchange value", "Cost value"], 1,
+     "Esteem value is real value. The VE question is never 'kill the chrome' — it's 'does this chrome deliver more esteem than it costs?' If yes, it stays."],
+    ["Your VE study kicks off Monday but the BOM costs are still 'roughly right'. What happens?",
+     ["Nothing — precision comes later", "The workshop becomes an argument about the baseline instead of the product", "Finance fixes it afterwards", "The facilitator estimates live"], 1,
+     "An unvalidated baseline means every finding gets relitigated. The costed BOM, validated by finance, is the non-negotiable entry ticket."],
+    ["The obvious facilitator candidate is the product's chief engineer — the deepest expert in the room. Why is that wrong?",
+     ["Experts are too busy", "Experts defend the designs they created; the facilitator owns process, not content", "Engineers can't run meetings", "It violates SAVE rules"], 1,
+     "The deepest expert has the most invested in the current design. Facilitators steer the method and the clock — the content belongs to the team."],
+    ["Which team produces the best VE ideas?",
+     ["Eight design engineers who know the product cold", "A cross-functional six-to-ten: design, manufacturing, purchasing, quality, finance, service", "The two most senior people available", "An external consultancy alone"], 1,
+     "Homogeneous teams produce homogeneous ideas. The friction between functions — design vs manufacturing vs purchasing — is where the ideas live."],
+    ["The loudest stakeholder insists 'customers absolutely need this feature'. The Information-Phase response is:",
+     ["Add it to the spec", "Check the evidence — usage data, Kano category, warranty text — not the volume of the voice", "Overrule them", "Defer to seniority"], 1,
+     "Requirements are evidence, not opinions. Kano mapping and usage data settle in minutes what opinions argue about for hours."],
+    ["Where does a product's removable cost mostly hide?",
+     ["In the basic function", "In secondary functions — design choices masquerading as requirements", "In the packaging", "In supplier margins"], 1,
+     "The basic function is untouchable; most secondary functions are just how this design happens to work — and every one is negotiable."],
+  ], "Good practice — re-read sections 1.1–1.5 on value, 2.2 on the team and 3.3 on requirements, then try again.");
+
+  /* ── 7 · Module 8 implementation gauntlet ── */
+  buildChallenge("#m8ChalMount", [
+    ["Your idea saves £0.25/unit at 200,000 units/year, and needs £60,000 one-time. Payback?",
+     ["About 7 months", "About 14 months — beyond the usual running-change bar", "About 3 months", "It can't be calculated"], 1,
+     "Annual saving = 0.25 × 200,000 = £50k. Payback = 60k ÷ 50k × 12 ≈ 14.4 months — over the 12-month bar, so cut the one-time cost or bundle it."],
+    ["The decision board loved the presentation, applauded, and moved to the next agenda item. What's missing?",
+     ["A longer presentation", "The decision log — explicit go/no-go, owner and date per proposal", "Better slides", "More attendees"], 1,
+     "Applause is not an output. A Phase 6 that ends without logged decisions is a rehearsal — every proposal needs a verdict, an owner and a date."],
+    ["Purchasing claims the same £180k saving your VE study claims. What prevents this?",
+     ["Claiming it first", "Reconciling with purchasing's ledger so the same pound is never counted twice", "Splitting it 50/50", "Escalating to the CFO"], 1,
+     "Double-counting destroys programme credibility faster than any failed idea. One savings ledger, reconciled — agreed in the measurement rules."],
+    ["Copper prices spiked and wiped out your design saving on paper. The audit should:",
+     ["Report the saving as lost", "Index-adjust the baseline so commodity swings don't mask real design savings", "Wait for prices to fall", "Exclude copper parts"], 1,
+     "Measure against the frozen, index-adjusted baseline. A real £0.30 design saving exists whether copper rises or falls — the rules must show it."],
+    ["An approved idea has sat at L3 for four months; its champion left the company. The funnel review should:",
+     ["Close it as lost", "Reassign it to a named owner with a new gate date — or kill it consciously", "Wait for a volunteer", "Escalate to the board"], 1,
+     "Orphaned ideas are killer number five. The monthly review exists precisely to reassign or consciously kill — never to let ideas fade silently."],
+    ["When does a saving officially 'count' in a governed programme?",
+     ["When the workshop ends", "At L4 — implemented in production and audited against the frozen baseline", "When the business case is approved", "When tooling is ordered"], 1,
+     "L1 ideas and L3 approvals are potential. Only implemented, finance-audited savings are real — that discipline is why the numbers are believed."],
+    ["Two sceptical executives sit on the decision board. The best move before the meeting is:",
+     ["Hope they're absent", "Pre-wire: walk them through the proposals one-to-one beforehand", "Schedule them last", "Send a longer read-ahead"], 1,
+     "Surprises make executives defensive, and defensive executives say no. Pre-wiring surfaces objections while they're still fixable."],
+    ["Wave two of your programme is running slower and costlier than wave one. The likeliest cause is:",
+     ["Harder products", "The loop never closed — lessons, design rules and cost standards weren't fed back", "Team fatigue", "Bad luck"], 1,
+     "Wave two should always be cheaper and faster: reused ideas, updated design rules, refreshed should-costs. If it isn't, the retro and feedback loop are being skipped."],
+  ], "Good practice — re-read sections 8.4–8.7 on the one-pager, the audit rules and the five killers, then try again.");
+
+  /* ── 8 · Module 9 should-cost challenge ── */
+  buildChallenge("#m9ChalMount", [
+    ["A supplier refuses to share their cost breakdown. Your move?",
+     ["Accept the quote — there's no other data", "Build a cleansheet from physics and market rates — you don't need their permission", "Threaten to resource", "Ask for three more quotes"], 1,
+     "That's the whole point of should-costing: material mass, cycle-time physics and public rate benchmarks rebuild their cost structure without a single confidential number."],
+    ["Which steel price belongs in the material layer of a cleansheet?",
+     ["The supplier's list price", "An indexed commodity market price for the grade and region", "Last year's contract price", "The cheapest price ever paid"], 1,
+     "List prices are negotiating positions, not costs. Commodity indices are the honest, updatable basis — and they set up the index clause for the contract."],
+    ["Your cleansheet says £1.42; the quote is £1.85. The WRONG next move is:",
+     ["A joint workshop walking the layers together", "Emailing the cleansheet with 'explain the gap'", "Checking your utilisation assumption first", "Preparing layer-by-layer questions"], 1,
+     "'Explain the gap' by email creates a defensive supplier and a worse relationship. Share the method, walk the layers together — audited suppliers hide, partnered suppliers volunteer."],
+    ["Bracket F sits 25% above your LPP regression line. Before targeting it you must:",
+     ["Demand 25% off", "Check for spec differences — F might carry a justified special requirement", "Remove it from the chart", "Change supplier"], 1,
+     "LPP finds outliers, not verdicts. F's special coating was justified; bracket D's premium wasn't. Specs first, negotiation second."],
+    ["Which should-cost layer is the classic hiding place for an underutilised plant?",
+     ["Raw material", "Overhead — allocated across too few production hours", "Fair margin", "Direct labour"], 1,
+     "A 55%-utilised plant spreads its fixed costs over half the hours, doubling the overhead per part. You shouldn't fund their idle air — that's a conversation, not a surcharge."],
+    ["In the three-way negotiation split, the supplier's margin gets:",
+     ["Squeezed first — it's pure profit", "Respected — the savings come from indexing material and engineering out conversion waste", "Indexed to inflation", "Deferred to next year"], 1,
+     "Squeezing legitimate margin buys one cheap year and a resentful supplier. Cleansheet negotiation attacks waste and mispricing, never fair profit — and gain-share keeps their ideas coming."],
+    ["Your machine-rate assumption uses 85% utilisation; the supplier's plant runs at 60%. Your should-cost is:",
+     ["Correct — they should be efficient", "Too low as a prediction, but exactly the right basis for the conversation about who pays for idle capacity", "Wrong and unusable", "Too high"], 1,
+     "The model shows what the part SHOULD cost at competent utilisation. The gap versus their reality is precisely the negotiation: why should your part fund their empty hours?"],
+    ["An AI engine returns £4.12 for your CAD housing in 58 seconds. That number is best used as:",
+     ["The target price in the contract", "A directional estimate for ranking options and preparing negotiation — verified before any business case", "Proof the supplier is lying", "A replacement for the RFQ"], 1,
+     "AI should-costs are directional: perfect for ranking designs and walking in prepared, never a substitute for verified quotes. Fluent is not the same as calibrated."],
+  ], "Good practice — re-read sections 9.1 on the information game, 9.5 on the seven steps and 9.7 on negotiation, then try again.");
+
+  /* ── 9 · Module 11 AI-era challenge ── */
+  buildChallenge("#m11ChalMount", [
+    ["An engineer pastes the full supplier-quoted BOM into a public chatbot to 'find savings'. This is:",
+     ["Efficient modern practice", "A confidentiality breach — supplier prices belong only in approved company instances", "Fine if anonymised later", "Good, because public models are smarter"], 1,
+     "Treat a pasted BOM like an emailed one: confidential data never enters public tools. Use your company's approved instances — the capability is the same, the exposure isn't."],
+    ["The LLM's business-case draft claims a '23% typical saving for this commodity'. Before it reaches the board you must:",
+     ["Round it to 25%", "Verify the number against a source — LLMs are fluent, not calibrated", "Delete the claim", "Ask the model to double-check itself"], 1,
+     "Every number that reaches a business case gets a human check against a real source. Fluency creates false confidence — that's exactly why verification is a hard rule."],
+    ["Your AI should-cost engine's estimates drifted 12% above real quotes over a year. The likely cause is:",
+     ["Suppliers cutting prices unrealistically", "Aged rate cards and silent model changes — re-benchmark against quotes on a cadence", "The CAD models got worse", "Inflation"], 1,
+     "Rate libraries age and models update silently. Teams that re-benchmark quarterly catch drift; teams that don't slowly lose finance's trust in every AI number."],
+    ["The best FIRST investment for a team starting its digital cost stack is:",
+     ["An enterprise AI copilot suite", "A spend cube and LPP on data you already own", "CT scanning equipment", "A cost knowledge graph"], 1,
+     "Crawl before you run: spend analytics needs no new tools, finds outliers in weeks, and its savings fund everything that follows. Tool-first transformations produce beautifully-formatted guesses."],
+    ["A feature-based engine returns different costs for the same part from two CAD files. Why?",
+     ["The engine is broken", "Quality-in decides quality-out — a sloppy model costs wrongly", "Random variation", "Currency differences"], 1,
+     "The engine reads manufacturing features from the geometry. Missing draft angles or wrong wall thicknesses change the simulated process — garbage CAD, garbage cost."],
+    ["Where should the human stay in charge in an AI-assisted workshop?",
+     ["Typing speed", "Judging, deciding and owning — AI drafts, counts and clusters", "Formatting slides", "Scheduling"], 1,
+     "The division of labour is constant across every phase: machines diverge and draft; engineers judge, validate and sign. The decision rights never move."],
+    ["Your team wants to automate function analysis before ever having run one manually. The risk is:",
+     ["None — that's what tools are for", "You can't audit what you can't do — automated output can't be judged by a team that never mastered the method", "It's too expensive", "The tool needs training data"], 1,
+     "A drafted function tree is only useful to someone who can spot where it's wrong. Master the manual method first; then AI becomes a multiplier instead of a black box."],
+    ["The same cleansheet lever cuts cost AND carbon. Which is it?",
+     ["Extending payment terms", "Mass reduction — less material is less money and less embodied CO₂e", "Rebranding", "Longer contracts"], 1,
+     "Cost and carbon share physics: mass, energy, scrap, distance. Add a kgCO₂e column to the cleansheet and most cost levers reveal a carbon dividend."],
+  ], "Good practice — re-read sections 11.4 on the engines, 11.8 on sequencing and 11.9 on the guardrails, then try again.");
 })();

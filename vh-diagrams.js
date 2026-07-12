@@ -144,3 +144,45 @@
   window.addEventListener("resize", onScroll, { passive: true });
   drive();
 })();
+
+/* ── Generic two-stage scroll driver ──
+   Any [data-scrollstages] element gets .ss-s1 / .ss-s2 as it approaches the
+   centre of the viewport, and loses them as it scrolls away — same
+   choreography as the exploded view, reusable by any diagram (the Module 9
+   cost waterfall uses it). An optional .ss-cap child carries per-stage
+   captions in data-s0 / data-s1 / data-s2. */
+(function () {
+  "use strict";
+  var els = document.querySelectorAll("[data-scrollstages]");
+  if (!els.length) return;
+  var items = [];
+  els.forEach(function (el) {
+    var it = { el: el, cap: el.querySelector(".ss-cap"), stage: -1 };
+    it.set = function (n) {
+      if (n === it.stage) return;
+      it.stage = n;
+      el.classList.toggle("ss-s1", n >= 1);
+      el.classList.toggle("ss-s2", n >= 2);
+      if (it.cap) it.cap.textContent = it.cap.dataset["s" + n] || "";
+    };
+    it.set(0);
+    items.push(it);
+  });
+  var ticking = false;
+  function drive() {
+    ticking = false;
+    var vh = window.innerHeight || 1;
+    items.forEach(function (it) {
+      var r = it.el.getBoundingClientRect();
+      if (r.bottom < -40 || r.top > vh + 40) return;
+      var d = Math.abs((r.top + r.height / 2) - vh / 2) / vh;
+      it.set(d <= 0.3 ? 2 : d <= 0.55 ? 1 : 0);
+    });
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(drive); }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  drive();
+})();
