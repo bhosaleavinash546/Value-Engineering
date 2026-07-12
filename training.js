@@ -286,6 +286,10 @@
     ["The 'value gap' in target costing is:", ["Market price minus list price", "The difference between the drifting (current-estimate) cost and the allowable cost", "Profit minus overhead", "The warranty reserve"], 1],
     ["Kaizen costing is:", ["Setting cost targets before design begins", "Continuous incremental cost reduction after production starts — the handoff from target costing", "A European auditing standard", "A supplier penalty clause"], 1],
     ["In design-to-cost, cost status at each design gate should be treated like:", ["A finance-only report", "Mass/weight status — a tracked engineering property with a named owner and a recovery plan when exceeded", "A marketing forecast", "An optional appendix"], 1],
+      ["In a teardown, what must happen before the first fastener is removed?", ["Supplier quotes are requested", "Everything is photographed, weighed and measured", "The parts are sent for material analysis", "The should-cost model is built"], 1],
+    ["Why are cost DELTAS between your part and a competitor's more useful than absolute estimates?", ["They are quicker to calculate", "Deltas remain robust even when both estimates carry error bands", "Absolutes are confidential", "Deltas ignore material cost"], 1],
+    ["When cleansheeting a competitor's part, the correct assumptions are:", ["Your own region and volumes", "The competitor's likely region, volumes and evidenced processes", "Whichever produce the largest gap", "Global average rates"], 1],
+    ["Which of these is a bright-line rule of teardown ethics?", ["Never study patented designs", "Never buy competitor products", "Never use misappropriated confidential information such as a rival's drawings", "Never photograph disassembled parts"], 2],
   ];
   const PASS_MARK = 0.8;
   const EXAM_SIZE = 30;
@@ -299,7 +303,7 @@
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
     const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
     mount.innerHTML = `<div class="ex-gate">
-      <p>Thirty questions, drawn at random from a 48-question bank spanning all thirteen modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
+      <p>Thirty questions, drawn at random from a 52-question bank spanning all thirteen modules — including the case studies and deep-dive material. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
       to earn the <strong>VAVEhub Certificate of Completion</strong>. You can retake the exam as many times as you like —
       a fresh random 30 is drawn from the bank on every attempt.</p>
       ${remaining > 0 ? `<p class="ex-warn">Heads up: ${remaining} module${remaining > 1 ? "s" : ""} not yet completed. You can still attempt the exam, but we recommend finishing the course first.</p>` : ""}
@@ -1395,4 +1399,32 @@
      ["A patent application", "A named champion and a gate date", "A press release", "A budget code"], 1,
      "Ideas handed to 'the team' reappear untouched next year. Every survivor needs one named champion to carry it into development, plus a date."],
   ], "Good practice — re-read sections 6.2–6.7 on the funnel and the ranking tools, then try again.");
+
+  /* ── 5 · Module 10 teardown challenge ── */
+  buildChallenge("#m10ChalMount", [
+    ["The competitor units just arrived at the lab. What happens first?",
+     ["Remove the fasteners while enthusiasm is high", "Photograph, weigh and measure everything", "Should-cost the visible parts", "Send parts to suppliers for quotes"], 1,
+     "You get exactly one first teardown. Document every state before changing it — the photo archive settles every argument the study will ever face."],
+    ["Why capture disassembly TIME for every operation?",
+     ["To bill the lab hours correctly", "Disassembly in reverse reveals their assembly cost", "To finish before the deadline", "It makes the report longer"], 1,
+     "The stopwatch reads their factory: a product that comes apart in 48 seconds went together in about a minute of paid labour."],
+    ["When should-costing the competitor's parts, whose assumptions do you use?",
+     ["Your region, your volumes — for comparability", "Their likely region, volumes and processes", "Whichever gives the bigger saving", "Industry averages only"], 1,
+     "Cost their parts at THEIR assumptions, evidenced by the parts themselves. Then compare deltas — deltas survive uncertainty that absolutes don't."],
+    ["Their hinge costs £1.10 ±15% and yours £2.30 ±15%. What's the robust conclusion?",
+     ["The numbers are too uncertain to use", "A real gap of roughly £1.20 exists — investigate it", "Their hinge must be lower quality", "Switch to their supplier immediately"], 1,
+     "Deltas are robust where absolutes are fragile: even at the worst ends of both bands, a large gap remains — that's a finding."],
+    ["A friendly shared supplier offers you the competitor's part drawings. You should:",
+     ["Accept — it saves teardown time", "Refuse — misappropriated confidential information poisons the study", "Accept but don't tell anyone", "Ask for their price list instead"], 1,
+     "That's the brightest of the bright lines. Open-market teardown is lawful; someone else's confidential documents are not. Refuse and say why."],
+    ["The teardown found their clever snap-fit chassis. It's patented. What can you do?",
+     ["Copy it — patents don't apply to internals", "Read the patent freely, then license it or design around it", "Nothing — patented ideas are off-limits even to study", "Wait for a lawsuit to clarify"], 1,
+     "Patents are public documents you SHOULD read. Learning is free; copying needs a licence or a design-around. Involve counsel when adopting, not when analysing."],
+    ["Your teardown produced a beautiful 80-page report and nothing else. What went wrong?",
+     ["Nothing — the report is the deliverable", "Teardown tourism: findings never became owned ideas in the funnel", "The report should have been longer", "Too few photos"], 1,
+     "The bench work is finished only when deltas become creative-phase seeds with owners, dates and a place in the savings funnel."],
+    ["A rival's product is 20% cheaper at retail. What does that alone prove about their cost?",
+     ["They build it 20% cheaper", "Almost nothing — they might be buying share at negative margin", "Their quality is 20% lower", "Their labour is offshore"], 1,
+     "Price alone tells you almost nothing. That's why benchmarking runs six dimensions — cost, functional, design, process, feature and patent/IP — together."],
+  ], "Good practice — re-read sections 10.3–10.7 on the five steps and 10.11 on the bright lines, then try again.");
 })();
