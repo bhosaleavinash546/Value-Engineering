@@ -101,7 +101,7 @@
    "Cross-functional team of 6–10 with a facilitator who owns process, not content.",
    "No sponsor, no study ,  decisions need someone empowered to make them.",
    "Now do it ,  hands-on assignment",
-   "Draft a five-line scope statement for a product you know well: baseline cost, target %, in scope, out of scope, sponsor. Use the pre-workshop checklist in the SAVE Workshop Agenda template."
+   "Draft a five-line scope statement for a product you know well: baseline cost, target %, in scope, out of scope, sponsor. Use the pre-workshop checklist in the VE Workshop Agenda template."
   ]
  },
  {
@@ -114,7 +114,7 @@
    "How to build the cost baseline the whole team trusts",
    "Pareto thinking: finding where the money hides",
    "3.1 ,  Know the thing cold",
-   "The Information Phase assembles the complete picture before anyone proposes anything. Miles' founding questions structure it: What is it? What does it do? What does it cost? What is it worth? What else could do the job? The discipline of answering the first four before touching the fifth is what separates a SAVE study from a brainstorm.",
+   "The Information Phase assembles the complete picture before anyone proposes anything. Miles' founding questions structure it: What is it? What does it do? What does it cost? What is it worth? What else could do the job? The discipline of answering the first four before touching the fifth is what separates a structured VE study from a brainstorm.",
    "3.2 ,  The cost walk",
    "Walk the costed BOM as a team: material, conversion, labour, overhead, logistics, warranty. Then Pareto it ,  typically 20% of parts carry 80% of cost, and those parts get the analytical firepower. Complement with a process walk: visit the line, watch the assembly, time the operations. Cost that looks reasonable on a spreadsheet often looks absurd on the shop floor.",
    "3.3 ,  Requirements, not assumptions",
@@ -560,7 +560,7 @@
    "Phase 4 ,  Evaluation ,  auto-clustering of duplicate ideas; first-pass feasibility flags; the humans keep the scoring",
    "Phase 5 ,  Development ,  drafted business cases with the arithmetic pre-filled; AI should-cost for instant savings estimates per idea",
    "Phase 6 ,  Presentation ,  live funnel dashboards; auto-drafted decision logs and savings-audit trails",
-   "Notice the pattern: in every phase AI does the drafting, counting and clustering, and the team does the judging, deciding and owning. The phase gates, the decision rights and the audit trail stay exactly where the SAVE job plan put them.",
+   "Notice the pattern: in every phase AI does the drafting, counting and clustering, and the team does the judging, deciding and owning. The phase gates, the decision rights and the audit trail stay exactly where the six-phase job plan put them.",
    "11.8 ,  Sequencing your own stack ,  crawl, walk, run",
    "Crawl ,  start with the data you already own: a spend cube and LPP across your top commodities needs no new tools, finds outliers in weeks, and funds everything that follows. Walk ,  pilot an AI should-cost engine on your top 50 purchased parts; measure it against real quotes for a quarter before trusting it; add a digital teardown-library subscription if you benchmark regularly. Run ,  approved LLM copilots wired into the workshop itself, CT scanning for non-destructive teardown, and a cost knowledge graph linking functions ↔ parts ↔ costs ↔ suppliers so no lesson is lost between waves. The failure mode to avoid is buying the \"run\" stack first: tools amplify a working method ,  bolted onto no method, they produce beautifully-formatted guesses. Sequence capability first, software second.",
    "11.9 ,  Guardrails ,  keeping AI-assisted cost work auditable",
