@@ -239,7 +239,7 @@
     });
   });
 
-  /* ── Generic tab engine (SAVE stepper + industries) ── */
+  /* ── Generic tab engine (job-plan stepper + industries) ── */
   function wireTabs(tabSel, panelSel, indicator) {
     const tabs = $$(tabSel);
     const panels = $$(panelSel);
@@ -310,7 +310,7 @@
       const k = Math.min(1, vi / 3); // gauge tops out at VI = 3
       ring.style.strokeDashoffset = CIRC * (1 - k);
       let color, msg;
-      if (vi < 0.8) { color = "#f87171"; msg = "Value destroyer — cost outweighs function. Prime SAVE-study target."; }
+      if (vi < 0.8) { color = "#f87171"; msg = "Value destroyer — cost outweighs function. Prime VE-study target."; }
       else if (vi < 1.2) { color = "#f59e0b"; msg = "Balanced — now engineer the ratio: function up, cost down."; }
       else if (vi < 2) { color = "#22d3ee"; msg = "Healthy value — benchmark it to prove it, then protect it."; }
       else { color = "#34d399"; msg = "Exceptional value — this is what a VE win looks like. Scale it."; }
@@ -376,7 +376,7 @@
   const dotnav = $("#dotnav");
   if (dotnav) {
     const SECTIONS = [
-      ["top", "Home"], ["about", "Value Engineering"], ["save", "SAVE Job Plan"],
+      ["top", "Home"], ["about", "Value Engineering"], ["save", "VE Job Plan"],
       ["fast", "Function Analysis"], ["levers", "Cost Levers"], ["ideation", "Ideation"],
       ["tech", "Technology"], ["benchmark", "Benchmarking"], ["industries", "Industries"],
       ["governance", "Savings Funnel"], ["toolkit", "Toolkit"], ["glossary", "Glossary"], ["faq", "FAQ"], ["diagnose", "Diagnosis"], ["engage", "Begin"],
@@ -617,7 +617,7 @@
   ];
 
   const SYMPTOM_VERDICT = {
-    cost: ["Classic cost-out territory — and highly solvable.", "A gap to target or competitor cost is exactly what the SAVE job plan was built for: baseline the cost, analyse the functions, and attack the mismatches part by part."],
+    cost: ["Classic cost-out territory — and highly solvable.", "A gap to target or competitor cost is exactly what the 6-phase job plan was built for: baseline the cost, analyse the functions, and attack the mismatches part by part."],
     margin: ["Margin erosion needs a full value wave, not a discount hunt.", "When price can't move up, cost must move down without touching customer value — that's function-based cost optimisation across design, sourcing and complexity at once."],
     warranty: ["Your cost problem is a value mismatch in disguise.", "Rising warranty means certain functions are under-delivering while others are over-specified. Function analysis on the failure Paretos finds both — and warranty savings usually dwarf piece-price savings."],
     price: ["You need to know their cost, not just their price.", "Losing on price means a competitor delivers the same function for less. Teardown benchmarking plus should-cost tells you exactly where their advantage lives — then VE closes the gap."],
@@ -630,9 +630,9 @@
     const add = (t, d, href, label) => { if (!recs.some((r) => r[0] === t)) recs.push([t, d, href, label]); };
 
     // Lifecycle anchor play
-    if (a.stage === "dev") add("Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "#save", "SAVE Job Plan");
-    else if (a.stage === "early") add("Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "#save", "SAVE Job Plan");
-    else add("Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "#save", "SAVE Job Plan");
+    if (a.stage === "dev") add("Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "#save", "VE Job Plan");
+    else if (a.stage === "early") add("Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "#save", "VE Job Plan");
+    else add("Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "#save", "VE Job Plan");
 
     // Urgent P&L symptoms
     if (a.margin === "loss") add("Triage the loss-makers first", "Pareto margin by SKU and fix, re-price or kill negative-margin products — the fastest P&L relief available.", "#levers", "Complexity Levers");
@@ -667,7 +667,7 @@
     if (a.teardown === "never") add("Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "#benchmark", "Benchmarking");
 
     // Programme
-    if (a.maturity === "never") add("Start with one product, one SAVE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "training.html", "VE Academy");
+    if (a.maturity === "never") add("Start with one product, one structured VE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "training.html", "VE Academy");
     else if (a.maturity === "oneoff") add("Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "#governance", "Governance & KPIs");
     else add("Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "#tech", "Technology Stack");
 
