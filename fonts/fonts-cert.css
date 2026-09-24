@@ -1,0 +1,13 @@
+/* Self-hosted web fonts (SIL Open Font License) — served from this site, no third-party requests. Latin + Latin-Extended subsets. */
+@font-face { font-family: 'Pinyon Script'; font-style: normal; font-display: swap; font-weight: 400; src:url(./pinyon-script-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Pinyon Script'; font-style: normal; font-display: swap; font-weight: 400; src:url(./pinyon-script-latin-ext-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-display: swap; font-weight: 600; src:url(./playfair-display-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-display: swap; font-weight: 600; src:url(./playfair-display-latin-ext-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-display: swap; font-weight: 700; src:url(./playfair-display-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-display: swap; font-weight: 700; src:url(./playfair-display-latin-ext-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-display: swap; font-weight: 400; src:url(./eb-garamond-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-display: swap; font-weight: 400; src:url(./eb-garamond-latin-ext-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-display: swap; font-weight: 500; src:url(./eb-garamond-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-display: swap; font-weight: 500; src:url(./eb-garamond-latin-ext-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-display: swap; font-weight: 600; src:url(./eb-garamond-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'EB Garamond'; font-style: normal; font-display: swap; font-weight: 600; src:url(./eb-garamond-latin-ext-600-normal.woff2) format('woff2'); }

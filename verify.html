@@ -3,14 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>Verify a Certificate · VAVEhub VE Academy</title>
-<meta name="description" content="Verify the authenticity of a VAVEhub VE Academy certificate by its ID." />
+<meta name="description" content="Check that a VAVEhub VE Academy Certificate of Completion is genuine — enter the certificate ID to see the holder, score and issue date." />
 <meta name="robots" content="index,follow" />
+<link rel="canonical" href="https://valueengineeringhub.com/verify.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="VAVEhub" />
+<meta property="og:title" content="Verify a VAVEhub Certificate" />
+<meta property="og:description" content="Check that a VAVEhub VE Academy Certificate of Completion is genuine — enter the certificate ID to see the holder, score and issue date." />
+<meta property="og:url" content="https://valueengineeringhub.com/verify.html" />
+<meta property="og:image" content="https://valueengineeringhub.com/og-certificate.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Verify a VAVEhub Certificate" />
+<meta name="twitter:description" content="Check that a VAVEhub VE Academy Certificate of Completion is genuine — enter the certificate ID to see the holder, score and issue date." />
+<meta name="twitter:image" content="https://valueengineeringhub.com/og-certificate.png" />
 <meta name="theme-color" content="#05070f" />
 <link rel="manifest" href="manifest.webmanifest" />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/ibm-plex-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="fonts/fonts.css" />
 <script>try{var _t=localStorage.getItem("vf-theme");if(_t)document.documentElement.dataset.theme=_t}catch(e){}</script>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="training.css" />
@@ -37,11 +52,23 @@
     </form>
     <div id="verify-result" style="margin-top:1.6rem" role="status" aria-live="polite"></div>
   </div>
+  <aside class="cert-path cert-path-narrow" aria-labelledby="pathTitle">
+      <h2 id="pathTitle">What this certificate is — and where it can lead</h2>
+      <div class="cp-grid">
+        <div><h3>What it shows</h3><p>The holder completed all 13 modules of the VAVEhub VE Academy — about 6.5 hours of
+        study — and passed a 30-question exam at 80% or above. The ID can be checked publicly at any time.</p></div>
+        <div><h3>What it isn't</h3><p>It is an independent educational credential, not a professional certification, and
+        is not accredited by or affiliated with any professional body.</p></div>
+        <div><h3>Next steps</h3><p>Practitioners who want a professional credential usually go on to formal value-methodology
+        training — for example SAVE International's VMA → AVS → CVS path, or Value Management qualifications based on
+        EN 12973 in Europe. The Academy covers the method those programmes teach.</p></div>
+      </div>
+    </aside>
 </div>
 
 <footer class="tr-footer">
   <p>VAVEhub VE Academy · certificate verification · an independent educational programme.</p>
-  <p>© Avinash Bhosale · VAVEhub. · <a href="privacy.html">Privacy</a></p>
+  <p>© Avinash Bhosale · VAVEhub. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
 </footer>
 
 <script src="site-config.js"></script>

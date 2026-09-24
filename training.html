@@ -3,16 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>VE Academy — Value Engineering Training & Certification | VAVEhub</title>
-<meta name="description" content="Free 360° Value Engineering training: 13 modules covering the 6-phase value-methodology job plan, function analysis, FAST, should-costing, teardown benchmarking and AI techniques — with a 30-question exam and certificate at 80% pass." />
+<meta name="description" content="Free 13-module Value Engineering course with narration, interactive labs and a 30-question exam. Pass at 80% to earn a shareable Certificate of Completion." />
 <meta name="robots" content="index,follow" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="VAVEhub" />
+<meta property="og:title" content="VE Academy — Free Value Engineering Course & Certificate" />
+<meta property="og:description" content="Free 13-module Value Engineering course with narration, interactive labs and a 30-question exam. Pass at 80% to earn a shareable Certificate of Completion." />
+<meta property="og:url" content="https://valueengineeringhub.com/training.html" />
+<meta property="og:image" content="https://valueengineeringhub.com/og-academy.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="VE Academy — Free Value Engineering Course & Certificate" />
+<meta name="twitter:description" content="Free 13-module Value Engineering course with narration, interactive labs and a 30-question exam. Pass at 80% to earn a shareable Certificate of Completion." />
+<meta name="twitter:image" content="https://valueengineeringhub.com/og-academy.png" />
 <link rel="canonical" href="https://valueengineeringhub.com/training.html" />
 <link rel="manifest" href="manifest.webmanifest" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Pinyon+Script&family=Playfair+Display:wght@600;700&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/ibm-plex-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="fonts/fonts-cert.css" />
 <script>try{var _t=localStorage.getItem("vf-theme");if(_t)document.documentElement.dataset.theme=_t}catch(e){}</script>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="training.css" />
@@ -63,6 +76,7 @@
       <button class="role-chip" data-role="all">Show everything</button>
     </div>
     <button class="btn btn-primary btn-lg" id="startBtn">Start learning →</button>
+    <p class="tr-byline">Written &amp; maintained by <a href="index.html#engage">Avinash Bhosale</a>, Senior Cost Improvement Engineer · Last updated <time datetime="2026-09-24">24 September 2026</time> · <a href="changelog.html">What’s new</a></p>
     </div>
 
     <div class="tr-hero-viz" aria-hidden="true">
@@ -161,6 +175,30 @@
   </div>
 </header>
 
+<section class="tr-catalog" aria-labelledby="catTitle">
+  <details class="cat-wrap" id="catWrap" open>
+    <summary><h2 id="catTitle">Course at a glance</h2><span class="cat-meta">13 modules · ≈6.5 hours · 30-question exam · no prerequisites</span></summary>
+    <p class="cat-intro">Take the modules in order — each builds on the last — or jump to what you need. Module 1 is a free preview;
+    a free account unlocks the rest and syncs your progress across devices.</p>
+    <div class="cat-grid">
+      <button type="button" class="cat-card" data-open="m1"><span class="cat-n">01</span><span class="cat-body"><b>Foundations of Value Engineering</b><span>Explain value as function ÷ cost, and why VE beats plain cost-cutting</span></span><span class="cat-time">20 min<em>Free preview</em></span></button>
+      <button type="button" class="cat-card" data-open="m2"><span class="cat-n">02</span><span class="cat-body"><b>Pre-Workshop Preparation</b><span>Scope a study, pick the team and freeze a baseline worth trusting</span></span><span class="cat-time">18 min</span></button>
+      <button type="button" class="cat-card" data-open="m3"><span class="cat-n">03</span><span class="cat-body"><b>Phase 1 — Information</b><span>Build the cost and requirement picture before anyone proposes ideas</span></span><span class="cat-time">22 min</span></button>
+      <button type="button" class="cat-card" data-open="m4"><span class="cat-n">04</span><span class="cat-body"><b>Phase 2 — Function Analysis &amp; FAST</b><span>Write verb–noun functions, build a FAST diagram and find value gaps</span></span><span class="cat-time">40 min</span></button>
+      <button type="button" class="cat-card" data-open="m5"><span class="cat-n">05</span><span class="cat-body"><b>Phase 3 — Creative Techniques</b><span>Generate hundreds of ideas with brainwriting, SCAMPER and TRIZ</span></span><span class="cat-time">35 min</span></button>
+      <button type="button" class="cat-card" data-open="m6"><span class="cat-n">06</span><span class="cat-body"><b>Phase 4 — Evaluation</b><span>Triage, screen and rank ideas with Pugh and weighted matrices</span></span><span class="cat-time">30 min</span></button>
+      <button type="button" class="cat-card" data-open="m7"><span class="cat-n">07</span><span class="cat-body"><b>Phase 5 — Development</b><span>Turn ideas into validated, dated business cases the board will sign</span></span><span class="cat-time">25 min</span></button>
+      <button type="button" class="cat-card" data-open="m8"><span class="cat-n">08</span><span class="cat-body"><b>Phase 6 — Presentation &amp; Implementation</b><span>Win the decision meeting and track savings to audited implementation</span></span><span class="cat-time">20 min</span></button>
+      <button type="button" class="cat-card" data-open="m9"><span class="cat-n">09</span><span class="cat-body"><b>Cost Levers &amp; Should-Costing</b><span>Build a seven-layer should-cost and negotiate from physics</span></span><span class="cat-time">32 min</span></button>
+      <button type="button" class="cat-card" data-open="m10"><span class="cat-n">10</span><span class="cat-body"><b>Teardown &amp; Competitive Benchmarking</b><span>Run a five-step teardown and benchmark across six dimensions</span></span><span class="cat-time">35 min</span></button>
+      <button type="button" class="cat-card" data-open="m11"><span class="cat-n">11</span><span class="cat-body"><b>Modern &amp; AI-Era Techniques</b><span>Use AI and digital cost tools safely across the whole job plan</span></span><span class="cat-time">26 min</span></button>
+      <button type="button" class="cat-card" data-open="m12"><span class="cat-n">12</span><span class="cat-body"><b>Running a VE Programme</b><span>Run VE as an ongoing programme with cadence, KPIs and targets</span></span><span class="cat-time">15 min</span></button>
+      <button type="button" class="cat-card" data-open="m13"><span class="cat-n">13</span><span class="cat-body"><b>Target Costing &amp; Design-to-Cost</b><span>Prevent cost with target costing and design-to-cost at the gates</span></span><span class="cat-time">25 min</span></button>
+      <button type="button" class="cat-card cat-exam" data-open="exam"><span class="cat-n">✓</span><span class="cat-body"><b>Final exam &amp; certificate</b><span>30 questions drawn from a 68-question bank · pass at 80% to earn your Certificate of Completion</span></span><span class="cat-time">30 Qs</span></button>
+    </div>
+  </details>
+</section>
+
 <div class="tr-layout" id="trLayout">
   <aside class="tr-sidebar" id="trSidebar">
     <div class="tr-side-head">Course content</div>
@@ -181,7 +219,7 @@
     <!-- ═══ MODULE 1 ═══ -->
     <section class="tmod" data-mod="m1" data-title="Foundations of Value Engineering" data-time="20 min">
       <div class="tmod-head"><span class="tmod-tag">Module 1 · 20 min</span><h2>Foundations of Value Engineering</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>What value really means — and the one equation behind the whole discipline</li><li>The five legitimate ways to improve value</li><li>VA vs. VE vs. VM, and the four types of value</li><li>Why VE beats ordinary cost-cutting, every time</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>What value really means — and the one equation behind the whole discipline</li><li>The five legitimate ways to improve value</li><li>VA vs. VE vs. VM, and the four types of value</li><li>Why VE beats ordinary cost-cutting, every time</li></ul></div>
 
       <h3>1.1 · Value is a ratio</h3>
       <p>Everything in this course rests on one equation: <strong>Value = Function ÷ Cost</strong>. Function is what the
@@ -310,7 +348,7 @@ Value Engineering annual summary reports (fhwa.dot.gov/ve).</i></p></div>
     <!-- ═══ MODULE 2 ═══ -->
     <section class="tmod" data-mod="m2" data-title="Pre-Workshop Preparation" data-time="18 min">
       <div class="tmod-head"><span class="tmod-tag">Module 2 · 18 min</span><h2>Pre-Workshop Preparation</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>How to scope a study and set a defensible savings target</li><li>Who belongs on the team — and who kills it</li><li>The data pack that makes or breaks the workshop</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>How to scope a study and set a defensible savings target</li><li>Who belongs on the team — and who kills it</li><li>The data pack that makes or breaks the workshop</li></ul></div>
 
       <h3>2.1 · Scope and sponsorship</h3>
       <p>Every failed VE study fails before it starts. Preparation takes <strong>2–4 weeks</strong> and begins with a
@@ -392,7 +430,7 @@ Use the pre-workshop checklist in the <a href="toolkit/save-workshop-agenda.html
     <!-- ═══ MODULE 3 ═══ -->
     <section class="tmod" data-mod="m3" data-title="Phase 1 — Information" data-time="22 min">
       <div class="tmod-head"><span class="tmod-tag">Module 3 · 22 min · Job Plan Phase 1</span><h2>Phase 1 — Information</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Miles' founding questions and why they still work</li><li>How to build the cost baseline the whole team trusts</li><li>Pareto thinking: finding where the money hides</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Miles' founding questions and why they still work</li><li>How to build the cost baseline the whole team trusts</li><li>Pareto thinking: finding where the money hides</li></ul></div>
 
       <h3>3.1 · Know the thing cold</h3>
       <p>The Information Phase assembles the complete picture <em>before anyone proposes anything</em>. Miles' founding
@@ -488,7 +526,7 @@ were you? That gap is why the Information Phase exists. Capture it in the
     <!-- ═══ MODULE 4 ═══ -->
     <section class="tmod" data-mod="m4" data-title="Phase 2 — Function Analysis & FAST" data-time="40 min">
       <div class="tmod-head"><span class="tmod-tag">Module 4 · 40 min · Job Plan Phase 2 · the heart of VE</span><h2>Phase 2 — Function Analysis &amp; FAST</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>What a "function" really is — in the simplest possible words</li><li>How to write any function in exactly two words: active verb + measurable noun</li><li>Every type of function, one by one, with everyday examples and simple tests</li><li>How a FAST diagram is built — watch one grow step by step</li><li>A reference library of verbs and nouns you can use forever</li><li>The function–cost matrix, worth, and the Value Index</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>What a "function" really is — in the simplest possible words</li><li>How to write any function in exactly two words: active verb + measurable noun</li><li>Every type of function, one by one, with everyday examples and simple tests</li><li>How a FAST diagram is built — watch one grow step by step</li><li>A reference library of verbs and nouns you can use forever</li><li>The function–cost matrix, worth, and the Value Index</li></ul></div>
 
       <h3>4.1 · What is a function? (Start here)</h3>
       <p>Look at the pen on your desk. Most people see a <em>thing</em>: a tube, a spring, a clip, some ink.
@@ -642,7 +680,7 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
     <!-- ═══ MODULE 5 ═══ -->
     <section class="tmod" data-mod="m5" data-title="Phase 3 — Creative Techniques" data-time="35 min">
       <div class="tmod-head"><span class="tmod-tag">Module 5 · 35 min · Job Plan Phase 3</span><h2>Phase 3 — Creative Techniques</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Why good ideas die in normal meetings — and Osborn's four rules that keep them alive</li><li>Six ideation techniques, each with a worked example, and when to reach for which</li><li>How to run brainstorming, brainwriting 6-3-5, SCAMPER, TRIZ, morphological analysis and biomimicry on real functions</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Why good ideas die in normal meetings — and Osborn's four rules that keep them alive</li><li>Six ideation techniques, each with a worked example, and when to reach for which</li><li>How to run brainstorming, brainwriting 6-3-5, SCAMPER, TRIZ, morphological analysis and biomimicry on real functions</li></ul></div>
 
       <h3>5.1 · The most fragile moment in the whole job plan</h3>
       <p>You have just finished Phase 2. You know exactly which functions cost too much — the kettle's "indicate
@@ -751,7 +789,7 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
           <h5>2 · Three-minute idea sprint (solo 6-3-5)</h5>
           <p class="lab-hint">Pick a function, hit start, and type one idea per line. No judging, no deleting — quantity is the goal. Nine or more ideas in three minutes is workshop pace.</p>
           <div class="sprint-row">
-            <select id="sprintFn"></select>
+            <select id="sprintFn" aria-label="Function to ideate on"></select>
             <button type="button" class="btn btn-primary" id="sprintGo">▶ Start 3:00</button>
             <span class="sprint-clock" id="sprintClock">3:00</span>
             <span class="sprint-count" id="sprintCount">0 ideas</span>
@@ -834,7 +872,7 @@ Altshuller Institute case reports.</i></p></div>
     <!-- ═══ MODULE 6 ═══ -->
     <section class="tmod" data-mod="m6" data-title="Phase 4 — Evaluation" data-time="30 min">
       <div class="tmod-head"><span class="tmod-tag">Module 6 · 30 min · Job Plan Phase 4</span><h2>Phase 4 — Evaluation</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>The four-stage funnel that turns 380 raw ideas into a dozen winners — without killing the good ones</li><li>Effort–impact grids, weighted matrices and Pugh analysis, each taught with real numbers</li><li>How to pressure-test winners for risk and bundle them into scenarios with named champions</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>The four-stage funnel that turns 380 raw ideas into a dozen winners — without killing the good ones</li><li>Effort–impact grids, weighted matrices and Pugh analysis, each taught with real numbers</li><li>How to pressure-test winners for risk and bundle them into scenarios with named champions</li></ul></div>
 
       <h3>6.1 · The morning after — 380 sticky notes and a decision to make</h3>
       <p>The creative day went well. The wall holds 380 ideas: brilliant ones, silly ones, duplicates, and a few that
@@ -977,7 +1015,7 @@ argues with your gut — that argument is the point. The columns are in the
     <!-- ═══ MODULE 7 ═══ -->
     <section class="tmod" data-mod="m7" data-title="Phase 5 — Development" data-time="25 min">
       <div class="tmod-head"><span class="tmod-tag">Module 7 · 25 min · Job Plan Phase 5</span><h2>Phase 5 — Development</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Turning shortlisted ideas into bankable value proposals</li><li>Validation: CAE, FMEA and test planning</li><li>The business-case math: savings, one-time cost, payback — and a live builder to practise it</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Turning shortlisted ideas into bankable value proposals</li><li>Validation: CAE, FMEA and test planning</li><li>The business-case math: savings, one-time cost, payback — and a live builder to practise it</li></ul></div>
 
       <h3>7.1 · From idea to proposal</h3>
       <p>Champions convert shortlisted ideas into <strong>implementable value proposals</strong>. Each answers five
@@ -1085,7 +1123,7 @@ compute payback in months. If it's under 12, you'd take it to a real board.</p><
     <!-- ═══ MODULE 8 ═══ -->
     <section class="tmod" data-mod="m8" data-title="Phase 6 — Presentation & Implementation" data-time="20 min">
       <div class="tmod-head"><span class="tmod-tag">Module 8 · 20 min · Job Plan Phase 6</span><h2>Phase 6 — Presentation &amp; Implementation</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Selling the study: decision-grade presentation</li><li>The L1→L4 savings funnel and implementation tracking</li><li>Auditing savings against the frozen baseline</li><li>Why 40–60% of approved ideas die — and the five killers to design out</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Selling the study: decision-grade presentation</li><li>The L1→L4 savings funnel and implementation tracking</li><li>Auditing savings against the frozen baseline</li><li>Why 40–60% of approved ideas die — and the five killers to design out</li></ul></div>
 
       <h3>8.1 · The decision meeting</h3>
       <p>Present to the sponsor and decision board: the value logic (functions and mismatches), the numbers (savings,
@@ -1182,7 +1220,7 @@ with your ideas at L1 — owner, saving, next gate date for each. Diary a 30-min
     <!-- ═══ MODULE 9 ═══ -->
     <section class="tmod" data-mod="m9" data-title="Cost Levers & Should-Costing" data-time="32 min">
       <div class="tmod-head"><span class="tmod-tag">Module 9 · 32 min</span><h2>Cost Levers &amp; Should-Costing</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Why should-costing exists: restoring the information balance between buyer and seller</li><li>The six lever families every programme draws from</li><li>The seven-layer anatomy of a should-cost — and how to build a cleansheet in seven steps</li><li>Linear Performance Pricing, negotiation choreography, and where AI is changing the game</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Why should-costing exists: restoring the information balance between buyer and seller</li><li>The six lever families every programme draws from</li><li>The seven-layer anatomy of a should-cost — and how to build a cleansheet in seven steps</li><li>Linear Performance Pricing, negotiation choreography, and where AI is changing the game</li></ul></div>
 
       <h3>9.1 · Why should-cost — one number against the truth</h3>
       <p>Every purchased part arrives with an information problem. The supplier knows their material buy price, their
@@ -1352,7 +1390,7 @@ Which layer would you challenge first, and with what fact?</p></div>
     <!-- ═══ MODULE 10 ═══ -->
     <section class="tmod" data-mod="m10" data-title="Teardown & Competitive Benchmarking" data-time="35 min">
       <div class="tmod-head"><span class="tmod-tag">Module 10 · 35 min</span><h2>Teardown &amp; Competitive Benchmarking</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Why teardown is the most honest evidence in Value Engineering — and what a programme costs and returns</li><li>The five-step process in working detail: documenting, disassembling, capturing the BOM, should-costing and harvesting ideas</li><li>Six benchmarking dimensions, how AI is transforming the teardown lab, and the ethical bright lines</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Why teardown is the most honest evidence in Value Engineering — and what a programme costs and returns</li><li>The five-step process in working detail: documenting, disassembling, capturing the BOM, should-costing and harvesting ideas</li><li>Six benchmarking dimensions, how AI is transforming the teardown lab, and the ethical bright lines</li></ul></div>
 
       <h3>10.1 · Why teardown is VE's mirror</h3>
       <p>Phase 2 taught you to ask "what is this function <em>worth</em>?" — and the honest answer is hard to find from
@@ -1513,7 +1551,7 @@ fasteners, assembly seconds. Write down two ideas the designer missed and what e
     <!-- ═══ MODULE 11 ═══ -->
     <section class="tmod" data-mod="m11" data-title="Modern & AI-Era Techniques" data-time="26 min">
       <div class="tmod-head"><span class="tmod-tag">Module 11 · 26 min</span><h2>Modern &amp; AI-Era Techniques</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>The 2026 cost-engineering technology stack — and what each layer actually does</li><li>Where AI genuinely accelerates VAVE, phase by phase — and where it doesn't</li><li>How to sequence your own stack: crawl, walk, run</li><li>The guardrails that keep AI-assisted cost work auditable and safe</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>The 2026 cost-engineering technology stack — and what each layer actually does</li><li>Where AI genuinely accelerates VAVE, phase by phase — and where it doesn't</li><li>How to sequence your own stack: crawl, walk, run</li><li>The guardrails that keep AI-assisted cost work auditable and safe</li></ul></div>
 
       <h3>11.1 · The digital cost stack</h3>
       <ul class="tlist">
@@ -1625,7 +1663,7 @@ product, ranked by likely cost."</em> Compare with your 6-3-5 output — what di
     <!-- ═══ MODULE 12 ═══ -->
     <section class="tmod" data-mod="m12" data-title="Running a VE Programme" data-time="15 min">
       <div class="tmod-head"><span class="tmod-tag">Module 12 · 15 min</span><h2>Running a VE Programme</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Governance: cadence, funnel, KPIs</li><li>Typical savings expectations by maturity</li><li>Professional standards and certifications</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Governance: cadence, funnel, KPIs</li><li>Typical savings expectations by maturity</li><li>Professional standards and certifications</li></ul></div>
 
       <h3>12.1 · From event to operating system</h3>
       <p>One-off studies decay; programmes compound. The operating system: a <strong>monthly funnel review</strong>
@@ -1694,7 +1732,7 @@ value board. If you can't name the people, that's your first action.</p></div>
     <!-- ═══ MODULE 13 ═══ -->
     <section class="tmod" data-mod="m13" data-title="Target Costing & Design-to-Cost" data-time="25 min">
       <div class="tmod-head"><span class="tmod-tag">Module 13 · 25 min</span><h2>Target Costing &amp; Design-to-Cost</h2></div>
-      <div class="tmod-obj"><h4>You will learn</h4><ul><li>Why preventing cost beats removing it — and where target costing came from</li><li>The allowable-cost equation, the value gap, and the cardinal rule</li><li>How targets cascade from vehicle to system to part to supplier</li><li>Design-to-cost at the gates: running cost like weight management</li><li>The handoff to kaizen costing after start of production</li></ul></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Why preventing cost beats removing it — and where target costing came from</li><li>The allowable-cost equation, the value gap, and the cardinal rule</li><li>How targets cascade from vehicle to system to part to supplier</li><li>Design-to-cost at the gates: running cost like weight management</li><li>The handoff to kaizen costing after start of production</li></ul></div>
 
       <h3>13.1 · Prevention beats correction</h3>
       <p>Everything so far in this course removes cost that already exists. This module is about never letting it in.
@@ -1833,7 +1871,7 @@ value board. If you can't name the people, that's your first action.</p></div>
   <p>VAVEhub VE Academy · free educational certification · an independent programme, not affiliated with,
   accredited by, or endorsed by SAVE International® or any certification body. SAVE International®, TRIZ® and other
   marks are trademarks of their respective owners.</p>
-  <p>© Avinash Bhosale · VAVEhub · <a href="privacy.html">Privacy</a> — course content, exam and certificate design.</p>
+  <p>© Avinash Bhosale · VAVEhub · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="changelog.html">What’s new</a> — course content, exam and certificate design.</p>
   <p>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b>Avinash Bhosale</b></a></p>
 </footer>
 

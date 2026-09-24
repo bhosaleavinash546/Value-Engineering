@@ -8,7 +8,7 @@
         cheaply via ETag and always matches the current timings.)
      • other same-origin assets (css/js/img) → stale-while-revalidate
    Bump VERSION / AUDIO_CACHE to purge previously cached responses. */
-const VERSION = "vh-v2";
+const VERSION = "vh-v3";
 const AUDIO_CACHE = "vh-audio-v2";
 
 self.addEventListener("install", () => self.skipWaiting());

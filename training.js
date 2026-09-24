@@ -785,7 +785,7 @@
     function renderLib(cat) {
       const show = cat === "all" ? cats : [cat];
       grid.innerHTML = show.map((c) =>
-        `<div class="fn-cat"><h5>${c}</h5>` + LIB[c].map(([fn, meaning, ex]) =>
+        `<div class="fn-cat"><h4>${c}</h4>` + LIB[c].map(([fn, meaning, ex]) =>
           `<div class="fn-item"><b>${fn}</b><span>${meaning}</span><em>e.g. ${ex}</em></div>`).join("") + "</div>").join("");
     }
     filters.addEventListener("click", (e) => {
@@ -1602,4 +1602,24 @@
      ["Extending payment terms", "Mass reduction — less material is less money and less embodied CO₂e", "Rebranding", "Longer contracts"], 1,
      "Cost and carbon share physics: mass, energy, scrap, distance. Add a kgCO₂e column to the cleansheet and most cost levers reveal a carbon dividend."],
   ], "Good practice — re-read sections 11.4 on the engines, 11.8 on sequencing and 11.9 on the guardrails, then try again.");
+})();
+
+/* ════════ Course-at-a-glance catalogue: open modules via the sidebar (keeps sign-in gating) ════════ */
+(function () {
+  "use strict";
+  const wrap = document.getElementById("catWrap");
+  if (!wrap) return;
+  // returning learners: collapse the catalogue so it doesn't push their modules down
+  try {
+    const st = JSON.parse(localStorage.getItem("vf-academy")) || {};
+    if ((st.done || []).length) wrap.open = false;
+  } catch (e) {}
+  wrap.addEventListener("click", (e) => {
+    const card = e.target.closest(".cat-card");
+    if (!card) return;
+    const link = document.querySelector(`#modNav .mod-link[data-target="${card.dataset.open}"]`);
+    if (link) link.click();
+    const layout = document.getElementById("trLayout");
+    if (layout) layout.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 })();

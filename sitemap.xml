@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://valueengineeringhub.com/</loc><priority>1.0</priority></url>
-  <url><loc>https://valueengineeringhub.com/training.html</loc><priority>0.9</priority></url>
-  <url><loc>https://valueengineeringhub.com/verify.html</loc><priority>0.6</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/fast-worksheet.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/function-cost-matrix.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/save-workshop-agenda.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/idea-capture.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/savings-funnel-tracker.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/ve-cheatsheet.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/toolkit/teardown-bom.html</loc><priority>0.7</priority></url>
-  <url><loc>https://valueengineeringhub.com/privacy.html</loc><priority>0.3</priority></url>
+  <url><loc>https://valueengineeringhub.com/</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://valueengineeringhub.com/training.html</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://valueengineeringhub.com/changelog.html</loc><lastmod>2026-09-24</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://valueengineeringhub.com/verify.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/fast-worksheet.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/function-cost-matrix.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/save-workshop-agenda.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/idea-capture.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/savings-funnel-tracker.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/teardown-bom.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/toolkit/ve-cheatsheet.html</loc><lastmod>2026-09-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://valueengineeringhub.com/privacy.html</loc><lastmod>2026-09-24</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://valueengineeringhub.com/terms.html</loc><lastmod>2026-09-24</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>

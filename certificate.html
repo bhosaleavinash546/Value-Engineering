@@ -3,13 +3,28 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>Certificate of Completion — VAVEhub VE Academy</title>
 <meta name="description" content="A VAVEhub VE Academy certificate of completion in Value Engineering." />
 <meta name="robots" content="noindex,follow" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="VAVEhub" />
+<meta property="og:title" content="Certificate of Completion — VAVEhub VE Academy" />
+<meta property="og:description" content="A Certificate of Completion from the free VAVEhub VE Academy — 13 modules of Value Engineering and a 30-question exam passed at 80% or above." />
+<meta property="og:url" content="https://valueengineeringhub.com/certificate.html" />
+<meta property="og:image" content="https://valueengineeringhub.com/og-certificate.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Certificate of Completion — VAVEhub VE Academy" />
+<meta name="twitter:description" content="A Certificate of Completion from the free VAVEhub VE Academy — 13 modules of Value Engineering and a 30-question exam passed at 80% or above." />
+<meta name="twitter:image" content="https://valueengineeringhub.com/og-certificate.png" />
 <link rel="manifest" href="manifest.webmanifest" />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Pinyon+Script&family=Playfair+Display:wght@600;700&family=EB+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/ibm-plex-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="stylesheet" href="fonts/fonts-cert.css" />
 <script>try{var _t=localStorage.getItem("vf-theme");if(_t)document.documentElement.dataset.theme=_t}catch(e){}</script>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="training.css" />
@@ -29,7 +44,7 @@
     <div class="cert cert-v2" id="cert">
       <div class="cert-frame">
         <div class="cert-brand">VAVEHUB • VE ACADEMY</div>
-        <div class="cert-title">Certificate of Completion</div>
+        <h1 class="cert-title">Certificate of Completion</h1>
         <div class="cert-sub">This certifies that</div>
         <div class="cert-name" id="certName">—</div>
         <div class="cert-body">has successfully completed the <b>Value Engineering 360° Practitioner Course</b> — covering the 6-phase value-engineering job plan, function analysis &amp; FAST, creative techniques, should-costing, target costing, teardown benchmarking and value programme governance — and passed the certification examination with a score of <b id="certScore">—</b>.</div>
@@ -50,6 +65,18 @@
       <button class="btn btn-ghost" onclick="window.print()">🖨 Print / Save as PDF</button>
       <a class="btn btn-ghost" href="training.html">Earn yours — take the free course</a>
     </div>
+    <aside class="cert-path" aria-labelledby="pathTitle">
+      <h2 id="pathTitle">What this certificate is — and where it can lead</h2>
+      <div class="cp-grid">
+        <div><h3>What it shows</h3><p>The holder completed all 13 modules of the VAVEhub VE Academy — about 6.5 hours of
+        study — and passed a 30-question exam at 80% or above. The ID can be checked publicly at any time.</p></div>
+        <div><h3>What it isn't</h3><p>It is an independent educational credential, not a professional certification, and
+        is not accredited by or affiliated with any professional body.</p></div>
+        <div><h3>Next steps</h3><p>Practitioners who want a professional credential usually go on to formal value-methodology
+        training — for example SAVE International's VMA → AVS → CVS path, or Value Management qualifications based on
+        EN 12973 in Europe. The Academy covers the method those programmes teach.</p></div>
+      </div>
+    </aside>
   </div>
   <div class="cert-invalid" id="certInvalid" hidden>
     <h2>Certificate link not recognised</h2>
@@ -62,7 +89,7 @@
 <footer class="tr-footer">
   <p>VAVEhub VE Academy · free educational certification · an independent programme, not affiliated with,
   accredited by, or endorsed by any professional certification body.</p>
-  <p>© Avinash Bhosale · VAVEhub. · <a href="privacy.html">Privacy</a> TRIZ® and other marks are trademarks of their respective owners.</p>
+  <p>© Avinash Bhosale · VAVEhub. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · TRIZ® and other marks are trademarks of their respective owners.</p>
   <p>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b>Avinash Bhosale</b></a></p>
 </footer>
 

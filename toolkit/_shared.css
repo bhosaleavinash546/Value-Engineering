@@ -23,3 +23,20 @@ td{border:1px solid #c9d2e6;padding:.5rem .55rem;height:2rem;vertical-align:top}
 .btn{border:0;border-radius:100px;padding:.6rem 1.3rem;font-weight:600;font-size:.85rem;cursor:pointer;background:#2563eb;color:#fff}
 .btn.ghost{background:#fff;color:#1a2233;border:1px solid #c9d2e6}
 @media print{body{background:#fff;padding:0}.sheet{border:0;box-shadow:none;border-radius:0;max-width:none;padding:0}.btnbar{display:none}@page{margin:14mm}}
+.head>div:first-child{min-width:0}
+.ver{flex:0 0 auto;text-align:right;font-size:.7rem;color:#5a6785;line-height:1.55;max-width:210px}
+.ver b{display:block;font-weight:700;color:#1a2233;letter-spacing:.02em}
+.ver a{color:#2563eb;text-decoration:underline;text-underline-offset:2px}
+.tbl{width:100%}
+.foot a,.tips a,p.note a{text-decoration:underline;text-underline-offset:2px}
+@media screen and (max-width:760px){
+  body{padding:.75rem .5rem}
+  .sheet{padding:1.3rem 1rem;border-radius:10px}
+  .head{flex-wrap:wrap}
+  .ver{text-align:left;max-width:none;flex:1 1 100%}
+  .meta{grid-template-columns:repeat(2,1fr)}
+  .tbl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tbl table{min-width:640px}
+  .foot{flex-direction:column;gap:.4rem}
+  .btnbar{flex-wrap:wrap;justify-content:flex-start}
+}

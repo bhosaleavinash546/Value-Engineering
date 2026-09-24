@@ -20,13 +20,13 @@
     if (reduced) { preloader.remove(); return done(); }
     let p = 0;
     const tick = () => {
-      p = Math.min(100, p + Math.random() * 16 + 5);
+      p = Math.min(100, p + Math.random() * 18 + 16);
       fill.style.width = p + "%";
       count.textContent = Math.floor(p) + "%";
-      if (p < 100) setTimeout(tick, 90);
-      else setTimeout(() => { preloader.classList.add("is-done"); done(); setTimeout(() => preloader.remove(), 1200); }, 250);
+      if (p < 100) setTimeout(tick, 55);
+      else setTimeout(() => { preloader.classList.add("is-done"); done(); setTimeout(() => preloader.remove(), 1200); }, 120);
     };
-    setTimeout(tick, 120);
+    setTimeout(tick, 60);
   })();
   // Safety: never leave the page hidden if something above failed.
   setTimeout(() => {
@@ -38,7 +38,7 @@
   }, 3200);
 
   /* ── Hero headline word stagger delays ── */
-  $$(".hero-title .w").forEach((w, i) => w.style.setProperty("--d", 0.25 + i * 0.07 + "s"));
+  $$(".hero-title .w").forEach((w, i) => w.style.setProperty("--d", (0.08 + i * 0.045).toFixed(3) + "s"));
 
   /* ── Reveal engine (spring reveals with auto-stagger) ── */
   $$("[data-stagger]").forEach((group) => {
