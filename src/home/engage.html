@@ -1,0 +1,91 @@
+<section class="section section-cta" id="engage">
+  <div class="container">
+
+    <div class="estimator" data-reveal>
+      <div class="est-head">
+        <h3>Estimate your <span class="grad-text">savings potential</span></h3>
+        <p>Indicative, based on the industry ranges published on this site. Real numbers come from a real study.</p>
+      </div>
+      <div class="est-body">
+        <div class="est-inputs">
+          <label>Currency
+            <select id="estCur"><option value="£">£ EUR</option><option value="$">$ USD</option><option value="₹">₹ INR</option><option value="£">£ GBP</option></select></label>
+          <label>Annual volume (units)
+            <input type="number" id="estVol" value="100000" min="1" /></label>
+          <label>Unit product cost
+            <input type="number" id="estCost" value="120" min="0.01" step="0.01" /></label>
+          <label>Industry
+            <select id="estInd">
+              <option value="auto">Automotive &amp; EV (3–8%)</option>
+              <option value="consumer">Consumer / FMCG (5–12%)</option>
+              <option value="heavy" selected>Heavy Machinery (8–15%)</option>
+              <option value="appliance">Home Appliances (6–12%)</option>
+              <option value="aero">Aerospace &amp; Defence (5–10%)</option>
+              <option value="electronics">Electronics (10–20%)</option>
+              <option value="medical">Medical Devices (5–10%)</option>
+              <option value="industrial">Industrial &amp; Energy (8–15%)</option>
+            </select></label>
+          <label>Programme maturity
+            <select id="estWave"><option value="first">First structured wave</option><option value="mature">Mature programme (annual)</option></select></label>
+        </div>
+        <div class="est-out">
+          <div class="est-row"><span>Annual product spend</span><b id="estSpend">—</b></div>
+          <div class="est-row est-big"><span>Indicative savings / year</span><b id="estSave">—</b></div>
+          <div class="est-row"><span>Per unit</span><b id="estUnit">—</b></div>
+          <p class="est-note">Typical study ROI exceeds <strong>10:1</strong> with portfolio payback under 12 months.
+          A 2–4 week baseline phase turns this range into a validated, part-by-part number.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-box" data-reveal>
+      <div class="cta-orb"></div>
+      <p class="kicker">05 · Begin</p>
+      <h2>Your product is carrying cost<br />that <span class="grad-text">adds no value.</span></h2>
+      <p class="cta-sub">Learn the method, take the worksheets, run your own study. Value Engineering isn't a slogan —
+      it's a job plan you can master, and everything you need to learn it is free on this site.</p>
+      <div class="cta-steps" data-stagger>
+        <div class="cs" data-reveal><b>Week 1–2</b><span>Baseline &amp; teardown: costs, functions, benchmarks</span></div>
+        <div class="cs" data-reveal><b>Week 3</b><span>VE workshop: 6 phases, cross-functional team, 200+ ideas</span></div>
+        <div class="cs" data-reveal><b>Week 4–12</b><span>Develop, decide, implement — savings tracked to the P&amp;L</span></div>
+      </div>
+      <div class="consult" data-reveal>
+        <div class="consult-badge">AB</div>
+        <div class="consult-info">
+          <h3>About <span class="grad-text">Avinash Bhosale</span></h3>
+          <p class="consult-title">Creator of VAVEhub · Senior Cost Improvement Engineer – Propulsion, JLR</p>
+          <p>VAVEhub is a free knowledge portal built from fourteen years of hands-on VAVE across automotive propulsion
+          &amp; chassis (JLR), construction equipment (John Deere) and engineering services (Tata Technologies) —
+          competitive benchmarking, should-cost modelling, facilitated VA/VE workshops, and
+          <strong>AI-powered cost-intelligence platforms</strong>: <em>BrainSpark</em>, <em>CostLens</em> and <em>CostVision</em>.
+          Everything here — the playbook, the tools, the toolkit and the Academy — is shared to help engineers and
+          buyers learn the discipline properly.</p>
+          <p class="consult-quote">"Most cost problems are actually value problems. Effective cost optimisation is not about
+          cheapening a product — it is about maximising function delivered per unit cost."</p>
+          <div class="consult-creds">
+            <span class="cred-cert">PVA · Professional Value Analyst</span><span class="cred-cert">VMA · SAVE International</span><span class="cred-cert">TRIZ® Certified</span>
+            <span>JLR</span><span>John Deere</span><span>Tata Technologies</span><span>B.E. Mechanical Engineering</span>
+          </div>
+        </div>
+        <div class="consult-actions">
+          <a class="btn btn-primary magnetic" href="training.html">🎓 Take the free course</a>
+          <a class="btn btn-ghost magnetic" href="https://www.linkedin.com/in/avinash-bhosale-671bbb80" target="_blank" rel="noopener">in LinkedIn ↗</a>
+          <a class="btn btn-ghost magnetic" href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener">View Portfolio ↗</a>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contactForm" data-reveal>
+        <h4>Questions about the method, the course or the toolkit?</h4>
+        <div class="cf-row">
+          <input type="text" id="cfName" required placeholder="Your name" aria-label="Your name" />
+          <input type="email" id="cfEmail" required placeholder="Work email" aria-label="Work email" />
+        </div>
+        <textarea id="cfMsg" required rows="4" placeholder="Ask anything about value engineering, the Academy or the worksheets…"></textarea>
+        <div class="cf-actions">
+          <button class="btn btn-primary" type="submit" id="cfSubmit">Ask →</button>
+          <span class="cf-status" id="cfStatus"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

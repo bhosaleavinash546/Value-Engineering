@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<base href="../" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://gc.zgo.at; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.goatcounter.com; connect-src 'self' https://pnvidzchlnlfodfnawur.supabase.co https://formspree.io https://*.goatcounter.com; frame-src https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://buttondown.com https://formspree.io; upgrade-insecure-requests" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<title>Teardown &amp; Competitive Benchmarking Guide | VAVEhub</title>
+<meta name="description" content="Run a competitive teardown in five steps — document, disassemble, capture the BOM, should-cost, harvest ideas — with an exploded-view SUV." />
+<link rel="canonical" href="https://valueengineeringhub.com/benchmarking/" />
+<meta property="og:site_name" content="VAVEhub" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Teardown &amp; Competitive Benchmarking Guide" />
+<meta property="og:description" content="Run a competitive teardown in five steps — document, disassemble, capture the BOM, should-cost, harvest ideas — with an exploded-view SUV." />
+<meta property="og:url" content="https://valueengineeringhub.com/benchmarking/" />
+<meta property="og:image" content="https://valueengineeringhub.com/og/benchmarking.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Teardown &amp; Competitive Benchmarking Guide" />
+<meta name="twitter:description" content="Run a competitive teardown in five steps — document, disassemble, capture the BOM, should-cost, harvest ideas — with an exploded-view SUV." />
+<meta name="twitter:image" content="https://valueengineeringhub.com/og/benchmarking.jpg" />
+<meta name="author" content="Avinash Bhosale" />
+<meta name="theme-color" content="#05070f" />
+<link rel="manifest" href="manifest.webmanifest" />
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Teardown & Competitive Benchmarking Guide", "description": "Run a competitive teardown in five steps — document, disassemble, capture the BOM, should-cost, harvest ideas — with an exploded-view SUV.", "url": "https://valueengineeringhub.com/benchmarking/", "mainEntityOfPage": "https://valueengineeringhub.com/benchmarking/", "image": "https://valueengineeringhub.com/og/benchmarking.jpg", "inLanguage": "en-GB", "datePublished": "2026-07-04", "dateModified": "2026-09-25", "author": {"@type": "Person", "name": "Avinash Bhosale", "url": "https://www.linkedin.com/in/avinash-bhosale-671bbb80"}, "publisher": {"@type": "Organization", "name": "VAVEhub", "url": "https://valueengineeringhub.com/"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://valueengineeringhub.com/"}, {"@type": "ListItem", "position": 2, "name": "Playbook", "item": "https://valueengineeringhub.com/#playbook"}, {"@type": "ListItem", "position": 3, "name": "Teardown & Benchmarking", "item": "https://valueengineeringhub.com/benchmarking/"}]}]}
+</script>
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/ibm-plex-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<script>try{var _t=localStorage.getItem("vf-theme");if(_t)document.documentElement.dataset.theme=_t}catch(e){}</script>
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%232e6fe8'/><path d='M24 7c-7.2 0-12.2 5.4-12.2 11.7 0 4.5 2.3 7.2 4.3 9.4 1.3 1.4 2 2.5 2 4.1h11.8c0-1.6.7-2.7 2-4.1 2-2.2 4.3-4.9 4.3-9.4C36.2 12.4 31.2 7 24 7z' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/><polyline points='16.8,20.5 20.4,20.5 22.6,15.6 25.3,25 27.6,20.5 31.2,20.5' fill='none' stroke='white' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/><rect x='19' y='35.4' width='10' height='2.6' rx='1.3' fill='white'/><rect x='20' y='39.6' width='8' height='2.6' rx='1.3' fill='white'/></svg>" />
+</head>
+<body class="guide">
+
+<!-- ══════════ CHROME ══════════ -->
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+
+<nav class="nav" id="nav" aria-label="Primary">
+  <div class="nav-inner container">
+    <a class="brand" href="./"><svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5c-8 0-13.5 6-13.5 13 0 5 2.6 8 4.8 10.4 1.4 1.5 2.2 2.8 2.2 4.6h13c0-1.8.8-3.1 2.2-4.6 2.2-2.4 4.8-5.4 4.8-10.4C37.5 11 32 5 24 5z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><polyline points="16,20 20,20 22.5,14.5 25.5,25 28,20 32,20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="18.5" y="36.5" width="11" height="2.7" rx="1.3" fill="currentColor"/><rect x="19.5" y="41" width="9" height="2.7" rx="1.3" fill="currentColor"/></svg>VAVE<span>hub</span><em class="brand-tag">VE · Cost · Benchmark</em></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+    <div class="nav-links" id="navLinks">
+      <a href="./#about">Value Engineering</a>
+      <a href="job-plan/">Job Plan</a>
+      <a href="cost-levers/">Cost Levers</a>
+      <a href="ideation/">Ideation</a>
+      <a href="technology/">Technology</a>
+      <a href="benchmarking/" class="is-active" aria-current="page">Benchmarking</a>
+      <a href="industries/">Industries</a>
+      <a href="training.html" class="nav-train">🎓 Training</a>
+      <button class="theme-toggle" data-themetoggle aria-label="Toggle light/dark theme">🌙</button>
+      <a class="nav-signin" href="auth.html">Sign in</a>
+      <a class="nav-cta magnetic" href="auth.html?view=signup">Get started</a>
+    </div>
+  </div>
+</nav>
+
+
+<header class="guide-hero" id="top">
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span aria-hidden="true">›</span><a href="./#playbook">Playbook</a><span aria-hidden="true">›</span><span aria-current="page">Teardown &amp; Benchmarking</span></nav>
+    <p class="kicker">07 · The Mirror</p>
+    <h1>Teardown &amp; <span class="grad-text">Competitive Benchmarking</span></h1>
+    <p class="sec-lede">Benchmarking answers the question VE always asks: <em>what is this function worth?</em>
+        The best evidence is a competitor delivering it for less.</p>
+    <p class="guide-meta">By <a href="./#engage">Avinash Bhosale</a> · Updated <time datetime="2026-09-25">25 September 2026</time> · 2 min read</p>
+    <aside class="guide-tldr" aria-labelledby="tldr-benchmarking"><h2 id="tldr-benchmarking">In 30 seconds</h2><p>A teardown answers VE's hardest question — <i>what is this function worth?</i> — with physical evidence. Five steps: <b>document</b> everything before touching a screw, <b>disassemble</b> level by level with a stopwatch, <b>capture</b> every part in a BOM, <b>should-cost</b> each part at the competitor's assumptions, and <b>harvest</b> the findings into your idea funnel. Compare on six dimensions, not price alone.</p></aside>
+  </div>
+</header>
+
+<main>
+<section class="section" id="benchmark">
+  <div class="container">
+
+
+    <div class="concept-viz" data-xview data-reveal>
+      <div class="cv-head"><h3>Anatomy of a teardown — two-stage exploded view</h3>
+      <p>How a teardown bench sees a vehicle: first the ten major subassemblies separate, then each opens into
+      its countable, weighable, costable parts. Just scroll — the vehicle tears itself down as it crosses the centre of your screen, and reassembles as you move on.</p></div>
+    </div>
+
+    <div class="td-steps" data-stagger>
+      <div class="td-step" data-reveal><b>1</b><h4>Acquire &amp; Document</h4><p>Procure competitor units; photograph, weigh and measure everything before the first screw turns.</p></div>
+      <div class="td-step" data-reveal><b>2</b><h4>Systematic Disassembly</h4><p>Level-by-level teardown with time capture — assembly sequence in reverse is assembly cost in disguise.</p></div>
+      <div class="td-step" data-reveal><b>3</b><h4>Digital BOM Capture</h4><p>Every part logged: material, mass, process, supplier marks, tooling clues, fastener count.</p></div>
+      <div class="td-step" data-reveal><b>4</b><h4>Should-Cost Each Part</h4><p>Cleansheet the competitor BOM to estimate their cost position — and expose your gaps line by line.</p></div>
+      <div class="td-step" data-reveal><b>5</b><h4>Harvest &amp; Transfer Ideas</h4><p>Side-by-side function comparison feeds the Creative Phase: adopt, adapt, or leapfrog every smart solution found.</p></div>
+    </div>
+
+    <div class="bench-wrap">
+      <div class="bench-types" data-stagger>
+        <h3 data-reveal>Six benchmarking dimensions</h3>
+        <div class="bt" data-reveal><b>Cost benchmarking</b><span>Part-by-part should-cost vs. competitors and best-in-class plants.</span></div>
+        <div class="bt" data-reveal><b>Functional benchmarking</b><span>Performance per pound: torque/£, lumens/£, litres/£ — value ratios, not absolutes.</span></div>
+        <div class="bt" data-reveal><b>Design benchmarking</b><span>Architecture choices, part integration, material mix, fastening strategies.</span></div>
+        <div class="bt" data-reveal><b>Process benchmarking</b><span>How the best factories make it: automation level, cycle time, yield, layout.</span></div>
+        <div class="bt" data-reveal><b>Feature benchmarking</b><span>Feature sets vs. price ladders across the competitive landscape — who over-serves, who under-prices.</span></div>
+        <div class="bt" data-reveal><b>Patent &amp; IP benchmarking</b><span>Mine patent landscapes for expired art you can use and active art you must design around.</span></div>
+      </div>
+
+      <div class="waterfall" data-reveal>
+        <h3>From current cost to target cost</h3>
+        <p class="wf-sub">Typical VAVE cost walk on a benchmarked product</p>
+        <div class="wf-chart" id="wfChart">
+          <div class="wf-row"><span>Current cost</span><div class="wf-bar"><i class="wf-cur" style="--w:100%"></i></div><b>100</b></div>
+          <div class="wf-row"><span>Design levers</span><div class="wf-bar"><i class="wf-save" style="--w:26%; --x:66%"></i></div><b>−8</b></div>
+          <div class="wf-row"><span>Material levers</span><div class="wf-bar"><i class="wf-save" style="--w:13%; --x:57%"></i></div><b>−4</b></div>
+          <div class="wf-row"><span>Manufacturing levers</span><div class="wf-bar"><i class="wf-save" style="--w:13%; --x:44%"></i></div><b>−4</b></div>
+          <div class="wf-row"><span>Sourcing levers</span><div class="wf-bar"><i class="wf-save" style="--w:16%; --x:28%"></i></div><b>−5</b></div>
+          <div class="wf-row"><span>Logistics &amp; complexity</span><div class="wf-bar"><i class="wf-save" style="--w:7%; --x:21%"></i></div><b>−2</b></div>
+          <div class="wf-row"><span class="wf-target">Target cost</span><div class="wf-bar"><i class="wf-tgt" style="--w:77%"></i></div><b class="wf-tb">77</b></div>
+        </div>
+        <p class="wf-note">Illustrative 23-point walk — real programmes are built bottom-up from validated ideas, each with an owner and a date.</p>
+      </div>
+    </div>
+
+    <div class="bm-band" data-reveal>
+      <div class="bm-stat"><b>5–10×</b><span>typical first-year return on a teardown study</span></div>
+      <div class="bm-stat"><b>1,000+</b><span>vehicles in commercial teardown databases carmakers subscribe to</span></div>
+      <div class="bm-stat"><b>±15%</b><span>honest banding for competitor cost estimates — deltas stay robust</span></div>
+      <div class="bm-stat"><b>6</b><span>benchmarking dimensions — price alone tells you almost nothing</span></div>
+    </div>
+
+    <div class="bm-case" data-reveal>
+      <span class="bm-case-tag">Documented case</span>
+      <p><b>The teardown that reset an industry's expectations.</b> In 2024, engineering firm Caresoft tore down BYD's
+      ~$12,000 Seagull city car — and Western carmakers studied the results intensely: profitably built, with far fewer
+      parts than expected. Munro's public Model Y teardown did the same in 2020, revealing Tesla's rear mega-casting to
+      the whole industry. Every shipped product is an open textbook — the leaders read them.</p>
+      <a class="btn btn-primary" href="training.html?open=m10">Deep-dive teardown in Module 10 →</a>
+    </div>
+  </div>
+</section>
+
+
+<section class="section guide-end">
+  <div class="container">
+    <div class="ge-grid"><div class="ge-card"><h2>Try it</h2><a href="toolkit/teardown-bom.html">Teardown BOM Capture Sheet <span aria-hidden="true">→</span></a></div><div class="ge-card ge-learn"><h2>Learn it properly</h2><a href="training.html?open=m10">Module 10 · Teardown &amp; Benchmarking <span aria-hidden="true">→</span></a><p>Free, narrated and interactive — with a Certificate of Completion.</p></div></div>
+    <nav class="ge-pn" aria-label="More of the playbook"><a class="ge-prev" href="technology/"><small>← Previous</small>Modern Cost Technology</a><a class="ge-next" href="industries/"><small>Next →</small>Industry Playbooks</a></nav>
+  </div>
+</section>
+</main>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="./"><svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5c-8 0-13.5 6-13.5 13 0 5 2.6 8 4.8 10.4 1.4 1.5 2.2 2.8 2.2 4.6h13c0-1.8.8-3.1 2.2-4.6 2.2-2.4 4.8-5.4 4.8-10.4C37.5 11 32 5 24 5z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><polyline points="16,20 20,20 22.5,14.5 25.5,25 28,20 32,20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="18.5" y="36.5" width="11" height="2.7" rx="1.3" fill="currentColor"/><rect x="19.5" y="41" width="9" height="2.7" rx="1.3" fill="currentColor"/></svg>VAVE<span>hub</span></a>
+        <p>Value Engineering · Product Cost Optimisation · Competitive Benchmarking.<br />
+        Function-first thinking, from Lawrence Miles' 1947 insight to today's AI-driven cost stack.</p>
+        <div class="footer-contact">
+          <a href="mailto:bhosale.avinash546@gmail.com">✉ bhosale.avinash546@gmail.com</a>
+          <a href="https://www.linkedin.com/in/avinash-bhosale-671bbb80" target="_blank" rel="noopener">in LinkedIn — Avinash Bhosale ↗</a>
+          <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener">Portfolio — Avinash Bhosale ↗</a>
+        </div>
+      </div>
+      <div class="footer-col"><h2 class="footer-h">Method</h2><a href="./#about">What is VE</a><a href="job-plan/">Job Plan</a><a href="function-analysis/">Function Analysis</a><a href="ideation/">Ideation Techniques</a></div>
+      <div class="footer-col"><h2 class="footer-h">Arsenal</h2><a href="cost-levers/">36 Cost Levers</a><a href="technology/">Technology Stack</a><a href="benchmarking/#top">Benchmarking</a><a href="industries/">Industry Playbooks</a></div>
+      <div class="footer-col"><h2 class="footer-h">Reference</h2><a href="governance/">Savings Funnel &amp; KPIs</a><a href="toolkit/">Free Toolkit</a><a href="training.html">VE Academy & Certificate</a><a href="verify.html">Verify a Certificate</a><a href="glossary/">Glossary</a><a href="./#faq">FAQ</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a><a href="changelog.html">What’s new</a></div>
+    </div>
+    <div class="newsletter" id="newsletter">
+      <div class="nl-txt"><h2>One cost-engineering insight, monthly.</h2>
+      <p>Lever deep-dives, teardown notes and VAVE tactics — no spam, unsubscribe anytime.</p></div>
+      <form class="nl-form" id="nlForm">
+        <input type="email" id="nlEmail" required placeholder="you@company.com" aria-label="Email address" />
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+      </form>
+    </div>
+    <div class="footer-bar">
+      <p class="footer-credit">Designed &amp; Developed by <a class="grad-text" href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/" target="_blank" rel="noopener"><b class="grad-text">Avinash Bhosale</b></a></p>
+      <p class="footer-copy">© <span id="year"></span> Avinash Bhosale · VAVEhub — all site content, tools and training material.<br />
+      SAVE International®, TRIZ®, DFMA® and other marks are trademarks of their respective owners. VAVEhub is an
+      independent educational resource, not affiliated with or endorsed by any of them.<br />
+      Last updated <time datetime="2026-09-25">25 September 2026</time> · <a href="changelog.html">See what’s new</a></p>
+    </div>
+  </div>
+</footer>
+
+
+<script src="site-config.js"></script>
+<script src="vh-protect.js"></script>
+<script src="vh-cloud.js"></script>
+<script src="vh-account.js"></script>
+<script src="app.js"></script>
+<script src="vh-diagrams.js"></script>
+</body>
+</html>

@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /src/
+Disallow: /tools/
 Sitemap: https://valueengineeringhub.com/sitemap.xml

@@ -84,7 +84,7 @@
   }, { passive: true });
 
   /* ── Scroll-spy ── */
-  const spyLinks = $$(".nav-links a[data-spy]");
+  const spyLinks = $$(".nav-links a[data-spy]").filter((a) => (a.getAttribute("href") || "").startsWith("#"));
   const spyIO = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
@@ -376,10 +376,8 @@
   const dotnav = $("#dotnav");
   if (dotnav) {
     const SECTIONS = [
-      ["top", "Home"], ["about", "Value Engineering"], ["save", "VE Job Plan"],
-      ["fast", "Function Analysis"], ["levers", "Cost Levers"], ["ideation", "Ideation"],
-      ["tech", "Technology"], ["benchmark", "Benchmarking"], ["industries", "Industries"],
-      ["governance", "Savings Funnel"], ["toolkit", "Toolkit"], ["glossary", "Glossary"], ["faq", "FAQ"], ["diagnose", "Diagnosis"], ["engage", "Begin"],
+      ["top", "Home"], ["about", "Value Engineering"], ["playbook", "The Playbook"],
+      ["faq", "FAQ"], ["diagnose", "Diagnosis"], ["engage", "Begin"],
     ].filter(([id]) => document.getElementById(id));
     dotnav.innerHTML = SECTIONS.map(([id, label]) =>
       `<a href="#${id}" data-label="${label}" aria-label="${label}"></a>`).join("");
@@ -630,46 +628,46 @@
     const add = (t, d, href, label) => { if (!recs.some((r) => r[0] === t)) recs.push([t, d, href, label]); };
 
     // Lifecycle anchor play
-    if (a.stage === "dev") add("Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "#save", "VE Job Plan");
-    else if (a.stage === "early") add("Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "#save", "VE Job Plan");
-    else add("Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "#save", "VE Job Plan");
+    if (a.stage === "dev") add("Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "job-plan/", "VE Job Plan");
+    else if (a.stage === "early") add("Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "job-plan/", "VE Job Plan");
+    else add("Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "job-plan/", "VE Job Plan");
 
     // Urgent P&L symptoms
-    if (a.margin === "loss") add("Triage the loss-makers first", "Pareto margin by SKU and fix, re-price or kill negative-margin products — the fastest P&L relief available.", "#levers", "Complexity Levers");
-    if (a.warranty === "pain" || a.warranty === "crisis" || a.symptom === "warranty") add("Function-analyse your failure Paretos", "Map warranty claims to functions, not parts — then redesign the under-performing functions and de-spec the over-performing ones.", "#fast", "Function Analysis");
-    if (a.symptom === "price" || a.price === "expensive" || a.price === "unknown") { if (a.teardown !== "recent") add("Tear down the competitor that's beating you", "Digitise their BOM, should-cost every part, and find exactly where their cost advantage lives.", "#benchmark", "Benchmarking"); }
+    if (a.margin === "loss") add("Triage the loss-makers first", "Pareto margin by SKU and fix, re-price or kill negative-margin products — the fastest P&L relief available.", "cost-levers/", "Complexity Levers");
+    if (a.warranty === "pain" || a.warranty === "crisis" || a.symptom === "warranty") add("Function-analyse your failure Paretos", "Map warranty claims to functions, not parts — then redesign the under-performing functions and de-spec the over-performing ones.", "function-analysis/", "Function Analysis");
+    if (a.symptom === "price" || a.price === "expensive" || a.price === "unknown") { if (a.teardown !== "recent") add("Tear down the competitor that's beating you", "Digitise their BOM, should-cost every part, and find exactly where their cost advantage lives.", "benchmarking/", "Benchmarking"); }
 
     // Over-engineering
     if (a.overspec && a.overspec !== "none") {
       const focus = { safety: "CAE-validated safety-factor right-sizing", features: "data-backed feature rationalisation", tolerance: "tolerance and surface-spec optimisation", material: "material-grade optimisation" }[a.overspec];
-      add("De-spec with data, not opinion", `Your flag: ${focus}. Over-engineering is invisible cost — function analysis makes it visible, validation makes it safe to remove.`, "#levers", "Design Levers");
+      add("De-spec with data, not opinion", `Your flag: ${focus}. Over-engineering is invisible cost — function analysis makes it visible, validation makes it safe to remove.`, "cost-levers/", "Design Levers");
     }
 
     // Complexity
-    if (a.complexity === "tail" || a.complexity === "custom" || a.symptom === "complexity") add("Attack the variant long tail", a.complexity === "custom" ? "Move from engineer-to-order to configure-to-order: modular architecture, standard interfaces, controlled options." : "Pareto margin by SKU, kill or merge the tail, and platform what remains — complexity levers pay across the whole chain.", "#levers", "Complexity Levers");
+    if (a.complexity === "tail" || a.complexity === "custom" || a.symptom === "complexity") add("Attack the variant long tail", a.complexity === "custom" ? "Move from engineer-to-order to configure-to-order: modular architecture, standard interfaces, controlled options." : "Pareto margin by SKU, kill or merge the tail, and platform what remains — complexity levers pay across the whole chain.", "cost-levers/", "Complexity Levers");
 
     // Commodity exposure
-    if (a.material === "exposed" || a.material === "unknown") add("Split raw material from conversion cost", "Index the material share, negotiate the conversion, hedge the volatile — and claw back windfalls when indices fall.", "#levers", "Sourcing Levers");
+    if (a.material === "exposed" || a.material === "unknown") add("Split raw material from conversion cost", "Index the material share, negotiate the conversion, hedge the volatile — and claw back windfalls when indices fall.", "cost-levers/", "Sourcing Levers");
 
     // Volume drift
-    if (a.volume === "up") add("Re-pick processes for today's volume", "Processes chosen at launch volumes are off-optimum after 2× growth: casting vs. machining, automation level, tooling class all deserve a re-run.", "#levers", "Manufacturing Levers");
-    else if (a.volume === "down") add("Right-size tooling and make-vs-buy", "Falling volumes flip the economics: family tooling, outsourcing commodity steps and asset consolidation stop the overhead bleed.", "#levers", "Manufacturing Levers");
+    if (a.volume === "up") add("Re-pick processes for today's volume", "Processes chosen at launch volumes are off-optimum after 2× growth: casting vs. machining, automation level, tooling class all deserve a re-run.", "cost-levers/", "Manufacturing Levers");
+    else if (a.volume === "down") add("Right-size tooling and make-vs-buy", "Falling volumes flip the economics: family tooling, outsourcing commodity steps and asset consolidation stop the overhead bleed.", "cost-levers/", "Manufacturing Levers");
 
     // Cost concentration
-    if (a.where === "bom") add("Get fact-based with suppliers", "Should-cost your top-spend parts and negotiate the gap with cleansheets and linear performance pricing — typically 5–15% on quoted prices.", "#levers", "Sourcing Levers");
-    else if (a.where === "labour") add("DFMA the assembly", "Part-count reduction and design-for-assembly typically cut 10–30% of assembly time — before any automation spend.", "#levers", "Design Levers");
-    else if (a.where === "mfg") add("Attack conversion cost", "Process substitution, cycle-time, OEE and yield levers bite hardest when cost sits in your own plants.", "#levers", "Manufacturing Levers");
-    else if (a.where === "logistics") add("Value-engineer the packaging & freight", "Pack spec, returnables and cube utilisation are the fastest-payback levers in the book.", "#levers", "Packaging Levers");
-    else if (a.where === "unknown") add("Build cost transparency first", "You can't optimise what you can't see: build a costed BOM and cleansheet your top 20 parts — everything else follows from that baseline.", "#tech", "Cost Technology");
+    if (a.where === "bom") add("Get fact-based with suppliers", "Should-cost your top-spend parts and negotiate the gap with cleansheets and linear performance pricing — typically 5–15% on quoted prices.", "cost-levers/", "Sourcing Levers");
+    else if (a.where === "labour") add("DFMA the assembly", "Part-count reduction and design-for-assembly typically cut 10–30% of assembly time — before any automation spend.", "cost-levers/", "Design Levers");
+    else if (a.where === "mfg") add("Attack conversion cost", "Process substitution, cycle-time, OEE and yield levers bite hardest when cost sits in your own plants.", "cost-levers/", "Manufacturing Levers");
+    else if (a.where === "logistics") add("Value-engineer the packaging & freight", "Pack spec, returnables and cube utilisation are the fastest-payback levers in the book.", "cost-levers/", "Packaging Levers");
+    else if (a.where === "unknown") add("Build cost transparency first", "You can't optimise what you can't see: build a costed BOM and cleansheet your top 20 parts — everything else follows from that baseline.", "technology/", "Cost Technology");
 
     // Capability
-    if (a.shouldcost === "quotes") add("Stop negotiating blind", "Relying on quotes alone leaves 5–15% on the table. Start should-cost modelling your A-parts — software or cleansheets.", "#tech", "Should-Cost Stack");
-    if (a.teardown === "never") add("Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "#benchmark", "Benchmarking");
+    if (a.shouldcost === "quotes") add("Stop negotiating blind", "Relying on quotes alone leaves 5–15% on the table. Start should-cost modelling your A-parts — software or cleansheets.", "technology/", "Should-Cost Stack");
+    if (a.teardown === "never") add("Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "benchmarking/", "Benchmarking");
 
     // Programme
     if (a.maturity === "never") add("Start with one product, one structured VE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "training.html", "VE Academy");
-    else if (a.maturity === "oneoff") add("Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "#governance", "Governance & KPIs");
-    else add("Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "#tech", "Technology Stack");
+    else if (a.maturity === "oneoff") add("Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "governance/", "Governance & KPIs");
+    else add("Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "technology/", "Technology Stack");
 
     return recs.slice(0, 5);
   }
@@ -739,7 +737,7 @@
         `<div class="wr-rec"><i>${i + 1}</i><span><b>${t}</b><small>${d} → <a href="${href}">${label}</a></small></span></div>`).join("")}</div>
       <div class="wr-actions">
         <a class="btn btn-primary" href="training.html">🎓 Learn how to fix this — free course</a>
-        <a class="btn btn-ghost" href="#toolkit">Get the free toolkit</a>
+        <a class="btn btn-ghost" href="toolkit/">Get the free toolkit</a>
         <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=${encodeURIComponent("Question about my Value Diagnosis")}&body=${mailBody}">Ask a question</a>
       </div></div>`;
   }

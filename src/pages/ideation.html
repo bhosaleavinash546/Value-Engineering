@@ -1,0 +1,44 @@
+<section class="section" id="ideation">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>05 · The Spark</p>
+      <h2 data-reveal data-delay="100">Idea-Generation <span class="grad-text">Techniques</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        The Creative Phase runs on structured divergence. Twelve battle-tested techniques —
+        from Osborn's brainstorming to TRIZ contradictions to LLM copilots.
+      </p>
+    </div>
+
+    <div class="idea-grid" data-stagger>
+      <article class="idea tilt" data-reveal><i>🌀</i><h3>Classic Brainstorming</h3><p>Osborn's four rules: defer judgement, welcome wild ideas, go for quantity, build on others. Facilitated, time-boxed, function-focused rounds.</p></article>
+      <article class="idea tilt" data-reveal><i>✍️</i><h3>Brainwriting 6-3-5</h3><p>6 people write 3 ideas in 5 minutes, pass the sheet, build on what they receive — 108 ideas in 30 silent minutes; introverts contribute equally.</p></article>
+      <article class="idea tilt" data-reveal><i>🔀</i><h3>SCAMPER</h3><p>Substitute · Combine · Adapt · Modify/Magnify · Put to other use · Eliminate · Reverse/Rearrange — a checklist that mutates any part or process.</p></article>
+      <article class="idea tilt" data-reveal><i>⚡</i><h3>TRIZ</h3><p>Altshuller's theory of inventive problem solving: model the contradiction ("stiffer but lighter"), apply the contradiction matrix and 40 inventive principles, aim for ideality.</p></article>
+      <article class="idea tilt" data-reveal><i>🧭</i><h3>FAST-Driven Ideation</h3><p>Ideate on the function verb–noun, not the part: "how else can we <em>transmit torque</em>?" detaches the team from the incumbent design.</p></article>
+      <article class="idea tilt" data-reveal><i>🧮</i><h3>Morphological Analysis</h3><p>Zwicky box: decompose into sub-functions, list every solution option per sub-function, then combine columns into thousands of concept permutations.</p></article>
+      <article class="idea tilt" data-reveal><i>🔗</i><h3>Synectics &amp; Analogy</h3><p>Make the strange familiar: direct, personal and fantasy analogies plus biomimicry — how does nature, or another industry, deliver this function?</p></article>
+      <article class="idea tilt" data-reveal><i>🗳️</i><h3>Nominal Group Technique</h3><p>Silent individual generation, round-robin sharing, clarification, anonymous ranked voting — kills anchoring and HiPPO bias in one pass.</p></article>
+      <article class="idea tilt" data-reveal><i>📡</i><h3>Delphi Method</h3><p>Iterative anonymous expert rounds with controlled feedback until convergence — ideal for distributed experts and sensitive cost questions.</p></article>
+      <article class="idea tilt" data-reveal><i>✅</i><h3>Miles' Value Questions</h3><p>The original VA checklist: Can it be eliminated? Simplified? Combined? Standardised? Made another way? From another material? By someone else for less?</p></article>
+      <article class="idea tilt" data-reveal><i>🔭</i><h3>Benchmark Transfer</h3><p>Harvest ideas straight from teardowns: competitor solutions, best-in-class cross-industry mechanisms, patent-landscape mining for expired IP you can use freely.</p></article>
+      <article class="idea tilt" data-reveal><i>🤖</i><h3>AI-Assisted Ideation</h3><p>LLM copilots primed with the FAST model, BOM and constraints generate and cluster hundreds of candidate ideas — humans judge, machines diverge.</p></article>
+    </div>
+
+    <!-- VALUE CALCULATOR -->
+    <div class="calc" data-reveal>
+      <div class="calc-head"><h3>Try it live · <span class="grad-text">Value Index Simulator</span></h3>
+      <p>Value Engineering in one interaction: push function up, push cost down, watch value respond.</p></div>
+      <div class="calc-body">
+        <div class="calc-sliders">
+          <label>Function delivered <b id="fVal">70</b><input type="range" id="fSlider" min="10" max="100" value="70" /></label>
+          <label>Cost incurred <b id="cVal">70</b><input type="range" id="cSlider" min="10" max="100" value="70" /></label>
+        </div>
+        <div class="calc-out">
+          <div class="calc-ring"><svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"/></svg>
+          <div class="calc-num"><b id="viNum">1.00</b><span>Value Index</span></div></div>
+          <p class="calc-verdict" id="viVerdict">Balanced — now engineer the ratio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

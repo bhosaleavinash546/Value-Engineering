@@ -68,7 +68,7 @@ window.VHAccount = (function () {
       '<div class="acct-menu" hidden>' +
         '<div class="acct-who">Signed in as<br><b>' + esc(user.name) + '</b>' + (user.email ? '<span>' + esc(user.email) + '</span>' : '') + '</div>' +
         '<a href="training.html">🎓 My learning</a>' +
-        '<a href="index.html#toolkit">🧰 Toolkit</a>' +
+        '<a href="toolkit/">🧰 Toolkit</a>' +
         '<button type="button" data-signout>Sign out</button>' +
       '</div>';
     const btn = $(".acct-btn", wrap), menu = $(".acct-menu", wrap);

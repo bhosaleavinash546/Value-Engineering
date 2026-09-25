@@ -1,0 +1,87 @@
+<section class="section" id="fast">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>03 · The Heart</p>
+      <h2 data-reveal data-delay="100">Function Analysis, <span class="grad-text">done properly</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        What separates Value Engineering from a discount hunt: express the product as <strong>verb–noun functions</strong>,
+        map their logic in a <strong>FAST diagram</strong>, load every pound of cost onto the functions it serves —
+        then attack the mismatches with arithmetic, not anecdotes. Worked live on an everyday product: the electric kettle.
+      </p>
+    </div>
+
+    <div class="fast-board" data-reveal>
+      <div class="fast-board-head">
+        <h3>FAST diagram — electric kettle <span>Function Analysis System Technique</span></h3>
+        <p>Read <b>→</b> to ask <em>HOW?</em> · Read <b>←</b> to ask <em>WHY?</em> · Everything between the dashed scope lines is the study.</p>
+      </div>
+      <div class="fast-svg-wrap">
+        <svg class="fast-svg" id="fastSvg" viewBox="0 0 980 340" role="img" aria-label="FAST diagram of an electric kettle">
+          <!-- direction labels -->
+          <text class="fdir" x="205" y="30">HOW ▸</text>
+          <text class="fdir fdir-r" x="775" y="30" text-anchor="end">◂ WHY</text>
+          <!-- scope lines -->
+          <line class="fscope" x1="185" y1="45" x2="185" y2="325" />
+          <line class="fscope" x1="780" y1="45" x2="780" y2="325" />
+          <text class="fscope-t" x="185" y="338" text-anchor="middle">scope line</text>
+          <text class="fscope-t" x="780" y="338" text-anchor="middle">scope line</text>
+          <!-- connectors -->
+          <path class="fline" d="M160 180 H200" />
+          <path class="fline" d="M350 180 H390" />
+          <path class="fline" d="M540 180 H580" />
+          <path class="fline" d="M730 180 H800" />
+          <path class="fline" d="M275 205 V270 H390" />
+          <path class="fline" d="M540 270 H580" />
+          <path class="fline fline-dot" d="M555 92 V155" />
+          <path class="fline fline-dot" d="M735 92 V155" />
+          <!-- nodes -->
+          <g class="fn fn-hi"><rect x="10" y="155" rx="10" width="150" height="50"/><text x="85" y="176" text-anchor="middle">Brew Beverage</text><text class="fn-t" x="85" y="192" text-anchor="middle">higher-order</text></g>
+          <g class="fn fn-basic"><rect x="200" y="155" rx="10" width="150" height="50"/><text x="275" y="176" text-anchor="middle">Heat Water</text><text class="fn-t" x="275" y="192" text-anchor="middle">BASIC function</text></g>
+          <g class="fn"><rect x="390" y="155" rx="10" width="150" height="50"/><text x="465" y="176" text-anchor="middle">Generate Heat</text><text class="fn-t" x="465" y="192" text-anchor="middle">secondary</text></g>
+          <g class="fn"><rect x="580" y="155" rx="10" width="150" height="50"/><text x="655" y="176" text-anchor="middle">Convert Energy</text><text class="fn-t" x="655" y="192" text-anchor="middle">secondary</text></g>
+          <g class="fn fn-out"><rect x="800" y="155" rx="10" width="150" height="50"/><text x="875" y="176" text-anchor="middle">Supply Power</text><text class="fn-t" x="875" y="192" text-anchor="middle">assumed · out of scope</text></g>
+          <g class="fn"><rect x="390" y="245" rx="10" width="150" height="50"/><text x="465" y="266" text-anchor="middle">Contain Water</text><text class="fn-t" x="465" y="282" text-anchor="middle">supporting</text></g>
+          <g class="fn"><rect x="580" y="245" rx="10" width="150" height="50"/><text x="655" y="266" text-anchor="middle">Control Temp.</text><text class="fn-t" x="655" y="282" text-anchor="middle">supporting</text></g>
+          <g class="fn fn-all"><rect x="480" y="42" rx="10" width="150" height="50"/><text x="555" y="63" text-anchor="middle">Ensure Safety</text><text class="fn-t" x="555" y="79" text-anchor="middle">all-time function</text></g>
+          <g class="fn fn-all"><rect x="660" y="42" rx="10" width="150" height="50"/><text x="735" y="63" text-anchor="middle">Convey Esteem</text><text class="fn-t" x="735" y="79" text-anchor="middle">all-time function</text></g>
+        </svg>
+      </div>
+      <div class="fast-legend">
+        <span><i class="lg lg-hi"></i>Higher-order objective</span>
+        <span><i class="lg lg-basic"></i>Basic function — why the product exists</span>
+        <span><i class="lg lg-sec"></i>Secondary / supporting — how this design does it</span>
+        <span><i class="lg lg-all"></i>All-time functions — active across the whole path</span>
+      </div>
+    </div>
+
+    <div class="matrix-wrap" data-reveal>
+      <div class="matrix-head">
+        <h3>Function–cost matrix &amp; <span class="grad-text">value index</span></h3>
+        <p>Allocate the kettle's <strong>£12.40 works cost</strong> to its functions, estimate each function's
+        <strong>worth</strong> — the lowest cost that could still achieve it — and the mismatches surface themselves.
+        <em>VI = Cost ÷ Worth; anything above 2.0 is a creative-phase target.</em></p>
+      </div>
+      <div class="matrix-scroll">
+        <table class="matrix">
+          <thead><tr><th>Function <small>(verb–noun)</small></th><th>Type</th><th>Cost £</th><th>Worth £</th><th>Value Index</th><th></th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr class="vi-ok"><td>Heat water</td><td>Basic</td><td>3.20</td><td>2.80</td><td>1.14</td><td><div class="vi-bar"><i data-bar style="--w:29%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-watch"><td>Contain water</td><td>Basic</td><td>2.60</td><td>1.90</td><td>1.37</td><td><div class="vi-bar"><i data-bar style="--w:34%"></i></div></td><td>Watch</td></tr>
+            <tr class="vi-watch"><td>Control temperature</td><td>Secondary</td><td>1.80</td><td>1.20</td><td>1.50</td><td><div class="vi-bar"><i data-bar style="--w:38%"></i></div></td><td>Watch</td></tr>
+            <tr class="vi-ok"><td>Prevent scald</td><td>Required</td><td>0.90</td><td>0.80</td><td>1.13</td><td><div class="vi-bar"><i data-bar style="--w:28%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-ok"><td>Enable pouring</td><td>Secondary</td><td>0.70</td><td>0.60</td><td>1.17</td><td><div class="vi-bar"><i data-bar style="--w:29%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-ok"><td>Resist corrosion</td><td>Secondary</td><td>0.50</td><td>0.45</td><td>1.11</td><td><div class="vi-bar"><i data-bar style="--w:28%"></i></div></td><td>Healthy</td></tr>
+            <tr class="vi-attack"><td>Indicate status</td><td>Secondary</td><td>0.60</td><td>0.15</td><td>4.00</td><td><div class="vi-bar"><i data-bar style="--w:100%"></i></div></td><td>Attack</td></tr>
+            <tr class="vi-attack"><td>Convey esteem</td><td>Esteem</td><td>2.10</td><td>0.70</td><td>3.00</td><td><div class="vi-bar"><i data-bar style="--w:75%"></i></div></td><td>Challenge</td></tr>
+          </tbody>
+          <tfoot><tr><td>Total product</td><td></td><td>12.40</td><td>8.60</td><td>1.44</td><td></td><td>−£3.80 gap</td></tr></tfoot>
+        </table>
+      </div>
+      <p class="matrix-note">
+        "Indicate status" costs <strong>4× its worth</strong> — a £0.45-per-unit opportunity hiding in one line.
+        "Convey esteem" deserves a challenge backed by consumer data, not opinion. Multiply by annual volume and
+        this little table is the business case for the whole study — <em>this is how VE picks its battles.</em>
+      </p>
+    </div>
+  </div>
+</section>

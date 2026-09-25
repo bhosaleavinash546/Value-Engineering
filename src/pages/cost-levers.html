@@ -1,0 +1,104 @@
+<section class="section section-alt" id="levers">
+  <div class="container">
+    <div class="sec-head">
+      <p class="kicker" data-reveal>04 · The Arsenal</p>
+      <h2 data-reveal data-delay="100">36 Cost-Reduction <span class="grad-text">Idea-Generation Levers</span></h2>
+      <p class="sec-lede" data-reveal data-delay="200">
+        Every sustainable product-cost programme pulls from six lever families. Filter the arsenal —
+        each lever states where it bites and the savings range it typically unlocks.
+      </p>
+    </div>
+
+    <div class="filter-bar" data-reveal id="leverFilters">
+      <button class="chip is-active" data-filter="all">All 36</button>
+      <button class="chip" data-filter="design">Product Design</button>
+      <button class="chip" data-filter="material">Materials</button>
+      <button class="chip" data-filter="mfg">Manufacturing</button>
+      <button class="chip" data-filter="sourcing">Sourcing</button>
+      <button class="chip" data-filter="logistics">Packaging &amp; Logistics</button>
+      <button class="chip" data-filter="complexity">Complexity &amp; Lifecycle</button>
+    </div>
+
+    <div class="lever-grid" id="leverGrid" data-stagger>
+      <!-- DESIGN -->
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Part-Count Reduction &amp; Integration</h3><p>Combine parts via snap-fits, multi-functional geometry, insert moulding or mega/giga-casting. Fewer parts = fewer joints, fixtures, fasteners, failure modes and invoices.</p><b class="impact">5–15% assembly cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>DFM / DFA (DFMA)</h3><p>Boothroyd–Dewhurst style design-for-manufacture-and-assembly: minimum-part criteria, self-locating features, one-axis assembly, poka-yoke geometry.</p><b class="impact">10–30% assembly time</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Material Substitution</h3><p>Metal→engineering polymer, brass→coated steel, virgin→glass-filled recyclate. Validate with CAE and accelerated life testing before switching.</p><b class="impact">10–40% part cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Lightweighting &amp; Topology Optimisation</h3><p>Remove material where stress doesn't live: topology-optimised castings, variable wall thickness, tailor-welded blanks, sandwich structures.</p><b class="impact">10–25% material mass</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Tolerance &amp; Surface-Spec Optimisation</h3><p>Every unnecessary decimal costs money. Open non-functional tolerances, downgrade cosmetic specs on hidden surfaces, kill redundant GD&amp;T callouts.</p><b class="impact">5–20% machining cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Standardisation &amp; Carry-Over</h3><p>Preferred-parts catalogues for fasteners, bearings, motors, connectors; reuse proven modules across programmes instead of reinventing them.</p><b class="impact">Scale + quality gains</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Modular Architecture &amp; Platforms</h3><p>Common cores with differentiating tops: shared platforms, standard interfaces, late-point differentiation. Volume concentrates, cost dilutes.</p><b class="impact">15–30% dev + unit cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Feature Rationalisation / De-speccing</h3><p>Use conjoint analysis and warranty/usage data to find features customers don't value — then remove or make them optional. Data-backed de-contenting.</p><b class="impact">3–10% unit cost</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Design-to-Cost Targets</h3><p>Cascade a market-back target cost to every subsystem and track it at each design gate — cost as a spec, with the same authority as mass or performance.</p><b class="impact">Prevents 10–20% creep</b></article>
+      <article class="lever tilt" data-cat="design" data-reveal><span class="tag t-design">Design</span><h3>Safety-Factor Right-Sizing</h3><p>Replace stacked legacy margins with CAE-validated, standards-compliant factors. Over-design is invisible cost; simulation makes it visible.</p><b class="impact">5–15% material</b></article>
+      <!-- MATERIALS -->
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h3>Material-Grade Optimisation</h3><p>Match grade to true duty cycle: 304→409 stainless where corrosion allows, PA66→PA6 or PP-GF where temperature allows, forged→ductile iron.</p><b class="impact">10–30% material cost</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h3>Recycled &amp; Bio-Based Materials</h3><p>Post-consumer resin, remelt alloys and bio-fillers — often cheaper and lower-carbon. Twin win: cost-out plus ESG scorecard.</p><b class="impact">5–20% + CO₂ story</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h3>Near-Net-Shape Blanks</h3><p>Precision forging, casting, MIM, powder metal or AM preforms that slash the buy-to-fly ratio and machining time.</p><b class="impact">20–50% machining</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h3>Nesting &amp; Yield Optimisation</h3><p>Algorithmic nesting, coil-width rationalisation, shared blanks across parts, cut-plan software for sheet, bar and fabric.</p><b class="impact">3–8% raw material</b></article>
+      <article class="lever tilt" data-cat="material" data-reveal><span class="tag t-material">Materials</span><h3>Scrap Monetisation &amp; Reversion</h3><p>Segregate alloys, close the loop with mills, sell sorted regrind at premium; in aerospace, revert titanium chips into the melt stream.</p><b class="impact">1–3% of spend back</b></article>
+      <!-- MANUFACTURING -->
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Process Substitution</h3><p>Machining→casting, stamping→fine blanking, welding→hemming/adhesives, painting→in-mould colour. Re-pick the process for today's volume, not launch volume.</p><b class="impact">15–40% conversion cost</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Automation &amp; Robotics</h3><p>Cobots for assembly and tending, vision-based inspection, automated packing — justified by cycle-time economics, not fashion.</p><b class="impact">20–60% direct labour</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Cycle-Time &amp; OEE Improvement</h3><p>Conformal-cooled tooling, SMED changeovers, bottleneck engineering, predictive maintenance. Same asset, more parts, lower overhead per unit.</p><b class="impact">10–25% machine cost/part</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Yield &amp; First-Pass Quality</h3><p>Attack scrap and rework Paretos with DOE, SPC and error-proofing. A point of yield in a costly process is pure margin.</p><b class="impact">2–8% COGS</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Low-Cost Intelligent Tooling</h3><p>Right-size tool life to programme volume, family moulds, modular die sets, 3D-printed jigs &amp; fixtures, best-cost-country tool rooms.</p><b class="impact">30–50% tooling capex</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Make-vs-Buy Rebalancing</h3><p>Re-run the make/buy math with current wages, utilisation and freight. Insource high-margin machining; outsource commodity processes.</p><b class="impact">10–20% on moved scope</b></article>
+      <article class="lever tilt" data-cat="mfg" data-reveal><span class="tag t-mfg">Manufacturing</span><h3>Footprint &amp; Best-Cost Manufacturing</h3><p>Locate labour-intensive steps in best-cost regions, automate in high-cost ones, and nearshore where logistics and risk dominate.</p><b class="impact">10–30% landed cost</b></article>
+      <!-- SOURCING -->
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Should-Cost / Cleansheet Negotiation</h3><p>Model what a part <em>should</em> cost from material, cycle time, machine rates and margin — then negotiate the gap with facts, not percentages.</p><b class="impact">5–15% on quoted price</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Linear Performance Pricing (LPP)</h3><p>Regress price against cost drivers (mass, power, size) across your part family; every point above the line is a negotiation target.</p><b class="impact">3–8% category spend</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Competitive RFQ &amp; E-Auctions</h3><p>Refresh the competitive set with qualified challengers; run structured e-auctions for spec-stable commodities.</p><b class="impact">5–20% on tendered scope</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Supplier Consolidation &amp; Bundling</h3><p>Bundle families and programmes to fewer, better suppliers in exchange for step-change pricing and joint productivity commitments.</p><b class="impact">5–12% bundled spend</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Best-Cost-Country Sourcing</h3><p>Total-landed-cost sourcing across India, SEA, Eastern Europe, Mexico — with duty, freight, quality and resilience priced in, not ignored.</p><b class="impact">15–40% vs. high-cost base</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Supplier VAVE / Co-Innovation Workshops</h3><p>Suppliers know their process cost drivers better than you do. Gain-share programmes routinely surface ideas internal teams can't see.</p><b class="impact">3–7% of supplier spend</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Raw-Material Indexation &amp; Hedging</h3><p>Split price into raw-material and conversion; index the first, negotiate the second, hedge the volatile — and claw back windfalls when indices fall.</p><b class="impact">Kills 2–5% volatility leak</b></article>
+      <article class="lever tilt" data-cat="sourcing" data-reveal><span class="tag t-sourcing">Sourcing</span><h3>Terms, Incoterms &amp; Duty Engineering</h3><p>Payment terms, consignment stock, FTA utilisation, tariff-code engineering and duty drawback — cash and cost hiding in the paperwork.</p><b class="impact">1–4% landed cost</b></article>
+      <!-- LOGISTICS -->
+      <article class="lever tilt" data-cat="logistics" data-reveal><span class="tag t-logistics">Pack &amp; Log</span><h3>Packaging Spec Optimisation</h3><p>Right-size board grade, remove redundant layers, switch to bulk packs, redesign dunnage. Packaging is a product too — value-engineer it.</p><b class="impact">10–30% packaging cost</b></article>
+      <article class="lever tilt" data-cat="logistics" data-reveal><span class="tag t-logistics">Pack &amp; Log</span><h3>Returnable / Reusable Packaging</h3><p>Durable totes and racks on closed loops replace one-way corrugate — lower cost per trip, less waste, better line-side ergonomics.</p><b class="impact">30–60% per-trip cost</b></article>
+      <article class="lever tilt" data-cat="logistics" data-reveal><span class="tag t-logistics">Pack &amp; Log</span><h3>Cube Utilisation &amp; Mode Shift</h3><p>Design products and packs to fill containers (knock-down, nesting), shift air→sea→rail, run milk-routes and consolidation hubs.</p><b class="impact">10–25% freight</b></article>
+      <!-- COMPLEXITY -->
+      <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h3>SKU &amp; Variant Rationalisation</h3><p>Pareto revenue and margin by variant; kill or merge the long tail. Every dead SKU releases inventory, changeovers, quality and admin cost.</p><b class="impact">2–5% total COGS</b></article>
+      <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h3>Commonality &amp; Reuse Index</h3><p>Measure and manage % common parts across the portfolio as a KPI; reward reuse in design gates just like performance targets.</p><b class="impact">Compounding scale gains</b></article>
+      <article class="lever tilt" data-cat="complexity" data-reveal><span class="tag t-complexity">Complexity</span><h3>Warranty &amp; Lifecycle Cost Design</h3><p>Design out top warranty Paretos, design in serviceability and upgradeability — optimise total cost of ownership, not just unit BOM.</p><b class="impact">20–40% warranty spend</b></article>
+    </div>
+
+    <div class="selector" data-reveal>
+      <div class="sel-head">
+        <h3>Not sure where to start? <span class="grad-text">Lever Selector</span></h3>
+        <p>Pick your industry and your biggest pains — get your top five levers, ranked.</p>
+      </div>
+      <div class="sel-body">
+        <div class="sel-controls">
+          <label class="sel-label" for="selIndustry">Your industry</label>
+          <select id="selIndustry" class="sel-select">
+            <option value="auto">Automotive &amp; EV</option>
+            <option value="consumer">Consumer Products / FMCG</option>
+            <option value="heavy">Heavy Machinery</option>
+            <option value="appliance">Home Appliances</option>
+            <option value="aero">Aerospace &amp; Defence</option>
+            <option value="electronics">Electronics &amp; High-Tech</option>
+            <option value="medical">Medical Devices</option>
+            <option value="industrial">Industrial &amp; Energy</option>
+          </select>
+          <label class="sel-label">Your biggest pains <small>(pick up to 3)</small></label>
+          <div class="sel-pains" id="selPains">
+            <button class="pain" data-pain="bom">Purchased material cost too high</button>
+            <button class="pain" data-pain="supplier">Supplier prices keep creeping</button>
+            <button class="pain" data-pain="labour">Assembly labour is heavy</button>
+            <button class="pain" data-pain="variants">Too many variants / SKUs</button>
+            <button class="pain" data-pain="overspec">Product feels over-engineered</button>
+            <button class="pain" data-pain="warranty">Quality &amp; warranty costs hurt</button>
+            <button class="pain" data-pain="logistics">Freight &amp; packaging expensive</button>
+            <button class="pain" data-pain="lowvol">Low volume, high mix</button>
+          </div>
+        </div>
+        <div class="sel-out">
+          <p class="sel-hint" id="selHint">Select at least one pain to see your ranked levers.</p>
+          <ol class="sel-results" id="selResults"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
