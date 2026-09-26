@@ -534,7 +534,7 @@
     ],
     m6: [
       ["The Pugh matrix compares candidate concepts against…", ["A theoretical ideal", "The current design (the datum)", "The cheapest competitor", "The cost target"], 1, "Each concept scores +/−/same per criterion versus the datum design."],
-      ["Parked ideas should be…", ["Deleted to keep things tidy", "Kept — they seed future waves", "Emailed to everyone", "Patented immediately"], 1, "Today's 'not yet' is next year's scenario — park, don't purge."],
+      ["Parked ideas should be…", ["Deleted to keep things tidy", "Kept, because they're the starting point for future rounds", "Emailed to everyone", "Patented immediately"], 1, "Today's 'not yet' could be next year's plan. Park ideas, don't delete them."],
     ],
     m7: [
       ["A change saves £0.30/unit on 300,000 units/yr and costs £45k one-time. Payback?", ["1.5 months", "6 months", "18 months", "3 years"], 1, "Annual saving £90k; 45k ÷ 90k = 0.5 years = 6 months."],
@@ -1425,7 +1425,7 @@
         "</tbody>";
       if (scored[0].name !== DEFAULT_WINNER) {
         note.className = "wm-note wm-flip";
-        note.innerHTML = `⚠ Winner flipped to <b>${scored[0].name}</b> (was ${DEFAULT_WINNER} at the default weights). A ranking that changes when you nudge a weight means the decision depends on your appetite — <b>report that sensitivity to the sponsor, don't hide it.</b>`;
+        note.innerHTML = `⚠ Winner changed to <b>${scored[0].name}</b> (was ${DEFAULT_WINNER} at the default weights). If the ranking changes when you adjust a weight slightly, the decision depends on how much risk you'll accept. <b>Tell the sponsor, don't hide it.</b>`;
       } else {
         note.className = "wm-note";
         note.innerHTML = `At these weights the winner is <b>${scored[0].name}</b> (${best.toFixed(2)}). Drag <em>Net savings</em> up and <em>Low technical risk</em> down and watch a riskier, higher-saving concept overtake it.`;
@@ -1441,17 +1441,17 @@
      ["Deep-analyse every single one", "Fast triage into go / grow / park", "Let the chief engineer pick favourites", "Build the top three immediately"], 1,
      "Never deep-study 380 ideas — you'll stall by idea 60. Triage is a shallow, fast first pass: go / grow / park."],
     ["An idea saves £3 per unit but breaks a homologation rule. Where does it belong in the matrix?",
-     ["Give it a low risk score", "Knock it out — it fails a non-negotiable screen", "Average it with the rest", "Hand it to a champion"], 1,
+     ["Give it a low risk score", "Screen it out: it fails a must-pass check", "Average it with the rest", "Hand it to a champion"], 1,
      "Safety and regulatory compliance are knockout screens, not scored criteria. No saving can trade against them — it's out."],
     ["Your weighted matrix uses BOTH 'annual savings' and 'payback period' as criteria. What's the problem?",
      ["Nothing — more criteria is better", "Double counting — both measure money", "Too few criteria overall", "Weights don't matter anyway"], 1,
      "Both criteria measure money, so money is counted twice and dominates unfairly. Pick one and pair it with investment."],
     ["Early concepts are too foggy to score honestly on a 1–9 scale. Which tool fits?",
      ["A weighted matrix with guessed numbers", "A Pugh matrix (+ / S / − versus a datum)", "The effort–impact grid", "A coin flip"], 1,
-     "When precise scores would be false precision, Pugh compares each concept against a datum with just better / same / worse — honest and fast."],
+     "When exact scores would just be guesses, Pugh compares each concept against a datum with just better / same / worse — honest and fast."],
     ["A tiny change to one criterion's weight flips your top-ranked concept. What should you do?",
      ["Hide it and keep the original winner", "Report the sensitivity to the sponsor", "Delete the criterion", "Stop using weights"], 1,
-     "A winner that flips on a small weight change means the choice depends on appetite — that's precisely the conversation the sponsor must have, not something to bury."],
+     "A winner that flips on a small weight change means the choice depends on how much risk you'll accept. The sponsor needs to discuss that, so don't hide it."],
     ["When should the evaluation criteria be fixed?",
      ["After seeing the idea list", "Before anyone sees the ideas", "During the final vote", "It makes no difference"], 1,
      "Criteria chosen after the ideas appear get bent toward someone's favourite. Agree them with the sponsor before the list is revealed."],
@@ -1461,7 +1461,7 @@
     ["Evaluation is done and the ideas are ranked. What must every survivor leave with?",
      ["A patent application", "A named champion and a gate date", "A press release", "A budget code"], 1,
      "Ideas handed to 'the team' reappear untouched next year. Every survivor needs one named champion to carry it into development, plus a date."],
-  ], "Good practice — re-read sections 6.2–6.7 on the funnel and the ranking tools, then try again.");
+  ], "Worth a second go. Re-read sections 6.2–6.7 on the funnel and the ranking tools, then try again.");
 
   /* ── 5 · Module 10 teardown challenge ── */
   buildChallenge("#m10ChalMount", [
