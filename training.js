@@ -521,8 +521,8 @@
       ["The one non-negotiable data item before the workshop is…", ["The marketing brochure", "A costed parts list (BOM) checked by finance", "The org chart", "A patent list"], 1, "Without a starting cost you can trust, there's no study. Everything builds on the costed parts list."],
     ],
     m3: [
-      ["Which is one of Miles' founding questions?", ["What is it worth?", "Who approved it?", "Can we outsource it?", "What's the discount?"], 0, "What is it? What does it do? What does it cost? What is it worth? What else could do the job?"],
-      ["Pareto thinking in the Information Phase means…", ["Analysing every part equally", "Focusing on the ~20% of parts that carry ~80% of the cost", "Ignoring cheap parts forever", "Sorting the BOM alphabetically"], 1, "Analytical firepower goes where the money is."],
+      ["Which of these is one of Miles' five questions?", ["What is it worth?", "Who approved it?", "Can we outsource it?", "What's the discount?"], 0, "What is it? What does it do? What does it cost? What is it worth? What else could do the job?"],
+      ["Pareto thinking in the Information Phase means…", ["Analysing every part equally", "Focusing on the ~20% of parts that make up ~80% of the cost", "Ignoring cheap parts forever", "Sorting the parts list alphabetically"], 1, "Put your effort where the money is."],
     ],
     m4: [
       ["'Fasten flange' vs. 'join components' — the better function statement is…", ["Fasten flange — it's specific", "Join components — abstraction opens the solution space", "Both are equal", "Neither is valid"], 1, "'Fasten flange' locks you into bolts; 'join components' opens welding, adhesives, snap-fits and integration."],
@@ -1494,30 +1494,30 @@
   /* ── 6 · Modules 1–3 foundations challenge ── */
   buildChallenge("#m3ChalMount", [
     ["Marketing calls a product 'too expensive to build'. The VE translation is:",
-     ["Cut the costliest part", "The functions' cost exceeds what the market pays for them — an engineering problem with levers", "Raise the price", "Outsource production"], 1,
-     "Price is capped by the market; cost is set by your design choices. Restating the complaint in function-and-cost language turns a budget moan into solvable engineering."],
+     ["Cut the costliest part", "The functions cost more than the market will pay for them, and that's an engineering problem you can solve", "Raise the price", "Outsource production"], 1,
+     "The market caps the price, and your design choices set the cost. Putting the complaint in terms of functions and cost turns a budget complaint into an engineering problem you can solve."],
     ["A rival's kettle has identical functions to yours but costs £2.60 less to make. In VE terms, your kettle has:",
      ["Lower quality", "Lower value — same function at higher cost", "Higher esteem value", "A pricing problem, not an engineering one"], 1,
-     "Value = Function ÷ Cost. Same function delivered at higher cost is, by definition, lower value — and physical proof that the gap is closable."],
+     "Value = Function ÷ Cost. The same function at a higher cost is lower value, and the rival's kettle proves the gap can be closed."],
     ["Someone proposes deleting the brushed-metal finish customers love, to save £0.80. Which value type is being ignored?",
      ["Use value", "Esteem value — customers pay for desirability", "Exchange value", "Cost value"], 1,
-     "Esteem value is real value. The VE question is never 'kill the chrome' — it's 'does this chrome deliver more esteem than it costs?' If yes, it stays."],
+     "Esteem value is real value. The VE question is never 'get rid of the chrome'. It's 'is the chrome worth more to customers than it costs?' If it is, it stays."],
     ["Your VE study kicks off Monday but the BOM costs are still 'roughly right'. What happens?",
      ["Nothing — precision comes later", "The workshop becomes an argument about the baseline instead of the product", "Finance fixes it afterwards", "The facilitator estimates live"], 1,
-     "An unvalidated baseline means every finding gets relitigated. The costed BOM, validated by finance, is the non-negotiable entry ticket."],
-    ["The obvious facilitator candidate is the product's chief engineer — the deepest expert in the room. Why is that wrong?",
-     ["Experts are too busy", "Experts defend the designs they created; the facilitator owns process, not content", "Engineers can't run meetings", "It violates the method's rules"], 1,
-     "The deepest expert has the most invested in the current design. Facilitators steer the method and the clock — the content belongs to the team."],
+     "If finance hasn't checked the starting cost, every finding gets argued over again. You can't start without a costed parts list checked by finance."],
+    ["The obvious choice for facilitator is the product's chief engineer, who knows the product best. Why is that wrong?",
+     ["Experts are too busy", "Experts defend the designs they created. The facilitator runs the process but doesn't supply the answers", "Engineers can't run meetings", "It violates the method's rules"], 1,
+     "The person who knows the product best has the most invested in the current design. Facilitators run the method and keep time. The answers come from the team."],
     ["Which team produces the best VE ideas?",
-     ["Eight design engineers who know the product cold", "A cross-functional six-to-ten: design, manufacturing, purchasing, quality, finance, service", "The two most senior people available", "An external consultancy alone"], 1,
-     "Homogeneous teams produce homogeneous ideas. The friction between functions — design vs manufacturing vs purchasing — is where the ideas live."],
-    ["The loudest stakeholder insists 'customers absolutely need this feature'. The Information-Phase response is:",
-     ["Add it to the spec", "Check the evidence — usage data, Kano category, warranty text — not the volume of the voice", "Overrule them", "Defer to seniority"], 1,
-     "Requirements are evidence, not opinions. Kano mapping and usage data settle in minutes what opinions argue about for hours."],
-    ["Where does a product's removable cost mostly hide?",
-     ["In the basic function", "In secondary functions — design choices masquerading as requirements", "In the packaging", "In supplier margins"], 1,
-     "The basic function is untouchable; most secondary functions are just how this design happens to work — and every one is negotiable."],
-  ], "Good practice — re-read sections 1.1–1.5 on value, 2.2 on the team and 3.3 on requirements, then try again.");
+     ["Eight design engineers who know the product inside out", "Six to ten people from different departments: design, manufacturing, purchasing, quality, finance and service", "The two most senior people available", "An external consultancy alone"], 1,
+     "A team from one department comes up with the same kind of ideas. The best ideas come when design, manufacturing and purchasing challenge each other."],
+    ["The loudest stakeholder insists 'customers absolutely need this feature'. In the Information Phase, you should:",
+     ["Add it to the spec", "Check the evidence (usage data, Kano category, warranty text), not who is loudest", "Overrule them", "Defer to seniority"], 1,
+     "Requirements should be based on evidence, not opinions. Kano mapping and usage data settle in minutes what people would otherwise argue about for hours."],
+    ["Where is most of the cost you can remove?",
+     ["In the basic function", "In secondary functions: design choices that look like requirements", "In the packaging", "In supplier margins"], 1,
+     "You can't touch the basic function. Most secondary functions are just how this design happens to work, and every one can be changed."],
+  ], "Worth a second go. Re-read sections 1.1–1.5 on value, 2.2 on the team and 3.3 on requirements, then try again.");
 
   /* ── 7 · Module 8 implementation gauntlet ── */
   buildChallenge("#m8ChalMount", [
