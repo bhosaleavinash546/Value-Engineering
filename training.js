@@ -538,7 +538,7 @@
     ],
     m7: [
       ["A change saves £0.30/unit on 300,000 units/yr and costs £45k one-time. Payback?", ["1.5 months", "6 months", "18 months", "3 years"], 1, "Annual saving £90k; 45k ÷ 90k = 0.5 years = 6 months."],
-      ["Before shaving a legacy safety factor, you should…", ["Just do it — margins are waste", "Validate with CAE / testing and check the applicable standards", "Ask the supplier's opinion", "Raise the price instead"], 1, "De-risking with simulation and standards is what makes the saving real and safe."],
+      ["Before reducing an old safety margin, you should…", ["Just do it: margins are waste", "Check it with simulation or testing, and check the relevant standards", "Ask the supplier's opinion", "Raise the price instead"], 1, "Reducing the risk with simulation and standards is what makes the saving real and safe."],
     ],
     m8: [
       ["The true output of the Presentation Phase is…", ["Applause from management", "Logged go / no-go decisions with owners and dates", "A polished slide deck", "A wall poster"], 1, "A presentation without decisions is a rehearsal."],
@@ -1210,9 +1210,9 @@
       const delayCost = annual / 12;
       cards.innerHTML = [
         [gbp(annual) + "/yr", "gross annual saving"],
-        [gbp(oneTime), "one-time cost — tooling + validation + engineering"],
+        [gbp(oneTime), "one-time cost: tooling + testing + engineering"],
         [isFinite(payback) ? payback.toFixed(1) + " mo" : "—", "payback, from implementation"],
-        [gbp(lifetimeNet), "lifetime net over " + harvestY.toFixed(1) + " harvest years"],
+        [gbp(lifetimeNet), "lifetime net saving over " + harvestY.toFixed(1) + " years of savings"],
       ].map((c) => `<div class="bc-card"><b>${c[0]}</b><span>${c[1]}</span></div>`).join("");
       const verdict = $("#bcVerdict");
       if (annual <= 0) {
@@ -1220,19 +1220,19 @@
         verdict.innerHTML = "No saving, no case. Every business case starts with a per-unit saving and a volume.";
       } else if (payback <= 12 && lifetimeNet > 0) {
         verdict.className = "bc-verdict bc-go";
-        verdict.innerHTML = `<b>Board-ready.</b> Payback in ${payback.toFixed(1)} months is inside the 12-month bar for running
+        verdict.innerHTML = `<b>Ready for the board.</b> Payback in ${payback.toFixed(1)} months is within the 12-month limit for production
           changes, and the proposal nets ${gbp(lifetimeNet)} over the product's remaining life. Every month of delay
-          still costs ${gbp(delayCost)} — date it and move.`;
+          still costs ${gbp(delayCost)}, so set a date and get going.`;
       } else if (payback <= 24 && lifetimeNet > 0) {
         verdict.className = "bc-verdict bc-mid";
-        verdict.innerHTML = `<b>Marginal.</b> ${payback.toFixed(1)} months payback is beyond the usual 12-month bar for a
-          running change. Cut the one-time cost, bundle it with neighbouring changes to share validation cost, or hold
-          it for the next planned design refresh.`;
+        verdict.innerHTML = `<b>Borderline.</b> ${payback.toFixed(1)} months payback is over the usual 12-month limit for a
+          production change. Cut the one-time cost, combine it with related changes to share the testing cost, or save
+          it for the next planned design update.`;
       } else {
         verdict.className = "bc-verdict bc-no";
-        verdict.innerHTML = `<b>Not investable as a running change.</b> ${isFinite(payback) ? "Payback of " + payback.toFixed(1) + " months " : "This cost structure "}
-          ${lifetimeNet <= 0 ? "never returns the one-time cost within the product's remaining life" : "is far beyond any running-change bar"}.
-          Park it as a requirement for the next-generation design, where the tooling is being bought anyway.`;
+        verdict.innerHTML = `<b>Not worth doing as a production change.</b> ${isFinite(payback) ? "Payback of " + payback.toFixed(1) + " months " : "This cost structure "}
+          ${lifetimeNet <= 0 ? "never returns the one-time cost within the product's remaining life" : "is far over any normal limit"}.
+          Park it as a requirement for the next-generation design, when new tooling is being bought anyway.`;
       }
     }
     Object.values(F).forEach((el) => el.addEventListener("input", calc));
