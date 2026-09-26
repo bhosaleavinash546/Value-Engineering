@@ -101,9 +101,9 @@
     "</div>";
 
   var CAPS = [
-    "Scroll to tear it down — the vehicle separates as it reaches the centre of your screen.",
-    "Nine subassemblies separate along their own paths — closures first, then interior, electrical, thermal, steering, powertrain, suspension, and the chassis settles as the datum.",
-    "Full teardown — every part countable, weighable and costable: a digital BOM in one picture. Scroll on and it reassembles.",
+    "Scroll down and the vehicle comes apart as it reaches the middle of your screen.",
+    "The nine main sections separate: the closures (doors, bonnet and tailgate) first, then the interior, electrical, thermal (cooling), steering, powertrain (engine and gearbox) and suspension, while the chassis stays in place.",
+    "Fully taken apart, every part can be counted, weighed and costed, like a parts list in one picture. Keep scrolling and it goes back together.",
   ];
 
   var widgets = [];
