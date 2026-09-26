@@ -517,8 +517,8 @@
       ["Which of these is NOT one of the four types of value?", ["Use value", "Esteem value", "Exchange value", "Discount value"], 3, "The four types: use, esteem, exchange and cost value."],
     ],
     m2: [
-      ["The ideal VE workshop team is…", ["Only design engineers", "Cross-functional, 6–10 people, with a trained facilitator", "The entire department", "External consultants only"], 1, "Diversity of functions is where the ideas come from; the facilitator owns process, not content."],
-      ["The one non-negotiable data item before the workshop is…", ["The marketing brochure", "A finance-validated costed BOM", "The org chart", "A patent list"], 1, "No trusted cost baseline, no study — everything builds on the costed BOM."],
+      ["The ideal VE workshop team is…", ["Only design engineers", "6–10 people from different departments, with a trained facilitator", "The entire department", "External consultants only"], 1, "Ideas come from people with different jobs. The facilitator runs the process but doesn't supply the answers."],
+      ["The one non-negotiable data item before the workshop is…", ["The marketing brochure", "A costed parts list (BOM) checked by finance", "The org chart", "A patent list"], 1, "Without a starting cost you can trust, there's no study. Everything builds on the costed parts list."],
     ],
     m3: [
       ["Which is one of Miles' founding questions?", ["What is it worth?", "Who approved it?", "Can we outsource it?", "What's the discount?"], 0, "What is it? What does it do? What does it cost? What is it worth? What else could do the job?"],
