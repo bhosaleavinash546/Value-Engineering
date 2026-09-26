@@ -541,8 +541,8 @@
       ["Before reducing an old safety margin, you should…", ["Just do it: margins are waste", "Check it with simulation or testing, and check the relevant standards", "Ask the supplier's opinion", "Raise the price instead"], 1, "Reducing the risk with simulation and standards is what makes the saving real and safe."],
     ],
     m8: [
-      ["The true output of the Presentation Phase is…", ["Applause from management", "Logged go / no-go decisions with owners and dates", "A polished slide deck", "A wall poster"], 1, "A presentation without decisions is a rehearsal."],
-      ["Implemented savings are audited against…", ["The current, inflation-adjusted cost", "The frozen baseline", "The competitor's price", "The sales forecast"], 1, "Freezing the baseline stops inflation and mix changes from blurring the result."],
+      ["The true output of the Presentation Phase is…", ["Applause from management", "Recorded yes/no decisions with owners and dates", "A polished slide deck", "A wall poster"], 1, "A presentation without decisions is a rehearsal."],
+      ["Implemented savings are audited against…", ["The current, inflation-adjusted cost", "The fixed starting cost (frozen baseline)", "The competitor's price", "The sales forecast"], 1, "Fixing the starting cost stops inflation and product-mix changes from blurring the result."],
     ],
     m9: [
       ["Most of your product cost sits in purchased materials. Which lever families bite first?", ["Packaging & logistics", "Sourcing + design", "Overhead allocation", "Warranty design"], 1, "Where the cost sits decides the levers: BOM-heavy → should-cost sourcing plus design changes."],
@@ -1522,30 +1522,30 @@
   /* ── 7 · Module 8 implementation gauntlet ── */
   buildChallenge("#m8ChalMount", [
     ["Your idea saves £0.25/unit at 200,000 units/year, and needs £60,000 one-time. Payback?",
-     ["About 7 months", "About 14 months — beyond the usual running-change bar", "About 3 months", "It can't be calculated"], 1,
+     ["About 7 months", "About 14 months: over the usual 12-month limit", "About 3 months", "It can't be calculated"], 1,
      "Annual saving = 0.25 × 200,000 = £50k. Payback = 60k ÷ 50k × 12 ≈ 14.4 months — over the 12-month bar, so cut the one-time cost or bundle it."],
     ["The decision board loved the presentation, applauded, and moved to the next agenda item. What's missing?",
-     ["A longer presentation", "The decision log — explicit go/no-go, owner and date per proposal", "Better slides", "More attendees"], 1,
+     ["A longer presentation", "The decision log: a clear yes or no, an owner and a date for each proposal", "Better slides", "More attendees"], 1,
      "Applause is not an output. A Phase 6 that ends without logged decisions is a rehearsal — every proposal needs a verdict, an owner and a date."],
     ["Purchasing claims the same £180k saving your VE study claims. What prevents this?",
      ["Claiming it first", "Reconciling with purchasing's ledger so the same pound is never counted twice", "Splitting it 50/50", "Escalating to the CFO"], 1,
      "Double-counting destroys programme credibility faster than any failed idea. One savings ledger, reconciled — agreed in the measurement rules."],
     ["Copper prices spiked and wiped out your design saving on paper. The audit should:",
-     ["Report the saving as lost", "Index-adjust the baseline so commodity swings don't mask real design savings", "Wait for prices to fall", "Exclude copper parts"], 1,
-     "Measure against the frozen, index-adjusted baseline. A real £0.30 design saving exists whether copper rises or falls — the rules must show it."],
+     ["Report the saving as lost", "Adjust the starting cost using an index, so material price changes don't hide real design savings", "Wait for prices to fall", "Exclude copper parts"], 1,
+     "Measure against the fixed starting cost, adjusted using an index. A real £0.30 design saving exists whether copper rises or falls — the rules must show it."],
     ["An approved idea has sat at L3 for four months; its champion left the company. The funnel review should:",
      ["Close it as lost", "Reassign it to a named owner with a new gate date — or kill it consciously", "Wait for a volunteer", "Escalate to the board"], 1,
-     "Orphaned ideas are killer number five. The monthly review exists precisely to reassign or consciously kill — never to let ideas fade silently."],
+     "Ideas without an owner are cause number five. The monthly review exists precisely to reassign or consciously kill — never to let ideas fade silently."],
     ["When does a saving officially 'count' in a governed programme?",
-     ["When the workshop ends", "At L4 — implemented in production and audited against the frozen baseline", "When the business case is approved", "When tooling is ordered"], 1,
+     ["When the workshop ends", "At L4: in production and checked against the fixed starting cost", "When the business case is approved", "When tooling is ordered"], 1,
      "L1 ideas and L3 approvals are potential. Only implemented, finance-audited savings are real — that discipline is why the numbers are believed."],
     ["Two sceptical executives sit on the decision board. The best move before the meeting is:",
-     ["Hope they're absent", "Pre-wire: walk them through the proposals one-to-one beforehand", "Schedule them last", "Send a longer read-ahead"], 1,
+     ["Hope they're absent", "Brief them in advance: take them through the proposals one-to-one beforehand", "Schedule them last", "Send a longer read-ahead"], 1,
      "Surprises make executives defensive, and defensive executives say no. Pre-wiring surfaces objections while they're still fixable."],
     ["Wave two of your programme is running slower and costlier than wave one. The likeliest cause is:",
-     ["Harder products", "The loop never closed — lessons, design rules and cost standards weren't fed back", "Team fatigue", "Bad luck"], 1,
+     ["Harder products", "Lessons, design rules and cost standards weren't fed back", "Team fatigue", "Bad luck"], 1,
      "Wave two should always be cheaper and faster: reused ideas, updated design rules, refreshed should-costs. If it isn't, the retro and feedback loop are being skipped."],
-  ], "Good practice — re-read sections 8.4–8.7 on the one-pager, the audit rules and the five killers, then try again.");
+  ], "Worth a second go. Re-read sections 8.4–8.7 on the one-pager, the checking rules and the five causes, then try again.");
 
   /* ── 8 · Module 9 should-cost challenge ── */
   buildChallenge("#m9ChalMount", [
