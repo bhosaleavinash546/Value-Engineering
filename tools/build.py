@@ -187,7 +187,7 @@ def build_glossary(section):
     section = re.sub(r'<div class="g-term"( data-reveal)?><b>(.*?)</b>',
                      lambda m: f'<div class="g-term" id="term-{slugify(m.group(2))}"{m.group(1) or ""}><b>{m.group(2)}</b>', section)
     terms = re.findall(r'<div class="g-term"[^>]*><b>(.*?)</b><span>(.*?)</span>', section)
-    section = re.sub(r"Twenty-four terms", f"{len(terms)} terms", section)
+    section = section.replace("{{TERM_COUNT}}", str(len(terms)))
     return section, terms, added
 
 def guide_page(i, p):
