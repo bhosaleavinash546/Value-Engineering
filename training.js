@@ -529,7 +529,7 @@
       ["A function costs £1.00 and its worth is £0.80. Its Value Index is…", ["0.80 — healthy", "1.25 — watch list", "2.00 — attack", "8.00 — attack"], 1, "VI = Cost ÷ Worth = 1.00/0.80 = 1.25, in the 1.2–2.0 watch zone."],
     ],
     m5: [
-      ["Mid-brainstorm, a manager says 'that will never work'. The facilitator should…", ["Open a debate", "Defer the judgement — criticism waits for the Evaluation Phase", "Delete the idea", "End the session"], 1, "Osborn's first rule: defer judgement absolutely. Evaluation has its own phase."],
+      ["Mid-brainstorm, a manager says 'that will never work'. The facilitator should…", ["Open a debate", "Hold back the judgement: criticism waits for the Evaluation Phase", "Delete the idea", "End the session"], 1, "Osborn's first rule: never judge ideas at this stage. Evaluation has its own phase."],
       ["A 6-3-5 brainwriting session produces how many ideas in ~30 minutes?", ["18", "35", "108", "635"], 2, "6 people × 3 ideas × 6 passes = 108 ideas, silently."],
     ],
     m6: [
@@ -1134,10 +1134,10 @@
       const n = ideas();
       verdict.hidden = false;
       verdict.innerHTML = n >= 9
-        ? `<b>${n} ideas — workshop pace. 🎉</b> That's the 6-3-5 rhythm: three ideas every five minutes, sustained. Now imagine six people doing this simultaneously.`
+        ? `<b>${n} ideas — the speed of a good workshop. 🎉</b> That's the 6-3-5 rhythm: three ideas every five minutes, sustained. Now imagine six people doing this simultaneously.`
         : n >= 5
           ? `<b>${n} ideas — solid.</b> The last few before the buzzer are usually the interesting ones; run it again on the same function and you'll pass nine.`
-          : `<b>${n} ideas.</b> Normal for a first sprint — the censor in your head is still on. Rules: no judging, no deleting, write the silly ones too.`;
+          : `<b>${n} ideas.</b> Normal for a first sprint — you're still judging your own ideas. Rules: no judging, no deleting, write the silly ones too.`;
     }
     go.addEventListener("click", () => {
       if (t) { stop(); return; }
@@ -1364,29 +1364,29 @@
   buildChallenge("#m5ChalMount", [
     ["Your team keeps proposing small tweaks to the current bracket instead of fresh concepts. What's the fix?",
      ["Write the function on the board and ideate on that, not the part", "Invite more senior engineers", "Give everyone longer to think", "Use a bigger whiteboard"], 0,
-     "The existing part anchors everyone. Naming the function — 'support load' — and hiding the current design reopens the whole solution space."],
+     "The existing part anchors everyone. Naming the function — 'support load' — and hiding the current design opens up all the options again."],
     ["Two people dominate every brainstorm and the quiet experts never get a word in. Best technique?",
      ["Classic brainstorming, but firmer", "Brainwriting 6-3-5", "Cancel the session", "Let the manager decide"], 1,
      "6-3-5 is silent and written: everyone contributes exactly three ideas per round, so the loudest voice and the quietest expert get equal airtime."],
     ["You're stuck on 'make it stiffer, but it keeps getting heavier'. Which tool is built for exactly this?",
      ["SCAMPER", "Analogy", "TRIZ contradiction matrix", "A show of hands"], 2,
      "'Improve A, worsen B' is a textbook technical contradiction — TRIZ's matrix returns the inventive principles that historically resolved it."],
-    ["The flow has dried up and the room is tired, but you still need twenty more ideas. What keeps the pump running?",
+    ["The flow has dried up and the room is tired, but you still need twenty more ideas. What keeps the ideas coming?",
      ["End the session early", "Run SCAMPER letter by letter", "Repeat the same question louder", "Break for two hours"], 1,
-     "SCAMPER is a mechanical checklist — Substitute, Combine, Adapt… — that keeps producing even when spontaneous flow has stopped."],
+     "SCAMPER is a mechanical checklist — Substitute, Combine, Adapt… — that keeps producing ideas even when people have run dry."],
     ["A torch has three sub-functions with several options each, and you suspect the winning combination has never been built. Which technique?",
      ["Morphological analysis", "Classic brainstorming", "Pugh matrix", "Pick the cheapest option"], 0,
      "Morphological analysis lists every option per sub-function and combines them systematically — ideal for surfacing untried combinations."],
     ["Someone says 'make the bracket out of cardboard' and the room laughs. What should the facilitator do?",
      ["Write it down without judging it", "Explain why it can't work", "Ask them to be serious", "Move on quickly"], 0,
-     "Defer all judgement. Wild ideas stretch the space — 'cardboard bracket' provokes 'how much load does this really see?', which finds the real weight saving."],
+     "Defer all judgement. Wild ideas widen the search — 'cardboard bracket' provokes 'how much load does this really see?', which finds the real weight saving."],
     ["You want to deliver 'contain fluid' at a tenth of today's cost. Where do you look first?",
      ["The internal cost database", "Another industry or nature (analogy & biomimicry)", "The current supplier's quote", "Last year's report"], 1,
-     "Analogy and biomimicry steal solutions from other worlds — a drinks carton contains fluid for pennies; nature is full of cheap containment."],
+     "Analogy and biomimicry borrow solutions from other industries and nature — a drinks carton contains fluid for pennies; nature is full of cheap containment."],
     ["The boss shares their favourite idea first and the room's thinking narrows around it. What went wrong?",
      ["Nothing — leaders should lead", "Anchoring — the senior voice should speak last", "Not enough ideas were on the board", "The boss happened to be right"], 1,
-     "Whatever the senior person says first becomes the anchor everyone rearranges around. In ideation, the most senior person speaks last."],
-  ], "Good practice — re-read section 5.2 on Osborn's rules and 5.11 on sequencing the tools, then try again.");
+     "Whatever the senior person says first shapes how everyone else thinks. In ideation, the most senior person speaks last."],
+  ], "Worth a second go. Re-read section 5.2 on Osborn's rules and 5.11 on the order of the tools, then try again.");
 
   /* ── 3 · Module 6 weighted-matrix sandbox ── */
   (function () {
