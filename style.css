@@ -1135,3 +1135,6 @@ html:not([data-theme="light"]) .tool-xls{color:#34d399!important;border-color:co
 html:not([data-theme="light"]) .tool-xls:hover{background:color-mix(in srgb,#34d399 12%,transparent);border-color:#34d399}
 html[data-theme="light"] .matrix .vi-ok td:last-child{color:#047857}
 html[data-theme="light"] .wf-tb{color:#047857!important}
+html[data-theme="light"] .tool-academy .tool-n{color:#7a4f0c}
+/* linked-to items (glossary terms, tools) clear the fixed nav, like sections do */
+:target{scroll-margin-top:96px}

@@ -322,6 +322,14 @@
     update();
   }
 
+  /* ── Deep links: show the linked item straight away (no slide-in), so the browser's jump to it
+        measures its real position and it lands just below the fixed nav ── */
+  if (location.hash.length > 1) {
+    let el = null;
+    try { el = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+    if (el) [el, el.closest("[data-reveal]")].forEach((n) => { if (n) { n.style.transition = "none"; n.classList.add("is-in"); } });
+  }
+
   /* ── Footer year ── */
   const y = $("#year");
   if (y) y.textContent = new Date().getFullYear();
