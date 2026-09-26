@@ -539,96 +539,96 @@
 
   const QUESTIONS = [
     /* ── Part A · Symptoms ── */
-    { id: "symptom", part: "Symptoms", q: "What is the primary problem you're facing?", sub: "Pick the one that hurts most right now.", opts: [
-      ["cost", "Product cost is too high", "versus target cost or competitor price points"],
-      ["margin", "Margins are shrinking", "price pressure, inflation, unfavourable mix"],
-      ["warranty", "Warranty & quality costs are rising", "field failures, claims, rework, recalls"],
-      ["price", "We're losing deals on price", "competitors deliver similar function for less"],
-      ["complexity", "Too many variants / SKUs", "complexity is taxing engineering, inventory and quality"],
-      ["npd", "New product is over its cost target", "still in development — hasn't launched yet"],
+    { id: "symptom", part: "Symptoms", q: "What's the main problem you're facing?", sub: "Pick the one that matters most right now.", opts: [
+      ["cost", "Product cost is too high", "compared with your target cost or competitors' prices"],
+      ["margin", "Margins are shrinking", "because of price pressure, inflation or selling more low-margin products"],
+      ["warranty", "Warranty and quality costs are rising", "failures, claims, rework and recalls"],
+      ["price", "We're losing deals on price", "competitors offer something similar for less"],
+      ["complexity", "Too many product variants", "the extra complexity costs you in engineering, stock and quality"],
+      ["npd", "A new product is over its cost target", "still in development and not launched yet"],
     ]},
-    { id: "margin", part: "Symptoms", q: "How are product margins trending?", sub: "Against your target margin, over the last 2–3 years.", opts: [
-      ["healthy", "Healthy and stable", "at or above target margin"],
-      ["pressure", "Flat, but under pressure", "price increases no longer stick"],
-      ["below", "Below target and sliding", "cost inflation is outpacing our pricing"],
-      ["loss", "Some products lose money", "we ship negative-margin SKUs and know it"],
+    { id: "margin", part: "Symptoms", q: "How have your margins changed?", sub: "Compared with your target margin, over the last two to three years.", opts: [
+      ["healthy", "Healthy and stable", "at or above your target"],
+      ["pressure", "Steady, but under pressure", "customers won't accept price rises any more"],
+      ["below", "Below target and falling", "costs are rising faster than our prices"],
+      ["loss", "Some products lose money", "we know some products are sold at a loss"],
     ]},
-    { id: "warranty", part: "Symptoms", q: "What's your warranty & quality cost situation?", sub: "Claims, rework, scrap, field campaigns.", opts: [
-      ["low", "Under control", "stable, and below ~1% of revenue"],
-      ["creep", "Creeping upward", "claims trending up year on year"],
-      ["pain", "A significant cost line", "warranty visibly hurts the P&L"],
-      ["crisis", "Acute — recalls or field campaigns", "we've had major quality events"],
+    { id: "warranty", part: "Symptoms", q: "How are your warranty and quality costs?", sub: "Think about claims, rework, scrap and recalls.", opts: [
+      ["low", "Under control", "steady, and under about 1% of revenue"],
+      ["creep", "Slowly rising", "claims go up a little every year"],
+      ["pain", "A big cost", "warranty is clearly hurting profits"],
+      ["crisis", "Serious: recalls or field fixes", "we've had major quality problems"],
     ]},
-    { id: "price", part: "Symptoms", q: "How does your price compare for similar function?", sub: "Same performance, feature for feature.", opts: [
-      ["win", "We win on value", "customers accept our premium"],
-      ["par", "At par with the market", "we neither win nor lose on price"],
+    { id: "price", part: "Symptoms", q: "How does your price compare with similar products?", sub: "Compare products that do the same job, feature for feature.", opts: [
+      ["win", "We win on value", "customers are happy to pay more for ours"],
+      ["par", "About the same as others", "price doesn't win or lose us deals"],
       ["expensive", "We're 5–15% more expensive", "and it's costing us deals"],
-      ["unknown", "We honestly don't know", "no structured feature-price benchmarking"],
+      ["unknown", "We honestly don't know", "we've never compared features and prices properly"],
     ]},
-    /* ── Part B · Product & cost exposures ── */
-    { id: "overspec", part: "Exposures", q: "What's the strongest sign of over-engineering in your product?", sub: "Over-specification is invisible cost — most products carry some.", opts: [
-      ["none", "None that we know of", "specs feel right-sized and challenged regularly"],
-      ["safety", "Legacy safety factors", "margins stacked over generations, never revisited"],
-      ["features", "Features customers don't use", "we suspect unvalued content in the product"],
-      ["tolerance", "Tolerances tighter than needed", "print callouts nobody can justify anymore"],
-      ["material", "Premium materials by habit", "grades chosen once and never challenged"],
+    /* ── Part B · Cost risks ── */
+    { id: "overspec", part: "Cost risks", q: "Where is your product most likely over-engineered?", sub: "Over-engineering is hidden cost, and most products have some.", opts: [
+      ["none", "None that we know of", "our specs are about right and we review them regularly"],
+      ["safety", "Old safety margins", "margins added over the years and never reviewed"],
+      ["features", "Features customers don't use", "we think some features aren't valued by customers"],
+      ["tolerance", "Tolerances tighter than needed", "drawing requirements nobody can explain any more"],
+      ["material", "Expensive materials out of habit", "material grades chosen once and never questioned"],
     ]},
-    { id: "complexity", part: "Exposures", q: "How complex is your product portfolio?", sub: "Variants, SKUs, engineer-to-order share.", opts: [
-      ["standard", "Few, standardised products", "high commonality across the range"],
-      ["managed", "Manageable variants", "some platform sharing, some proliferation"],
-      ["tail", "A long tail of variants", "many low-volume SKUs nobody dares to kill"],
-      ["custom", "Almost everything is custom", "engineer-to-order dominates our business"],
+    { id: "complexity", part: "Cost risks", q: "How many different products and variants do you make?", sub: "Think about variants, SKUs and how much is custom-made.", opts: [
+      ["standard", "A few standard products", "lots of shared parts across the range"],
+      ["managed", "A manageable number of variants", "some shared platforms, some variants creeping in"],
+      ["tail", "A long tail of variants", "many low-selling variants nobody wants to drop"],
+      ["custom", "Almost everything is custom", "most orders are designed specially for the customer"],
     ]},
-    { id: "material", part: "Exposures", q: "How exposed are you to raw-material price swings?", sub: "Steel, copper, resins, electronics, energy.", opts: [
-      ["hedged", "Indexed and hedged", "contracts split raw material from conversion"],
-      ["partial", "Partially covered", "some indexation, plenty of leakage"],
-      ["exposed", "Fully exposed", "supplier increases pass straight through to us"],
-      ["unknown", "We don't track it", "no visibility of the material share in our prices"],
+    { id: "material", part: "Cost risks", q: "How much do raw material price changes affect you?", sub: "For example steel, copper, plastics, electronics and energy.", opts: [
+      ["hedged", "Linked to indices and hedged", "contracts separate material cost from processing cost"],
+      ["partial", "Partially covered", "some prices are linked to indices, but we still lose money"],
+      ["exposed", "Not protected at all", "supplier price rises are passed straight on to us"],
+      ["unknown", "We don't track it", "we don't know how much of our prices is material cost"],
     ]},
-    { id: "volume", part: "Exposures", q: "Have volumes changed significantly since the product was designed?", sub: "Processes chosen at design volumes drift off-optimum.", opts: [
-      ["same", "Roughly as planned", "the process still fits the volume"],
-      ["up", "Grown significantly", "2× or more — the process may be outgrown"],
-      ["down", "Dropped significantly", "tooling and automation are now oversized"],
-      ["mixed", "Shifted across variants", "the mix looks nothing like the plan"],
+    { id: "volume", part: "Cost risks", q: "Have your volumes changed a lot since the product was designed?", sub: "Processes chosen for the original volumes may no longer be the best fit.", opts: [
+      ["same", "About as planned", "the process still suits the volume"],
+      ["up", "Grown a lot", "doubled or more, so the process may no longer fit"],
+      ["down", "Dropped a lot", "our tooling and automation are now more than we need"],
+      ["mixed", "Shifted between variants", "the mix is very different from the plan"],
     ]},
-    { id: "where", part: "Exposures", q: "Where does most of the product cost sit?", sub: "Your best guess is fine.", opts: [
-      ["bom", "Purchased materials & components", "the BOM dominates — suppliers hold the cost"],
+    { id: "where", part: "Cost risks", q: "Where is most of the product's cost?", sub: "Your best guess is fine.", opts: [
+      ["bom", "Bought-in parts and materials", "most of the cost is in what we buy from suppliers"],
       ["mfg", "In-house manufacturing", "machining, moulding, welding, forming, finishing"],
-      ["labour", "Assembly labour", "manual assembly hours drive the cost"],
-      ["logistics", "Packaging & logistics", "freight, packaging and warehousing are heavy"],
-      ["unknown", "Honestly — we don't know precisely", "we've never split cost down properly"],
+      ["labour", "Assembly labour", "the hours spent assembling by hand"],
+      ["logistics", "Packaging and logistics", "freight, packaging and storage cost a lot"],
+      ["unknown", "We don't know exactly", "we've never broken the cost down properly"],
     ]},
-    /* ── Part C · Capability & readiness ── */
-    { id: "shouldcost", part: "Readiness", q: "How well do you know what your parts should cost?", sub: "Not what you pay — what they should cost.", opts: [
-      ["models", "We have should-cost models for most spend", "cleansheets or software-based models"],
-      ["some", "Some ad-hoc estimates", "a few parts, when negotiations get tough"],
-      ["quotes", "We rely on supplier quotes only", "the quote is the price — we can't challenge it"],
+    /* ── Part C · Readiness ── */
+    { id: "shouldcost", part: "Readiness", q: "How well do you know what your parts should cost?", sub: "Not what you pay, but what they ought to cost.", opts: [
+      ["models", "We have should-cost estimates for most of what we buy", "from cleansheet models or software"],
+      ["some", "A few rough estimates", "for some parts, when negotiations get difficult"],
+      ["quotes", "We only have supplier quotes", "we accept the quote because we can't check it"],
     ]},
-    { id: "teardown", part: "Readiness", q: "When did you last tear down a competitor's product?", sub: "Physically, part by part, with costs attached.", opts: [
-      ["recent", "Within the last 12 months", "benchmarking is part of our rhythm"],
-      ["old", "Years ago", "we did it once — the insights are stale"],
-      ["never", "Never", "we've never systematically torn one down"],
+    { id: "teardown", part: "Readiness", q: "When did you last take apart a competitor's product?", sub: "Physically, part by part, with a cost for each part.", opts: [
+      ["recent", "Within the last 12 months", "we do it regularly"],
+      ["old", "Years ago", "we did it once and the findings are out of date"],
+      ["never", "Never", "we've never done a proper teardown"],
     ]},
-    { id: "stage", part: "Readiness", q: "Where is the product in its lifecycle?", sub: "This decides whether it's VE (design) or VA (production).", opts: [
-      ["dev", "In development — before production start", "requirements and design still movable"],
-      ["early", "Early production", "launched recently, ramping volumes"],
-      ["mature", "Mature, high-volume", "stable design, years of production ahead"],
-      ["legacy", "Legacy / declining", "old product, still meaningful volumes"],
+    { id: "stage", part: "Readiness", q: "What stage is the product at?", sub: "This decides whether you need value engineering (design) or value analysis (production).", opts: [
+      ["dev", "In development", "not yet in production, and the design can still change"],
+      ["early", "Early production", "launched recently, volumes still rising"],
+      ["mature", "Established, high volume", "settled design with years of production ahead"],
+      ["legacy", "Older, declining", "an old product that still sells in useful numbers"],
     ]},
-    { id: "maturity", part: "Readiness", q: "Have you run structured VAVE before?", sub: "Honest answer — it shapes the starting point.", opts: [
-      ["never", "Never", "cost work has been ad-hoc negotiations and budget cuts"],
-      ["oneoff", "One-off workshops", "we've tried it — results faded without follow-up"],
-      ["program", "A regular programme", "we run waves — looking to raise the game"],
+    { id: "maturity", part: "Readiness", q: "Have you run proper VE studies before?", sub: "Be honest: it decides where to start.", opts: [
+      ["never", "Never", "cost work has been one-off negotiations and budget cuts"],
+      ["oneoff", "One-off workshops", "we tried it, but the results faded without follow-up"],
+      ["program", "A regular programme", "we run regular rounds and want to do better"],
     ]},
   ];
 
   const SYMPTOM_VERDICT = {
-    cost: ["Classic cost-out territory — and highly solvable.", "A gap to target or competitor cost is exactly what the 6-phase job plan was built for: baseline the cost, analyse the functions, and attack the mismatches part by part."],
-    margin: ["Margin erosion needs a full value wave, not a discount hunt.", "When price can't move up, cost must move down without touching customer value — that's function-based cost optimisation across design, sourcing and complexity at once."],
-    warranty: ["Your cost problem is a value mismatch in disguise.", "Rising warranty means certain functions are under-delivering while others are over-specified. Function analysis on the failure Paretos finds both — and warranty savings usually dwarf piece-price savings."],
-    price: ["You need to know their cost, not just their price.", "Losing on price means a competitor delivers the same function for less. Teardown benchmarking plus should-cost tells you exactly where their advantage lives — then VE closes the gap."],
-    complexity: ["Complexity is a cost lever hiding in plain sight.", "Variant proliferation quietly taxes every function. SKU rationalisation, platforming and commonality typically release 2–5% of total COGS with zero customer-visible change."],
-    npd: ["Perfect timing — 80% of cost is committed in design.", "Value Engineering during development is worth roughly double what the same effort returns after launch. Design-to-cost targets plus function analysis at the next gate is the move."],
+    cost: ["This is a classic cost problem, and it can be solved.", "A gap between your cost and your target, or a competitor's cost, is exactly what the six-step job plan is for: work out your current cost, analyse the functions, and go after the mismatches part by part."],
+    margin: ["Falling margins need a proper VE round, not a hunt for discounts.", "When you can't raise prices, you have to lower cost without taking away anything customers value. That means looking at design, sourcing and complexity together, based on what the product does."],
+    warranty: ["Your cost problem is really a value problem.", "Rising warranty costs mean some functions aren't doing their job, while others are over-engineered. Function analysis of your most common failures finds both, and warranty savings are usually much bigger than savings on part prices."],
+    price: ["You need to know their cost, not just their price.", "Losing on price means a competitor does the same job for less. A teardown and should-cost estimate show exactly where their advantage comes from, and VE then closes the gap."],
+    complexity: ["Too many variants is a hidden cost you can fix.", "Every extra variant adds cost across the business. Cutting variants, sharing platforms and using common parts usually saves 2–5% of total cost of goods, with no change customers would notice."],
+    npd: ["Good timing: 80% of the cost is decided during design.", "VE during development is worth about twice as much as the same effort after launch. Set cost targets for each part of the design and run function analysis at the next design review."],
   };
 
   function buildRecs(a) {
@@ -636,46 +636,46 @@
     const add = (t, d, href, label) => { if (!recs.some((r) => r[0] === t)) recs.push([t, d, href, label]); };
 
     // Lifecycle anchor play
-    if (a.stage === "dev") add("Run VE at the next design gate", "Cost is still movable — cascade design-to-cost targets to subsystems and run function analysis before the design freezes.", "job-plan/", "VE Job Plan");
-    else if (a.stage === "early") add("Stabilise, then optimise", "Lock quality first, then launch a focused VA wave — early-production products usually carry launch-rush cost that never got engineered out.", "job-plan/", "VE Job Plan");
-    else add("Run a VA wave on the running product", "Teardown your own product, baseline the cost, and harvest running-change savings with sub-12-month paybacks.", "job-plan/", "VE Job Plan");
+    if (a.stage === "dev") add("Run VE at your next design review", "Cost can still be changed. Set cost targets for each part of the design and do function analysis before the design is frozen.", "job-plan/", "The job plan");
+    else if (a.stage === "early") add("Fix quality first, then reduce cost", "Sort out quality first, then run a focused VA round. New products usually carry cost from the rush to launch that was never engineered out.", "job-plan/", "The job plan");
+    else add("Run a VA round on the product you make now", "Take your own product apart, work out its current cost, and make changes in production that pay back within 12 months.", "job-plan/", "The job plan");
 
     // Urgent P&L symptoms
-    if (a.margin === "loss") add("Triage the loss-makers first", "Pareto margin by SKU and fix, re-price or kill negative-margin products — the fastest P&L relief available.", "cost-levers/", "Complexity Levers");
-    if (a.warranty === "pain" || a.warranty === "crisis" || a.symptom === "warranty") add("Function-analyse your failure Paretos", "Map warranty claims to functions, not parts — then redesign the under-performing functions and de-spec the over-performing ones.", "function-analysis/", "Function Analysis");
-    if (a.symptom === "price" || a.price === "expensive" || a.price === "unknown") { if (a.teardown !== "recent") add("Tear down the competitor that's beating you", "Digitise their BOM, should-cost every part, and find exactly where their cost advantage lives.", "benchmarking/", "Benchmarking"); }
+    if (a.margin === "loss") add("Deal with the loss-making products first", "Rank products by margin, then fix, re-price or drop the ones that lose money. It's the quickest way to improve profit.", "cost-levers/", "Cost levers");
+    if (a.warranty === "pain" || a.warranty === "crisis" || a.symptom === "warranty") add("Analyse your most common failures by function", "Link warranty claims to functions, not parts. Then redesign the functions that fall short, and scale back the ones that are over-engineered.", "function-analysis/", "Function Analysis");
+    if (a.symptom === "price" || a.price === "expensive" || a.price === "unknown") { if (a.teardown !== "recent") add("Take apart the competitor that's beating you", "Record their parts list, estimate what every part costs, and find exactly where their cost advantage comes from.", "benchmarking/", "Benchmarking"); }
 
     // Over-engineering
     if (a.overspec && a.overspec !== "none") {
-      const focus = { safety: "CAE-validated safety-factor right-sizing", features: "data-backed feature rationalisation", tolerance: "tolerance and surface-spec optimisation", material: "material-grade optimisation" }[a.overspec];
-      add("De-spec with data, not opinion", `Your flag: ${focus}. Over-engineering is invisible cost — function analysis makes it visible, validation makes it safe to remove.`, "cost-levers/", "Design Levers");
+      const focus = { safety: "safety margins, checked by simulation", features: "features customers don't value, backed by data", tolerance: "tolerances and surface finishes", material: "material grades" }[a.overspec];
+      add("Remove over-engineering based on data, not opinion", `Where to look: ${focus}. Over-engineering is hidden cost. Function analysis shows where it is, and testing makes it safe to remove.`, "cost-levers/", "Cost levers");
     }
 
     // Complexity
-    if (a.complexity === "tail" || a.complexity === "custom" || a.symptom === "complexity") add("Attack the variant long tail", a.complexity === "custom" ? "Move from engineer-to-order to configure-to-order: modular architecture, standard interfaces, controlled options." : "Pareto margin by SKU, kill or merge the tail, and platform what remains — complexity levers pay across the whole chain.", "cost-levers/", "Complexity Levers");
+    if (a.complexity === "tail" || a.complexity === "custom" || a.symptom === "complexity") add("Cut the low-selling variants", a.complexity === "custom" ? "Move from designing every order from scratch to building orders from standard modules, with standard interfaces and a controlled list of options." : "Rank variants by margin, drop or merge the ones at the bottom, and build the rest on shared platforms. The savings show up right across the business.", "cost-levers/", "Cost levers");
 
     // Commodity exposure
-    if (a.material === "exposed" || a.material === "unknown") add("Split raw material from conversion cost", "Index the material share, negotiate the conversion, hedge the volatile — and claw back windfalls when indices fall.", "cost-levers/", "Sourcing Levers");
+    if (a.material === "exposed" || a.material === "unknown") add("Separate material cost from processing cost", "Link the material part of the price to an index, negotiate the processing part, hedge the most volatile materials, and get money back when prices fall.", "cost-levers/", "Cost levers");
 
     // Volume drift
-    if (a.volume === "up") add("Re-pick processes for today's volume", "Processes chosen at launch volumes are off-optimum after 2× growth: casting vs. machining, automation level, tooling class all deserve a re-run.", "cost-levers/", "Manufacturing Levers");
-    else if (a.volume === "down") add("Right-size tooling and make-vs-buy", "Falling volumes flip the economics: family tooling, outsourcing commodity steps and asset consolidation stop the overhead bleed.", "cost-levers/", "Manufacturing Levers");
+    if (a.volume === "up") add("Choose processes that suit today's volume", "Processes chosen for launch volumes are no longer the best fit once volumes double. Review casting versus machining, how much is automated, and the type of tooling.", "cost-levers/", "Cost levers");
+    else if (a.volume === "down") add("Match tooling and make-or-buy to lower volumes", "Lower volumes change the numbers. Family tooling, outsourcing commodity steps and combining equipment stop overheads eating into margin.", "cost-levers/", "Cost levers");
 
     // Cost concentration
-    if (a.where === "bom") add("Get fact-based with suppliers", "Should-cost your top-spend parts and negotiate the gap with cleansheets and linear performance pricing — typically 5–15% on quoted prices.", "cost-levers/", "Sourcing Levers");
-    else if (a.where === "labour") add("DFMA the assembly", "Part-count reduction and design-for-assembly typically cut 10–30% of assembly time — before any automation spend.", "cost-levers/", "Design Levers");
-    else if (a.where === "mfg") add("Attack conversion cost", "Process substitution, cycle-time, OEE and yield levers bite hardest when cost sits in your own plants.", "cost-levers/", "Manufacturing Levers");
-    else if (a.where === "logistics") add("Value-engineer the packaging & freight", "Pack spec, returnables and cube utilisation are the fastest-payback levers in the book.", "cost-levers/", "Packaging Levers");
-    else if (a.where === "unknown") add("Build cost transparency first", "You can't optimise what you can't see: build a costed BOM and cleansheet your top 20 parts — everything else follows from that baseline.", "technology/", "Cost Technology");
+    if (a.where === "bom") add("Negotiate with suppliers using facts", "Estimate what your highest-spend parts should cost, and negotiate the difference using cleansheets and linear performance pricing. This typically saves 5–15% on quoted prices.", "cost-levers/", "Cost levers");
+    else if (a.where === "labour") add("Design for easier assembly (DFMA)", "Using fewer parts and designing for easy assembly typically cuts assembly time by 10–30%, before you spend anything on automation.", "cost-levers/", "Cost levers");
+    else if (a.where === "mfg") add("Reduce the cost of making it", "When most of the cost is in your own factories, the best levers are changing processes, cutting cycle times, and improving machine use (OEE) and yield.", "cost-levers/", "Cost levers");
+    else if (a.where === "logistics") add("Apply VE to packaging and freight", "Packaging specs, reusable packaging and filling containers properly are the quickest levers to pay back.", "cost-levers/", "Cost levers");
+    else if (a.where === "unknown") add("Find out where your cost is first", "You can't improve what you can't see. Build a costed parts list and a should-cost for your top 20 parts. Everything else builds on that.", "technology/", "Cost technology");
 
     // Capability
-    if (a.shouldcost === "quotes") add("Stop negotiating blind", "Relying on quotes alone leaves 5–15% on the table. Start should-cost modelling your A-parts — software or cleansheets.", "technology/", "Should-Cost Stack");
-    if (a.teardown === "never") add("Make teardown benchmarking a habit", "One competitive teardown per year feeds your idea pipeline better than any brainstorm — see the 5-step process.", "benchmarking/", "Benchmarking");
+    if (a.shouldcost === "quotes") add("Stop negotiating without the facts", "Relying only on quotes leaves 5–15% on the table. Start building should-cost estimates for your most important parts, using software or cleansheets.", "technology/", "Cost technology");
+    if (a.teardown === "never") add("Make competitor teardowns a habit", "One competitor teardown a year gives you more good ideas than any brainstorm. See the five-step process.", "benchmarking/", "Benchmarking");
 
     // Programme
-    if (a.maturity === "never") add("Start with one product, one structured VE study", "Pick your highest-volume line, run the 6-phase job plan with a trained facilitator, and let the first wave's 8–15% build the case.", "training.html", "VE Academy");
-    else if (a.maturity === "oneoff") add("Install the operating system", "Your workshops worked — the follow-through didn't. A governed savings funnel with owners, stages and monthly reviews is what makes savings stick.", "governance/", "Governance & KPIs");
-    else add("Add AI to your cost stack", "You have the discipline — now compress the analysis: AI should-costing, spend cubes and LLM-assisted ideation multiply a mature programme.", "technology/", "Technology Stack");
+    if (a.maturity === "never") add("Start with one product and one proper VE study", "Pick your highest-volume product, run the six-step job plan with a trained facilitator, and let the 8–15% from the first round make the case for more.", "training.html", "VE Academy");
+    else if (a.maturity === "oneoff") add("Put a proper process in place", "Your workshops worked, but the follow-up didn't. A savings funnel with owners, stages and monthly reviews is what makes savings stick.", "governance/", "Savings funnel & KPIs");
+    else add("Add AI tools to your cost work", "You already have the discipline. Now speed up the analysis with AI should-cost tools, spend analysis and AI-assisted idea generation.", "technology/", "Cost technology");
 
     return recs.slice(0, 5);
   }
@@ -693,10 +693,10 @@
     if (a.margin === "below" || a.margin === "loss") gaps += 1;
     if (a.warranty === "pain" || a.warranty === "crisis") gaps += 1;
     if (a.price === "expensive" || a.price === "unknown") gaps += 1;
-    if (gaps >= 7) return ["12–18%", "major untapped headroom across several fronts"];
-    if (gaps >= 4) return ["10–15%", "large first-wave potential"];
-    if (gaps >= 2) return ["8–12%", "solid first-wave potential"];
-    return ["3–5% / yr", "mature-programme territory — compound it annually"];
+    if (gaps >= 7) return ["12–18%", "lots of untapped savings in several areas"];
+    if (gaps >= 4) return ["10–15%", "big savings likely from a first round"];
+    if (gaps >= 2) return ["8–12%", "good savings likely from a first round"];
+    return ["3–5% / yr", "typical for an established programme, saved again every year"];
   }
 
   let step = 0;
@@ -727,24 +727,24 @@
     const [head, body] = SYMPTOM_VERDICT[answers.symptom];
     const [opp, oppNote] = opportunity(answers);
     const recs = buildRecs(answers);
-    const phase = answers.stage === "dev" ? "VE — engineer it out in design" : "VA — optimise the running product";
-    const start = answers.maturity === "never" ? "One focused SAVE study" : answers.maturity === "oneoff" ? "Governed savings funnel" : "AI-augmented programme";
+    const phase = answers.stage === "dev" ? ["VE", "design the cost out now"] : ["VA", "improve the product already in production"];
+    const start = answers.maturity === "never" ? "One focused VE study" : answers.maturity === "oneoff" ? "A savings funnel with regular reviews" : "Add AI tools to your programme";
     const mailBody = encodeURIComponent(
       "Hi Avinash,\n\nI ran the Value Diagnosis on VAVEhub. My situation:\n" +
       QUESTIONS.map((Q) => `- ${Q.q} ${Q.opts.find((o) => o[0] === answers[Q.id])[1]}`).join("\n") +
-      `\n\nIndicated opportunity: ${opp}.\n\nI'd like to discuss how Value Engineering could help.\n`);
+      `\n\nPossible saving: ${opp}.\n\nI'd like to discuss how Value Engineering could help.\n`);
     stage.innerHTML = `<div class="wiz-result">
       <div class="wr-verdict"><h3>${head}</h3><p>${body}</p></div>
       <div class="wr-stats">
-        <div class="wr-stat"><b>${opp}</b><span>indicated cost opportunity — ${oppNote}</span></div>
-        <div class="wr-stat"><b>${phase.split(" — ")[0]}</b><span>${phase.split(" — ")[1]}</span></div>
+        <div class="wr-stat"><b>${opp}</b><span>possible cost saving: ${oppNote}</span></div>
+        <div class="wr-stat"><b>${phase[0]}</b><span>${phase[1]}</span></div>
         <div class="wr-stat"><b>${start}</b><span>recommended starting point</span></div>
       </div>
-      <h4>Your recommended plays</h4>
+      <h4>What we suggest you do</h4>
       <div class="wr-recs">${recs.map(([t, d, href, label], i) =>
         `<div class="wr-rec"><i>${i + 1}</i><span><b>${t}</b><small>${d} → <a href="${href}">${label}</a></small></span></div>`).join("")}</div>
       <div class="wr-actions">
-        <a class="btn btn-primary" href="training.html">🎓 Learn how to fix this — free course</a>
+        <a class="btn btn-primary" href="training.html">🎓 Learn how to fix this with the free course</a>
         <a class="btn btn-ghost" href="toolkit/">Get the free toolkit</a>
         <a class="btn btn-ghost" href="mailto:bhosale.avinash546@gmail.com?subject=${encodeURIComponent("Question about my Value Diagnosis")}&body=${mailBody}">Ask a question</a>
       </div></div>`;

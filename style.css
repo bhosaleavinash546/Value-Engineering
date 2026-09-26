@@ -766,6 +766,7 @@ section[id]{scroll-margin-top:80px}
 .wr-rec small{display:block;color:var(--muted);font-size:.78rem;margin-top:.2rem;line-height:1.5}
 .wr-rec a{color:var(--acc1);border-bottom:1px dashed rgba(90,162,255,.5)}
 .wr-actions{display:flex;gap:.8rem;flex-wrap:wrap}
+.wr-actions .btn{max-width:100%;white-space:normal;text-align:center;justify-content:center}
 @media (max-width:700px){.wr-stats{grid-template-columns:1fr}}
 [hidden]{display:none!important}
 
