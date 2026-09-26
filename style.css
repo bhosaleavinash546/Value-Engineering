@@ -1133,3 +1133,4 @@ html[data-theme="light"] .ge-card h2{color:#8a5a0f}
 .nav-links a[aria-current="page"]{color:var(--txt)}
 html:not([data-theme="light"]) .tool-xls{color:#34d399!important;border-color:color-mix(in srgb,#34d399 40%,transparent)}
 html:not([data-theme="light"]) .tool-xls:hover{background:color-mix(in srgb,#34d399 12%,transparent);border-color:#34d399}
+html[data-theme="light"] .matrix .vi-ok td:last-child{color:#047857}
