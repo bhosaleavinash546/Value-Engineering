@@ -310,10 +310,10 @@
       const k = Math.min(1, vi / 3); // gauge tops out at VI = 3
       ring.style.strokeDashoffset = CIRC * (1 - k);
       let color, msg;
-      if (vi < 0.8) { color = "#f87171"; msg = "Value destroyer — cost outweighs function. Prime VE-study target."; }
-      else if (vi < 1.2) { color = "#f59e0b"; msg = "Balanced — now engineer the ratio: function up, cost down."; }
-      else if (vi < 2) { color = "#22d3ee"; msg = "Healthy value — benchmark it to prove it, then protect it."; }
-      else { color = "#34d399"; msg = "Exceptional value — this is what a VE win looks like. Scale it."; }
+      if (vi < 0.8) { color = "#f87171"; msg = "Poor value. It costs more than it delivers, so it’s a prime target for a VE study."; }
+      else if (vi < 1.2) { color = "#f59e0b"; msg = "Balanced. Now try to raise the function or lower the cost."; }
+      else if (vi < 2) { color = "#22d3ee"; msg = "Good value. Benchmark it to confirm, then protect it."; }
+      else { color = "#34d399"; msg = "Excellent value. This is what a VE success looks like, so use it more widely."; }
       ring.style.stroke = color; num.style.color = color;
       verdict.textContent = msg;
     }
