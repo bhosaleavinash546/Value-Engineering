@@ -525,7 +525,7 @@
       ["Pareto thinking in the Information Phase means…", ["Analysing every part equally", "Focusing on the ~20% of parts that make up ~80% of the cost", "Ignoring cheap parts forever", "Sorting the parts list alphabetically"], 1, "Put your effort where the money is."],
     ],
     m4: [
-      ["'Fasten flange' vs. 'join components' — the better function statement is…", ["Fasten flange — it's specific", "Join components — abstraction opens the solution space", "Both are equal", "Neither is valid"], 1, "'Fasten flange' locks you into bolts; 'join components' opens welding, adhesives, snap-fits and integration."],
+      ["'Fasten flange' vs. 'join components' — the better function statement is…", ["Fasten flange — it's specific", "Join components: a more general function opens up more solutions", "Both are equal", "Neither is valid"], 1, "'Fasten flange' locks you into bolts; 'join components' opens welding, adhesives, snap-fits and integration."],
       ["A function costs £1.00 and its worth is £0.80. Its Value Index is…", ["0.80 — healthy", "1.25 — watch list", "2.00 — attack", "8.00 — attack"], 1, "VI = Cost ÷ Worth = 1.00/0.80 = 1.25, in the 1.2–2.0 watch zone."],
     ],
     m5: [
@@ -685,14 +685,14 @@
   if (fb) {
     const CAPTIONS = [
       "A FAST diagram starts as an empty canvas. Press <b>Next step</b> to begin.",
-      "<b>Step 1 — Draw the scope lines.</b> Two dashed lines bracket what your study covers. Everything you'll analyse lives between them. The logic axis runs left–right: moving right asks <b>HOW?</b>, moving left asks <b>WHY?</b>",
-      "<b>Step 2 — Place the basic function.</b> <i>HEAT WATER</i> goes just inside the left scope line. It's the reason the kettle exists — remove it and the product is pointless.",
-      "<b>Step 3 — Ask HOW?</b> HOW do we heat water? — by <i>generating heat</i>. The answer sits immediately to the right, connected by the logic path.",
+      "<b>Step 1 — Draw the scope lines.</b> Two dashed lines mark the edges of your study. Everything you'll analyse goes between them. The logic runs left to right: moving right asks <b>HOW?</b>, moving left asks <b>WHY?</b>",
+      "<b>Step 2 — Place the basic function.</b> <i>HEAT WATER</i> goes just inside the left scope line. It's the reason the kettle exists. Remove it and the product is pointless.",
+      "<b>Step 3 — Ask HOW?</b> HOW do we heat water? By <i>generating heat</i>. The answer goes just to the right, joined by a line.",
       "<b>Step 4 — Keep asking HOW?</b> HOW do we generate heat? — by <i>conducting current</i> through a resistive element. Each HOW? extends the chain one card to the right.",
-      "<b>Step 5 — Stop at the assumed function.</b> HOW do we conduct current? — mains electricity <i>supplies power</i>. That's outside our control, so it sits <b>outside the right scope line</b>. Our study stops here.",
-      "<b>Step 6 — Anchor the WHY? direction.</b> WHY do we heat water? — to <i>prepare a beverage</i>. That's the customer's higher purpose, so it sits <b>outside the left scope line</b>. Now read the chain backwards: every WHY? must sound right.",
+      "<b>Step 5 — Stop at the assumed function.</b> HOW do we conduct current? Mains electricity <i>supplies power</i>. That's outside our control, so it sits <b>outside the right scope line</b>. Our study stops here.",
+      "<b>Step 6 — Complete the WHY? side.</b> WHY do we heat water? — to <i>prepare a beverage</i>. That's the customer's higher purpose, so it sits <b>outside the left scope line</b>. Now read the chain backwards: every WHY? should make sense.",
       "<b>Step 7 — Float the all-time functions.</b> <i>ENSURE SAFETY</i> and <i>CONVEY ESTEEM</i> act on the whole product all the time, so they float above the main path rather than joining the chain.",
-      "<b>Done — now validate.</b> Read it aloud both ways: \"WHY conduct current? To generate heat. WHY generate heat? To heat water. ✓\" and \"HOW to heat water? Generate heat. HOW? Conduct current. ✓\" — a sentence that sounds wrong means a card is misplaced. That read-aloud test is the whole point of FAST.",
+      "<b>Done — now validate.</b> Read it aloud both ways: \"WHY conduct current? To generate heat. WHY generate heat? To heat water. ✓\" and \"HOW to heat water? Generate heat. HOW? Conduct current. ✓\" If a sentence sounds wrong, a card is in the wrong place. Reading it aloud like this is the whole point of FAST.",
     ];
     const LAST = CAPTIONS.length - 1;
     let step = 0;
