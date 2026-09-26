@@ -279,6 +279,16 @@ def playbook_section():
   </div>
 </section>'''
 
+def faq_jsonld():
+    """Google's FAQ markup is generated from the visible FAQ, so the two always match."""
+    faq = read("home", "faq.html")
+    pairs = re.findall(r"<summary>(.*?)<i></i></summary><p>(.*?)</p>", faq, re.S)
+    clean = lambda t: html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", t))).strip()
+    data = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": clean(q), "acceptedAnswer": {"@type": "Answer", "text": clean(a)}} for q, a in pairs]}
+    if len(pairs) < 1: raise SystemExit("FAQ: no questions found")
+    return '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False) + "\n</script>"
+
 def build():
     for p in PAGES: CONTENT_IDS[p["slug"]] = ids_in(read("pages", p["slug"] + ".html"))
     CONTENT_IDS[None] = set().union(*(ids_in(read("home", f)) for f in ["hero.html", "about.html", "faq.html", "diagnose.html", "engage.html"])) | {"playbook"}
@@ -290,7 +300,7 @@ def build():
                 "Free Value Engineering (VAVE) playbook and certified course: the 6-phase job plan, FAST, 36 cost levers, should-costing and teardown benchmarking.",
                 SITE, SITE + "og-image.png", "VAVEhub — Value Engineering & Product Cost Optimisation",
                 "6-phase VE job plan · 36 cost levers · TRIZ, SCAMPER & FAST ideation · Should-cost, teardown & benchmarking · 8 industry playbooks.",
-                read("home", "head-extra.html"),
+                read("home", "head-extra.html") + "\n" + faq_jsonld(),
                 extra='<meta name="keywords" content="value engineering, value analysis, VAVE, product cost optimisation, cost reduction, should-cost, cleansheet, teardown benchmarking, value methodology job plan, FAST diagram, TRIZ, DFMA, target costing, design to cost" />\n')
     home += "<body>\n\n" + read("home", "preloader.html") + "\n\n<!-- ══════════ CHROME ══════════ -->\n" + chrome(None) + "\n\n"
     home += rewrite(home_body, None) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, None) + "\n\n" + SCRIPTS
