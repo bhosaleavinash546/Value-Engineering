@@ -64,12 +64,13 @@
   function init(T) {
     const audio = new Audio();
     audio.preload = "none";
-    let activeBar = null, activeMod = null, blocks = [];
+    let activeBar = null, activeMod = null, blocks = [], els = [], raf = 0;
 
     function highlightAt(t) {
+      // the block being read; it stays lit through the short pause before the next block (no flicker)
       let el = null;
-      for (let i = 0; i < blocks.length; i++) {
-        if (t >= blocks[i][0] && t < blocks[i][1]) { el = collect(activeMod)[i]; break; }
+      for (let i = blocks.length - 1; i >= 0; i--) {
+        if (t >= blocks[i][0]) { if (i + 1 < blocks.length || t < blocks[i][1] + 1) el = els[i] || null; break; }
       }
       $$(".is-reading").forEach((x) => { if (x !== el) x.classList.remove("is-reading"); });
       if (el && !el.classList.contains("is-reading")) {
@@ -95,8 +96,15 @@
         $(".vo-seek", activeBar).value = "0";
         $(".vo-time", activeBar).textContent = fmt(0) + " / " + fmt(+$(".vo-seek", activeBar).max);
       }
-      activeBar = null; activeMod = null; blocks = [];
+      activeBar = null; activeMod = null; blocks = []; els = [];
     }
+
+    // follow the audio every frame while playing: timeupdate only fires ~4×/s, which lags the highlight
+    function follow() {
+      if (activeBar && !audio.paused) { highlightAt(audio.currentTime); raf = requestAnimationFrame(follow); }
+      else raf = 0;
+    }
+    audio.addEventListener("playing", () => { if (!raf) raf = requestAnimationFrame(follow); });
 
     audio.addEventListener("timeupdate", () => {
       if (!activeBar) return;
@@ -132,7 +140,7 @@
           return;
         }
         stop();
-        activeBar = bar; activeMod = mod; blocks = meta.blocks;
+        activeBar = bar; activeMod = mod; blocks = meta.blocks; els = collect(mod);
         audio.src = "audio/" + id + ".mp3";
         audio.playbackRate = prefs.rate;
         audio.play().then(() => setBtn(bar, "playing")).catch(() => {
