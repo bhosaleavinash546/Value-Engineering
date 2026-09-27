@@ -40,20 +40,20 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+<a class="skip-link" href="function-analysis/#main">Skip to content</a>
 
 <nav class="nav" id="nav" aria-label="Primary">
   <div class="nav-inner container">
     <a class="brand" href="./"><svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5c-8 0-13.5 6-13.5 13 0 5 2.6 8 4.8 10.4 1.4 1.5 2.2 2.8 2.2 4.6h13c0-1.8.8-3.1 2.2-4.6 2.2-2.4 4.8-5.4 4.8-10.4C37.5 11 32 5 24 5z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><polyline points="16,20 20,20 22.5,14.5 25.5,25 28,20 32,20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="18.5" y="36.5" width="11" height="2.7" rx="1.3" fill="currentColor"/><rect x="19.5" y="41" width="9" height="2.7" rx="1.3" fill="currentColor"/></svg>VAVE<span>hub</span><em class="brand-tag">VE · Cost · Benchmark</em></a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
     <div class="nav-links" id="navLinks">
-      <a href="./#about">Value Engineering</a>
+      <a href="./#playbook">Guides</a>
       <a href="job-plan/">Job Plan</a>
       <a href="cost-levers/">Cost Levers</a>
       <a href="ideation/">Ideation</a>
-      <a href="technology/">Technology</a>
       <a href="benchmarking/">Benchmarking</a>
-      <a href="industries/">Industries</a>
+      <a href="toolkit/">Toolkit</a>
+      <a href="glossary/">Glossary</a>
       <a href="training.html" class="nav-train">🎓 Training</a>
       <button class="theme-toggle" data-themetoggle aria-label="Toggle light/dark theme">🌙</button>
       <a class="nav-signin" href="auth.html">Sign in</a>
@@ -73,12 +73,13 @@
     <aside class="guide-tldr" aria-labelledby="tldr-function-analysis"><h2 id="tldr-function-analysis">In 30 seconds</h2><p>Describe what the product does in two words at a time, a verb and a noun, such as “heat water” or “indicate status”. Put these functions on a FAST diagram. Read it to the right and it tells you how each function is done. Read it to the left and it tells you why. Then share the product’s cost out across the functions and compare each one with the cheapest reliable way to do the same job. The biggest gaps are where to start.</p></aside>
   </div>
 </header>
+<nav class="guide-toc" aria-label="On this page"><div class="container"><span class="gt-label">On this page</span><a href="function-analysis/#fast-diagram">FAST diagram</a><a href="function-analysis/#cost-vs-worth">Cost vs worth</a><a href="function-analysis/#next-steps">What to do next</a></div></nav>
 
-<main>
+<main id="main">
 <section class="section" id="fast">
   <div class="container">
 
-    <div class="fast-board" data-reveal>
+    <div id="fast-diagram" class="fast-board" data-reveal>
       <div class="fast-board-head">
         <h3>FAST diagram of an electric kettle <span>FAST stands for Function Analysis System Technique</span></h3>
         <p>Read to the right <b>→</b> to ask <em>how?</em> Read to the left <b>←</b> to ask <em>why?</em> Everything between the two dashed lines is inside the study.</p>
@@ -122,7 +123,7 @@
       </div>
     </div>
 
-    <div class="matrix-wrap" data-reveal>
+    <div id="cost-vs-worth" class="matrix-wrap" data-reveal>
       <div class="matrix-head">
         <h3>Function–cost matrix and <span class="grad-text">value index</span></h3>
         <p>Split the kettle’s <strong>£12.40 manufacturing cost</strong> across its functions. Then estimate what each
@@ -156,7 +157,7 @@
 </section>
 
 
-<section class="section guide-end">
+<section class="section guide-end" id="next-steps">
   <div class="container">
     <div class="ge-grid"><div class="ge-card"><h2>Try it</h2><a href="toolkit/fast-worksheet.html">FAST Diagram Worksheet <span aria-hidden="true">→</span></a><a href="toolkit/function-cost-matrix.html">Function–Cost Matrix <span aria-hidden="true">→</span></a></div><div class="ge-card ge-learn"><h2>Learn it properly</h2><a href="training.html?open=m4">Module 4 · Function Analysis &amp; FAST <span aria-hidden="true">→</span></a><p>Free, narrated and interactive — with a Certificate of Completion.</p></div></div>
     <nav class="ge-pn" aria-label="More of the playbook"><a class="ge-prev" href="job-plan/"><small>← Previous</small>The 6-Phase Job Plan</a><a class="ge-next" href="cost-levers/"><small>Next →</small>36 Cost Levers</a></nav>
@@ -200,6 +201,7 @@
   </div>
 </footer>
 
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
 <script src="site-config.js"></script>
 <script src="vh-protect.js"></script>

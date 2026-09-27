@@ -1,16 +1,36 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Page not found — VAVEhub</title><meta name="robots" content="noindex"><meta name="description" content="This page does not exist on VAVEhub.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%232e6fe8'/><path d='M24 7c-7.2 0-12.2 5.4-12.2 11.7 0 4.5 2.3 7.2 4.3 9.4 1.3 1.4 2 2.5 2 4.1h11.8c0-1.6.7-2.7 2-4.1 2-2.2 4.3-4.9 4.3-9.4C36.2 12.4 31.2 7 24 7z' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/><rect x='19' y='35.4' width='10' height='2.6' rx='1.3' fill='white'/><rect x='20' y='39.6' width='8' height='2.6' rx='1.3' fill='white'/></svg>" />
 <style>
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:#05070f;color:#eaeefb;font-family:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;text-align:center;padding:2rem}
-h1{font-size:5rem;margin:0;color:#5aa2ff;font-weight:800;letter-spacing:-.02em}
-p{color:#98a2c0;max-width:440px;margin:1rem auto 2rem;line-height:1.6}
-a{display:inline-block;padding:.9rem 1.8rem;border-radius:100px;background:#2e6fe8;color:#fff;text-decoration:none;font-weight:600;transition:background .2s}
-a:hover{background:#5aa2ff}
-.brand{font-weight:800;font-size:1.05rem;margin-bottom:1.4rem;color:#eaeefb}
-.brand span{color:#5aa2ff}
-</style></head><body><div>
-<div class="brand">VAVE<span>hub</span></div>
+:root{--bg:#05070f;--card:#0d1220;--line:#1c2438;--txt:#eaeefb;--muted:#98a2c0;--acc:#5aa2ff;--btn:#2e6fe8}
+@media (prefers-color-scheme:light){:root{--bg:#f6f8fc;--card:#fff;--line:#dfe5f0;--txt:#0b1224;--muted:#4a5572;--acc:#1d4ed8;--btn:#1d4ed8}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--txt);font-family:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;text-align:center;padding:2rem 1rem}
+main{max-width:640px;width:100%}
+.brand{display:inline-block;font-weight:800;font-size:1.05rem;margin-bottom:1.2rem;color:var(--txt);text-decoration:none}
+.brand span{color:var(--acc)}
+h1{font-size:clamp(3.5rem,14vw,5rem);margin:0;color:var(--acc);font-weight:800;letter-spacing:-.02em;line-height:1}
+.lede{color:var(--muted);max-width:460px;margin:1rem auto 1.8rem;line-height:1.6;font-size:1.02rem}
+.home{display:inline-flex;align-items:center;min-height:48px;padding:0 1.8rem;border-radius:100px;background:var(--btn);color:#fff;text-decoration:none;font-weight:600}
+.home:hover{filter:brightness(1.12)}
+h2{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin:2.4rem 0 .9rem;font-weight:600}
+.go{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem;text-align:left}
+.go a{display:block;padding:.85rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--txt);text-decoration:none;font-weight:600;font-size:.95rem}
+.go a small{display:block;color:var(--muted);font-weight:400;font-size:.82rem;margin-top:.2rem}
+.go a:hover{border-color:var(--acc)}
+a:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+</style></head><body><main>
+<a class="brand" href="/">VAVE<span>hub</span></a>
 <h1>404</h1>
-<p>This page adds cost but no function — a classic value mismatch. Let's engineer you back to the good stuff.</p>
-<a href="/">← Back to VAVEhub</a>
-</div></body></html>
+<p class="lede">This page adds cost but no function — a classic value mismatch. It may have moved, or the link may have a typo.</p>
+<a class="home" href="/">← Back to the homepage</a>
+<h2>Popular pages</h2>
+<nav class="go" aria-label="Popular pages">
+  <a href="/training.html">VE Academy<small>Free 13-module course and certificate</small></a>
+  <a href="/job-plan/">The six-step job plan<small>How a VE study runs, start to finish</small></a>
+  <a href="/cost-levers/">36 cost levers<small>Ways to take cost out of a product</small></a>
+  <a href="/toolkit/">Free templates<small>Worksheets to use in your own studies</small></a>
+  <a href="/glossary/">Glossary<small>VE terms in plain English</small></a>
+  <a href="/#playbook">All ten guides<small>The full playbook</small></a>
+</nav>
+</main></body></html>

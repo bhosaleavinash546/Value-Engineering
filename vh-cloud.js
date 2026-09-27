@@ -12,8 +12,12 @@ window.VHCloud = (function () {
   let client = null, ready;
 
   // Load the Supabase SDK on demand, then create the client.
+  // Content pages only need it to show who is signed in, so they skip the 200 KB SDK
+  // unless this browser already holds a Supabase session token.
+  const NEEDS_SDK = /(training|auth|certificate|verify)\.html$/.test(location.pathname);
+  const HAS_TOKEN = (() => { try { return Object.keys(localStorage).some((k) => /^sb-.+-auth-token$/.test(k)); } catch (e) { return true; } })();
   ready = (function () {
-    if (!LIVE) return Promise.resolve(null);
+    if (!LIVE || (!NEEDS_SDK && !HAS_TOKEN)) return Promise.resolve(null);
     return new Promise((resolve) => {
       if (window.supabase) { resolve(mk()); return; }
       const s = document.createElement("script");

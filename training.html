@@ -35,6 +35,7 @@
 </script>
 </head>
 <body class="tr-body">
+<a class="skip-link" href="#trMain">Skip to content</a>
 
 <nav class="tr-nav">
   <div class="tr-nav-inner">
@@ -42,6 +43,7 @@
     <div class="tr-nav-right"><button class="theme-toggle" data-themetoggle aria-label="Toggle light/dark theme">🌙</button>
       <div class="tr-progress-pill"><i id="navProgFill"></i><span id="navProgText">0% complete</span></div>
       <a class="nav-signin tr-signin" href="auth.html">Sign in</a>
+      <a class="tr-back tr-guides" href="index.html#playbook">Guides</a>
       <a class="tr-back" href="index.html">← Back to site</a>
     </div>
   </div>
@@ -201,7 +203,8 @@
 
 <div class="tr-layout" id="trLayout">
   <aside class="tr-sidebar" id="trSidebar">
-    <div class="tr-side-head">Course content</div>
+    <button type="button" class="tr-side-head" id="sideToggle" aria-expanded="true" aria-controls="sideBody"><span>Course content</span><span class="tr-side-cur" id="sideCur"></span></button>
+    <div class="tr-side-body" id="sideBody">
     <div class="course-search-wrap">
       <input type="search" id="courseSearch" class="course-search" placeholder="🔍 Search the course…" aria-label="Search course content" autocomplete="off" />
       <div id="searchResults" class="search-results" hidden></div>
@@ -211,6 +214,7 @@
       <div class="tr-side-prog"><div class="tr-side-bar"><i id="sideProgFill"></i></div><span id="sideProgText">0 / 13 modules</span></div>
       <span class="tr-points" id="trPoints">0 pts · Value Apprentice</span>
       <div class="tr-badges" id="trBadges"></div>
+    </div>
     </div>
   </aside>
 
@@ -610,7 +614,7 @@ far off were you? That gap is why the Information Phase exists. Capture it in th
           <div class="fb-card fb-at1" data-fstep="7"><i>all-time</i>ENSURE SAFETY</div>
           <div class="fb-card fb-at2" data-fstep="7"><i>all-time</i>CONVEY ESTEEM</div>
         </div>
-        <p class="fb-caption" id="fbCaption" role="status" aria-live="polite">A FAST diagram starts as an empty canvas. Press <b>Next step</b> to begin.</p>
+        <p class="fb-caption" id="fbCaption" role="status" aria-live="polite">Here’s the finished diagram, faded. Press <b>Next step</b> to build it one card at a time.</p>
         <div class="fb-controls">
           <button type="button" class="btn btn-ghost" id="fbPrev" disabled>← Back</button>
           <div class="fb-dots" id="fbDots" aria-hidden="true"></div>

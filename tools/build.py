@@ -91,6 +91,21 @@ def write(rel, text):
     path = os.path.join(ROOT, rel); os.makedirs(os.path.dirname(path) or ROOT, exist_ok=True)
     open(path, "w", encoding="utf-8").write(text)
 
+# fixed-position helpers go after the footer so they aren't the first keyboard stops
+TAIL_GUIDE = '<button class="to-top" id="toTop" aria-label="Back to top">↑</button>'
+TAIL_HOME = '<nav class="dotnav" id="dotnav" aria-label="Section navigation"></nav>\n' + TAIL_GUIDE
+
+TOC = {
+    "cost-levers": [("lever-grid", "leverGrid", "All 36 levers"), ("selector", "lever-selector", "Lever Selector")],
+    "job-plan": [("concept-viz", "why-early", "Why start early"), ("save-stepper", "six-steps", "The six steps")],
+    "function-analysis": [("fast-board", "fast-diagram", "FAST diagram"), ("matrix-wrap", "cost-vs-worth", "Cost vs worth")],
+    "ideation": [("idea-grid", "techniques", "The techniques"), ("calc", "vi-simulator", "Value Index simulator")],
+    "technology": [("tech-grid", "tools", "The tools"), ("sc-anatomy", "inside-should-cost", "Inside a should-cost")],
+    "benchmarking": [("concept-viz", "teardown-view", "Teardown view"), ("td-steps", "five-steps", "Five steps"),
+                     ("bench-wrap", "six-ways", "Six ways to compare"), ("bm-case", "case-study", "Case study")],
+    "governance": [("gov-wrap", "funnel", "The savings funnel"), ("cadence", "review-rhythm", "Review rhythm")],
+}
+
 def page_prefix(slug):  # how a page refers to another page, given <base href="../"> on topic pages
     return "" if slug is None else ""   # all hrefs are root-relative thanks to <base>
 
@@ -120,13 +135,13 @@ def rewrite(htmltext, here):
     return re.sub(r'href="#([A-Za-z][\w-]*)"', lambda m: f'href="{link_for(m.group(1), here)}"', htmltext)
 
 def nav_links(here):
-    # same seven items as the original one-page nav (Function Analysis is reached from Job Plan and the playbook grid)
-    NAV = ["job-plan", "cost-levers", "ideation", "technology", "benchmarking", "industries"]
-    items = [("Value Engineering", None, "about")] + [(BY_SLUG[s]["nav"], s, None) for s in NAV]
+    # seven items: "Guides" opens the full list of ten; the rest are the most-used pages
+    NAV = ["job-plan", "cost-levers", "ideation", "benchmarking", "toolkit", "glossary"]
+    items = [("Guides", None, "playbook")] + [(BY_SLUG[s]["nav"], s, None) for s in NAV]
     out = []
     for label, slug, frag in items:
         if slug is None:
-            href = "#about" if here is None else "./#about"
+            href = f"#{frag}" if here is None else f"./#{frag}"
             extra = " data-spy" if here is None else ""
         else:
             href, extra = f"{slug}/", (' class="is-active" aria-current="page"' if slug == here else "")
@@ -137,7 +152,7 @@ def chrome(here):
     c = read("partials", "chrome.html")
     c = c.replace("{{NAV_LINKS}}", nav_links(here))
     c = c.replace("{{HOME_TOP}}", "#top" if here is None else "./")
-    c = c.replace("{{DOTNAV}}", '<nav class="dotnav" id="dotnav" aria-label="Section navigation"></nav>\n' if here is None else "")
+    c = c.replace("{{SKIP}}", f'<a class="skip-link" href="{"" if here is None else here + "/"}#main">Skip to content</a>')
     return c
 
 HEAD_COMMON = read("partials", "head-common.html") if os.path.exists(os.path.join(SRC, "partials", "head-common.html")) else None
@@ -218,6 +233,21 @@ def guide_page(i, p):
     pn += (f'<a class="ge-prev" href="{prev_p["slug"]}/"><small>← Previous</small>{html.escape(prev_p["short"])}</a>' if prev_p else '<a class="ge-prev" href="./#playbook"><small>← Back to</small>The playbook overview</a>')
     pn += (f'<a class="ge-next" href="{next_p["slug"]}/"><small>Next →</small>{html.escape(next_p["short"])}</a>' if next_p else '<a class="ge-next" href="training.html"><small>Next →</small>Take the free VE Academy</a>')
     pn += "</nav>"
+    # "On this page" bar for guides with several landmarks: (class of the block, anchor id, label)
+    toc_html = ""
+    toc = TOC.get(p["slug"])
+    if toc:
+        links = []
+        for cls, anchor, label in toc:
+            if cls:
+                if f'id="{anchor}"' not in body:
+                    pat = re.compile(r'<div class="' + re.escape(cls) + r'(?=[ "])')
+                    mm = pat.search(body)
+                    assert mm, (p["slug"], cls)
+                    body = body[:mm.start()] + f'<div id="{anchor}" class="' + cls + body[mm.end():]
+            links.append(f'<a href="{p["slug"]}/#{anchor}">{html.escape(label)}</a>')
+        links.append(f'<a href="{p["slug"]}/#next-steps">What to do next</a>')
+        toc_html = f'<nav class="guide-toc" aria-label="On this page"><div class="container"><span class="gt-label">On this page</span>{"".join(links)}</div></nav>\n'
     page = f'''<header class="guide-hero" id="top">
   <div class="container">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span aria-hidden="true">›</span><a href="./#playbook">Playbook</a><span aria-hidden="true">›</span><span aria-current="page">{html.escape(p["short"])}</span></nav>
@@ -228,11 +258,11 @@ def guide_page(i, p):
     <aside class="guide-tldr" aria-labelledby="tldr-{p["slug"]}"><h2 id="tldr-{p["slug"]}">In 30 seconds</h2><p>{p["tldr"]}</p></aside>
   </div>
 </header>
-
-<main>
+{toc_html}
+<main id="main">
 {body}
 
-<section class="section guide-end">
+<section class="section guide-end" id="next-steps">
   <div class="container">
     <div class="ge-grid">{end_cards}</div>
     {pn}
@@ -294,7 +324,7 @@ def build():
     CONTENT_IDS[None] = set().union(*(ids_in(read("home", f)) for f in ["hero.html", "about.html", "faq.html", "diagnose.html", "engage.html"])) | {"playbook"}
     footer = read("partials", "footer.html")
     # ── home ──
-    home_body = "\n\n".join([read("home", "hero.html"), "<main>", "", read("home", "about.html"), playbook_section(),
+    home_body = "\n\n".join([read("home", "hero.html"), '<main id="main">', "", read("home", "about.html"), playbook_section(),
                              read("home", "faq.html"), read("home", "diagnose.html"), read("home", "engage.html"), "", "</main>"])
     home = head(None, "VAVEhub — Value Engineering, Product Cost Optimisation & Benchmarking",
                 "Free Value Engineering (VAVE) playbook and certified course: the 6-phase job plan, FAST, 36 cost levers, should-costing and teardown benchmarking.",
@@ -302,8 +332,8 @@ def build():
                 "6-phase VE job plan · 36 cost levers · TRIZ, SCAMPER & FAST ideation · Should-cost, teardown & benchmarking · 8 industry playbooks.",
                 read("home", "head-extra.html") + "\n" + faq_jsonld(),
                 extra='<meta name="keywords" content="value engineering, value analysis, VAVE, product cost optimisation, cost reduction, should-cost, cleansheet, teardown benchmarking, value methodology job plan, FAST diagram, TRIZ, DFMA, target costing, design to cost" />\n')
-    home += "<body>\n\n" + read("home", "preloader.html") + "\n\n<!-- ══════════ CHROME ══════════ -->\n" + chrome(None) + "\n\n"
-    home += rewrite(home_body, None) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, None) + "\n\n" + SCRIPTS
+    home += "<body>\n\n<!-- ══════════ CHROME ══════════ -->\n" + chrome(None) + "\n\n"
+    home += rewrite(home_body, None) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, None) + "\n" + TAIL_HOME + "\n\n" + SCRIPTS
     write("index.html", home)
     print(f"index.html  {len(home)//1024} KB")
     # ── topic pages ──
@@ -312,7 +342,7 @@ def build():
         doc = head(p["slug"], p["title"] + " | VAVEhub", p["desc"], url, f"{SITE}og/{p['slug']}.jpg",
                    p["title"], p["desc"], jsonld)
         doc += '<body class="guide">\n\n<!-- ══════════ CHROME ══════════ -->\n' + chrome(p["slug"]) + "\n\n"
-        doc += rewrite(body, p["slug"]) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, p["slug"]) + "\n\n" + SCRIPTS
+        doc += rewrite(body, p["slug"]) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, p["slug"]) + "\n" + TAIL_GUIDE + "\n\n" + SCRIPTS
         write(f"{p['slug']}/index.html", doc)
         print(f"{p['slug']+'/index.html':34} {len(doc)//1024:>3} KB")
     write_sitemap()

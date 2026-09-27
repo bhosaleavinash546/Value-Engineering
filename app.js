@@ -95,31 +95,39 @@
 
   /* ── Mobile nav ── */
   const navToggle = $("#navToggle"), navLinks = $("#navLinks");
-  navToggle.addEventListener("click", () => {
-    const open = navLinks.classList.toggle("is-open");
+  const navItems = () => $$("a, button", navLinks).filter((el) => el.offsetParent);
+  function setNav(open, returnFocus) {
+    navLinks.classList.toggle("is-open", open);
     navToggle.classList.toggle("is-open", open);
     navToggle.setAttribute("aria-expanded", open);
     document.body.classList.toggle("nav-open", open);
-  });
-  navLinks.addEventListener("click", (e) => {
-    if (e.target.tagName === "A") {
-      navLinks.classList.remove("is-open");
-      navToggle.classList.remove("is-open");
-      document.body.classList.remove("nav-open");
-    }
+    if (open) { const first = navItems()[0]; if (first) setTimeout(() => first.focus(), 50); }
+    else if (returnFocus) navToggle.focus();
+  }
+  navToggle.addEventListener("click", () => setNav(!navLinks.classList.contains("is-open"), true));
+  navLinks.addEventListener("click", (e) => { if (e.target.closest("a")) setNav(false); });
+  document.addEventListener("keydown", (e) => {
+    if (!navLinks.classList.contains("is-open")) return;
+    if (e.key === "Escape") { e.preventDefault(); setNav(false, true); return; }
+    if (e.key !== "Tab") return;
+    // keep keyboard focus inside the open menu (the toggle counts as part of it)
+    const items = [navToggle, ...navItems()], i = items.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); items[items.length - 1].focus(); }
+    else if (!e.shiftKey && i === items.length - 1) { e.preventDefault(); items[0].focus(); }
   });
 
   /* ── Custom cursor ── */
   if (finePointer && !reduced) {
     const dot = $("#cursorDot"), ring = $("#cursorRing");
-    let mx = -100, my = -100, rx = -100, ry = -100;
-    document.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; });
-    (function loop() {
+    let mx = -100, my = -100, rx = -100, ry = -100, running = false;
+    function loop() {
       rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
       dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
       ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-      requestAnimationFrame(loop);
-    })();
+      // idle once the ring has caught up with the pointer: no work while the mouse is still
+      if (Math.abs(mx - rx) + Math.abs(my - ry) > 0.3) requestAnimationFrame(loop); else running = false;
+    }
+    document.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; if (!running) { running = true; requestAnimationFrame(loop); } });
     document.addEventListener("mouseover", (e) => {
       ring.classList.toggle("is-hover", !!e.target.closest("a,button,input,.lever,.idea,.tech-card"));
     });
@@ -137,43 +145,49 @@
       ? ["rgba(29,78,216,", "rgba(30,86,176,", "rgba(150,99,18,"]
       : ["rgba(90,162,255,", "rgba(46,111,232,", "rgba(217,164,74,"];
     let COLORS = palette();
-    function resize() {
-      W = canvas.width = canvas.offsetWidth * devicePixelRatio;
-      H = canvas.height = canvas.offsetHeight * devicePixelRatio;
-      const n = Math.min(110, Math.floor((canvas.offsetWidth * canvas.offsetHeight) / 16000));
+    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+    let lastW = 0, lastH = 0;
+    function resize(force) {
+      const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+      // phones fire resize when the address bar shows/hides: ignore small height-only changes
+      if (force !== true && cw === lastW && Math.abs(ch - lastH) < 160) return;
+      lastW = cw; lastH = ch;
+      W = canvas.width = cw * DPR;
+      H = canvas.height = ch * DPR;
+      const n = Math.min(cw < 700 ? 45 : 90, Math.floor((cw * ch) / 16000));
       parts = Array.from({ length: n }, () => ({
         x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.35 * devicePixelRatio,
-        vy: (Math.random() - 0.5) * 0.35 * devicePixelRatio,
-        r: (Math.random() * 1.6 + 0.6) * devicePixelRatio,
+        vx: (Math.random() - 0.5) * 0.35 * DPR,
+        vy: (Math.random() - 0.5) * 0.35 * DPR,
+        r: (Math.random() * 1.6 + 0.6) * DPR,
         c: COLORS[(Math.random() * COLORS.length) | 0],
       }));
     }
-    resize();
+    resize(true);
     window.addEventListener("resize", resize);
-    document.addEventListener("vf-themechange", () => { COLORS = palette(); resize(); });
+    document.addEventListener("vf-themechange", () => { COLORS = palette(); resize(true); });
     canvas.parentElement.addEventListener("mousemove", (e) => {
       const b = canvas.getBoundingClientRect();
-      mouse.x = (e.clientX - b.left) * devicePixelRatio;
-      mouse.y = (e.clientY - b.top) * devicePixelRatio;
+      mouse.x = (e.clientX - b.left) * DPR;
+      mouse.y = (e.clientY - b.top) * DPR;
     });
     canvas.parentElement.addEventListener("mouseleave", () => { mouse.x = -9999; mouse.y = -9999; });
     let heroVisible = true;
     new IntersectionObserver((e) => { heroVisible = e[0].isIntersecting; }).observe(canvas);
-    const LINK = 130 * devicePixelRatio;
+    const LINK = 130 * DPR;
     (function draw() {
       requestAnimationFrame(draw);
-      if (!heroVisible) return;
+      if (!heroVisible || document.hidden) return;
       ctx.clearRect(0, 0, W, H);
       for (const p of parts) {
         // gentle mouse repulsion
-        const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy, R = 140 * devicePixelRatio;
+        const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy, R = 140 * DPR;
         if (d2 < R * R && d2 > 0.01) {
           const d = Math.sqrt(d2), f = ((R - d) / R) * 0.6;
           p.vx += (dx / d) * f; p.vy += (dy / d) * f;
         }
         p.vx *= 0.985; p.vy *= 0.985;
-        const min = 0.06 * devicePixelRatio;
+        const min = 0.06 * DPR;
         if (Math.abs(p.vx) < min) p.vx += (Math.random() - 0.5) * 0.08;
         if (Math.abs(p.vy) < min) p.vy += (Math.random() - 0.5) * 0.08;
         p.x += p.vx; p.y += p.vy;
@@ -192,7 +206,7 @@
             ctx.beginPath();
             ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
             ctx.strokeStyle = COLORS[1] + (1 - d / LINK) * 0.22 + ")";
-            ctx.lineWidth = devicePixelRatio * 0.7;
+            ctx.lineWidth = DPR * 0.7;
             ctx.stroke();
           }
         }
@@ -328,6 +342,33 @@
     let el = null;
     try { el = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
     if (el) [el, el.closest("[data-reveal]")].forEach((n) => { if (n) { n.style.transition = "none"; n.classList.add("is-in"); } });
+  }
+
+  /* ── Pause decorative animation loops in sections that are off screen ── */
+  // Only endless loops are paused; one-off entrance animations always run to the end.
+  if ("IntersectionObserver" in window && Element.prototype.getAnimations) {
+    const offIO = new IntersectionObserver((es) => es.forEach((e) => {
+      e.target.getAnimations({ subtree: true }).forEach((a) => {
+        const t = a.effect && a.effect.getComputedTiming ? a.effect.getComputedTiming() : null;
+        if (!t || t.iterations !== Infinity) return;
+        if (e.isIntersecting) { if (a.playState === "paused") a.play(); } else if (a.playState === "running") a.pause();
+      });
+    }), { rootMargin: "120px 0px" });
+    $$("main > section > * > *, header.hero, .hero, footer").forEach((el) => offIO.observe(el));
+  }
+
+  /* ── Guides: highlight the "On this page" link for the section in view ── */
+  const tocLinks = $$(".guide-toc a");
+  if (tocLinks.length) {
+    const targets = tocLinks.map((a) => document.getElementById(a.getAttribute("href").split("#")[1])).filter(Boolean);
+    const mark = () => {
+      const y = 140; let cur = null;
+      targets.forEach((t, i) => { if (t.getBoundingClientRect().top <= y) cur = i; });
+      tocLinks.forEach((a, i) => a.classList.toggle("is-here", i === cur));
+    };
+    let q = false;
+    window.addEventListener("scroll", () => { if (!q) { q = true; requestAnimationFrame(() => { q = false; mark(); }); } }, { passive: true });
+    mark();
   }
 
   /* ── Footer year ── */
@@ -513,7 +554,7 @@
     const fmt = (n, cur) => {
       if (!isFinite(n)) return "—";
       const a = Math.abs(n);
-      const s = a >= 1e9 ? (n / 1e9).toFixed(2) + "B" : a >= 1e6 ? (n / 1e6).toFixed(2) + "M" : a >= 1e3 ? (n / 1e3).toFixed(1) + "k" : n.toFixed(2);
+      const s = a >= 1e9 ? (n / 1e9).toFixed(2) + "B" : a >= 1e6 ? (n / 1e6).toFixed(2) + "M" : a >= 1e3 ? (n / 1e3).toFixed(a >= 1e5 ? 0 : 1) + "k" : n.toFixed(2);
       return cur + s;
     };
     function calc() {

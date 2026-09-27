@@ -95,6 +95,12 @@
     if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  // "Mark complete" buttons say where they lead next
+  $$(".tmod-done").forEach((btn) => {
+    const i = mods.findIndex((m) => m.dataset.mod === btn.dataset.done), nxt = mods[i + 1];
+    if (nxt && nxt.dataset.mod !== "exam") btn.textContent = "Mark complete & go to Module " + (i + 2) + " →";
+  });
+
   function show(id, scroll) {
     if (gated(id) && !acctName) { renderGate(id, scroll); return; }
     currentId = id;
@@ -102,8 +108,26 @@
     mods.forEach((m) => m.classList.toggle("is-visible", m.dataset.mod === id));
     $$(".mod-link", modNav).forEach((l) => l.classList.toggle("is-active", l.dataset.target === id));
     if (id === "exam") renderExamGate();
-    if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
+    // phones/tablets: fold the course list away so the lesson comes first
+    if (narrow.matches) setSide(false);
+    updateSideCur();
+    if (scroll !== false) (narrow.matches ? $("#trMain") : $("#trLayout")).scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  const narrow = window.matchMedia("(max-width:960px)");
+  const sideEl = $("#trSidebar"), sideBtn = $("#sideToggle");
+  function setSide(open) {
+    sideEl.classList.toggle("is-collapsed", !open);
+    sideBtn.setAttribute("aria-expanded", String(open));
+  }
+  function updateSideCur() {
+    const cur = mods.find((m) => m.dataset.mod === currentId);
+    const done = state.done.filter((d) => /^m\d+$/.test(d)).length;
+    $("#sideCur").textContent = (cur ? cur.dataset.title + " · " : "") + done + "/" + (mods.length - 1);
+  }
+  sideBtn.addEventListener("click", () => { if (narrow.matches) setSide(sideEl.classList.contains("is-collapsed")); });
+  narrow.addEventListener("change", (e) => setSide(!e.matches));
+  if (narrow.matches) setSide(false);
 
   function updateLocks() {
     $$(".mod-link", modNav).forEach((l) => l.classList.toggle("is-locked", !acctName && gated(l.dataset.target)));
@@ -130,7 +154,7 @@
     const done = state.done.length;
     const pct = Math.round((done / total) * 100);
     $("#navProgFill").style.width = pct + "%";
-    $("#navProgText").textContent = state.exam && state.exam.passed ? "Certified ✓ · " + rank(points()) : pct + "% · " + rank(points());
+    $("#navProgText").textContent = state.exam && state.exam.passed ? "✓ Certified" : pct + "% · " + rank(points());
     $("#sideProgFill").style.width = pct + "%";
     $("#sideProgText").textContent = `${done} / ${total} modules` + (state.exam && state.exam.passed ? " · certified" : "");
     const pts = $("#trPoints");
@@ -323,15 +347,19 @@
 
   function renderExamGate() {
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
-    const remaining = courseMods.filter((m) => !state.done.includes(m.dataset.mod)).length;
+    const todo = courseMods.filter((m) => !state.done.includes(m.dataset.mod));
+    const remaining = todo.length, nextMod = todo[0];
     mount.innerHTML = `<div class="ex-gate">
       <p>Thirty questions, picked at random from a bank of ${BANK.length} covering all thirteen modules, including the case studies. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
       to earn the <strong>VAVEhub Certificate of Completion</strong>. You can retake the exam as often as you like, and
       you'll get a new random set of 30 each time.</p>
-      ${remaining > 0 ? `<p class="ex-warn">Note: you haven't finished ${remaining} module${remaining > 1 ? "s" : ""} yet. You can still take the exam, but we recommend finishing the course first.</p>` : ""}
-      <button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>
+      ${remaining > 0
+        ? `<p class="ex-warn">The exam opens once you've finished all ${courseMods.length} modules, so your certificate shows you completed the whole course. You have ${remaining} module${remaining > 1 ? "s" : ""} to go.</p>
+      <button class="btn btn-primary btn-lg" id="examNextMod">Continue: ${nextMod.dataset.title} →</button>`
+        : `<button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>`}
     </div>`;
-    $("#examStart").addEventListener("click", startExam);
+    if (remaining > 0) $("#examNextMod").addEventListener("click", () => show(nextMod.dataset.mod));
+    else $("#examStart").addEventListener("click", startExam);
     $("#certWrap").hidden = true;
   }
 
@@ -693,7 +721,7 @@
   const fb = $("#fastBuilder");
   if (fb) {
     const CAPTIONS = [
-      "A FAST diagram starts as an empty canvas. Press <b>Next step</b> to begin.",
+      "Here’s the finished diagram, faded. Press <b>Next step</b> to build it one card at a time.",
       "<b>Step 1 — Draw the scope lines.</b> Two dashed lines mark the edges of your study. Everything you'll analyse goes between them. The logic runs left to right: moving right asks <b>HOW?</b>, moving left asks <b>WHY?</b>",
       "<b>Step 2 — Place the basic function.</b> <i>HEAT WATER</i> goes just inside the left scope line. It's the reason the kettle exists. Remove it and the product is pointless.",
       "<b>Step 3 — Ask HOW?</b> HOW do we heat water? By <i>generating heat</i>. The answer goes just to the right, joined by a line.",
@@ -710,6 +738,7 @@
     function render() {
       $$("[data-fstep]", stage).forEach((el) => el.classList.toggle("fb-in", +el.dataset.fstep <= step));
       stage.classList.toggle("fb-validating", step === LAST);
+      stage.classList.toggle("fb-ghost", step === 0); // step 0 shows a faint preview of the finished diagram
       cap.innerHTML = CAPTIONS[step];
       prev.disabled = step === 0;
       next.textContent = step === LAST ? "↻ Replay" : "Next step →";

@@ -40,20 +40,20 @@
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+<a class="skip-link" href="job-plan/#main">Skip to content</a>
 
 <nav class="nav" id="nav" aria-label="Primary">
   <div class="nav-inner container">
     <a class="brand" href="./"><svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5c-8 0-13.5 6-13.5 13 0 5 2.6 8 4.8 10.4 1.4 1.5 2.2 2.8 2.2 4.6h13c0-1.8.8-3.1 2.2-4.6 2.2-2.4 4.8-5.4 4.8-10.4C37.5 11 32 5 24 5z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><polyline points="16,20 20,20 22.5,14.5 25.5,25 28,20 32,20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="18.5" y="36.5" width="11" height="2.7" rx="1.3" fill="currentColor"/><rect x="19.5" y="41" width="9" height="2.7" rx="1.3" fill="currentColor"/></svg>VAVE<span>hub</span><em class="brand-tag">VE · Cost · Benchmark</em></a>
     <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
     <div class="nav-links" id="navLinks">
-      <a href="./#about">Value Engineering</a>
+      <a href="./#playbook">Guides</a>
       <a href="job-plan/" class="is-active" aria-current="page">Job Plan</a>
       <a href="cost-levers/">Cost Levers</a>
       <a href="ideation/">Ideation</a>
-      <a href="technology/">Technology</a>
       <a href="benchmarking/">Benchmarking</a>
-      <a href="industries/">Industries</a>
+      <a href="toolkit/">Toolkit</a>
+      <a href="glossary/">Glossary</a>
       <a href="training.html" class="nav-train">🎓 Training</a>
       <button class="theme-toggle" data-themetoggle aria-label="Toggle light/dark theme">🌙</button>
       <a class="nav-signin" href="auth.html">Sign in</a>
@@ -73,12 +73,13 @@
     <aside class="guide-tldr" aria-labelledby="tldr-job-plan"><h2 id="tldr-job-plan">In 30 seconds</h2><p>A value engineering study follows six steps, always in the same order. You gather the facts first, then work out what the product actually has to do. Only then do you come up with ideas, pick the best ones, build the business case and present it. Don’t judge any idea until they’re all written down. And start as early as you can, because most of a product’s cost is locked in once the design is set.</p></aside>
   </div>
 </header>
+<nav class="guide-toc" aria-label="On this page"><div class="container"><span class="gt-label">On this page</span><a href="job-plan/#why-early">Why start early</a><a href="job-plan/#six-steps">The six steps</a><a href="job-plan/#next-steps">What to do next</a></div></nav>
 
-<main>
+<main id="main">
 <section class="section" id="save">
   <div class="container">
 
-    <div class="concept-viz jobmap">
+    <div id="why-early" class="concept-viz jobmap">
       <div class="cv-head"><h3>Why it pays to start early</h3>
       <p>Most of a product’s cost is decided long before the money is actually spent, because early design choices lock it in. The gap between the two lines is where value engineering can make the biggest difference.</p></div>
       <div class="jm-plot">
@@ -104,7 +105,7 @@
       <p class="jm-foot">About 80% of a product’s lifetime cost is already decided by the end of <b>Function Analysis</b>. That’s why VE work done during design pays back around ten times more than the same work after launch.</p>
     </div>
 
-    <div class="save-stepper" data-reveal>
+    <div id="six-steps" class="save-stepper" data-reveal>
       <div class="save-tabs" role="tablist" id="saveTabs">
         <button class="save-tab is-active" role="tab" data-tab="0"><b>1</b><span>Information</span></button>
         <button class="save-tab" role="tab" data-tab="1"><b>2</b><span>Function Analysis</span></button>
@@ -227,7 +228,7 @@
 </section>
 
 
-<section class="section guide-end">
+<section class="section guide-end" id="next-steps">
   <div class="container">
     <div class="ge-grid"><div class="ge-card"><h2>Try it</h2><a href="toolkit/save-workshop-agenda.html">VE Workshop Agenda <span aria-hidden="true">→</span></a></div><div class="ge-card ge-learn"><h2>Learn it properly</h2><a href="training.html?open=m3">Modules 3–8 · one module per phase <span aria-hidden="true">→</span></a><p>Free, narrated and interactive — with a Certificate of Completion.</p></div></div>
     <nav class="ge-pn" aria-label="More of the playbook"><a class="ge-prev" href="./#playbook"><small>← Back to</small>The playbook overview</a><a class="ge-next" href="function-analysis/"><small>Next →</small>Function Analysis &amp; FAST</a></nav>
@@ -271,6 +272,7 @@
   </div>
 </footer>
 
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
 
 <script src="site-config.js"></script>
 <script src="vh-protect.js"></script>
