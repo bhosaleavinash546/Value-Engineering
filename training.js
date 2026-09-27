@@ -562,7 +562,7 @@
     ],
     m13: [
       ["A product will sell at £400 and the business needs a 25% margin. Its allowable cost is…", ["£100", "£300", "£375", "£500"], 1, "Allowable cost = price − margin = 400 × (1 − 0.25) = £300 — set before design, not after."],
-      ["The 'cardinal rule' of target costing says…", ["If costs drift up, raise the price", "The target cost may never be exceeded — content trades elsewhere instead of drifting", "Suppliers absorb all overruns", "Targets are advisory until SOP"], 1, "Cooper & Slagmulder's rule: the number holds; features, design or make-buy flex around it."],
+      ["The 'cardinal rule' of target costing says…", ["If costs drift up, raise the price", "The target cost can never be exceeded: savings are found elsewhere instead of letting cost creep up", "Suppliers absorb all overruns", "Targets are only guidance until production starts"], 1, "Cooper & Slagmulder's rule: the number stays fixed, and features, design or make-or-buy decisions change around it."],
     ],
   };
 
