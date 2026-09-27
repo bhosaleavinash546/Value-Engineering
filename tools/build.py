@@ -14,8 +14,8 @@ import html, json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "src")
 SITE = "https://valueengineeringhub.com/"
-UPDATED = "2026-09-25"
-UPDATED_HUMAN = "25 September 2026"
+UPDATED = "2026-09-27"
+UPDATED_HUMAN = "27 September 2026"
 PUBLISHED = "2026-07-04"
 AUTHOR = "Avinash Bhosale"
 
