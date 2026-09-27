@@ -545,8 +545,8 @@
       ["Implemented savings are audited against…", ["The current, inflation-adjusted cost", "The fixed starting cost (frozen baseline)", "The competitor's price", "The sales forecast"], 1, "Fixing the starting cost stops inflation and product-mix changes from blurring the result."],
     ],
     m9: [
-      ["Most of your product cost sits in purchased materials. Which lever families bite first?", ["Packaging & logistics", "Sourcing + design", "Overhead allocation", "Warranty design"], 1, "Where the cost sits decides the levers: BOM-heavy → should-cost sourcing plus design changes."],
-      ["A supplier's plant runs at 60% utilisation. Which should-cost layer inflates?", ["Raw material", "Overhead", "Margin", "Freight"], 1, "Overhead is spread over fewer parts — you're paying for idle air. A negotiable fact."],
+      ["Most of your product cost sits in purchased materials. Which groups of levers work best first?", ["Packaging & logistics", "Sourcing + design", "Overhead allocation", "Warranty design"], 1, "Where the cost sits decides the levers: Mostly bought-in parts → should-cost sourcing plus design changes."],
+      ["A supplier's plant runs at 60% utilisation. Which should-cost layer inflates?", ["Raw material", "Overhead", "Margin", "Freight"], 1, "Overhead is spread over fewer parts — you're paying for empty machine time. A negotiable fact."],
     ],
     m10: [
       ["The FIRST step of a teardown is…", ["Disassemble as fast as possible", "Photograph, weigh and measure everything", "Send parts out for quotes", "Scan to CAD"], 1, "Document before disassembly — you only get one first teardown."],
@@ -1182,10 +1182,10 @@
         const pc = (gap / total * 100).toFixed(0);
         gapEl.className = "sc-gap sc-gap-over";
         gapEl.innerHTML = `Quote ${eur(q)} vs should-cost <b>${eur(total)}</b> → gap <b>${eur(gap)}</b> per part (${pc}% above should).` +
-          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} pcs/year that's <b>£${Math.round(gap * vol).toLocaleString("en-GB")}</b> on the table.` : "");
+          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} parts a year, that's <b>£${Math.round(gap * vol).toLocaleString("en-GB")}</b> you could save.` : "");
       } else {
         gapEl.className = "sc-gap sc-gap-ok";
-        gapEl.innerHTML = `Quote ${eur(q)} is at or below the should-cost of <b>${eur(total)}</b> — either your buyer is excellent or an assumption is off. Check the machine-rate utilisation first.`;
+        gapEl.innerHTML = `Quote ${eur(q)} is at or below the should-cost of <b>${eur(total)}</b>. Either your buyer is excellent or one of your assumptions is wrong. Check how busy you've assumed the machine is first.`;
       }
     }
     Object.values(F).forEach((el) => el.addEventListener("input", calc));
@@ -1557,23 +1557,23 @@
      "List prices are negotiating positions, not costs. Commodity indices are the honest, updatable basis — and they set up the index clause for the contract."],
     ["Your cleansheet says £1.42; the quote is £1.85. The WRONG next move is:",
      ["A joint workshop walking the layers together", "Emailing the cleansheet with 'explain the gap'", "Checking your utilisation assumption first", "Preparing layer-by-layer questions"], 1,
-     "'Explain the gap' by email creates a defensive supplier and a worse relationship. Share the method, walk the layers together — audited suppliers hide, partnered suppliers volunteer."],
+     "'Explain the gap' by email creates a defensive supplier and a worse relationship. Share the method, walk the layers together — suppliers who feel checked up on hide things, and suppliers who feel like partners offer them."],
     ["Bracket F sits 25% above your LPP regression line. Before targeting it you must:",
      ["Demand 25% off", "Check for spec differences — F might carry a justified special requirement", "Remove it from the chart", "Change supplier"], 1,
-     "LPP finds outliers, not verdicts. F's special coating was justified; bracket D's premium wasn't. Specs first, negotiation second."],
+     "LPP finds the odd ones out, not the answers. F's special coating was justified; bracket D's premium wasn't. Specs first, negotiation second."],
     ["Which should-cost layer is the classic hiding place for an underutilised plant?",
      ["Raw material", "Overhead — allocated across too few production hours", "Fair margin", "Direct labour"], 1,
-     "A 55%-utilised plant spreads its fixed costs over half the hours, doubling the overhead per part. You shouldn't fund their idle air — that's a conversation, not a surcharge."],
+     "A 55%-utilised plant spreads its fixed costs over half the hours, doubling the overhead per part. You shouldn't pay for their empty machine time. That's something to discuss, not an extra charge."],
     ["In the three-way negotiation split, the supplier's margin gets:",
      ["Squeezed first — it's pure profit", "Respected — the savings come from indexing material and engineering out conversion waste", "Indexed to inflation", "Deferred to next year"], 1,
      "Squeezing legitimate margin buys one cheap year and a resentful supplier. Cleansheet negotiation attacks waste and mispricing, never fair profit — and gain-share keeps their ideas coming."],
     ["Your machine-rate assumption uses 85% utilisation; the supplier's plant runs at 60%. Your should-cost is:",
-     ["Correct — they should be efficient", "Too low as a prediction, but exactly the right basis for the conversation about who pays for idle capacity", "Wrong and unusable", "Too high"], 1,
+     ["Correct — they should be efficient", "Too low as a prediction, but exactly the right starting point for discussing who pays for unused capacity", "Wrong and unusable", "Too high"], 1,
      "The model shows what the part SHOULD cost at competent utilisation. The gap versus their reality is precisely the negotiation: why should your part fund their empty hours?"],
     ["An AI engine returns £4.12 for your CAD housing in 58 seconds. That number is best used as:",
      ["The target price in the contract", "A directional estimate for ranking options and preparing negotiation — verified before any business case", "Proof the supplier is lying", "A replacement for the RFQ"], 1,
-     "AI should-costs are directional: perfect for ranking designs and walking in prepared, never a substitute for verified quotes. Fluent is not the same as calibrated."],
-  ], "Good practice — re-read sections 9.1 on the information game, 9.5 on the seven steps and 9.7 on negotiation, then try again.");
+     "AI should-costs are directional: perfect for ranking designs and walking in prepared, never a substitute for verified quotes. Sounding confident isn't the same as being accurate."],
+  ], "Worth a second go. Re-read section 9.1 on why should-cost matters, 9.5 on the seven steps and 9.7 on negotiation, then try again.");
 
   /* ── 9 · Module 11 AI-era challenge ── */
   buildChallenge("#m11ChalMount", [
