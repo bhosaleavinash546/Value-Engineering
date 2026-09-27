@@ -550,7 +550,7 @@
     ],
     m10: [
       ["The FIRST step of a teardown is…", ["Disassemble as fast as possible", "Photograph, weigh and measure everything", "Send parts out for quotes", "Scan to CAD"], 1, "Document before disassembly — you only get one first teardown."],
-      ["Functional benchmarking compares…", ["Absolute performance only", "Performance per pound (torque/£, lumens/£)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not absolutes — that's the VE lens on benchmarking."],
+      ["Functional benchmarking compares…", ["Absolute performance only", "Performance per pound (torque/£, lumens/£)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not raw figures. That's how VE looks at benchmarking."],
     ],
     m11: [
       ["The right division of labour with AI in VAVE is…", ["AI replaces the workshop team", "AI diverges and drafts; humans judge, validate and decide", "AI sets the prices", "AI signs supplier contracts"], 1, "AI compresses analysis and idea volume; judgement and validation stay human."],
@@ -1247,16 +1247,16 @@
     const STEPS = [
       { t: "Two mice on the bench — the competitor's next to yours. Nothing has been touched yet; the first move is a camera, not a screwdriver.",
         cards: [["🖱️", "Theirs", "£24 retail"], ["🖱️", "Ours", "£29 retail"]] },
-      { t: "Step 1 — Acquire & document. Photograph, weigh and measure everything before the first screw turns. You only get one first teardown.",
+      { t: "Step 1 — Buy and record. Photograph, weigh and measure everything before the first screw comes out. You only get one first teardown.",
         cards: [["📷", "48 photos", "every face, every label"], ["⚖️", "87 g vs 112 g", "theirs is 22% lighter"], ["📏", "Dimensions logged", "against a scale reference"]] },
-      { t: "Step 2 — Systematic disassembly, level by level, with a stopwatch. Disassembly sequence in reverse is their assembly cost in disguise.",
+      { t: "Step 2 — Take it apart, level by level, with a stopwatch. The time it takes to take apart shows you their assembly cost.",
         cards: [["⏱", "48 s to open", "ours takes 92 s"], ["🔩", "2 screws", "ours has 6 + 2 clip types"], ["🧩", "Snap-fit chassis", "one moulding holds everything"]] },
-      { t: "Step 3 — Digital BOM capture. Every part logged: material, mass, process evidence, supplier marks, fastener count.",
-        cards: [["📋", "9 parts vs 14", "five fewer things to buy, fit and fail"], ["🏷", "PCB supplier mark", "same board house as our B-supplier"], ["🔧", "Tool marks", "2-cavity mould, mid-volume strategy"]] },
-      { t: "Step 4 — Should-cost each part at THEIR assumptions: their region, their volumes, their processes. Band every estimate; deltas are robust where absolutes are fragile.",
-        cards: [["💶", "Their BOM ≈ £3.10", "±15% banded estimate"], ["💶", "Our BOM ≈ £4.60", "same method, same bands"], ["Δ", "Top shell −£0.60", "biggest single-part delta"]] },
-      { t: "Step 5 — Harvest & transfer. Findings become creative-phase inputs with owners and dates — that's the difference between a teardown and teardown tourism.",
-        cards: [["💡", "Snap-fit chassis", "adopt — delete 4 screws"], ["💡", "Single-screw service path", "adapt to our architecture"], ["🧱", "Cost walk: −£1.50", "design −0.9 · sourcing −0.4 · assembly −0.2"]] },
+      { t: "Step 3 — Record every part. Every part logged: material, mass, process evidence, supplier marks, fastener count.",
+        cards: [["📋", "9 parts vs 14", "five fewer things to buy, fit and fail"], ["🏷", "PCB supplier mark", "same board house as our B-supplier"], ["🔧", "Tool marks", "2-cavity mould, set up for medium volumes"]] },
+      { t: "Step 4 — Should-cost each part using THEIR assumptions: their region, their volumes, their processes. Give every estimate a range. Differences are reliable even when exact figures aren't.",
+        cards: [["💶", "Their BOM ≈ £3.10", "estimate, ±15%"], ["💶", "Our BOM ≈ £4.60", "same method, same bands"], ["Δ", "Top shell −£0.60", "biggest difference on one part"]] },
+      { t: "Step 5 — Turn findings into ideas. Findings become Creative Phase ideas with owners and dates. That's the difference between a real teardown and teardown tourism.",
+        cards: [["💡", "Snap-fit chassis", "copy it: remove 4 screws"], ["💡", "Single-screw service path", "adapt to our architecture"], ["🧱", "Cost walk: −£1.50", "design −0.9 · sourcing −0.4 · assembly −0.2"]] },
     ];
     let s = 0;
     dots.innerHTML = STEPS.map((_, i) => `<i data-d="${i}"></i>`).join("");
@@ -1469,27 +1469,27 @@
      ["Remove the fasteners while enthusiasm is high", "Photograph, weigh and measure everything", "Should-cost the visible parts", "Send parts to suppliers for quotes"], 1,
      "You get exactly one first teardown. Document every state before changing it — the photo archive settles every argument the study will ever face."],
     ["Why capture disassembly TIME for every operation?",
-     ["To bill the lab hours correctly", "Disassembly in reverse reveals their assembly cost", "To finish before the deadline", "It makes the report longer"], 1,
-     "The stopwatch reads their factory: a product that comes apart in 48 seconds went together in about a minute of paid labour."],
+     ["To bill the lab hours correctly", "Taking it apart shows you their assembly cost", "To finish before the deadline", "It makes the report longer"], 1,
+     "The stopwatch tells you about their factory: a product that comes apart in 48 seconds went together in about a minute of paid labour."],
     ["When should-costing the competitor's parts, whose assumptions do you use?",
      ["Your region, your volumes — for comparability", "Their likely region, volumes and processes", "Whichever gives the bigger saving", "Industry averages only"], 1,
-     "Cost their parts at THEIR assumptions, evidenced by the parts themselves. Then compare deltas — deltas survive uncertainty that absolutes don't."],
+     "Cost their parts at THEIR assumptions, evidenced by the parts themselves. Then compare the differences — differences stay reliable even when exact figures are uncertain."],
     ["Their hinge costs £1.10 ±15% and yours £2.30 ±15%. What's the robust conclusion?",
      ["The numbers are too uncertain to use", "A real gap of roughly £1.20 exists — investigate it", "Their hinge must be lower quality", "Switch to their supplier immediately"], 1,
-     "Deltas are robust where absolutes are fragile: even at the worst ends of both bands, a large gap remains — that's a finding."],
+     "Differences are reliable even when exact figures aren't: even at the worst ends of both bands, a large gap remains — that's a finding."],
     ["A friendly shared supplier offers you the competitor's part drawings. You should:",
-     ["Accept — it saves teardown time", "Refuse — misappropriated confidential information poisons the study", "Accept but don't tell anyone", "Ask for their price list instead"], 1,
-     "That's the brightest of the bright lines. Open-market teardown is lawful; someone else's confidential documents are not. Refuse and say why."],
+     ["Accept — it saves teardown time", "Refuse: confidential information obtained improperly contaminates the study", "Accept but don't tell anyone", "Ask for their price list instead"], 1,
+     "That's the clearest limit of all. Open-market teardown is lawful; someone else's confidential documents are not. Refuse and say why."],
     ["The teardown found their clever snap-fit chassis. It's patented. What can you do?",
      ["Copy it — patents don't apply to internals", "Read the patent freely, then license it or design around it", "Nothing — patented ideas are off-limits even to study", "Wait for a lawsuit to clarify"], 1,
      "Patents are public documents you SHOULD read. Learning is free; copying needs a licence or a design-around. Involve counsel when adopting, not when analysing."],
     ["Your teardown produced a beautiful 80-page report and nothing else. What went wrong?",
-     ["Nothing — the report is the deliverable", "Teardown tourism: findings never became owned ideas in the funnel", "The report should have been longer", "Too few photos"], 1,
+     ["Nothing — the report is the deliverable", "Teardown tourism: the findings never became ideas with owners in the funnel", "The report should have been longer", "Too few photos"], 1,
      "The bench work is finished only when deltas become creative-phase seeds with owners, dates and a place in the savings funnel."],
     ["A rival's product is 20% cheaper at retail. What does that alone prove about their cost?",
-     ["They build it 20% cheaper", "Almost nothing — they might be buying share at negative margin", "Their quality is 20% lower", "Their labour is offshore"], 1,
+     ["They build it 20% cheaper", "Almost nothing — they might be selling at a loss to win market share", "Their quality is 20% lower", "Their labour is offshore"], 1,
      "Price alone tells you almost nothing. That's why benchmarking runs six dimensions — cost, functional, design, process, feature and patent/IP — together."],
-  ], "Good practice — re-read sections 10.3–10.7 on the five steps and 10.11 on the bright lines, then try again.");
+  ], "Worth a second go. Re-read sections 10.3–10.7 on the five steps and 10.11 on the limits, then try again.");
 
   /* ── 6 · Modules 1–3 foundations challenge ── */
   buildChallenge("#m3ChalMount", [
