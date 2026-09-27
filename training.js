@@ -553,7 +553,7 @@
       ["Functional benchmarking compares…", ["Absolute performance only", "Performance per pound (torque/£, lumens/£)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not raw figures. That's how VE looks at benchmarking."],
     ],
     m11: [
-      ["The right division of labour with AI in VAVE is…", ["AI replaces the workshop team", "AI diverges and drafts; humans judge, validate and decide", "AI sets the prices", "AI signs supplier contracts"], 1, "AI compresses analysis and idea volume; judgement and validation stay human."],
+      ["The right division of labour with AI in VAVE is…", ["AI replaces the workshop team", "AI generates and drafts; people judge, check and decide", "AI sets the prices", "AI signs supplier contracts"], 1, "AI speeds up analysis and produces more ideas; judgement and checking stay with people."],
       ["CT scanning is used in teardowns to…", ["Sterilise components", "See internal structures non-destructively", "Paint-match surfaces", "Estimate freight cost"], 1, "Wall thicknesses, hidden joints and internal architecture — without cutting the part open."],
     ],
     m12: [
@@ -1578,30 +1578,30 @@
   /* ── 9 · Module 11 AI-era challenge ── */
   buildChallenge("#m11ChalMount", [
     ["An engineer pastes the full supplier-quoted BOM into a public chatbot to 'find savings'. This is:",
-     ["Efficient modern practice", "A confidentiality breach — supplier prices belong only in approved company instances", "Fine if anonymised later", "Good, because public models are smarter"], 1,
-     "Treat a pasted BOM like an emailed one: confidential data never enters public tools. Use your company's approved instances — the capability is the same, the exposure isn't."],
+     ["Efficient modern practice", "A confidentiality breach — supplier prices belong only in your company's approved tools", "Fine if anonymised later", "Good, because public models are smarter"], 1,
+     "Treat a pasted BOM like an emailed one: confidential data never enters public tools. Use your company's approved tools — the capability is the same, the exposure isn't."],
     ["The LLM's business-case draft claims a '23% typical saving for this commodity'. Before it reaches the board you must:",
-     ["Round it to 25%", "Verify the number against a source — LLMs are fluent, not calibrated", "Delete the claim", "Ask the model to double-check itself"], 1,
-     "Every number that reaches a business case gets a human check against a real source. Fluency creates false confidence — that's exactly why verification is a hard rule."],
+     ["Round it to 25%", "Verify the number against a source — AI tools sound confident even when they're wrong", "Delete the claim", "Ask the model to double-check itself"], 1,
+     "Every number that reaches a business case gets a human check against a real source. Confident-sounding answers can mislead you — that's exactly why verification is a hard rule."],
     ["Your AI should-cost engine's estimates drifted 12% above real quotes over a year. The likely cause is:",
-     ["Suppliers cutting prices unrealistically", "Aged rate cards and silent model changes — re-benchmark against quotes on a cadence", "The CAD models got worse", "Inflation"], 1,
+     ["Suppliers cutting prices unrealistically", "Aged rate cards and silent model changes — compare against real quotes regularly", "The CAD models got worse", "Inflation"], 1,
      "Rate libraries age and models update silently. Teams that re-benchmark quarterly catch drift; teams that don't slowly lose finance's trust in every AI number."],
     ["The best FIRST investment for a team starting its digital cost stack is:",
      ["An enterprise AI copilot suite", "A spend cube and LPP on data you already own", "CT scanning equipment", "A cost knowledge graph"], 1,
-     "Crawl before you run: spend analytics needs no new tools, finds outliers in weeks, and its savings fund everything that follows. Tool-first transformations produce beautifully-formatted guesses."],
+     "Crawl before you run: spend analytics needs no new tools, finds outliers in weeks, and its savings fund everything that follows. Buying tools first just produces nicely formatted guesses."],
     ["A feature-based engine returns different costs for the same part from two CAD files. Why?",
-     ["The engine is broken", "Quality-in decides quality-out — a sloppy model costs wrongly", "Random variation", "Currency differences"], 1,
-     "The engine reads manufacturing features from the geometry. Missing draft angles or wrong wall thicknesses change the simulated process — garbage CAD, garbage cost."],
+     ["The engine is broken", "The result is only as good as the input: a careless model gives the wrong cost", "Random variation", "Currency differences"], 1,
+     "The engine reads manufacturing features from the geometry. Missing draft angles or wrong wall thicknesses change the simulated process — poor CAD, wrong cost."],
     ["Where should the human stay in charge in an AI-assisted workshop?",
      ["Typing speed", "Judging, deciding and owning — AI drafts, counts and clusters", "Formatting slides", "Scheduling"], 1,
-     "The division of labour is constant across every phase: machines diverge and draft; engineers judge, validate and sign. The decision rights never move."],
+     "The division of labour is constant across every phase: AI generates and drafts; engineers judge, validate and sign. People always make the decisions."],
     ["Your team wants to automate function analysis before ever having run one manually. The risk is:",
-     ["None — that's what tools are for", "You can't audit what you can't do — automated output can't be judged by a team that never mastered the method", "It's too expensive", "The tool needs training data"], 1,
+     ["None — that's what tools are for", "You can't check what you can't do yourself — automated output can't be judged by a team that never mastered the method", "It's too expensive", "The tool needs training data"], 1,
      "A drafted function tree is only useful to someone who can spot where it's wrong. Master the manual method first; then AI becomes a multiplier instead of a black box."],
     ["The same cleansheet lever cuts cost AND carbon. Which is it?",
      ["Extending payment terms", "Mass reduction — less material is less money and less embodied CO₂e", "Rebranding", "Longer contracts"], 1,
-     "Cost and carbon share physics: mass, energy, scrap, distance. Add a kgCO₂e column to the cleansheet and most cost levers reveal a carbon dividend."],
-  ], "Good practice — re-read sections 11.4 on the engines, 11.8 on sequencing and 11.9 on the guardrails, then try again.");
+     "Cost and carbon share physics: mass, energy, scrap, distance. Add a kgCO₂e column to the cleansheet and most cost savings cut carbon too."],
+  ], "Worth a second go. Re-read sections 11.4 on the engines, 11.8 on the order to adopt tools and 11.9 on the ground rules, then try again.");
 })();
 
 /* ════════ Course-at-a-glance catalogue: open modules via the sidebar (keeps sign-in gating) ════════ */
