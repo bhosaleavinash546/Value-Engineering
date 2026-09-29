@@ -57,6 +57,16 @@ window.VHCloud = (function () {
       try { localStorage.removeItem("vh-session"); } catch (e) {}
     },
 
+    // ── anonymous module feedback (no user id is sent) ──
+    async sendFeedback(module, helpful, comment) {
+      if (!LIVE) return false;
+      await ready; if (!client) return false;
+      try {
+        const { error } = await client.from("module_feedback").insert({ module, helpful, comment: comment ? String(comment).slice(0, 500) : null });
+        return !error;
+      } catch (e) { return false; }
+    },
+
     // ── progress: push/pull the course state blob ──
     async saveProgress(state) {
       const u = await user(); if (!u) return;

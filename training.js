@@ -95,6 +95,46 @@
     if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  /* ── "Was this module helpful?" — anonymous; the rating is sent on click, a comment is optional ── */
+  const FB_KEY = "vh-feedback";
+  const fbDone = (() => { try { return JSON.parse(localStorage.getItem(FB_KEY)) || {}; } catch { return {}; } })();
+  const fbThanks = '<p class="mf-thanks" role="status">Thanks for your feedback. It helps improve the course.</p>';
+  courseMods.forEach((mod) => {
+    const id = mod.dataset.mod, done = $(".tmod-done", mod);
+    if (!done) return;
+    const box = document.createElement("div");
+    box.className = "mod-feedback";
+    box.innerHTML = fbDone[id] ? fbThanks :
+      `<p class="mf-q" id="mfq-${id}">Was this module helpful?</p>
+      <div class="mf-btns" role="group" aria-labelledby="mfq-${id}">
+        <button type="button" class="mf-btn" data-v="1" aria-pressed="false">👍 Yes</button>
+        <button type="button" class="mf-btn" data-v="0" aria-pressed="false">👎 Not really</button>
+      </div>
+      <form class="mf-more" hidden>
+        <label for="mfc-${id}">Anything we could improve? <span>Optional and anonymous.</span></label>
+        <textarea id="mfc-${id}" maxlength="500" rows="3"></textarea>
+        <button type="submit" class="btn btn-ghost mf-send">Send comment</button>
+      </form>`;
+    done.parentNode.insertBefore(box, done);
+    let helpful = null;
+    const remember = () => { fbDone[id] = true; try { localStorage.setItem(FB_KEY, JSON.stringify(fbDone)); } catch (e) {} };
+    box.addEventListener("click", (e) => {
+      const b = e.target.closest(".mf-btn");
+      if (!b || helpful !== null) return;
+      helpful = b.dataset.v === "1";
+      $$(".mf-btn", box).forEach((x) => { x.setAttribute("aria-pressed", String(x === b)); x.disabled = true; });
+      remember();
+      if (window.VHCloud) VHCloud.sendFeedback(id, helpful, null);
+      const form = $(".mf-more", box); form.hidden = false; $("textarea", form).focus();
+    });
+    box.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const comment = $("textarea", box).value.trim();
+      if (comment && window.VHCloud) VHCloud.sendFeedback(id, helpful, comment);
+      box.innerHTML = fbThanks;
+    });
+  });
+
   // "Mark complete" buttons say where they lead next
   $$(".tmod-done").forEach((btn) => {
     const i = mods.findIndex((m) => m.dataset.mod === btn.dataset.done), nxt = mods[i + 1];
@@ -1367,6 +1407,12 @@
     render();
   }
 
+  /* ── 0 · toggle buttons announce their state (they follow the visual "is-on" class) ── */
+  document.querySelectorAll(".role-chip").forEach((btn) => {
+    const sync = () => btn.setAttribute("aria-pressed", String(btn.classList.contains("is-on")));
+    sync(); new MutationObserver(sync).observe(btn, { attributes: true, attributeFilter: ["class"] });
+  });
+
   /* ── 1 · SCAMPER explorer (Module 5) ── */
   (function () {
     const row = $("#scamperRow"), panel = $("#scamperPanel");
@@ -1391,7 +1437,7 @@
       `<button type="button" class="scamper-key${i === 0 ? " is-on" : ""}" data-i="${i}"><b>${l}</b><span>${name}</span></button>`).join("");
     function show(i) {
       const [l, name, q, ex] = SC[i];
-      $$(".scamper-key", row).forEach((k) => k.classList.toggle("is-on", +k.dataset.i === i));
+      $$(".scamper-key", row).forEach((k) => { k.classList.toggle("is-on", +k.dataset.i === i); k.setAttribute("aria-pressed", String(+k.dataset.i === i)); });
       panel.innerHTML = `<div class="sc-letter">${l}</div><div class="sc-body"><h5>${name}</h5><p class="sc-q">${q}</p><p class="sc-ex"><b>On the torch →</b> ${ex}</p></div>`;
     }
     row.addEventListener("click", (e) => { const k = e.target.closest(".scamper-key"); if (k) show(+k.dataset.i); });

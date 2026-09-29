@@ -67,4 +67,21 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- ── Module feedback ("Was this module helpful?") ─────────────
+-- Anonymous: no user id, name or email is stored. Anyone may ADD a row;
+-- nobody can read rows through the website — view them in the Supabase
+-- dashboard (Table Editor → module_feedback).
+create table if not exists public.module_feedback (
+  id         bigint generated always as identity primary key,
+  module     text        not null check (module ~ '^m([1-9]|1[0-3])$'),
+  helpful    boolean     not null,
+  comment    text        check (comment is null or char_length(comment) <= 500),
+  created_at timestamptz not null default now()
+);
+alter table public.module_feedback enable row level security;
+drop policy if exists "anyone can send feedback" on public.module_feedback;
+create policy "anyone can send feedback" on public.module_feedback
+  for insert to anon, authenticated with check (true);
+grant insert on public.module_feedback to anon, authenticated;
+
 -- Done. Your VAVEhub project is ready.

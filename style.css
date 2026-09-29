@@ -1187,3 +1187,6 @@ body::before,body::after{animation:none!important}
 #main:focus{outline:none}
 /* focus rings appear instantly, even on elements with hover transitions */
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{transition-property:none}
+
+/* text for screen readers only */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}

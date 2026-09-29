@@ -345,6 +345,7 @@ def build():
         doc += rewrite(body, p["slug"]) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, p["slug"]) + "\n" + TAIL_GUIDE + "\n\n" + SCRIPTS
         write(f"{p['slug']}/index.html", doc)
         print(f"{p['slug']+'/index.html':34} {len(doc)//1024:>3} KB")
+    build_academy()
     write_sitemap()
     return PAGES
 
@@ -362,6 +363,14 @@ def write_sitemap():
     xml += [f"  <url><loc>{SITE}{p}</loc><lastmod>{UPDATED}</lastmod><changefreq>{c}</changefreq><priority>{pr}</priority></url>" for p, pr, c in rows]
     write("sitemap.xml", "\n".join(xml + ["</urlset>"]) + "\n")
     print(f"sitemap.xml  {len(rows)} URLs")
+
+def build_academy():
+    """training.html = src/academy/_head.html + m1..m13.html + _tail.html (exam, certificate, scripts).
+    Edit the module files, not training.html. The narration workflow reads the built page, so any
+    change to narrated module text still needs the audio regenerating for that module."""
+    parts = [read("academy", "_head.html")] + [read("academy", f"m{i}.html") for i in range(1, 14)] + [read("academy", "_tail.html")]
+    write("training.html", "".join(parts))
+    print("training.html  13 modules")
 
 if __name__ == "__main__":
     if HEAD_COMMON is None: sys.exit("missing src/partials/head-common.html")

@@ -1,3 +1,4 @@
 __pycache__/
 *.pyc
 parts-src/
+node_modules/

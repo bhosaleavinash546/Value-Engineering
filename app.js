@@ -371,6 +371,13 @@
     mark();
   }
 
+  /* ── Keep tab/toggle states readable by screen readers (they follow the visual "is-active" class) ── */
+  const syncAria = (btn, on) => btn.setAttribute(btn.getAttribute("role") === "tab" ? "aria-selected" : "aria-pressed", String(on));
+  $$(".save-tab, .ind-tab, #leverFilters .chip").forEach((btn) => {
+    syncAria(btn, btn.classList.contains("is-active"));
+    new MutationObserver(() => syncAria(btn, btn.classList.contains("is-active"))).observe(btn, { attributes: true, attributeFilter: ["class"] });
+  });
+
   /* ── Footer year ── */
   const y = $("#year");
   if (y) y.textContent = new Date().getFullYear();
@@ -756,7 +763,7 @@
     stage.querySelectorAll(".wiz-opt").forEach((btn) => btn.addEventListener("click", () => {
       answers[Q.id] = btn.dataset.v;
       btn.classList.add("is-picked");
-      setTimeout(() => { step++; step < QUESTIONS.length ? renderQuestion() : renderResult(); }, 220);
+      setTimeout(() => { step++; step < QUESTIONS.length ? renderQuestion() : renderResult(); focusStage(); }, 220);
     }));
   }
 
@@ -791,8 +798,13 @@
       </div></div>`;
   }
 
-  back.addEventListener("click", () => { step = step >= QUESTIONS.length ? QUESTIONS.length - 1 : Math.max(0, step - 1); renderQuestion(); });
-  restart.addEventListener("click", () => { step = 0; for (const k in answers) delete answers[k]; renderQuestion(); });
+  // after an answer, Back or Restart, move keyboard/screen-reader focus to the new question or result
+  function focusStage() {
+    const t = $(".wiz-q, .wr-verdict h3", stage);
+    if (t) { t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true }); }
+  }
+  back.addEventListener("click", () => { step = step >= QUESTIONS.length ? QUESTIONS.length - 1 : Math.max(0, step - 1); renderQuestion(); focusStage(); });
+  restart.addEventListener("click", () => { step = 0; for (const k in answers) delete answers[k]; renderQuestion(); focusStage(); });
   renderQuestion();
 })();
 

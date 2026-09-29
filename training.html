@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Built by tools/build.py from src/academy/ — edit those files, not this one. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -469,7 +470,8 @@ Use the pre-workshop checklist in the <a href="toolkit/save-workshop-agenda.html
         <div class="cv-head"><h4>Cost vs worth: the value gap you're hunting</h4>
         <p>For each function, put what it <em>costs</em> today next to what it's <em>worth</em>: the cheapest reliable way to do the same job. The bigger the gap, and the higher the value index (VI&nbsp;=&nbsp;cost&nbsp;÷&nbsp;worth), the bigger the saving.</p></div>
         <div class="vg-legend"><span class="vg-k vg-cost">Cost today</span><span class="vg-k vg-worth">Worth</span></div>
-        <div class="vg-chart">
+        <p class="sr-only">Chart summary: indicate status costs £0.60 but is worth £0.15 (value index 4.0); transmit torque costs £2.30 and is worth £1.10 (2.1); contain water costs £0.90 and is worth £0.55 (1.6); support load costs £1.20 and is worth £0.90 (1.3).</p>
+        <div class="vg-chart" aria-hidden="true">
           <div class="vg-group is-target" style="--c:26.1;--w:6.5"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£0.60</span></div><div class="vg-bar vg-b-worth"><span>£0.15</span></div></div><div class="vg-name">Indicate status<b class="vg-vi">VI 4.0</b></div></div>
           <div class="vg-group" style="--c:100;--w:47.8"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£2.30</span></div><div class="vg-bar vg-b-worth"><span>£1.10</span></div></div><div class="vg-name">Transmit torque<b class="vg-vi">VI 2.1</b></div></div>
           <div class="vg-group" style="--c:39.1;--w:23.9"><div class="vg-bars"><div class="vg-bar vg-b-cost"><span>£0.90</span></div><div class="vg-bar vg-b-worth"><span>£0.55</span></div></div><div class="vg-name">Contain water<b class="vg-vi">VI 1.6</b></div></div>
@@ -600,7 +602,8 @@ far off were you? That gap is why the Information Phase exists. Capture it in th
       <p>Press <strong>Next step</strong> to build a real FAST diagram for an electric kettle:</p>
 
       <div class="fast-builder" id="fastBuilder">
-        <div class="fb-stage" id="fbStage">
+        <p class="sr-only">Finished diagram: the basic function is heat water. Asking how: generate heat, then conduct current. Supply power is an assumed function outside the right scope line. Asking why: prepare beverage, the higher-order function outside the left scope line. Ensure safety and convey esteem are all-time functions above the main path. Use the Next step button to hear it built step by step.</p>
+        <div class="fb-stage" id="fbStage" aria-hidden="true">
           <div class="fb-scope fb-scope-l" data-fstep="1"><span>scope line</span></div>
           <div class="fb-scope fb-scope-r" data-fstep="1"><span>scope line</span></div>
           <div class="fb-axis" data-fstep="1"><span class="fb-how">HOW? →</span><span class="fb-why">← WHY?</span></div>
@@ -765,7 +768,7 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
         <p>Click each letter to see the question it asks and what it produces for an ordinary £8 aluminium pocket
         torch.</p></div>
         <div class="scamper-row" id="scamperRow"></div>
-        <div class="scamper-panel" id="scamperPanel"></div>
+        <div class="scamper-panel" id="scamperPanel" aria-live="polite"></div>
       </div>
 
       <h3>5.7 · TRIZ in twenty minutes</h3>
@@ -794,7 +797,7 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
             <span class="triz-vs">but this worsens…</span>
             <label>Worsens <select id="trizWor"></select></label>
           </div>
-          <div id="trizOut" class="triz-out" hidden></div>
+          <div id="trizOut" class="triz-out" aria-live="polite" hidden></div>
         </div>
 
         <div class="lab-part">
@@ -807,7 +810,7 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
             <span class="sprint-count" id="sprintCount">0 ideas</span>
           </div>
           <textarea id="sprintPad" class="sprint-pad" rows="6" placeholder="One idea per line — start the timer first…" disabled></textarea>
-          <div id="sprintVerdict" class="sprint-verdict" hidden></div>
+          <div id="sprintVerdict" class="sprint-verdict" aria-live="polite" hidden></div>
         </div>
       </div>
 
@@ -950,7 +953,7 @@ Altshuller Institute case reports.</i></p></div>
         update. If a small change in weight changes the winner, you must report that, not hide it.</p></div>
         <div class="wm-weights" id="wmWeights"></div>
         <div class="wm-table-wrap"><table class="wm-table" id="wmTable"></table></div>
-        <div class="wm-note" id="wmNote"></div>
+        <div class="wm-note" id="wmNote" aria-live="polite"></div>
       </div>
 
       <h3>6.6 · Setting fair criteria</h3>
@@ -1040,7 +1043,8 @@ disagrees with your gut feeling. That disagreement is the point. The columns are
       <div class="concept-viz costwalk">
         <div class="cv-head"><h4>The cost walk: from current cost to target, one step at a time</h4>
         <p>Development turns checked ideas into a staircase from today's cost down to the target. Each step is a named saving, and the steps must add up, or the target isn't real.</p></div>
-        <div class="cw-chart">
+        <p class="sr-only">Chart summary: from a current cost of 100, design saves 8, material 4, manufacturing 4, sourcing 5 and logistics 2, reaching a target of 77.</p>
+        <div class="cw-chart" aria-hidden="true">
           <div class="cw-col cw-anchor" style="--base:0;--h:100;--i:0"><b class="cw-val">100</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Current</span></div>
           <div class="cw-col cw-step" style="--base:92;--h:8;--i:1"><b class="cw-val">-8</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Design</span></div>
           <div class="cw-col cw-step" style="--base:88;--h:4;--i:2"><b class="cw-val">-4</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Material</span></div>
@@ -1158,7 +1162,8 @@ and work out the payback in months. If it's under 12, you'd take it to a real bo
       <div class="concept-viz sfunnel">
         <div class="cv-head"><h4>The savings funnel: why 380 ideas become a dozen wins</h4>
         <p>Ideas only "count" when they reach L4: in production and checked against the fixed starting cost. The drop-off below is normal and healthy. It means the filtering is working.</p></div>
-        <ul class="sf-stages">
+        <p class="sr-only">Chart summary: 380 raw ideas, 120 sorted as go or grow, 60 screened concepts, 25 developed proposals and 18 implemented at L4.</p>
+        <ul class="sf-stages" aria-hidden="true">
           <li style="--w:100;--i:0"><i class="sf-bar"></i><b class="sf-num" data-countup="380">0</b><span>Raw ideas</span></li>
           <li style="--w:56;--i:1"><i class="sf-bar"></i><b class="sf-num" data-countup="120">0</b><span>Sorted: go / grow</span></li>
           <li style="--w:40;--i:2"><i class="sf-bar"></i><b class="sf-num" data-countup="60">0</b><span>Screened concepts</span></li>
@@ -1292,7 +1297,8 @@ with your ideas at L1, with an owner, saving and next review date for each. Put 
           <div class="pw-quote"><b>£1.85</b><span>the quoted price: one number</span></div>
           <div class="pw-should"><b>should-cost £1.42</b></div>
         </div>
-        <div class="pw-legend">
+        <p class="sr-only">Chart summary: the £1.85 quote splits into material £0.62, process £0.31, labour £0.09, scrap £0.04, overhead £0.22, SG&amp;A £0.08 and fair margin £0.06, a should-cost of £1.42, leaving a gap of £0.43.</p>
+        <div class="pw-legend" aria-hidden="true">
           <span><i class="pw-c0"></i>Material £0.62</span><span><i class="pw-c1"></i>Process £0.31</span>
           <span><i class="pw-c2"></i>Labour £0.09</span><span><i class="pw-c3"></i>Scrap £0.04</span>
           <span><i class="pw-c4"></i>Overhead £0.22</span><span><i class="pw-c5"></i>SG&amp;A £0.08</span>
@@ -1355,7 +1361,7 @@ with your ideas at L1, with an owner, saving and next review date for each. Put 
             <div class="sc-bar" id="scBar" aria-hidden="true"></div>
             <table class="sc-table"><tbody id="scRows"></tbody>
               <tfoot><tr><th>Should-cost</th><th id="scTotal">—</th></tr></tfoot></table>
-            <div class="sc-gap" id="scGap"></div>
+            <div class="sc-gap" id="scGap" aria-live="polite"></div>
           </div>
         </div>
       </div>

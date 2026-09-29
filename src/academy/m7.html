@@ -1,0 +1,112 @@
+    <!-- ═══ MODULE 7 ═══ -->
+    <section class="tmod" data-mod="m7" data-title="Phase 5 — Development" data-time="25 min">
+      <div class="tmod-head"><span class="tmod-tag">Module 7 · 25 min · Job Plan Phase 5</span><h2>Phase 5 — Development</h2></div>
+      <div class="tmod-obj"><h3>You will learn</h3><ul><li>Turning shortlisted ideas into proposals finance will accept</li><li>Validation: CAE, FMEA and test planning</li><li>The business-case maths (savings, one-time cost and payback), with a live builder to practise on</li></ul></div>
+
+      <h3>7.1 · From idea to proposal</h3>
+      <p>Champions turn shortlisted ideas into <strong>value proposals that can be put into practice</strong>. Each one
+      answers five questions: what exactly changes, what it saves (checked by finance), what it costs to bring in
+      (tooling, testing, engineering hours), what could go wrong, and when it happens. With those five answers, an idea
+      becomes a business decision. Without them, it's still a sticky note.</p>
+
+      <div class="concept-viz costwalk">
+        <div class="cv-head"><h4>The cost walk: from current cost to target, one step at a time</h4>
+        <p>Development turns checked ideas into a staircase from today's cost down to the target. Each step is a named saving, and the steps must add up, or the target isn't real.</p></div>
+        <p class="sr-only">Chart summary: from a current cost of 100, design saves 8, material 4, manufacturing 4, sourcing 5 and logistics 2, reaching a target of 77.</p>
+        <div class="cw-chart" aria-hidden="true">
+          <div class="cw-col cw-anchor" style="--base:0;--h:100;--i:0"><b class="cw-val">100</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Current</span></div>
+          <div class="cw-col cw-step" style="--base:92;--h:8;--i:1"><b class="cw-val">-8</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Design</span></div>
+          <div class="cw-col cw-step" style="--base:88;--h:4;--i:2"><b class="cw-val">-4</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Material</span></div>
+          <div class="cw-col cw-step" style="--base:84;--h:4;--i:3"><b class="cw-val">-4</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Manufacturing</span></div>
+          <div class="cw-col cw-step" style="--base:79;--h:5;--i:4"><b class="cw-val">-5</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Sourcing</span></div>
+          <div class="cw-col cw-step" style="--base:77;--h:2;--i:5"><b class="cw-val">-2</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Logistics</span></div>
+          <div class="cw-col cw-anchor cw-target" style="--base:0;--h:77;--i:6"><b class="cw-val">77</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Target</span></div>
+        </div>
+        <p class="cw-foot">A 23-point cost reduction, built up from checked ideas. Each step has an owner and a date. Without those, a cost walk is just a nice picture, not a plan.</p>
+      </div>
+      <h3>7.2 · Engineering checks</h3>
+      <p>Reduce the risk before you commit. Use <strong>CAE simulation</strong> (computer modelling) to check a thinner
+      wall or a smaller safety margin. Use a <strong>design FMEA</strong> to find new ways the product could fail. And
+      use a <strong>DVP&amp;R</strong> (design verification plan and report) sized to how risky the change is. For
+      sourcing ideas, a <strong>should-cost model</strong> or a supplier quote confirms the saving. In regulated
+      industries, ask early whether the change needs re-certification, re-testing or PPAP (customer approval of
+      production parts).</p>
+
+      <h3>7.3 · The business case</h3>
+      <p>The basic sums are always the same: <strong>annual saving = saving per unit × volume</strong>, and
+      <strong>payback = one-time cost ÷ annual saving</strong>. Most changes to products already in production should
+      pay back in under <strong>12 months</strong>, and well-run VE studies return more than <strong>10:1</strong>
+      overall. Be honest about savings: show them before and after the one-time costs, and give a date. A saving that
+      arrives in 18 months is worth less than one that arrives this quarter.</p>
+
+      
+      <h3>7.4 · The testing ladder</h3>
+      <p>Match the amount of testing to the risk, not to habit: <strong>desk calculation → CAE/simulation → rig test →
+      production-line trial → field trial</strong>. A packaging spec change may need one step, while reducing a safety
+      margin needs all five. Two rules: only go as far up the ladder as the risk requires, because too much testing
+      slowly destroys the payback. And start anything with a long lead time (tooling, approving a supplier) at the same
+      time as testing, with clear stop points, rather than waiting until every test has passed.</p>
+      <h3>7.5 · FMEA in ten minutes</h3>
+      <p>Any VE change can create new ways for the product to fail that the current design never had. Score each
+      possible failure on <strong>Severity × Occurrence × Detection</strong> (1–10 each; multiply them to get the RPN,
+      the risk priority number). But score the <em>change from the current design</em>, not the absolute figure. A
+      thinner wall that raises occurrence from 2 to 4 on a failure with severity 8 needs action. One that goes from 2 to
+      3 on a failure with severity 2 just needs a note. For serious or regulated systems, move up to a full DFMEA with
+      the whole team. That isn't red tape. It's what makes the saving safe to count.</p>
+      <h3>7.6 · The money: sums finance will sign off</h3>
+      <p><strong>Net saving</strong> = the saving per part, minus the one-time costs spread over time (tooling,
+      testing, engineering hours, scrapped stock and re-approval). <strong>Payback</strong> = one-time cost ÷ annual net
+      saving. That's the right measure when volumes are steady. When volumes are rising or falling, use
+      <strong>NPV</strong> (net present value) at the company's minimum required return. And put a date on everything:
+      savings start on the day the change is <em>made</em>, not the day it's approved. A proposal without a date has a
+      business case of zero.</p>
+
+      <div class="ve-lab" id="bcLab" data-lab="m7">
+        <div class="lab-head"><span class="lab-tag">🧪 Interactive lab</span><h4>Build a business case the board would approve</h4>
+        <p>This uses the fine-blanked bracket from the worked example below. Change any number (the saving, the
+        volume, the tooling cost or the date it starts) and watch the annual saving, payback and the board's decision
+        update. Try delaying the start by six months and see what it costs.</p></div>
+        <div class="bc-grid">
+          <div class="bc-inputs">
+            <h5>The saving</h5>
+            <label>Per-unit saving (£) <input type="number" id="bcSave" value="0.30" min="0" max="1000" step="0.01" /></label>
+            <label>Annual volume (pcs) <input type="number" id="bcVol" value="300000" min="0" max="100000000" step="1000" /></label>
+            <h5>The one-time cost</h5>
+            <label>Tooling (£) <input type="number" id="bcTool" value="38000" min="0" max="10000000" step="500" /></label>
+            <label>Validation &amp; testing (£) <input type="number" id="bcTest" value="7000" min="0" max="10000000" step="500" /></label>
+            <label>Engineering hours <input type="number" id="bcEng" value="120" min="0" max="100000" step="10" /></label>
+            <label>Engineering rate (£/h) <input type="number" id="bcRate" value="65" min="0" max="500" step="5" /></label>
+            <h5>The timing</h5>
+            <label>Months until implemented <input type="number" id="bcDelay" value="4" min="0" max="36" step="1" /></label>
+            <label>Remaining product life (years) <input type="number" id="bcLife" value="4" min="0.5" max="20" step="0.5" /></label>
+          </div>
+          <div class="bc-result">
+            <div class="bc-cards" id="bcCards"></div>
+            <div class="bc-verdict" id="bcVerdict" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tex"><h4>Worked example</h4><p>Idea: replace a machined bracket with a fine-blanked part. Saving £0.30/unit × 300,000 units = <strong>£90k/year</strong>.
+One-time cost: tooling £38k + validation £7k = £45k. Payback = 45k ÷ 90k = <strong>6 months</strong>. Simulation shows the
+part is still strong enough. The DFMEA finds one new way it could fail (the condition of the cut edge), which is handled by
+servicing the die at set intervals. Ready for a decision.</p></div>
+      <div class="tcase"><h4>Case study — documented</h4><p><b>Development at giga scale: Tesla's Model Y rear underbody.</b> The idea was to replace about 70 pressed and
+welded parts (as used on the Model 3) with one or two giant aluminium castings. Reports put the saving at about
+<b>40% of the manufacturing cost</b> for that assembly, plus a big saving on equipment (hundreds of welding robots no
+longer needed), and a rear body about 30% lighter. It also brought real new risks (repairs, casting quality) that had to
+be engineered and tested before the savings were real. It's a textbook Phase 5: a bold idea, thorough development and a
+fixed start date. <i>Sources: Tesla statements; Charged EVs / Electrek reporting; Munro &
+Associates analyses.</i></p></div>
+      <div class="tpit"><h4>Common pitfalls</h4><ul><li>Savings estimated by the idea's biggest supporter instead of finance</li><li>Forgetting one-time costs (validation, requalification, scrapped stock)</li><li>Testing everything as much as possible: too much testing slowly destroys the payback</li><li>No start date: a proposal without a date is worth nothing on paper</li></ul></div>
+      <div class="tkey"><h4>Key takeaways</h4><ul>
+        <li>Five answers make a proposal: what, saves, costs, risks, when.</li>
+        <li>Check with simulation and FMEA. Reducing the risk is what makes savings real.</li>
+        <li>Aim for payback in under 12 months, and report savings after costs, with dates.</li>
+      </ul></div>
+      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Build one business case. Pick your best idea, estimate the saving per unit × annual volume, guess the one-time cost
+and work out the payback in months. If it's under 12, you'd take it to a real board.</p></div>
+      <div class="qcheck" data-qc="m7"></div>
+      <button class="btn btn-primary tmod-done" data-done="m7">Mark complete & continue →</button>
+    </section>
+

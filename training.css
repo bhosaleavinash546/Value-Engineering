@@ -778,3 +778,18 @@ html[data-theme="light"] .tdo a{border-bottom-color:rgba(4,120,87,.45)}
 
 /* FAST builder: before the first step, show a faint outline of the finished diagram */
 .fb-stage.fb-ghost [data-fstep]{opacity:.14;transform:none}
+
+/* ── "Was this module helpful?" ── */
+.mod-feedback{margin:1.4rem 0 1.2rem;padding:1rem 1.2rem;border:1px dashed var(--line);border-radius:14px}
+.mf-q{margin:0 0 .6rem;font-weight:600;color:var(--txt)}
+.mf-btns{display:flex;flex-wrap:wrap;gap:.5rem}
+.mf-btn{min-height:40px;padding:0 1rem;border:1px solid var(--line);border-radius:100px;background:var(--card);color:var(--txt);font:500 .92rem var(--font-b);cursor:pointer;transition:border-color .2s,background .2s}
+.mf-btn:hover:not(:disabled){border-color:var(--acc1)}
+.mf-btn[aria-pressed="true"]{border-color:var(--acc1);background:color-mix(in srgb,var(--acc1) 16%,transparent)}
+.mf-btn:disabled:not([aria-pressed="true"]){opacity:.5}
+.mf-more{margin-top:.9rem;display:grid;gap:.5rem}
+.mf-more label{font-size:.92rem;color:var(--txt)}
+.mf-more label span{color:var(--muted)}
+.mf-more textarea{width:100%;padding:.7rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--bg2);color:var(--txt);font:inherit;font-size:.95rem;resize:vertical}
+.mf-send{justify-self:start;min-height:40px}
+.mf-thanks{margin:0;color:var(--muted)}
