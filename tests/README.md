@@ -18,6 +18,7 @@ node run.js academy narration     # just some groups
 | `narration` | Lesson text matches the audio script word for word, timings are sound, seeking highlights the right paragraph |
 | `guides` | Homepage and the ten guides: old links redirect, every tool works, nav, phone menu, skip link |
 | `academy` | Catalogue and sign-in gate, labs, exam gate, a full exam pass and certificate, answer shuffling, feedback button, phone layout |
+| `admin` | Owner dashboard: signed-out, learner and setup-missing states, real data (simulated), filters, search, learner detail, CSV, text safety |
 
 Nothing here talks to the real Supabase project. Signed-in tests switch Supabase
 off inside the test browser only, and feedback requests are intercepted.

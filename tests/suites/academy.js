@@ -29,7 +29,7 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   // ── Signed in: labs and course features
   ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } });
   p = track(await ctx.newPage());
-  await p.goto(U); await p.evaluate(() => localStorage.setItem("vf-academy", JSON.stringify({ done: ["m1"] }))); await p.reload();
+  await p.goto(U); await p.evaluate(() => localStorage.setItem("vf-academy", JSON.stringify({ done: ["m1"], qc: { m2: true } }))); await p.reload();
   await p.waitForSelector("#modNav .mod-link"); await p.waitForTimeout(500);
   r.ok(!(await p.$eval("#catWrap", (d) => d.open)), "returning learner: catalogue collapsed");
   await open(p, "m7"); await p.waitForTimeout(400);
@@ -49,6 +49,10 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   await open(p, "exam"); await p.waitForTimeout(400);
   r.ok(!(await p.$("#examStart")) && !!(await p.$("#examNextMod")), "exam locked until all 13 modules are done");
   await p.click("#examNextMod"); await p.waitForTimeout(400);
+  await p.evaluate(() => document.querySelector('section[data-mod="m2"] .tmod-done').click()); await p.waitForTimeout(300);
+  const st2 = await p.evaluate(() => JSON.parse(localStorage.getItem("vf-academy")));
+  r.ok(st2.done.includes("m2") && !!(st2.doneAt && st2.doneAt.m2), "completing a module records the date");
+  await open(p, "m2"); await p.waitForTimeout(300);
   r.ok(await p.evaluate(() => document.querySelector(".tmod.is-visible").dataset.mod === "m2"), "'continue' button opens the next unfinished module");
   await ctx.close();
 
@@ -78,6 +82,8 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   r.ok(Math.max(...positions) <= 18 && positions.filter(Boolean).length >= 3, `answers are shuffled across positions (A–D: ${positions.join("/")})`);
   await p.fill("#certNameInput", "Test Learner"); await p.click("#genCert"); await p.waitForTimeout(300);
   r.ok((await p.textContent("#certName")).includes("Test Learner"), "certificate carries the learner's name");
+  const saved = await p.evaluate(() => JSON.parse(localStorage.getItem("vf-academy")));
+  r.ok(Array.isArray(saved.attempts) && saved.attempts.length === 1 && saved.attempts[0].p === true && saved.attempts[0].s === 100, "exam attempt is recorded for the owner dashboard");
   await p.reload(); await p.waitForTimeout(700);
   r.ok((await p.textContent("#navProgText")).trim() === "✓ Certified", "progress badge shows ✓ Certified");
   await ctx.close();

@@ -14,7 +14,7 @@ window.VHCloud = (function () {
   // Load the Supabase SDK on demand, then create the client.
   // Content pages only need it to show who is signed in, so they skip the 200 KB SDK
   // unless this browser already holds a Supabase session token.
-  const NEEDS_SDK = /(training|auth|certificate|verify)\.html$/.test(location.pathname);
+  const NEEDS_SDK = /(training|auth|certificate|verify|admin)\.html$/.test(location.pathname);
   const HAS_TOKEN = (() => { try { return Object.keys(localStorage).some((k) => /^sb-.+-auth-token$/.test(k)); } catch (e) { return true; } })();
   ready = (function () {
     if (!LIVE || (!NEEDS_SDK && !HAS_TOKEN)) return Promise.resolve(null);
@@ -31,6 +31,20 @@ window.VHCloud = (function () {
       return client;
     }
   })();
+
+  // Remember how this browser first found the site (a campaign tag or the linking website),
+  // so the owner dashboard can show where learners come from. Stays on the device until sign-in.
+  try {
+    if (!localStorage.getItem("vh-src")) {
+      const utm = new URLSearchParams(location.search).get("utm_source");
+      let src = utm || "";
+      if (!src && document.referrer) {
+        const h = new URL(document.referrer).hostname.replace(/^www\./, "");
+        if (h && h !== location.hostname.replace(/^www\./, "")) src = h;
+      }
+      localStorage.setItem("vh-src", (src || "direct").slice(0, 80));
+    }
+  } catch (e) {}
 
   async function user() {
     if (!LIVE) return null;
@@ -55,6 +69,30 @@ window.VHCloud = (function () {
     async signOut() {
       if (LIVE) { await ready; if (client) await client.auth.signOut(); }
       try { localStorage.removeItem("vh-session"); } catch (e) {}
+    },
+
+    // ── profile details for the owner dashboard, at most once a day per browser:
+    // time zone + language (to estimate the country; no IP address), phone or computer,
+    // first referrer, last seen. `force` is used straight after signing in.
+    async touchProfile(force) {
+      if (!LIVE) return false;
+      const today = new Date().toISOString().slice(0, 10);
+      try { if (!force && localStorage.getItem("vh-touch") === today) return false; } catch (e) {}
+      const u = await user(); if (!u) return false;
+      const row = {
+        last_seen_at: new Date().toISOString(),
+        timezone: (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || null; } catch (e) { return null; } })(),
+        language: (navigator.language || "").slice(0, 20) || null,
+        device: /Mobi|Android|iPhone|iPod/i.test(navigator.userAgent) ? "phone" : /iPad|Tablet/i.test(navigator.userAgent) ? "tablet" : "computer",
+      };
+      try {
+        const { error } = await client.from("profiles").update(row).eq("id", u.id);
+        if (error) return false;
+        let src = null; try { src = localStorage.getItem("vh-src"); } catch (e) {}
+        if (src) await client.from("profiles").update({ source: src }).eq("id", u.id).is("source", null);
+        try { localStorage.setItem("vh-touch", today); } catch (e) {}
+        return true;
+      } catch (e) { return false; }
     },
 
     // ── anonymous module feedback (no user id is sent) ──

@@ -84,4 +84,62 @@ create policy "anyone can send feedback" on public.module_feedback
   for insert to anon, authenticated with check (true);
 grant insert on public.module_feedback to anon, authenticated;
 
+-- ── Owner dashboard (admin.html) ─────────────────────────────
+-- Extra profile details, recorded when a learner visits the Academy (at most once a day):
+-- the browser's time zone and language (to estimate the country; no IP address is used),
+-- phone or computer, the website that first sent them here, and when they were last seen.
+alter table public.profiles
+  add column if not exists timezone     text,
+  add column if not exists language     text,
+  add column if not exists device       text,
+  add column if not exists source       text,
+  add column if not exists last_seen_at timestamptz;
+
+-- Who may open the dashboard. No policies = nobody can read this table through the website.
+-- To add another admin:  insert into public.admins (email) values ('someone@example.com');
+create table if not exists public.admins (email text primary key);
+alter table public.admins enable row level security;
+insert into public.admins (email) values ('bhosale.avinash546@gmail.com') on conflict do nothing;
+
+create or replace function public.is_admin()
+returns boolean language sql stable security definer set search_path = public, auth as $$
+  select exists (
+    select 1 from public.admins a join auth.users u on lower(u.email) = lower(a.email)
+    where u.id = auth.uid() and u.email_confirmed_at is not null);
+$$;
+
+-- Everything the dashboard shows, in one call. Refuses anyone who isn't an admin.
+create or replace function public.admin_dashboard()
+returns jsonb language plpgsql stable security definer set search_path = public, auth as $$
+begin
+  if not public.is_admin() then
+    raise exception 'Only the site owner can open the dashboard' using errcode = '42501';
+  end if;
+  return jsonb_build_object(
+    'generated_at', now(),
+    'users', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'id', u.id,
+        'email', u.email,
+        'name', coalesce(nullif(p.full_name, ''), u.raw_user_meta_data->>'full_name'),
+        'created_at', u.created_at,
+        'last_sign_in_at', u.last_sign_in_at,
+        'confirmed', u.email_confirmed_at is not null,
+        'timezone', p.timezone, 'language', p.language, 'device', p.device,
+        'source', p.source, 'last_seen_at', p.last_seen_at,
+        'progress', pr.data, 'progress_at', pr.updated_at
+      ) order by u.created_at desc)
+      from auth.users u
+      left join public.profiles p on p.id = u.id
+      left join public.progress pr on pr.user_id = u.id), '[]'::jsonb),
+    'certificates', coalesce((select jsonb_agg(to_jsonb(c) order by c.issued_at desc) from public.certificates c), '[]'::jsonb),
+    'feedback', coalesce((select jsonb_agg(to_jsonb(f) order by f.created_at desc) from public.module_feedback f), '[]'::jsonb)
+  );
+end; $$;
+
+revoke all on function public.is_admin()        from public, anon;
+revoke all on function public.admin_dashboard() from public, anon;
+grant execute on function public.is_admin()        to authenticated;
+grant execute on function public.admin_dashboard() to authenticated;
+
 -- Done. Your VAVEhub project is ready.

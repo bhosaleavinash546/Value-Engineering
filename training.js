@@ -25,8 +25,14 @@
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
     }
   })();
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} if (window.VHCloud) VHCloud.saveProgress(state); };
+  const save = () => {
+    // the quick-check block below writes state.qc separately; keep its passes
+    try { const cur = JSON.parse(localStorage.getItem(KEY)) || {}; if (cur.qc) state.qc = Object.assign({}, cur.qc, state.qc); } catch {}
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    if (window.VHCloud) VHCloud.saveProgress(state);
+  };
   // Pull cloud progress on load (cross-device); merge completed modules & keep best exam.
+  if (window.VHCloud && VHCloud.live) VHCloud.touchProfile(); // last seen, country estimate (once a day)
   if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
     if (!cloud) return;
     let changed = false;
@@ -34,6 +40,12 @@
     if (cloud.qc) { state.qc = Object.assign({}, cloud.qc, state.qc); }
     if (cloud.exam && (!state.exam || (cloud.exam.score || 0) > (state.exam.score || 0))) { state.exam = cloud.exam; changed = true; }
     if (cloud.role && !state.role) state.role = cloud.role;
+    if (cloud.doneAt) state.doneAt = Object.assign({}, cloud.doneAt, state.doneAt);
+    if (cloud.attempts) {
+      const seen = new Set((state.attempts || []).map((a) => a.t));
+      state.attempts = (state.attempts || []).concat(cloud.attempts.filter((a) => !seen.has(a.t)))
+        .sort((a, b) => (a.t < b.t ? -1 : 1)).slice(-20);
+    }
     if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); toast("✓ Progress restored from your account"); }
   });
 
@@ -242,7 +254,7 @@
 
   $$(".tmod-done").forEach((btn) => btn.addEventListener("click", () => {
     const id = btn.dataset.done;
-    if (!state.done.includes(id)) state.done.push(id);
+    if (!state.done.includes(id)) { state.done.push(id); (state.doneAt = state.doneAt || {})[id] = new Date().toISOString(); }
     save(); refreshProgress();
     const order = mods.map((m) => m.dataset.mod);
     const next = order[order.indexOf(id) + 1];
@@ -445,9 +457,11 @@
       if (picks[bi] === c) score++;
       else { wrong.push([q, opts[picks[bi]] ?? "—", opts[c]]); missedIdx.push(bi); }
     });
-    state.review = missedIdx; save(); // feed the review-mistakes mode
     const pct = Math.round((score / EXAM_SIZE) * 100);
     const passed = score >= Math.ceil(EXAM_SIZE * PASS_MARK);
+    state.review = missedIdx; // feed the review-mistakes mode
+    state.attempts = (state.attempts || []).concat([{ t: new Date().toISOString(), s: pct, p: passed }]).slice(-20);
+    save();
     const color = passed ? "#34d399" : "#f87171";
     mount.innerHTML = `<div class="ex-result">
       <div class="ex-ring"><svg viewBox="0 0 160 160"><circle class="rbg" cx="80" cy="80" r="72"/><circle class="rfg" id="exRing" cx="80" cy="80" r="72" style="stroke:${color}"/></svg>
@@ -586,7 +600,8 @@
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
     }
   })();
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  // merge into the latest stored copy: the main Academy block may have saved newer progress since this page loaded
+  const save = () => { try { const cur = JSON.parse(localStorage.getItem(KEY)) || {}; cur.qc = Object.assign({}, cur.qc, state.qc); localStorage.setItem(KEY, JSON.stringify(cur)); } catch {} };
 
   const QUICK = {
     m1: [

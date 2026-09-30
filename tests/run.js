@@ -1,10 +1,10 @@
 /* Runs the site checks against a local copy of the site.
    Usage:  cd tests && npm install && node run.js [suite ...]
-   Suites: pages, links, narration, guides, academy (default: all)
+   Suites: pages, links, narration, guides, academy, admin (default: all)
    Set CHROMIUM_PATH to use an existing Chromium instead of Playwright's own. */
 const { ROOT, startServer, launch, recorder } = require("./lib");
 
-const SUITES = ["pages", "links", "narration", "guides", "academy"];
+const SUITES = ["pages", "links", "narration", "guides", "academy", "admin"];
 const PORT = +process.env.PORT || 8490;
 
 (async () => {

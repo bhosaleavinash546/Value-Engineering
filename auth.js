@@ -190,6 +190,7 @@
   }
 
   function succeed(title, msg, name, email) {
+    if (LIVE && window.VHCloud) VHCloud.touchProfile(true); // record country estimate + last seen for the owner dashboard
     if (name) store.setSession({ name, email: email || (pending && pending.email) || "", at: Date.now() });
     $("#success-title").textContent = title;
     $("#success-msg").textContent = msg;
