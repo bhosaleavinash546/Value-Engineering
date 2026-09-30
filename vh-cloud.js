@@ -14,7 +14,7 @@ window.VHCloud = (function () {
   // Load the Supabase SDK on demand, then create the client.
   // Content pages only need it to show who is signed in, so they skip the 200 KB SDK
   // unless this browser already holds a Supabase session token.
-  const NEEDS_SDK = /(training|auth|certificate|verify|admin)\.html$/.test(location.pathname);
+  const NEEDS_SDK = /(training|leaders|auth|certificate|verify|admin)\.html$/.test(location.pathname);
   const HAS_TOKEN = (() => { try { return Object.keys(localStorage).some((k) => /^sb-.+-auth-token$/.test(k)); } catch (e) { return true; } })();
   ready = (function () {
     if (!LIVE || (!NEEDS_SDK && !HAS_TOKEN)) return Promise.resolve(null);
@@ -114,6 +114,22 @@ window.VHCloud = (function () {
       const u = await user(); if (!u) return null;
       try {
         const { data } = await client.from("progress").select("data").eq("user_id", u.id).maybeSingle();
+        return data ? data.data : null;
+      } catch (e) { return null; }
+    },
+
+    // ── other courses (e.g. VAVE for Leaders): one row per learner per course ──
+    async saveCourse(course, state) {
+      const u = await user(); if (!u) return false;
+      try {
+        const { error } = await client.from("course_progress").upsert({ user_id: u.id, course, data: state, updated_at: new Date().toISOString() });
+        return !error;
+      } catch (e) { return false; }
+    },
+    async loadCourse(course) {
+      const u = await user(); if (!u) return null;
+      try {
+        const { data } = await client.from("course_progress").select("data").eq("user_id", u.id).eq("course", course).maybeSingle();
         return data ? data.data : null;
       } catch (e) { return null; }
     },

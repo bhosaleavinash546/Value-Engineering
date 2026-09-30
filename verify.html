@@ -110,7 +110,10 @@
     btn.classList.remove("is-loading"); btn.disabled = false;
     if (res.status === "valid") {
       const c = res.cert, d = new Date(c.issued_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-      card("ok", "✓ Valid certificate", "<b style='color:var(--txt)'>" + esc(c.full_name) + "</b> passed the Value Engineering 360° Practitioner exam with a score of <b style='color:var(--txt)'>" + esc(c.score) + "%</b>, issued " + esc(d) + ". ID " + esc(c.id) + ".");
+      const what = /^VL-/.test(c.id)
+        ? "</b> completed <i>VAVE for Leaders</i>, the one-hour overview course for senior leaders, scoring <b style='color:var(--txt)'>"
+        : "</b> passed the Value Engineering 360° Practitioner exam with a score of <b style='color:var(--txt)'>";
+      card("ok", "✓ Valid certificate", "<b style='color:var(--txt)'>" + esc(c.full_name) + what + esc(c.score) + "%</b>" + (/^VL-/.test(c.id) ? " in the final quiz" : "") + ", issued " + esc(d) + ". ID " + esc(c.id) + ".");
     } else if (res.status === "notfound") {
       card("no", "✗ Not found", "No certificate with ID <b style='color:var(--txt)'>" + esc(id) + "</b> was found in our records. Check the ID, or ask the holder to re-share their certificate link.");
     } else {

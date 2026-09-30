@@ -15,14 +15,16 @@ const DATA = {
   users: [
     { id: "u1", email: "priya@example.com", name: "Priya Sharma", created_at: iso(now - 2 * DAY), last_sign_in_at: iso(now - DAY), confirmed: true,
       timezone: "Asia/Calcutta", language: "en-IN", device: "phone", source: "linkedin.com", last_seen_at: iso(now - 3600e3),
-      progress: { done: ["m1", "m2", "m3"], doneAt: { m1: iso(now - DAY) }, role: "sourcing" } },
+      progress: { done: ["m1", "m2", "m3"], doneAt: { m1: iso(now - DAY) }, role: "sourcing" },
+      courses: { leaders: { done: ["l0", "l1", "l2", "l3", "l4", "l5", "l6"], quiz: { attempts: [{ t: iso(now - DAY), s: 90, p: true }], best: 90, passed: true }, updated_at: iso(now - DAY) } } },
     { id: "u2", email: "sam@example.com", name: "<img src=x onerror=window.__xss=1>", created_at: iso(now - 5 * DAY), confirmed: false,
       timezone: "Europe/London", device: "computer", source: "direct", progress: null },
     { id: "u3", email: "alex@example.com", name: "Alex Doe", created_at: iso(now - 40 * DAY), confirmed: true, language: "de-DE",
       progress: { done: ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", "m11", "m12", "m13"],
         attempts: [{ t: iso(now - 20 * DAY), s: 70, p: false }, { t: iso(now - 19 * DAY), s: 87, p: true }], exam: { passed: true, score: 87 } } },
   ],
-  certificates: [{ id: "VH-TEST1", user_id: "u3", full_name: "Alex Doe", score: 87, issued_at: iso(now - 19 * DAY) }],
+  certificates: [{ id: "VH-TEST1", user_id: "u3", full_name: "Alex Doe", score: 87, issued_at: iso(now - 19 * DAY) },
+    { id: "VL-TEST2", user_id: "u1", full_name: "Priya Sharma", score: 90, issued_at: iso(now - DAY) }],
   feedback: [{ module: "m1", helpful: true, comment: "<b>Great</b> module", created_at: iso(now - DAY) }, { module: "m2", helpful: false, comment: null, created_at: iso(now - 2 * DAY) }],
 };
 
@@ -66,6 +68,9 @@ module.exports = async function admin({ browser, O, r }) {
   r.ok(await p.evaluate(() => !window.__xss && !document.querySelector("#dash img") && document.body.textContent.includes("<img src=x")), "learner-typed text is shown as text, never run");
   r.ok((await p.textContent('[aria-label="Module feedback"]')).includes("<b>Great</b> module"), "feedback comments shown as plain text");
   r.ok((await p.$$("#usersCard tbody tr")).length === 3, "learners table lists everyone");
+  const lead = await p.textContent('[aria-label="VAVE for Leaders"]');
+  r.ok(/Learners on the course\s*1/.test(lead) && /Passed the quiz\s*1/.test(lead) && /Leaders certificates\s*1/.test(lead), "VAVE for Leaders section counts course learners, quiz passes and certificates");
+  r.ok(!(await p.textContent('#usersCard')).includes("VL-TEST2"), "a leaders certificate isn't shown as an Academy certificate");
   await p.fill("#usersCard input[type=search]", "priya"); await p.waitForTimeout(200);
   r.ok((await p.$$("#usersCard tbody tr")).length === 1, "search filters the learners table");
   await p.fill("#usersCard input[type=search]", ""); await p.waitForTimeout(200);

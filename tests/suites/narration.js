@@ -17,6 +17,13 @@ module.exports = async function narration({ browser, O, r, ROOT }) {
   await p.goto(`${O}/training.html`); await p.waitForTimeout(800);
   const page = await p.evaluate(() => window.VHVoice.extractAll());
   r.ok(page.length === 13, `13 narrated modules (found ${page.length})`);
+  // the 1-hour leaders course shares the same audio files and checks
+  const lp = await p.context().newPage();
+  await lp.goto(`${O}/leaders.html`); await lp.waitForTimeout(600);
+  const lead = await lp.evaluate(() => window.VHVoice.extractAll());
+  r.ok(lead.length === 7, `VAVE for Leaders: 7 narrated modules (found ${lead.length})`);
+  await lp.close();
+  page.push(...lead);
 
   for (const m of page) {
     const aud = sm[m.id] || [], tb = (timings[m.id] || {}).blocks || [];

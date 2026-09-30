@@ -13,7 +13,7 @@
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
   const KEY = "vh-voice";
 
-  const mods = $$(".tmod").filter((m) => m.dataset.mod !== "exam");
+  const mods = $$(".tmod").filter((m) => m.dataset.mod !== "exam" && !m.classList.contains("tmod-exam"));
   if (!mods.length) return;
 
   /* ── text extraction (shared with the narration generator) ──

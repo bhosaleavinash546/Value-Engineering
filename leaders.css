@@ -1,0 +1,63 @@
+/* VAVE for Leaders — extras on top of training.css (same look as the VE Academy). */
+.lc-hero .tr-hero-inner{max-width:900px}
+.lc-hero h1{margin-bottom:.6rem}
+
+/* "What this means for leaders" call-out */
+.lc-note{border:1px solid color-mix(in srgb,var(--acc2) 45%,var(--line));background:color-mix(in srgb,var(--acc2) 7%,transparent);border-radius:12px;padding:.8rem 1rem}
+
+/* two-column rows that read like a table (kept as a list so the narration reads them) */
+.lc-table{list-style:none;margin:.6rem 0 1.2rem;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.lc-table li{display:grid;grid-template-columns:minmax(150px,32%) 1fr;gap:.4rem 1.1rem;padding:.8rem 1rem;border-top:1px solid var(--line);font-size:.98rem;line-height:1.6;color:var(--muted)}
+.lc-table li:first-child{border-top:0}
+.lc-table li:nth-child(even){background:color-mix(in srgb,var(--txt) 3%,transparent)}
+.lc-k{font-weight:600;color:var(--txt)}
+.lc-k em{display:block;font-style:normal;font-weight:500;font-size:.84rem;color:var(--acc1)}
+.lc-thead{display:grid;grid-template-columns:minmax(150px,32%) 1fr;gap:1.1rem;padding:0 1rem .4rem;margin-top:.6rem;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lc-thead + .lc-table{margin-top:0}
+.lc-links a{color:var(--acc1)}
+
+/* job-plan step picker (Module 3) */
+.jp-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.45rem;margin-bottom:.9rem}
+.jp-step{display:flex;flex-direction:column;gap:.15rem;align-items:flex-start;text-align:left;padding:.6rem .7rem;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--txt);cursor:pointer;font:inherit}
+.jp-step b{font-size:.84rem}
+.jp-step small{font-size:.74rem;color:var(--muted)}
+.jp-step:hover{border-color:var(--acc1)}
+.jp-step.is-on{border-color:var(--acc1);background:color-mix(in srgb,var(--acc1) 14%,var(--bg2))}
+
+/* readiness check (Module 5) */
+.rd-list{display:grid;gap:.6rem;margin-bottom:1rem}
+.rd-q{border:1px solid var(--line);border-radius:12px;padding:.6rem .9rem .75rem;margin:0;background:var(--bg2)}
+.rd-q legend{padding:0 .3rem;font-size:.95rem;color:var(--txt)}
+.rd-opts{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.35rem}
+.rd-opts label{position:relative}
+.rd-opts input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.rd-opts span{display:inline-flex;align-items:center;min-height:40px;padding:0 1rem;border:1px solid var(--line);border-radius:100px;font-size:.9rem;color:var(--muted)}
+.rd-opts input:checked + span{border-color:var(--acc1);background:color-mix(in srgb,var(--acc1) 16%,transparent);color:var(--txt);font-weight:600}
+.rd-opts input:focus-visible + span{outline:2px solid var(--acc1);outline-offset:2px}
+.rd-next{display:block;margin-top:.4rem}
+.bc-verdict ol{margin:.4rem 0 0;padding-left:1.3rem}
+
+/* pilot picker (Module 6) */
+.pp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin-bottom:1rem}
+.pp-col{border:1px solid var(--line);border-radius:12px;padding:.8rem .9rem;margin:0;background:var(--bg2);display:grid;gap:.55rem;min-width:0}
+.pp-name{display:grid;gap:.3rem;font-size:.8rem;color:var(--muted)}
+.pp-name input{font:inherit;font-size:.95rem;font-weight:600;color:var(--txt);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.45rem .6rem;min-height:40px}
+.pp-row{display:grid;gap:.2rem;font-size:.86rem;color:var(--txt)}
+.pp-row span{display:flex;justify-content:space-between}
+.pp-row b{color:var(--acc1)}
+.pp-row input{width:100%;accent-color:var(--acc1);min-height:28px}
+.pp-row small{font-size:.74rem;color:var(--muted);line-height:1.35}
+
+@media (max-width:960px){
+  .jp-steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pp-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .lc-table li,.lc-thead{grid-template-columns:minmax(0,1fr)}
+  .lc-thead{display:none}
+  .jp-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media print{.jp-steps,.rd-list,.pp-grid{break-inside:avoid}}
+.pp-name,.pp-row{min-width:0}
+.pp-name input,.pp-row input{width:100%;min-width:0;box-sizing:border-box}
+.ex-review-item .ex-expl{display:block;margin-top:.35rem;font-size:.88rem;line-height:1.5;color:var(--muted)}

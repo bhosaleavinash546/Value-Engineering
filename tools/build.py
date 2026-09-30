@@ -346,13 +346,14 @@ def build():
         write(f"{p['slug']}/index.html", doc)
         print(f"{p['slug']+'/index.html':34} {len(doc)//1024:>3} KB")
     build_academy()
+    build_leaders()
     write_sitemap()
     return PAGES
 
 def write_sitemap():
     """Sitemap is generated too, so it always lists exactly the pages that exist."""
     rows = [("", "1.0", "weekly")] + [(p["slug"] + "/", "0.8", "monthly") for p in PAGES] + [
-        ("training.html", "0.9", "weekly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly")]
+        ("training.html", "0.9", "weekly"), ("leaders.html", "0.9", "monthly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly")]
     for f in sorted(os.listdir(os.path.join(ROOT, "toolkit"))):
         if f.endswith(".html") and f != "index.html": rows.append((f"toolkit/{f}", "0.6", "monthly"))
     rows += [("privacy.html", "0.3", "yearly"), ("terms.html", "0.3", "yearly")]
@@ -371,6 +372,13 @@ def build_academy():
     parts = [read("academy", "_head.html")] + [read("academy", f"m{i}.html") for i in range(1, 14)] + [read("academy", "_tail.html")]
     write("training.html", "".join(parts))
     print("training.html  13 modules")
+
+def build_leaders():
+    """leaders.html (VAVE for Leaders, the 1-hour crash course) = src/leaders/_head.html + l0..l6.html + _tail.html.
+    Same rule as the Academy: edit the source files, and regenerate narration for any module whose text changes."""
+    parts = [read("leaders", "_head.html")] + [read("leaders", f"l{i}.html") for i in range(7)] + [read("leaders", "_tail.html")]
+    write("leaders.html", "".join(parts))
+    print("leaders.html   7 modules")
 
 if __name__ == "__main__":
     if HEAD_COMMON is None: sys.exit("missing src/partials/head-common.html")

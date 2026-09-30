@@ -73,7 +73,7 @@ create trigger on_auth_user_created
 -- dashboard (Table Editor → module_feedback).
 create table if not exists public.module_feedback (
   id         bigint generated always as identity primary key,
-  module     text        not null check (module ~ '^m([1-9]|1[0-3])$'),
+  module     text        not null check (module ~ '^(m([1-9]|1[0-3])|l[0-6])$'),
   helpful    boolean     not null,
   comment    text        check (comment is null or char_length(comment) <= 500),
   created_at timestamptz not null default now()
@@ -83,6 +83,26 @@ drop policy if exists "anyone can send feedback" on public.module_feedback;
 create policy "anyone can send feedback" on public.module_feedback
   for insert to anon, authenticated with check (true);
 grant insert on public.module_feedback to anon, authenticated;
+
+-- ── Short courses (VAVE for Leaders) ─────────────────────────
+-- One row per learner per course, so a short course never overwrites Academy progress.
+create table if not exists public.course_progress (
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  course     text not null check (course ~ '^[a-z0-9-]{2,30}$'),
+  data       jsonb not null default '{}'::jsonb,
+  updated_at timestamptz default now(),
+  primary key (user_id, course)
+);
+alter table public.course_progress enable row level security;
+drop policy if exists "own course progress" on public.course_progress;
+create policy "own course progress" on public.course_progress
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+grant select, insert, update on public.course_progress to authenticated;
+
+-- Feedback may also come from the leaders course modules (l0–l6).
+alter table public.module_feedback drop constraint if exists module_feedback_module_check;
+alter table public.module_feedback add constraint module_feedback_module_check
+  check (module ~ '^(m([1-9]|1[0-3])|l[0-6])$');
 
 -- ── Owner dashboard (admin.html) ─────────────────────────────
 -- Extra profile details, recorded when a learner visits the Academy (at most once a day):
@@ -127,7 +147,9 @@ begin
         'confirmed', u.email_confirmed_at is not null,
         'timezone', p.timezone, 'language', p.language, 'device', p.device,
         'source', p.source, 'last_seen_at', p.last_seen_at,
-        'progress', pr.data, 'progress_at', pr.updated_at
+        'progress', pr.data, 'progress_at', pr.updated_at,
+        'courses', (select jsonb_object_agg(cp.course, cp.data || jsonb_build_object('updated_at', cp.updated_at))
+                    from public.course_progress cp where cp.user_id = u.id)
       ) order by u.created_at desc)
       from auth.users u
       left join public.profiles p on p.id = u.id

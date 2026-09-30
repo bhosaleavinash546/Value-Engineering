@@ -4,7 +4,7 @@ const fs = require("fs");
 const AXE = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 
 const PAGES = [
-  "index.html", "training.html", "auth.html", "certificate.html", "verify.html", "privacy.html", "terms.html", "changelog.html", "404.html",
+  "index.html", "training.html", "leaders.html", "auth.html", "certificate.html", "verify.html", "privacy.html", "terms.html", "changelog.html", "404.html",
   "job-plan/", "function-analysis/", "cost-levers/", "ideation/", "technology/", "benchmarking/", "industries/", "governance/", "toolkit/", "glossary/",
 ];
 

@@ -10,6 +10,9 @@
   "use strict";
   const $ = (s, c) => (c || document).querySelector(s);
   const MODS = Array.from({ length: 13 }, (_, i) => "m" + (i + 1));
+  const LMODS = Array.from({ length: 7 }, (_, i) => "l" + i); // VAVE for Leaders
+  const LTITLE = ["Welcome", "Why VAVE, and why now", "VAVE in plain words", "How a VAVE study runs", "What VAVE delivers", "Why everyone, and why leaders", "Your first 90 days"];
+  const isLeadersCert = (id) => /^VL-/.test(id || "");
   const DAY = 864e5;
   const REFRESH_MS = 60e3;
   const PAGE = 25;
@@ -50,7 +53,7 @@
   const flag = (cc) => (cc && /^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "🌐");
   const countryName = (cc) => (cc ? window.VH_TZ.name(cc) : "Unknown");
   const ROLE = { design: "Design engineer", sourcing: "Buyer / sourcing", manager: "Manager / leader", all: "Chose 'show everything'" };
-  const modName = (m) => "Module " + m.slice(1);
+  const modName = (m) => (m[0] === "l" ? "Leaders module " : "Module ") + m.slice(1);
 
   /* ── turn the raw function result into learner records ── */
   function countryOf(tz, lang) {
@@ -62,7 +65,11 @@
   function normalise(raw) {
     const certs = (raw.certificates || []).map((c) => ({ id: c.id, userId: c.user_id, name: c.full_name, score: c.score, at: c.issued_at }));
     const certByUser = {};
-    certs.forEach((c) => { if (c.userId && (!certByUser[c.userId] || c.score > certByUser[c.userId].score)) certByUser[c.userId] = c; });
+    const leadCertByUser = {};
+    certs.forEach((c) => {
+      const map = isLeadersCert(c.id) ? leadCertByUser : certByUser;
+      if (c.userId && (!map[c.userId] || c.score > map[c.userId].score)) map[c.userId] = c;
+    });
     const users = (raw.users || []).map((u) => {
       const p = u.progress || {};
       const done = MODS.filter((m) => (p.done || []).includes(m));
@@ -80,6 +87,13 @@
         quick: Object.keys(p.qc || {}).length,
         attempts, best, passed: !!(p.exam && p.exam.passed) || attempts.some((a) => a.p),
         cert: certByUser[u.id] || null,
+        leaders: (() => {
+          const L = (u.courses && u.courses.leaders) || null;
+          if (!L) return null;
+          const q = L.quiz || {};
+          return { done: LMODS.filter((m) => (L.done || []).includes(m)), doneAt: L.doneAt || {}, attempts: (q.attempts || []).filter((a) => a && a.t),
+            best: q.best || 0, passed: !!q.passed, at: L.updated_at || null, cert: leadCertByUser[u.id] || null };
+        })(),
       };
     });
     const feedback = (raw.feedback || []).map((f) => ({ module: f.module, helpful: !!f.helpful, comment: f.comment || "", at: f.created_at }));
@@ -120,12 +134,19 @@
         last_sign_in_at: new Date(last).toISOString(), last_seen_at: new Date(last).toISOString(), confirmed: rnd() > 0.06, timezone: tz, language: lang,
         device: rnd() < 0.42 ? "phone" : rnd() < 0.08 ? "tablet" : "computer", source: pick(SRC),
         progress: { done, doneAt, attempts, role: rnd() < 0.7 ? pick(["design", "sourcing", "manager", "all"]) : undefined, visits: { streak: 1 + Math.floor(rnd() * 6) },
-          qc: Object.fromEntries(done.map((m) => [m, true])), exam: passed ? { passed: true, score: Math.max(...attempts.map((a) => a.s)) } : undefined } });
+          qc: Object.fromEntries(done.map((m) => [m, true])), exam: passed ? { passed: true, score: Math.max(...attempts.map((a) => a.s)) } : undefined },
+        courses: rnd() < 0.35 ? (() => {
+          const n = 1 + Math.floor(rnd() * 7), ld = LMODS.slice(0, n), qa = [];
+          if (n === 7 && rnd() < 0.8) { const sc = 50 + Math.round(rnd() * 5) * 10; qa.push({ t: new Date(Math.min(now, created + 2 * DAY)).toISOString(), s: sc, p: sc >= 70 }); }
+          if (qa[0] && qa[0].p && rnd() < 0.7) certs.push({ id: "VL-S" + i.toString(36).toUpperCase(), user_id: id, full_name: fn + " " + ln, score: qa[0].s, issued_at: qa[0].t });
+          return { leaders: { done: ld, doneAt: Object.fromEntries(ld.map((m) => [m, new Date(Math.min(now, created + DAY)).toISOString()])),
+            quiz: { attempts: qa, best: qa[0] ? qa[0].s : 0, passed: !!(qa[0] && qa[0].p) }, updated_at: new Date(last).toISOString() } };
+        })() : undefined });
       if (passed) { const best = attempts.find((a) => a.p); certs.push({ id: "VH-S" + i.toString(36).toUpperCase(), user_id: id, full_name: fn + " " + ln, score: best.s, issued_at: best.t }); }
     }
     const COMMENTS = ["More worked examples please", "The FAST diagram lab finally made it click.", "A bit long, but very clear.", "Would love a downloadable summary.", "Great case study.", "Audio was really helpful on my commute.", "Could use a video for this one."];
     for (let i = 0; i < 90; i++) {
-      const m = "m" + (1 + Math.floor(Math.pow(rnd(), 1.4) * 13));
+      const m = i % 5 === 0 ? "l" + Math.floor(rnd() * 7) : "m" + (1 + Math.floor(Math.pow(rnd(), 1.4) * 13));
       feedback.push({ module: m, helpful: rnd() < 0.84, comment: rnd() < 0.15 ? pick(COMMENTS) : null, created_at: new Date(now - rnd() * 180 * DAY).toISOString() });
     }
     feedback.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
@@ -382,13 +403,35 @@
           h("a", { href: "verify.html?id=" + encodeURIComponent(c.id), target: "_blank", rel: "noopener" }, c.id))))) : h("p", { class: "empty" }, "No certificates in this period.")),
       { cols: ["Name", "Score", "Issued", "Certificate"], rows: sl.certs.map((c) => [c.name, c.score + "%", fmtDate(c.at), c.id]) });
 
+    // VAVE for Leaders (the 1-hour course): signed-in learners only
+    const lead = sl.all.filter((u) => u.leaders && u.leaders.done.length);
+    const leadNew = lead.filter((u) => +new Date(u.leaders.at || u.created) >= sl.from);
+    const lFinished = lead.filter((u) => u.leaders.done.length === 7).length;
+    const lPassed = lead.filter((u) => u.leaders.passed).length;
+    const lCerts = sl.certs.filter((c) => isLeadersCert(c.id)).length;
+    const lFunnel = LMODS.map((m, i) => ({ label: `Module ${i} · ${LTITLE[i]}`, v: lead.filter((u) => u.leaders.done.includes(m)).length }))
+      .concat([{ label: "Passed the quiz", v: lPassed }]);
+    lFunnel.forEach((r) => { r.text = `${fmtN(r.v)} · ${pct(r.v, lead.length)}%`; });
+    const lfb = LMODS.map((m, i) => { const l = sl.feedback.filter((f) => f.module === m); const y = l.filter((f) => f.helpful).length; return { m, i, y, t: l.length }; }).filter((r) => r.t);
+    const cLead = card("leaders", "VAVE for Leaders", "The 1-hour crash course. Only learners who signed in are counted; anyone can take it without an account.",
+      () => h("div", {},
+        h("div", { class: "kpis kpis-2", style: "margin-bottom:1rem" },
+          tile("Learners on the course", fmtN(lead.length), `${fmtN(leadNew.length)} active ${inP}`),
+          tile("Finished all 7 modules", fmtN(lFinished), `${pct(lFinished, lead.length)}% of them`),
+          tile("Passed the quiz", fmtN(lPassed), `${pct(lPassed, lead.length)}% of them`),
+          tile("Leaders certificates", fmtN(lCerts), `Issued ${inP}`)),
+        lead.length ? hbars(lFunnel) : h("p", { class: "empty" }, "No signed-in learners have started the course yet."),
+        lfb.length ? h("div", { style: "margin-top:1rem" }, h("h3", { class: "tile-label" }, "Module ratings"),
+          hbars(lfb.map((r) => ({ label: `Module ${r.i} · helpful`, v: Math.max(1, pct(r.y, r.t)), text: `${pct(r.y, r.t)}% of ${r.t}`, tip: `${r.y} of ${r.t} said it was helpful` })))) : null),
+      { cols: ["Stage", "Learners"], rows: lFunnel.map((r) => [r.label, r.text]) }, { wide: true });
+
     dash.classList.remove("refetching");
     dash.replaceChildren(
       st.sample ? h("p", { class: "sample-note", role: "note" }, h("strong", {}, "Sample data. "), "These learners are made up so you can see how the dashboard works. ",
         st.live ? h("a", { href: "admin.html" }, "Show real data") : "Real data appears once Supabase is connected.") : null,
       h("h1", { class: "sr-only" }, "Owner dashboard"),
       filters, kpi1, kpi2,
-      h("div", { class: "grid" }, cSign, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert),
+      h("div", { class: "grid" }, cSign, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead),
       usersCard(sl),
       h("p", { class: "foot-note" }, "Countries are estimated from each learner's time zone (or their browser language if the time zone is missing). Details are recorded when a learner next opens the Academy, so people who haven't been back since this dashboard launched show as \"Unknown\" or \"Not recorded yet\"."));
   }
@@ -446,9 +489,10 @@
 
   function downloadCsv(list) {
     const cell = (v) => { let t = v == null ? "" : String(v); if (/^[=+\-@]/.test(t)) t = "'" + t; return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
-    const rows = [["Name", "Email", "Email verified", "Country", "Time zone", "Language", "Device", "Source", "Signed up", "Last active", "Modules completed", "Best exam score", "Passed exam", "Exam attempts", "Certificate", "Role"]]
+    const rows = [["Name", "Email", "Email verified", "Country", "Time zone", "Language", "Device", "Source", "Signed up", "Last active", "Modules completed", "Best exam score", "Passed exam", "Exam attempts", "Certificate", "Role", "Leaders modules", "Leaders quiz best", "Leaders certificate"]]
       .concat(list.map((u) => [u.name, u.email, u.confirmed ? "Yes" : "No", u.country, u.tz || "", u.lang || "", u.device || "", u.source || "", u.created, u.lastActive || "",
-        u.done.length, u.best || "", u.passed ? "Yes" : "No", u.attempts.length, u.cert ? u.cert.id : "", u.role ? ROLE[u.role] || u.role : ""]));
+        u.done.length, u.best || "", u.passed ? "Yes" : "No", u.attempts.length, u.cert ? u.cert.id : "", u.role ? ROLE[u.role] || u.role : "",
+        u.leaders ? u.leaders.done.length : 0, u.leaders && u.leaders.attempts.length ? u.leaders.best : "", u.leaders && u.leaders.cert ? u.leaders.cert.id : ""]));
     const blob = new Blob(["﻿" + rows.map((r) => r.map(cell).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" });
     const a = h("a", { href: URL.createObjectURL(blob), download: `vavehub-learners-${new Date().toISOString().slice(0, 10)}.csv` });
     document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
@@ -478,7 +522,11 @@
           h("tbody", {}, u.attempts.slice().reverse().map((a) => h("tr", {}, h("td", {}, fmtDateTime(a.t)), h("td", { class: "num" }, a.s + "%"),
             h("td", {}, a.p ? h("span", { class: "chip good" }, "✓ Passed") : h("span", { class: "chip bad" }, "✗ Below 80%")))))))
           : h("p", { class: "empty", style: "text-align:left;padding:0" }, u.best ? `Best score ${u.best}% (attempt history started when this dashboard launched).` : "No exam attempts yet."),
-        h("h3", {}, "Certificate"),
+        h("h3", {}, "VAVE for Leaders"),
+        u.leaders ? h("p", {}, `${u.leaders.done.length} of 7 modules · quiz ${u.leaders.attempts.length ? "best " + u.leaders.best + "%" + (u.leaders.passed ? " ✓ passed" : "") : "not taken yet"}`,
+          u.leaders.cert ? h("span", {}, " · ", h("a", { href: "verify.html?id=" + encodeURIComponent(u.leaders.cert.id), target: "_blank", rel: "noopener" }, "Verify " + u.leaders.cert.id)) : null)
+          : h("p", { class: "empty", style: "text-align:left;padding:0" }, "Not started (or taken without signing in)."),
+        h("h3", {}, "Academy certificate"),
         u.cert ? h("p", {}, `${u.cert.name}, ${u.cert.score}%, issued ${fmtDate(u.cert.at)} · `, h("a", { href: "verify.html?id=" + encodeURIComponent(u.cert.id), target: "_blank", rel: "noopener" }, "Verify " + u.cert.id))
           : h("p", { class: "empty", style: "text-align:left;padding:0" }, "No certificate yet.")));
     dlg.showModal();

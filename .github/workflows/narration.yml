@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       modules:
-        description: 'Only regenerate these modules (e.g. "m5,m6"); empty = all'
+        description: 'Only regenerate these modules (e.g. "m5,m6" or "l0,l1,l2"); empty = all'
         required: false
         default: ""
 
