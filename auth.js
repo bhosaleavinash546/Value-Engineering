@@ -47,6 +47,31 @@
     el.textContent = msg || "";
     el.className = "form-banner" + (msg ? " show " + (kind || "err") : "");
   }
+  // Supabase messages are technical ("Failed to fetch", "over_email_send_rate_limit").
+  // Turn them into plain English; `fallback` covers anything we don't recognise.
+  function friendly(err, fallback) {
+    const m = String((err && (err.message || err.code)) || err || "");
+    const status = err && err.status;
+    if (/failed to fetch|networkerror|load failed|network request failed|fetch failed/i.test(m) || status === 0)
+      return "We couldn't reach our sign-in service. Please check your connection and try again in a minute.";
+    if (/rate limit|too many|security purposes/i.test(m) || status === 429)
+      return "Too many attempts. Please wait a few minutes and try again.";
+    if (/signups? not allowed|signup is disabled/i.test(m))
+      return "New sign-ups are closed at the moment. Please try again later.";
+    if (/not authori[sz]ed|sending.*email|smtp/i.test(m))
+      return "We couldn't send an email to this address right now. Please try again later.";
+    if (/invalid login credentials/i.test(m))
+      return "That email and password don't match. Try again, or sign in with an email code instead.";
+    if (/email not confirmed/i.test(m))
+      return "Please confirm your email first. Use \"Email me a one-time code instead\" to sign in.";
+    if (/expired|invalid.*(otp|token|code)|token.*(invalid|expired)/i.test(m))
+      return "That code is wrong or has expired. Check the digits, or request a new code.";
+    if (/password should|weak password|password.*(at least|characters)/i.test(m))
+      return "Please choose a stronger password: at least 8 characters, with letters and numbers.";
+    if (/same.*password|different from the old/i.test(m))
+      return "Your new password must be different from your old one.";
+    return fallback || "Something went wrong. Please try again in a minute.";
+  }
   function fieldError(input, on) { input.closest(".field").classList.toggle("is-error", on); }
   function loading(form, on) {
     const btn = $('button[type="submit"]', form);
@@ -96,8 +121,8 @@
       // send fails (signInWithOtp resolves with {error}, it does not throw).
       try {
         const { error } = await (await supaReady()).auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
-        if (error) banner("otp-banner", "Email couldn't be sent: " + (error.message || "unknown error") + ". Check spam, or try again shortly.", "err");
-      } catch (e) { banner("otp-banner", "Could not send code: " + (e.message || "try again"), "err"); }
+        if (error) banner("otp-banner", friendly(error, "We couldn't send your code. Please try again in a minute."), "err");
+      } catch (e) { banner("otp-banner", friendly(e, "We couldn't send your code. Please try again in a minute."), "err"); }
       $("#demo-otp").className = "demo-otp";
     } else {
       // Demo path: reveal the code on-screen (clearly labeled)
@@ -198,10 +223,10 @@
       try {
         const { data, error } = await (await supaReady()).auth.signInWithPassword({ email, password: pass });
         loading(e.target, false);
-        if (error) return banner("signin-banner", error.message, "err");
+        if (error) return banner("signin-banner", friendly(error), "err");
         const nm = (data && data.user && data.user.user_metadata && data.user.user_metadata.full_name) || email.split("@")[0];
         succeed("Welcome back, " + nm.split(" ")[0] + "!", "Signed in successfully.", nm, email);
-      } catch (err) { loading(e.target, false); banner("signin-banner", "Sign-in failed. Try the email code option.", "err"); }
+      } catch (err) { loading(e.target, false); banner("signin-banner", friendly(err, "Sign-in didn't work. Try again, or sign in with an email code instead."), "err"); }
       return;
     }
     setTimeout(() => {
@@ -246,9 +271,9 @@
         const { error } = await (await supaReady()).auth.verifyOtp({ email: pending.email, token: code, type: "email" });
         if (!error && pending.pass) { try { await (await supaReady()).auth.updateUser({ password: pending.pass }); } catch (x) {} }
         loading(e.target, false);
-        if (error) return banner("otp-banner", "Invalid or expired code.", "err");
+        if (error) return banner("otp-banner", friendly(error, "That code is wrong or has expired. Check the digits, or request a new code."), "err");
         finishPending();
-      } catch (err) { loading(e.target, false); banner("otp-banner", "Verification failed.", "err"); }
+      } catch (err) { loading(e.target, false); banner("otp-banner", friendly(err, "We couldn't check your code. Please try again."), "err"); }
       return;
     }
     setTimeout(() => {
@@ -300,10 +325,10 @@
         // OTP verification signed the user in, so updateUser can set the password
         const { error } = await (await supaReady()).auth.updateUser({ password: p1 });
         loading(e.target, false);
-        if (error) return banner("newpass-banner", error.message, "err");
+        if (error) return banner("newpass-banner", friendly(error), "err");
         succeed("Password updated", "Your new password is saved — and you're signed in.", email.split("@")[0], email);
         pending = null;
-      } catch (err) { loading(e.target, false); banner("newpass-banner", "Could not save the password — try again.", "err"); }
+      } catch (err) { loading(e.target, false); banner("newpass-banner", friendly(err, "We couldn't save your password. Please try again."), "err"); }
       return;
     }
     setTimeout(() => {
