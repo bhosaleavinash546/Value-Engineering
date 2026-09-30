@@ -13,7 +13,7 @@ node run.js academy narration     # just some groups
 
 | Group | What it checks |
 |---|---|
-| `pages` | All 20 pages: accessibility (WCAG 2 AA) in dark and light mode, fits a 375px phone, no script errors |
+| `pages` | All 21 pages: accessibility (WCAG 2 AA) in dark and light mode, fits a 375px phone, no script errors |
 | `links` | Crawls the site: no broken links or `#anchors` |
 | `narration` | Lesson text matches the audio script word for word, timings are sound, seeking highlights the right paragraph |
 | `guides` | Homepage and the ten guides: old links redirect, every tool works, nav, phone menu, skip link |

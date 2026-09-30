@@ -188,7 +188,7 @@
     $("#certWrap").hidden = true;
     if (state.quiz.passed) { renderPassed(); return; }
     mount.innerHTML = `<div class="ex-gate">
-      <p>Ten questions covering all seven modules. You need <strong>${NEED} of ${N} (${Math.round(C.passMark * 100)}%)</strong>
+      <p>${N} questions covering all seven modules. You need <strong>${NEED} of ${N} (${Math.round(C.passMark * 100)}%)</strong>
       to pass. The questions and answers are shuffled on every attempt, you can retake the quiz as often as you like, and
       you'll see the right answer to anything you missed.</p>
       ${doneCount() < courseMods.length ? `<p class="ex-note">You've finished ${doneCount()} of ${courseMods.length} modules. You can take the quiz now, but it's easier after all seven.</p>` : ""}

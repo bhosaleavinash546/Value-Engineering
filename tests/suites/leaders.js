@@ -38,6 +38,13 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   const inr = await p.textContent("#peCards");
   r.ok(inr.includes("₹10 lakh") && inr.includes("₹1 crore"), `calculator works in rupees, in lakh and crore (${inr.replace(/\s+/g, " ").trim()})`);
 
+  await p.selectOption("#peCur", "£"); await p.fill("#peSave", "0.50"); await p.fill("#peVol", "200000"); await p.fill("#peMargin", "8"); await p.fill("#peRev", "50000000"); await p.waitForTimeout(100);
+  r.ok((await p.textContent("#peCards")).includes("+0.2 pts") && (await p.textContent("#peVerdict")).includes("0.2 percentage points"), "calculator shows margin points when revenue is entered");
+  r.ok(!!(await p.$('section[data-mod="l1"] .lc-curve svg')) && !!(await p.$('section[data-mod="l1"] .lc-curve .sr-only')), "cost-commitment chart has a text summary for screen readers");
+  const narr = await p.evaluate(() => window.VHVoice.extractAll());
+  r.ok(!narr.some((m) => m.blocks.some((t) => /^Source|practitioner experience; not a published/i.test(t))), "source lines are not read out by the narration");
+  r.ok(narr.find((m) => m.id === "l0").blocks.some((t) => t.startsWith("What AI changes")), "Module 0 narrates 'The hour in one minute'");
+
   // quick check gating on Module 1
   const answer = async (id) => {
     for (const [qi, q] of C.quick[id].entries()) await p.click(`.qcheck[data-qc="${id}"] .qc-item[data-qi="${qi}"] .qc-opt[data-oi="${q[2]}"]`);
@@ -60,6 +67,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
 
   // M3 job plan
   await p.click('.jp-step[data-s="5"]'); await p.waitForTimeout(150);
+  r.ok((await p.textContent("#jpStage")).includes("Where AI helps"), "job-plan steps show where AI helps");
   r.ok((await p.textContent("#jpStage")).includes("signed decision log") && (await p.getAttribute('.jp-step[data-s="5"]', "aria-pressed")) === "true", "job-plan steps show what each step produces");
   await answer("l3"); await p.click('.tmod-done[data-done="l3"]'); await p.waitForTimeout(300);
 
@@ -90,16 +98,17 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
 
   // quiz: fail once, then pass
   await p.click("#examStart");
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < C.quiz.length; i++) {
     const q = await p.textContent(".ex-q");
     const item = C.quiz.find((x) => x[0] === q);
     const wrong = [0, 1, 2, 3].find((k) => k !== item[2]);
     await p.click(`.ex-opt[data-i="${i < 4 ? wrong : item[2]}"]`); await p.click("#exNext");
   }
-  r.ok((await p.textContent(".ex-verdict")).includes("Not this time") && (await p.$$(".ex-review-item")).length === 4, "6 of 10 fails and shows the four corrections with explanations");
+  r.ok((await p.textContent(".ex-verdict")).includes("Not this time") && (await p.$$(".ex-review-item")).length === 4, `${C.quiz.length - 4} of ${C.quiz.length} fails and shows the four corrections with explanations`);
+  r.ok(C.quiz.length === 12 && Math.ceil(C.quiz.length * C.passMark) === 9, "12 questions, 9 needed to pass");
   await p.click("text=Retake the quiz");
   const positions = [0, 0, 0, 0];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < C.quiz.length; i++) {
     const q = await p.textContent(".ex-q");
     const item = C.quiz.find((x) => x[0] === q);
     const btns = await p.$$(".ex-opt");
@@ -139,7 +148,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   // ── phone
   ctx = await demoContext(browser, { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   p = track(await ctx.newPage());
-  for (const id of ["l3", "l5", "l6"]) {
+  for (const id of ["l1", "l2", "l3", "l4", "l5", "l6"]) {
     await p.goto(`${U}?open=${id}`); await p.waitForTimeout(600);
     const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     r.ok(ov <= 0, `phone: ${id} has no sideways scrolling${ov > 0 ? ` (${ov}px)` : ""}`);

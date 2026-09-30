@@ -17,14 +17,17 @@
   (function () {
     const cards = $("#peCards");
     if (!cards) return;
-    const F = { cur: $("#peCur"), save: $("#peSave"), vol: $("#peVol"), margin: $("#peMargin") };
+    const F = { cur: $("#peCur"), save: $("#peSave"), vol: $("#peVol"), margin: $("#peMargin"), rev: $("#peRev") };
     function calc() {
       const cur = F.cur.value, annual = num(F.save) * num(F.vol), m = num(F.margin) / 100;
       const sales = m > 0 ? annual / m : 0;
+      const rev = num(F.rev), pts = rev > 0 ? (annual / rev) * 100 : 0;
       cards.innerHTML = card(money(annual, cur), "extra profit a year from the saving") +
-        card(m > 0 ? money(sales, cur) : "—", "extra sales needed to earn the same profit");
+        card(m > 0 ? money(sales, cur) : "—", "extra sales needed to earn the same profit") +
+        (rev > 0 ? card("+" + pts.toLocaleString("en-GB", { maximumFractionDigits: 2 }) + " pts", "on your profit margin") : "");
       $("#peVerdict").textContent = annual > 0 && m > 0
-        ? `At a ${F.margin.value}% margin, every ${cur}1 saved is worth ${cur}${(1 / m).toLocaleString("en-GB", { maximumFractionDigits: 1 })} of new sales. This saving does the work of ${money(sales, cur)} in extra sales.`
+        ? `At a ${F.margin.value}% margin, every ${cur}1 saved is worth ${cur}${(1 / m).toLocaleString("en-GB", { maximumFractionDigits: 1 })} of new sales. This saving does the work of ${money(sales, cur)} in extra sales.` +
+          (rev > 0 ? ` That's ${pts.toLocaleString("en-GB", { maximumFractionDigits: 2 })} percentage points on your profit margin.` : "")
         : "Enter a saving, a volume and a margin above zero.";
     }
     Object.values(F).forEach((el) => el.addEventListener("input", calc));
@@ -85,24 +88,30 @@
     if (!stage) return;
     const STEPS = [
       ["1 · Information", "Day 1", "The facilitator, with finance", "An agreed, dated starting cost; the few parts that make up most of the cost; what customers actually need",
-        "Is the starting cost agreed with finance, and dated?", "The team goes through the costs, walks the production line and looks at the product before anyone suggests an idea."],
+        "Is the starting cost agreed with finance, and dated?", "The team goes through the costs, walks the production line and looks at the product before anyone suggests an idea.",
+        "Spend analysis finds the same part bought at different prices, and AI reads thousands of warranty comments in minutes."],
       ["2 · Function analysis", "Days 1–2", "Design engineering, with the facilitator", "A list of functions, what each one costs, and the mismatches",
-        "Which functions cost far more than they're worth?", "The team maps what each part does and what each function costs, then finds where the money is being wasted."],
+        "Which functions cost far more than they're worth?", "The team maps what each part does and what each function costs, then finds where the money is being wasted.",
+        "Should-cost software estimates what each part should cost from its 3D model."],
       ["3 · Creative", "Day 3", "The whole team, suppliers included", "Hundreds of ideas for the costly functions",
-        "Did we protect the day from criticism and interruptions?", "A full day of ideas. No criticism allowed: judging comes tomorrow."],
+        "Did we protect the day from criticism and interruptions?", "A full day of ideas. No criticism allowed: judging comes tomorrow.",
+        "AI tools suggest extra ideas for each function; the team decides which are worth pursuing."],
       ["4 · Evaluation", "Day 4", "The team, against agreed criteria", "A shortlist, with a named owner for every idea",
-        "Who owns each idea, and by when?", "Ideas are sorted, screened and scored. The survivors each get an owner."],
+        "Who owns each idea, and by when?", "Ideas are sorted, screened and scored. The survivors each get an owner.",
+        "Cost models test ideas quickly, so fewer are rejected on guesswork."],
       ["5 · Development", "Day 5", "Idea owners, with finance", "Business cases: saving, one-time cost, risk and date",
-        "Has finance checked the savings?", "The best ideas become business cases a board can decide on."],
+        "Has finance checked the savings?", "The best ideas become business cases a board can decide on.",
+        "Simulation checks strength and fit before anything is made, and AI drafts the business case for people to check."],
       ["6 · Presentation", "Day 5", "The sponsor and decision board", "A signed decision log",
-        "Did every idea get a yes, a no, or 'more data by a date'?", "The week ends with decisions, not applause."],
+        "Did every idea get a yes, a no, or 'more data by a date'?", "The week ends with decisions, not applause.",
+        "A live dashboard tracks every idea's stage, owner and date. The decisions stay with people."],
     ];
     const bar = $("#jpSteps");
     bar.innerHTML = STEPS.map((s, i) => `<button type="button" class="jp-step" data-s="${i}" aria-pressed="false"><b>${s[0]}</b><small>${s[1]}</small></button>`).join("");
     function pick(i) {
-      const [, when, who, makes, ask, what] = STEPS[i];
+      const [, when, who, makes, ask, what, ai] = STEPS[i];
       $$(".jp-step", bar).forEach((b, k) => { b.classList.toggle("is-on", k === i); b.setAttribute("aria-pressed", String(k === i)); });
-      stage.innerHTML = [["🕐", "When and who", when + " · " + who], ["📄", "What it produces", makes], ["❓", "Ask as a leader", ask]]
+      stage.innerHTML = [["🕐", "When and who", when + " · " + who], ["📄", "What it produces", makes], ["❓", "Ask as a leader", ask], ["🤖", "Where AI helps", ai]]
         .map((c, k) => `<div class="td-card td-in" style="animation-delay:${k * 0.08}s"><span class="td-ico">${c[0]}</span><b>${c[1]}</b><small>${c[2]}</small></div>`).join("");
       $("#jpCaption").textContent = what;
     }

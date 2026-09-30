@@ -61,3 +61,86 @@
 .pp-name,.pp-row{min-width:0}
 .pp-name input,.pp-row input{width:100%;min-width:0;box-sizing:border-box}
 .ex-review-item .ex-expl{display:block;margin-top:.35rem;font-size:.88rem;line-height:1.5;color:var(--muted)}
+
+/* ── v2: one-minute box, sources, charts, metric cards, hero picture ── */
+.lc-body{--lc-s1:#3987e5;--lc-s2:#d95926;--lc-grid:rgba(255,255,255,.08);--lc-axis:rgba(255,255,255,.22)}
+html[data-theme="light"] .lc-body{--lc-s1:#1d5fd6;--lc-s2:#eb6834;--lc-grid:rgba(15,23,42,.08);--lc-axis:rgba(15,23,42,.25)}
+
+.lc-box{border:1px solid color-mix(in srgb,var(--acc1) 40%,var(--line));background:color-mix(in srgb,var(--acc1) 6%,var(--card));border-radius:16px;padding:1.1rem 1.3rem;margin:1.6rem 0}
+.lc-box h4{margin:0 0 .6rem;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc1)}
+.lc-box ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
+.lc-box li{font-size:.98rem;line-height:1.6;color:var(--muted);padding-left:1.3rem;position:relative}
+.lc-box li::before{content:"→";position:absolute;left:0;color:var(--acc1)}
+.lc-box li strong{color:var(--txt)}
+.lc-src{font-size:.78rem !important;line-height:1.5;color:var(--muted);opacity:.9;margin:-.4rem 0 1.2rem;font-style:italic}
+.lc-opt{font-weight:400;color:var(--muted);font-size:.85em}
+
+.lc-chart{margin:1.4rem 0 1rem;padding:1rem 1.1rem .9rem;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.lc-chart svg{width:100%;height:auto;display:block;overflow:visible}
+.lc-grid line{stroke:var(--lc-grid);stroke-width:1}
+.lc-grid .lc-base{stroke:var(--lc-axis)}
+.lc-tick text{fill:var(--muted);font-size:12px;font-family:inherit}
+.lc-mark{stroke:var(--lc-axis);stroke-width:1}
+.lc-l1,.lc-l2{fill:none;stroke-width:2.5;stroke-linecap:round}
+.lc-l1{stroke:var(--lc-s1)}.lc-l2{stroke:var(--lc-s2)}
+.lc-d1{fill:var(--lc-s1);stroke:var(--card);stroke-width:2}
+.lc-ann{fill:var(--txt);font-size:13px;font-weight:600;font-family:inherit}
+.lc-lbl{fill:var(--muted);font-size:12.5px;font-family:inherit}
+.lc-chart figcaption,.lc-hero-viz figcaption{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted);margin-top:.5rem}
+.lc-key{display:inline-flex;align-items:center;gap:.4rem}
+.lc-key i{display:inline-block;width:16px;height:3px;border-radius:2px}
+.lc-key i.k1{background:var(--lc-s1)}.lc-key i.k2{background:var(--lc-s2)}
+
+/* kettle cost vs worth */
+.kv-head{margin:0 0 .8rem !important}
+.kv-head b{color:var(--txt);font-size:.92rem;margin-right:auto}
+.kv-rows{display:grid;gap:.55rem}
+.kv-row{display:grid;grid-template-columns:minmax(120px,30%) 1fr;gap:.8rem;align-items:center}
+.kv-n{font-size:.88rem;color:var(--txt)}
+.kv-row.is-gap .kv-n{font-weight:700}
+.kv-row.is-gap .kv-n::after{content:" ◆";color:var(--lc-s2);font-size:.7em}
+.kv-bars{display:grid;grid-template-columns:1fr auto;gap:2px .5rem;align-items:center}
+.kv-b{display:block;height:9px;border-radius:0 4px 4px 0;min-width:2px}
+.kv-c{background:var(--lc-s1)}.kv-w{background:var(--lc-s2)}
+.kv-bars em{font-style:normal;font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums;min-width:3.2em}
+.kv-total{margin:.8rem 0 0 !important;font-size:.86rem !important;color:var(--muted)}
+.kv-total b{color:var(--txt)}
+
+/* big numbers on case studies */
+.lc-metrics{display:flex;flex-wrap:wrap;gap:.6rem;margin:.2rem 0 .8rem}
+.lc-metrics span{display:flex;flex-direction:column;min-width:120px;padding:.55rem .8rem;border-radius:10px;background:color-mix(in srgb,var(--acc3) 10%,transparent);border:1px solid color-mix(in srgb,var(--acc3) 30%,transparent);font-size:.78rem;color:var(--muted);line-height:1.35}
+.lc-metrics b{font-family:var(--font-d);font-size:1.35rem;color:var(--txt);line-height:1.2}
+
+/* three-column comparison */
+.lc-table-3 li,.lc-thead-3{grid-template-columns:minmax(120px,20%) minmax(140px,32%) 1fr}
+
+/* hero picture */
+.lc-hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.9fr);gap:2.5rem;align-items:center;text-align:left;max-width:1100px}
+.lc-hero-grid .tr-hero-stats{justify-content:flex-start}
+.lc-hero-viz{margin:0;padding:1.1rem 1.2rem;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--card) 80%,transparent);box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.lc-hero-viz svg{width:100%;height:auto;display:block}
+.lc-hgrid{stroke:var(--lc-grid);stroke-width:1}.lc-hbase{stroke:var(--lc-axis);stroke-width:1}.lc-hmark{stroke:var(--lc-axis);stroke-width:1}
+.lc-hl1,.lc-hl2{fill:none;stroke-width:3;stroke-linecap:round}
+.lc-hl1{stroke:var(--lc-s1)}.lc-hl2{stroke:var(--lc-s2)}
+.lc-hdot{fill:var(--lc-s1);stroke:var(--card);stroke-width:2}
+.lc-hnum{fill:var(--txt);font-size:16px;font-weight:700;font-family:var(--font-d)}
+.lc-htick{fill:var(--muted);font-size:11px;font-family:inherit}
+.lc-hero-viz figcaption b{flex-basis:100%;color:var(--txt);font-size:.9rem;font-weight:600}
+
+/* job plan: four cards per step */
+#jpStage{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+
+@media (max-width:960px){
+  .lc-hero-grid{grid-template-columns:minmax(0,1fr);text-align:center}
+  .lc-hero-grid .tr-hero-stats{justify-content:center}
+  .lc-hero-viz{max-width:420px;margin:0 auto}
+  .lc-table-3 li,.lc-thead-3{grid-template-columns:minmax(0,1fr)}
+  .lc-thead-3{display:none}
+}
+@media (max-width:560px){
+  .kv-row{grid-template-columns:minmax(0,1fr);gap:.25rem}
+}
+.lc-hero .lc-hero-grid{max-width:1120px}
+.lc-hero-grid .tr-hero-stats{gap:1.6rem}
+.kv-gapkey{color:var(--lc-s2)}
+.lc-dl{margin:1rem 0 1.4rem}

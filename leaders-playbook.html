@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<title>VAVE for Leaders — the one-page playbook | VAVEhub</title>
+<meta name="description" content="A printable one-page summary of VAVE for Leaders: what VAVE is, why it pays, the five things only leaders can do, a 90-day plan and the questions to ask your team." />
+<link rel="canonical" href="https://valueengineeringhub.com/leaders-playbook.html" />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<link rel="icon" href="icon-192.png" />
+<style>
+  :root{--ink:#131c30;--muted:#4d5c78;--line:#dfe5f0;--acc:#1d5fd6;--acc2:#eb6834;--paper:#fff;--bg:#e9edf5}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font:13px/1.45 "Inter","IBM Plex Sans",system-ui,sans-serif}
+  .skip{position:absolute;left:12px;top:-60px;background:var(--acc);color:#fff;padding:.5rem .9rem;border-radius:8px}
+  .skip:focus{top:12px}
+  .bar{max-width:210mm;margin:16px auto 0;display:flex;gap:.6rem;justify-content:flex-end;flex-wrap:wrap;padding:0 16px}
+  .bar a,.bar button{font:inherit;font-size:14px;font-weight:600;border-radius:100px;padding:.6rem 1.1rem;min-height:44px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+  .bar button{background:var(--acc);color:#fff;border:0}
+  .bar a{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .page{width:210mm;min-height:297mm;max-width:calc(100% - 32px);margin:12px auto 32px;background:var(--paper);padding:13mm 14mm 11mm;box-shadow:0 10px 30px rgba(15,23,42,.12);border-radius:6px}
+  header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--acc);padding-bottom:8px;margin-bottom:12px;gap:1rem}
+  header h1{font:700 22px/1.15 "IBM Plex Sans",sans-serif;margin:0}
+  header h1 span{color:var(--acc)}
+  header p{margin:3px 0 0;color:var(--muted);font-size:12px}
+  .brand{font:700 14px "IBM Plex Sans",sans-serif;white-space:nowrap}
+  .brand span{color:var(--acc)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+  section{break-inside:avoid}
+  h2{font:700 11px/1.2 "IBM Plex Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin:0 0 5px}
+  ul,ol{margin:0;padding-left:1.1em}
+  li{margin:0 0 3px}
+  li strong{color:var(--ink)}
+  .box{border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+  .wide{grid-column:1 / -1}
+  .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .nums div{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  .nums b{display:block;font:700 20px/1.1 "IBM Plex Sans",sans-serif;color:var(--acc)}
+  .nums span{color:var(--muted);font-size:11.5px}
+  .plan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .plan div{border-top:3px solid var(--acc2);background:#faf7f2;border-radius:0 0 8px 8px;padding:7px 9px}
+  .plan b{display:block;font-size:12px;margin-bottom:2px}
+  .plan p{margin:0;color:var(--muted);font-size:11.5px}
+  footer{margin-top:10px;padding-top:7px;border-top:1px solid var(--line);color:var(--muted);font-size:10.5px;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  @media (max-width:760px){
+    .page{padding:18px}
+    .grid,.nums,.plan{grid-template-columns:1fr}
+    header{flex-direction:column;align-items:flex-start}
+  }
+  @page{size:A4;margin:0}
+  @media print{
+    body{background:#fff}
+    .bar,.skip{display:none}
+    .page{margin:0;box-shadow:none;border-radius:0;max-width:none;width:210mm;height:297mm;overflow:hidden}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-size:12.2px;line-height:1.4}
+    .page{padding:10mm 12mm 8mm}
+    .grid{gap:8px 14px}
+    header{margin-bottom:9px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="bar">
+  <a href="leaders.html">← Back to the course</a>
+  <button type="button" onclick="window.print()">🖨 Print / Save as PDF</button>
+</div>
+<main class="page" id="main">
+  <header>
+    <div>
+      <h1>VAVE for Leaders: <span>the one-page playbook</span></h1>
+      <p>The essentials of value analysis and value engineering for senior leaders.</p>
+    </div>
+    <div class="brand">VAVE<span>hub</span></div>
+  </header>
+
+  <div class="grid">
+    <section class="box wide">
+      <h2>The hour in one minute</h2>
+      <ul>
+        <li><strong>What it is:</strong> a structured way to remove cost that customers aren't paying for, while keeping everything they are.</li>
+        <li><strong>What it's worth:</strong> a first proper study usually finds 8–15% of a product's cost, and every pound saved is worth many pounds of new sales.</li>
+        <li><strong>What it asks of you:</strong> a sponsor, a mixed team with protected time, quick decisions and a monthly check on real savings.</li>
+        <li><strong>What AI changes:</strong> analysis that used to take weeks now takes minutes, so teams spend their time on decisions. The judgement stays with people.</li>
+      </ul>
+    </section>
+
+    <section class="wide">
+      <h2>Why it pays</h2>
+      <div class="nums">
+        <div><b>70–80%</b><span>of lifetime cost is decided by design choices, before purchasing gets involved</span></div>
+        <div><b>8–15%</b><span>of product cost is usually found in a first proper study; 3–5% a year after that</span></div>
+        <div><b>£12.50</b><span>of new sales earns the same profit as £1 saved, at an 8% margin</span></div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>Five things only leaders can do</h2>
+      <ol>
+        <li><strong>Sponsor it visibly.</strong> Agree the scope and attend the decision meeting.</li>
+        <li><strong>Set targets based on evidence.</strong> Work back from the market price and the margin you need.</li>
+        <li><strong>Protect the team's time,</strong> and fund the engineering time to make the changes.</li>
+        <li><strong>Decide quickly.</strong> Yes, no, or "more data by a date", recorded at the meeting.</li>
+        <li><strong>Track real savings.</strong> Review the funnel monthly; count only savings in production, checked by finance.</li>
+      </ol>
+    </section>
+
+    <section class="box">
+      <h2>Questions to ask your team</h2>
+      <ul>
+        <li>Is the starting cost agreed with finance, and dated?</li>
+        <li>Which functions cost far more than they're worth?</li>
+        <li>Who owns each idea, and by when?</li>
+        <li>Has finance checked the savings?</li>
+        <li>Did every idea get a yes, a no, or "more data by a date"?</li>
+        <li>Has every change passed testing and the required approvals?</li>
+        <li>Did people check any AI estimate before we relied on it?</li>
+      </ul>
+    </section>
+
+    <section class="wide">
+      <h2>Your 90-day plan</h2>
+      <div class="plan">
+        <div><b>Days 1–30: set up</b><p>Name a sponsor and a facilitator. Choose the pilot product. Fix a dated starting cost with finance. Write the scope and a target based on evidence.</p></div>
+        <div><b>Days 31–60: run the study</b><p>Run the 3–5 day workshop. Hold the decision meeting and sign the decision log. Give every approved idea an owner and a date.</p></div>
+        <div><b>Days 61–90: deliver and learn</b><p>Start the monthly funnel review. Get the quick wins into production. Report the first checked savings. Choose the next two products.</p></div>
+      </div>
+    </section>
+
+    <section class="box">
+      <h2>The numbers to watch</h2>
+      <ul>
+        <li>Checked savings in production (L4) against the target</li>
+        <li>Ideas implemented: the share of approved ideas that reach production</li>
+        <li>Time to savings: months from approval to production</li>
+        <li>Average payback</li>
+      </ul>
+    </section>
+
+    <section class="box">
+      <h2>Two rules for AI</h2>
+      <ul>
+        <li>Keep confidential cost and supplier data out of public AI tools.</li>
+        <li>Never approve a saving based only on an AI estimate.</li>
+      </ul>
+      <h2 style="margin-top:8px">A good first product</h2>
+      <p style="margin:0">Fairly simple, high volume, designed by your own engineers, with at least two years of production left.</p>
+    </section>
+  </div>
+
+  <footer>
+    <span>From <b>VAVE for Leaders</b>, a free one-hour course · valueengineeringhub.com/leaders.html</span>
+    <span>Sources: design-for-manufacture research (Boothroyd &amp; Dewhurst); practitioner ranges.</span>
+  </footer>
+</main>
+</body>
+</html>

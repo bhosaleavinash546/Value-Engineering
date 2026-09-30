@@ -69,5 +69,9 @@ window.VH_COURSE = {
       "Leaders provide what follow-through needs: people, time, decisions and money."],
     ["What's the best measure of whether a VAVE programme is working?", ["The number of workshops held", "The number of ideas generated", "Checked savings in production, against a fixed starting cost", "How much staff enjoyed the workshops"], 2,
       "Only savings in production (L4), checked against a fixed starting cost, are real."],
+    ["Your team's AI tool estimates that a part should cost 30% less than you pay. What should happen next?", ["Approve the saving straight away", "Ask the supplier for 30% off immediately", "Check the estimate's assumptions and use it as the starting point for a study", "Ignore it, because AI estimates are never useful"], 2,
+      "AI estimates are a fast first draft. People check the assumptions before anything is decided."],
+    ["A VAVE idea saves money but changes a safety-related part. What should happen?", ["Reject it, because safety parts are never changed", "Approve it, because the saving is worth it", "Test it and get the required approvals, including the customer's where needed, before it goes into production", "Let the supplier decide"], 2,
+      "Safety-related changes can be good ideas, but only once testing and approvals prove they're safe."],
   ],
 };
