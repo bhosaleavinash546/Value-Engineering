@@ -123,6 +123,7 @@
     const earn = document.querySelector('.cert-actions a[href="training.html"]');
     if (earn) { earn.href = "leaders.html"; earn.textContent = "Take the free 1-hour course"; }
     document.querySelector(".brand-tag").textContent = "VAVE for Leaders";
+    const seal = document.querySelector(".cert-seal-img"); seal.src = "cert-seal-leaders.png"; seal.alt = "VAVEhub VAVE for Leaders seal";
   }
   document.getElementById("certName").textContent = data.n;
   document.getElementById("certScore").textContent = (data.s || "—") + "%";

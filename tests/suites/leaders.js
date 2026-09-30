@@ -110,6 +110,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   r.ok(positions.filter(Boolean).length >= 2, `answer positions are shuffled (A–D: ${positions.join("/")})`);
   await p.fill("#certNameInput", "Test Leader"); await p.click("#genCert"); await p.waitForTimeout(300);
   r.ok((await p.textContent("#certName")) === "Test Leader" && /^VL-/.test(await p.textContent("#certId")), "certificate shows the name and a VL- ID");
+  r.ok(await p.$eval("#cert .cert-seal-img", (i) => i.src.endsWith("cert-seal-leaders.png")), "certificate uses the VAVE for Leaders seal");
   r.ok((await p.textContent("#cert")).includes("a one-hour overview of value analysis and value engineering for senior leaders"), "certificate uses the approved wording");
   const saved = await p.evaluate(() => JSON.parse(localStorage.getItem("vh-leaders")));
   r.ok(saved.quiz.attempts.length === 2 && saved.quiz.passed && saved.cert && saved.doneAt.l3, "attempts, completion dates and certificate are saved");
@@ -121,6 +122,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   const cp = track(await ctx.newPage());
   await cp.goto(`${O}/certificate.html?c=${token}`); await cp.waitForTimeout(500);
   r.ok((await cp.textContent(".cert-brand")).includes("VAVE FOR LEADERS") && (await cp.textContent(".cert-body")).includes("VAVE for Leaders") && (await cp.textContent("#certScore")) === "100%", "shared certificate page shows the leaders wording and score");
+  r.ok(await cp.$eval(".cert-seal-img", (i) => i.src.endsWith("cert-seal-leaders.png") && i.complete && i.naturalWidth > 0), "shared certificate shows the VAVE for Leaders seal");
   r.ok(await cp.$eval(".cert-path", (e) => e.hidden || getComputedStyle(e).display === "none"), "Academy-only notes are hidden on a leaders certificate");
   await cp.close();
   await ctx.close();
