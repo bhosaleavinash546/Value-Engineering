@@ -1,0 +1,42 @@
+# Fetches openly licensed photos from Wikimedia Commons, with their licence
+# details, onto the "media-candidates" branch so they can be reviewed before
+# any are used on the site. Nothing here changes the live site.
+name: Fetch media candidates
+
+on:
+  workflow_dispatch:
+    inputs:
+      categories:
+        description: "Commons categories, separated by |, e.g. Tata Nano|Giga Press"
+        required: false
+        default: ""
+      files:
+        description: "Commons file names to fetch at full size, separated by |"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+      - name: Fetch from Wikimedia Commons
+        env:
+          CATS: ${{ inputs.categories }}
+          FILES: ${{ inputs.files }}
+        run: python3 site/.github/scripts/commons-fetch.py out
+      - name: Save to the media-candidates branch
+        run: |
+          cd out
+          git init -q -b media-candidates
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Media candidates from Wikimedia Commons"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" media-candidates
