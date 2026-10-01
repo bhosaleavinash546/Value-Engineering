@@ -356,7 +356,7 @@ def write_sitemap():
         ("training.html", "0.9", "weekly"), ("leaders.html", "0.9", "monthly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly")]
     for f in sorted(os.listdir(os.path.join(ROOT, "toolkit"))):
         if f.endswith(".html") and f != "index.html": rows.append((f"toolkit/{f}", "0.6", "monthly"))
-    rows += [("privacy.html", "0.3", "yearly"), ("terms.html", "0.3", "yearly")]
+    rows += [("privacy.html", "0.3", "yearly"), ("terms.html", "0.3", "yearly"), ("credits.html", "0.3", "yearly")]
     for path, _, _ in rows:
         target = os.path.join(ROOT, path, "index.html") if path.endswith("/") or path == "" else os.path.join(ROOT, path)
         if not os.path.exists(target): raise SystemExit(f"sitemap: {path} does not exist")

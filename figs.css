@@ -255,3 +255,20 @@
   .fg-stack span{white-space:normal;padding:.4rem .5rem;font-size:.7rem}
   .fg-wf-axis div span:nth-child(even){display:none}
 }
+
+/* ── course videos (click to play) and photos with credits ── */
+.tvid,.tphoto{margin:1.6rem 0}
+.tvid .vid-facade{max-width:760px}
+.tvid figcaption,.tphoto figcaption{margin-top:.6rem;font-size:.84rem;line-height:1.55;color:var(--muted);max-width:760px}
+.tvid figcaption b,.tphoto figcaption b{color:var(--txt)}
+.tvid figcaption a,.tphoto figcaption a{color:var(--acc1);text-decoration:underline;text-underline-offset:3px}
+.tphoto img{display:block;width:100%;max-width:760px;height:auto;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+.tphoto .ph-credit{display:block;margin-top:.25rem;font-size:.74rem;opacity:.9}
+.tphoto-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;max-width:760px}
+@media (max-width:560px){.tphoto-pair{grid-template-columns:minmax(0,1fr)}}
+.tphoto-pair .tphoto{margin:0}
+.tphoto-pair{margin:1.6rem 0;align-items:start}
+.ph-pins{position:relative}
+.ph-pin{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#1d5fd6;color:#fff;font:800 .85rem var(--font-d);border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.45)}
+.tphoto figcaption b{display:inline-flex;align-items:center;justify-content:center;width:1.3em;height:1.3em;border-radius:50%;background:#1d5fd6;color:#fff;font-size:.8em}
+section > .tphoto img,section > .tphoto figcaption{max-width:520px}
