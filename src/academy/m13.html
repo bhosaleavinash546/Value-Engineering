@@ -14,6 +14,20 @@
       hard part of target costing is people, not maths: sticking to the number when engineering says "it can't be done
       for that", and splitting the number up so every team owns a piece of it.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The same sum, in opposite directions</h4>
+        <p>Cost-plus starts from the design and hopes the market accepts the price. Target costing starts from the market. Figures from the EV example later in this module.</p></div>
+        <p class="sr-only">Two bars. Cost-plus: the cost estimated from the design, plus the margin, gives a price, and you hope the market accepts it. Target costing: the market price is fixed first, £29,900; take off the required 22% margin, £6,578, and the allowable cost is £23,322. The design has to fit that number.</p>
+        <div class="fg-tc" aria-hidden="true">
+          <div class="fg-tc-row" data-i style="--i:0"><h5>Cost-plus <span>· "what will it cost, so what must we charge?"</span></h5>
+            <div class="fg-stack"><span class="is-cost" style="flex:58"><b>Cost</b>estimated from the design</span><span class="is-mar" style="flex:16"><b>+ Margin</b></span><span class="is-q" style="flex:26">= price… will the market pay it?</span></div>
+            <span class="fg-arrow">Cost → add margin → <b>price</b></span></div>
+          <div class="fg-tc-row" data-i style="--i:1"><h5>Target costing <span>· "what will the market pay, so what can it cost?"</span></h5>
+            <div class="fg-stack"><span class="is-cost" style="flex:78"><b>Allowable cost £23,322</b>the design must fit this</span><span class="is-mar" style="flex:22"><b>Margin 22%</b>£6,578</span></div>
+            <span class="fg-arrow">Market price <b>£29,900</b> → take off the margin → <b>allowable cost</b></span></div>
+        </div>
+      </div>
+
       <h3>13.2 · Allowable cost, drifting cost and the value gap</h3>
       <p>Three numbers drive the process. The <strong>allowable cost</strong> comes from the market, working down from
       the price. The <strong>drifting cost</strong> is today's estimate of what the design as drawn would actually cost,
@@ -61,6 +75,34 @@
       (−£38), a housing redesign merging three castings into one (−£61), magnet grade optimisation validated by CAE
       (−£43), and a supplier gain-share on machining cycle time (−£26). Gap closed: −£168, with £6 returned to the reserve.
       Every step uses a technique from Modules 4–11, applied before the design was frozen.</p></div>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The EV example as a picture</h4>
+        <p>Split the vehicle's allowable cost down to the motor, then close the motor's value gap one change at a time.</p></div>
+        <p class="sr-only">Top: the vehicle allowable cost of £23,322; 9.8% goes to the drive unit, £2,286; 46% of that goes to the motor, a target of £1,052. Bottom, a waterfall: the motor's drifting cost is £1,214, £162 over target. A hairpin winding saves £38, merging three housing castings into one saves £61, a better magnet grade saves £43, and a supplier gain-share on machining time saves £26. The new cost is £1,046, £6 under the £1,052 target, and the £6 goes back to the reserve.</p>
+        <div aria-hidden="true">
+          <div class="fg-cas">
+            <div class="fg-cas-row" data-i style="--i:0"><b>Vehicle<small>allowable cost</small></b><div class="fg-cas-bar">£23,322<i style="width:9.8%"></i><em>9.8%</em></div></div>
+            <div class="fg-zoom z1" data-i style="--i:1"></div>
+            <div class="fg-cas-row" data-i style="--i:1"><b>Drive unit<small>9.8% of the vehicle</small></b><div class="fg-cas-bar">£2,286<i style="width:46%"></i><em>Motor 46%</em></div></div>
+            <div class="fg-zoom z2" data-i style="--i:2"></div>
+            <div class="fg-cas-row" data-i style="--i:2"><b>Motor<small>target cost</small></b><div class="fg-cas-bar">£1,052</div></div>
+          </div>
+          <div class="fg-gap">
+            <h5>Closing the motor's £162 gap</h5>
+            <div class="fg-wf">
+              <div class="fg-wf-r is-was" data-i style="--i:3"><span>Drifting cost today</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:0;--w:97.27"></i></div><em>£1,214</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:4"><span>Hairpin winding: 8% less copper</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:80;--w:17.27"></i></div><em>−£38</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:5"><span>Housing: three castings become one</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:52.27;--w:27.73"></i></div><em>−£61</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:6"><span>Magnet grade, checked by simulation</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:32.73;--w:19.55"></i></div><em>−£43</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:7"><span>Supplier gain-share on machining time</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:20.91;--w:11.82"></i></div><em>−£26</em></div>
+              <div class="fg-wf-r" data-i style="--i:8"><span>New cost</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:0;--w:20.91"></i></div><em>£1,046</em></div>
+              <div class="fg-wf-axis"><span></span><div><span style="left:0">£1,000</span><span style="left:22.73%">£1,050</span><span style="left:45.45%">£1,100</span><span style="left:68.18%">£1,150</span><span style="left:90.91%">£1,200</span></div><span></span></div>
+            </div>
+          </div>
+        </div>
+        <p class="fg-foot">Dashed line: the £1,052 target. The changes save £168, £6 more than the gap, and the £6 goes back to the reserve. <b>The scale starts at £1,000 so the steps are easy to see.</b></p>
+      </div>
 
       <div class="tcase"><h4>Case study — documented</h4><p><b>Tata Nano: the price came first.</b> Ratan Tata
       announced the "1-lakh car" (about US$2,500) in 2003. The price was public before the design existed, which makes

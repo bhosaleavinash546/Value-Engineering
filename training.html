@@ -30,6 +30,7 @@
 <script>try{var _t=localStorage.getItem("vf-theme");if(_t)document.documentElement.dataset.theme=_t}catch(e){}</script>
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="training.css" />
+<link rel="stylesheet" href="figs.css" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect width='48' height='48' rx='11' fill='%232e6fe8'/><path d='M24 7c-7.2 0-12.2 5.4-12.2 11.7 0 4.5 2.3 7.2 4.3 9.4 1.3 1.4 2 2.5 2 4.1h11.8c0-1.6.7-2.7 2-4.1 2-2.2 4.3-4.9 4.3-9.4C36.2 12.4 31.2 7 24 7z' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/><polyline points='16.8,20.5 20.4,20.5 22.6,15.6 25.3,25 27.6,20.5 31.2,20.5' fill='none' stroke='white' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/><rect x='19' y='35.4' width='10' height='2.6' rx='1.3' fill='white'/><rect x='20' y='39.6' width='8' height='2.6' rx='1.3' fill='white'/></svg>" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Course","name":"Value Engineering 360° Practitioner Course","description":"Free 13-module Value Engineering certification course: the 6-phase Value Methodology job plan, function analysis & FAST, creative techniques, should-costing, teardown benchmarking, AI-era methods and programme governance, with a 30-question exam at 80% pass mark.","provider":{"@type":"Organization","name":"VAVEhub VE Academy","url":"https://valueengineeringhub.com/"},"educationalCredentialAwarded":"VAVEhub Certificate of Completion","teaches":["Value Engineering","Value Methodology job plan","Function analysis","FAST diagrams","Should-cost modelling","Teardown benchmarking","TRIZ","Target costing","Cost optimisation"],"isAccessibleForFree":true,"inLanguage":"en","author":{"@type":"Person","name":"Avinash Bhosale"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","category":"Free"},"hasCourseInstance":{"@type":"CourseInstance","courseMode":"online","courseWorkload":"PT5H"}}
@@ -396,6 +397,27 @@ Value Engineering annual summary reports (fhwa.dot.gov/ve).</i></p></div>
         <li><b>Idea champions</b> — one person for each idea that gets through Phase 4, who takes it through development.</li>
         <li><b>Note-taker</b> — writes down every idea word for word, with the function it relates to. Don't rely on memory.</li>
       </ul>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>Who's in a VE study, and what each person does</h4>
+        <p>One sponsor who can make decisions, one facilitator who runs the process, and a mixed team who do the thinking.</p></div>
+        <p class="sr-only">Diagram of a VE study team. At the top, the sponsor owns the target, comes to the kick-off and the decision meeting, and removes obstacles. Below, the facilitator runs the process and keeps time, and the note-taker writes every idea down word for word. Below them, the core team of 6 to 10 people: design engineering, manufacturing, purchasing, quality, finance (which checks every number), service and a key supplier. At the bottom, idea champions: one named person for each idea that gets through Phase 4.</p>
+        <div class="fg-team" aria-hidden="true">
+          <div class="fg-tier"><div class="fg-box fg-lead" data-i style="--i:0"><h5>Sponsor</h5><p>Owns the target. Comes to the kick-off and the decision meeting. Removes obstacles.</p></div></div>
+          <span class="fg-link"></span>
+          <div class="fg-tier">
+            <div class="fg-box" data-i style="--i:1"><h5>Facilitator</h5><p>Runs the process and keeps time. Not the product expert.</p></div>
+            <div class="fg-box" data-i style="--i:2"><h5>Note-taker</h5><p>Writes every idea down word for word.</p></div>
+          </div>
+          <span class="fg-link"></span>
+          <div class="fg-core" data-i style="--i:3"><span class="fg-lbl">Core team · 6–10 people from different departments</span>
+            <div class="fg-chips"><span class="fg-chip">Design engineering</span><span class="fg-chip">Manufacturing</span><span class="fg-chip">Purchasing</span><span class="fg-chip">Quality</span><span class="fg-chip">Finance <em>· checks every number</em></span><span class="fg-chip">Service</span><span class="fg-chip is-sup">Key supplier</span></div>
+          </div>
+          <span class="fg-link"></span>
+          <div class="fg-tier"><div class="fg-box" data-i style="--i:4"><h5>Idea champions</h5><p>One named person for each idea that gets through Phase 4.</p></div></div>
+        </div>
+        <p class="fg-foot">A team from one department comes up with the same kind of ideas. <b>The mix of departments is the point.</b></p>
+      </div>
       <h3>2.6 · Fix the starting cost, then set the target</h3>
       <p>Before the workshop, fix a <strong>dated starting cost</strong>: a specific version of the parts list, a set volume
       and a currency. Agree how savings will be measured, for example gross or net, and how you'll allow for changes in
@@ -415,6 +437,27 @@ Value Engineering annual summary reports (fhwa.dot.gov/ve).</i></p></div>
       format suits better: two days, a two-week break to gather more data, then two more days. The one thing you can't
       shorten is keeping the phases separate. If you generate ideas and judge them <em>in the same session</em>, both
       suffer.</p>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The workshop week, day by day</h4>
+        <p>Five days, with the phases kept apart. Ideas are created on Day 3 and judged on Day 4, never in the same session.</p></div>
+        <p class="sr-only">Diagram of the five-day workshop. Day 1, phases 1 and 2: information and functions. Day 2, phase 2: FAST, worth and targets. Day 3, phase 3: creative, with no criticism allowed. Day 4, phase 4: evaluation and champions. Day 5, phases 5 and 6: develop and present, ending with the decision meeting. A three-day version combines days 1 and 2, and days 4 and 5. A split format for complex products runs two days, then a two-week break to gather data, then two more days.</p>
+        <div aria-hidden="true">
+          <div class="fg-week">
+            <div class="fg-box" data-i style="--i:0"><span class="fg-day">Day 1</span><span class="fg-pill">Phases 1–2</span><h5>Information and functions</h5><p>Costs, the production line and the product itself. Start function analysis.</p></div>
+            <div class="fg-box" data-i style="--i:1"><span class="fg-day">Day 2</span><span class="fg-pill">Phase 2</span><h5>FAST, worth and targets</h5><p>FAST diagram, function–cost matrix and Value Index. The mismatches are found.</p></div>
+            <div class="fg-box is-free" data-i style="--i:2"><span class="fg-day">Day 3</span><span class="fg-pill">Phase 3</span><h5>Creative</h5><p>A full day of ideas: brainwriting, SCAMPER, TRIZ. No criticism allowed.</p></div>
+            <div class="fg-box" data-i style="--i:3"><span class="fg-day">Day 4</span><span class="fg-pill">Phase 4</span><h5>Evaluation and champions</h5><p>Sort, screen and score. Every idea that survives gets a champion and a date.</p></div>
+            <div class="fg-box" data-i style="--i:4"><span class="fg-day">Day 5</span><span class="fg-pill">Phases 5–6</span><h5>Develop and present</h5><p>Business cases and risks, then the decision meeting with the sponsor.</p></div>
+          </div>
+          <div class="fg-alt" data-i style="--i:5">
+            <span class="fg-lbl">Three-day version</span>
+            <div class="fg-strip fg-s3"><span>Days 1–2 combined</span><span>Creative</span><span>Days 4–5 combined</span></div>
+            <span class="fg-lbl">Split format</span>
+            <div class="fg-strip fg-s4"><span>Two days</span><span class="is-gap">Two-week break to gather data</span><span>Two more days</span></div>
+          </div>
+        </div>
+      </div>
 
       <div class="tex"><h4>Worked example</h4><p>Here's a scope statement for a study of a washing machine's drum unit: <em>"Reduce works cost of drum assembly (baseline £38.20/unit,
 validated 12 May) by ≥12% within 9 months. In scope: drum, spider, bearings, seals, counterweights. Out of scope: motor
@@ -755,6 +798,28 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
       the product best. Start every creative session with 6-3-5: it guarantees lots of ideas, gives everyone an equal
       say, and gets everything written down before any discussion.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>Brainwriting 6-3-5: how one sheet grows</h4>
+        <p>Six people round a table. Every five minutes, each sheet moves one seat on, and its new owner adds three ideas.</p></div>
+        <p class="sr-only">Diagram: six seats round a table, with sheets passed one seat clockwise every round. Six people, three ideas each, six rounds: 108 ideas in 30 minutes. One idea's journey: in round 1, Priya writes "snap-fit cover". In round 2, Marek adds a moulded-in hinge so the lid never gets lost. In round 3, Chen makes the hinge the cable guide too, which removes a clip. The result is one part fewer, an idea nobody had at the start.</p>
+        <div class="fg-635" aria-hidden="true">
+          <svg viewBox="0 0 260 260" focusable="false">
+            <circle class="fg-ring" cx="130" cy="130" r="95"/>
+            <g class="fg-spin"><path class="fg-arrowhead" d="M-6,-5 L6,0 L-6,5 Z" transform="translate(177.5 47.7) rotate(30)"/><path class="fg-arrowhead" d="M-6,-5 L6,0 L-6,5 Z" transform="translate(225.0 130.0) rotate(90)"/><path class="fg-arrowhead" d="M-6,-5 L6,0 L-6,5 Z" transform="translate(177.5 212.3) rotate(150)"/><path class="fg-arrowhead" d="M-6,-5 L6,0 L-6,5 Z" transform="translate(82.5 212.3) rotate(210)"/><path class="fg-arrowhead" d="M-6,-5 L6,0 L-6,5 Z" transform="translate(35.0 130.0) rotate(270)"/><path class="fg-arrowhead" d="M-6,-5 L6,0 L-6,5 Z" transform="translate(82.5 47.7) rotate(330)"/></g>
+            <circle class="fg-seat is-on" cx="130.0" cy="35.0" r="22"/><text class="fg-seat-t" x="130.0" y="39.5">P</text><circle class="fg-seat is-on" cx="212.3" cy="82.5" r="22"/><text class="fg-seat-t" x="212.3" y="87.0">M</text><circle class="fg-seat is-on" cx="212.3" cy="177.5" r="22"/><text class="fg-seat-t" x="212.3" y="182.0">C</text><circle class="fg-seat" cx="130.0" cy="225.0" r="22"/><text class="fg-seat-t" x="130.0" y="229.5">4</text><circle class="fg-seat" cx="47.7" cy="177.5" r="22"/><text class="fg-seat-t" x="47.7" y="182.0">5</text><circle class="fg-seat" cx="47.7" cy="82.5" r="22"/><text class="fg-seat-t" x="47.7" y="87.0">6</text>
+            <text class="fg-big" x="130" y="134">108</text>
+            <text class="fg-small" x="130" y="152">ideas in 30 minutes</text>
+            <text class="fg-small" x="130" y="168">6 × 3 × 6</text>
+          </svg>
+          <ol class="fg-travel">
+            <li data-i style="--i:0"><span class="fg-lbl">Round 1</span><div class="fg-box"><h5>Priya</h5><p>"Snap-fit cover"</p></div></li>
+            <li data-i style="--i:1"><span class="fg-lbl">Round 2</span><div class="fg-box"><h5>Marek adds</h5><p>"…with a moulded-in hinge, so the lid never gets lost"</p></div></li>
+            <li data-i style="--i:2"><span class="fg-lbl">Round 3</span><div class="fg-box"><h5>Chen adds</h5><p>"…and make the hinge the cable guide too, which removes a clip"</p></div></li>
+            <li data-i style="--i:3"><span class="fg-lbl">Result</span><div class="fg-box"><h5>One part fewer</h5><p>An idea nobody had at the start of the session.</p></div></li>
+          </ol>
+        </div>
+      </div>
+
       <h3>5.6 · SCAMPER: a checklist for changing a design</h3>
       <p>SCAMPER is seven questions you ask about an existing design, one letter at a time: <strong>S</strong>ubstitute,
       <strong>C</strong>ombine, <strong>A</strong>dapt, <strong>M</strong>odify or magnify, <strong>P</strong>ut to
@@ -825,6 +890,18 @@ Print the <a href="toolkit/fast-worksheet.html" target="_blank" rel="noopener">F
       make no sense. You're looking for the three or four new ones worth taking into evaluation. Morphological
       analysis is the slowest technique but the most thorough — use it when the function structure is
       rich and you suspect the winning combination has simply never been tried.</p>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>A morphological box for the torch</h4>
+        <p>List every known way to deliver each sub-function, then pick one from each row. Here's one combination nobody has built yet.</p></div>
+        <p class="sr-only">Table of torch options. Provide light: LED array, single high-power LED, laser diode or electroluminescent panel. Store energy: AA cells, rechargeable li-ion, supercapacitor or hand-crank dynamo. Control output: push switch, twist bezel or proximity sensor. Highlighted combination: single high-power LED, hand-crank dynamo and twist bezel, which gives an emergency torch that never needs batteries. 4 × 4 × 3 = 48 possible concepts.</p>
+        <div class="fg-morph" aria-hidden="true">
+          <div class="fg-mrow" data-i style="--i:0"><b>Provide light</b><span>LED array</span><span class="is-pick">Single high-power LED</span><span>Laser diode</span><span>Electro&shy;luminescent panel</span></div>
+          <div class="fg-mrow" data-i style="--i:1"><b>Store energy</b><span>AA cells</span><span>Rechargeable li-ion</span><span>Super&shy;capacitor</span><span class="is-pick">Hand-crank dynamo</span></div>
+          <div class="fg-mrow" data-i style="--i:2"><b>Control output</b><span>Push switch</span><span class="is-pick">Twist bezel</span><span>Proximity sensor</span><span class="is-none"></span></div>
+          <div class="fg-mres" data-i style="--i:3"><span class="fg-pill">4 × 4 × 3 = 48 concepts</span><span>Highlighted: <b>an emergency torch that never needs batteries</b></span></div>
+        </div>
+      </div>
 
       <h3>5.9 · Analogy and biomimicry: borrow from other industries and nature</h3>
       <p>Someone, somewhere, already delivers your function for less — often in a different industry, sometimes in
@@ -901,6 +978,20 @@ Altshuller Institute case reports.</i></p></div>
       About <strong>one idea in eight</strong> makes it to development, and that's a healthy rate, not a disappointing
       one.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>From 380 sticky notes to a short list with owners</h4>
+        <p>Each round is more careful than the one before, because there are fewer ideas left to look at. Bars are drawn to scale.</p></div>
+        <p class="sr-only">Funnel chart, to scale. Start: 380 raw ideas from the creative day. After round 1, the quick sort into go, grow or park: about 120. After round 2, grouping, merging and the must-pass checks: 60 to 80. After round 3, ranking with the effort–impact grid, weighted matrix and Pugh: a short list of about 15. Round 4 checks each one for risk, and every survivor leaves with a named champion.</p>
+        <ol class="fg-fun" aria-hidden="true">
+          <li><div class="fg-st"><b>Raw ideas</b><span>The wall after the creative day</span></div><div class="fg-track"><span class="fg-bar" style="--w:100;--i:0"></span><span class="fg-n">380</span></div></li>
+          <li><div class="fg-st"><b>Round 1 · Quick sort</b><span>Go, grow or park, about a minute each</span></div><div class="fg-track"><span class="fg-bar" style="--w:31.6;--i:1"></span><span class="fg-n">≈120</span></div></li>
+          <li><div class="fg-st"><b>Round 2 · Group and screen</b><span>Merge duplicates, apply must-pass checks</span></div><div class="fg-track"><span class="fg-bar" style="--w:18.4;--i:2"></span><span class="fg-n">60–80</span></div></li>
+          <li><div class="fg-st"><b>Round 3 · Rank</b><span>Effort–impact, weighted matrix, Pugh</span></div><div class="fg-track"><span class="fg-bar is-win" style="--w:3.9;--i:3"></span><span class="fg-n">≈15</span></div></li>
+          <li><div class="fg-st"><b>Round 4 · Risk check</b><span>Then a named champion for each</span></div><div class="fg-track"><span class="fg-pill">Every survivor has an owner and a date</span></div></li>
+        </ol>
+        <p class="fg-foot">Parked ideas aren't deleted. <b>They're the starting list for next year's study.</b></p>
+      </div>
+
       <h3>6.2 · Round 1: quick sort into go, grow or park</h3>
       <p>First pass is fast and shallow — about a minute per idea, done as a group. Three piles only:</p>
       <ul class="tlist">
@@ -935,6 +1026,20 @@ Altshuller Institute case reports.</i></p></div>
       of fill-ins means the creative phase played it too safe; a wall full of big bets means this year's savings target is
       in trouble.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The effort–impact grid</h4>
+        <p>Two questions per idea: how big is the benefit, and how hard is it to get? Where it lands tells you what to do with it.</p></div>
+        <p class="sr-only">Two-by-two grid. Impact runs from low at the bottom to high at the top; effort runs from low on the left to high on the right. High impact, low effort: quick wins, do these first; example, delete the second label nobody reads, 4p a unit, one drawing change. High impact, high effort: big bets, plan and fund them; example, integrate the bracket into the housing moulding, 80p a unit but new tooling and full revalidation. Low impact, low effort: fill-ins, batch them into running changes. Low impact, high effort: money pits, park them for good.</p>
+        <div class="fg-ei" aria-hidden="true">
+          <span class="fg-lbl fg-yax">Impact: low → high</span>
+          <div class="fg-box fg-q-win" data-i style="--i:0"><h5>Quick wins</h5><p>High impact, low effort</p><span class="fg-do">Do these first</span><span class="fg-ex">Delete the second label nobody reads: 4p a unit, one drawing change</span></div>
+          <div class="fg-box fg-q-bet" data-i style="--i:1"><h5>Big bets</h5><p>High impact, high effort</p><span class="fg-do">Plan and fund them</span><span class="fg-ex">Mould the bracket into the housing: 80p a unit, but new tooling and full revalidation</span></div>
+          <div class="fg-box" data-i style="--i:2"><h5>Fill-ins</h5><p>Low impact, low effort</p><span class="fg-do">Batch into running changes</span></div>
+          <div class="fg-box fg-q-pit" data-i style="--i:3"><h5>Money pits</h5><p>Low impact, high effort</p><span class="fg-do">Park them for good</span></div>
+          <span></span><span class="fg-lbl fg-xax">Effort: low → high</span>
+        </div>
+      </div>
+
       <h3>6.5 · Round 3b: the weighted decision matrix, with real numbers</h3>
       <p>For the ideas that matter (the quick wins and big bets), move from rough to precise. A weighted matrix has
       five steps. <strong>One:</strong> agree the criteria (four to six, no more). Say: net savings, technical risk,
@@ -953,7 +1058,7 @@ Altshuller Institute case reports.</i></p></div>
         <p>Four real concepts for "transmit torque", already scored 1–9. Drag the weights and watch the ranking
         update. If a small change in weight changes the winner, you must report that, not hide it.</p></div>
         <div class="wm-weights" id="wmWeights"></div>
-        <div class="wm-table-wrap"><table class="wm-table" id="wmTable"></table></div>
+        <div class="wm-table-wrap" tabindex="0" role="region" aria-label="Weighted matrix scores"><table class="wm-table" id="wmTable"></table></div>
         <div class="wm-note" id="wmNote" aria-live="polite"></div>
       </div>
 
@@ -1642,6 +1747,21 @@ fasteners, assembly seconds. Write down two ideas the designer missed and what e
       <em>judging, deciding and owning</em>. The phase reviews, who makes decisions, and the record of what was decided
       stay exactly where the six-phase job plan put them.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>AI drafts, people decide</h4>
+        <p>The same split in every phase of the job plan.</p></div>
+        <p class="sr-only">Table of the six phases. Phase 1, Information: AI groups warranty claims by function and builds the starting cost from spend data; people check the figures with finance and see the product for themselves. Phase 2, Function analysis: AI drafts the function tree from the parts list; people correct it and agree what each function is worth. Phase 3, Creative: AI gives 25 ranked ideas per function as a warm-up and finds analogies; people build on them in the room. Phase 4, Evaluation: AI merges duplicates and does a first feasibility check; people do the scoring. Phase 5, Development: AI drafts business cases and should-cost estimates; people check every number and a named engineer signs. Phase 6, Presentation: AI builds dashboards and drafts decision logs; the sponsor decides and the decisions are recorded.</p>
+        <div class="fg-ai" aria-hidden="true">
+          <div class="fg-ai-h"><span></span><span class="fg-lbl fg-ai-k">AI drafts, counts, groups</span><span class="fg-lbl fg-ai-k k-ppl">People judge, decide, own</span></div>
+          <div class="fg-ai-r" data-i style="--i:0"><b><i>1</i>Information</b><span class="is-ai">Groups warranty claims by function; builds the starting cost from spend data</span><span class="is-ppl">Check the figures with finance; see the product for themselves</span></div>
+          <div class="fg-ai-r" data-i style="--i:1"><b><i>2</i>Function analysis</b><span class="is-ai">Drafts the function tree from the parts list</span><span class="is-ppl">Correct it; agree what each function is worth</span></div>
+          <div class="fg-ai-r" data-i style="--i:2"><b><i>3</i>Creative</b><span class="is-ai">25 ranked ideas per function as a warm-up; finds analogies</span><span class="is-ppl">Build on them in the room</span></div>
+          <div class="fg-ai-r" data-i style="--i:3"><b><i>4</i>Evaluation</b><span class="is-ai">Merges duplicates; first feasibility check</span><span class="is-ppl">Do the scoring</span></div>
+          <div class="fg-ai-r" data-i style="--i:4"><b><i>5</i>Development</b><span class="is-ai">Drafts business cases; should-cost estimates</span><span class="is-ppl">Check every number; a named engineer signs</span></div>
+          <div class="fg-ai-r" data-i style="--i:5"><b><i>6</i>Presentation</b><span class="is-ai">Live dashboards; draft decision logs</span><span class="is-ppl">The sponsor decides; decisions are recorded</span></div>
+        </div>
+      </div>
+
       <h3>11.8 · Adopting the tools in order: crawl, walk, run</h3>
       <p><strong>Crawl</strong>: start with the data you already have. Spend analysis and LPP across your biggest
       categories need no new tools, find the odd ones out within weeks, and pay for everything that follows.
@@ -1652,6 +1772,17 @@ fasteners, assembly seconds. Write down two ideas the designer missed and what e
       lost between rounds. The mistake to avoid is buying the "run" tools first. Tools make a working method stronger.
       Added to no method at all, they just produce nicely formatted guesses. Build the skills first, then buy the
       software.</p>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>Crawl, walk, run</h4>
+        <p>Each step pays for the next. Buying the "run" tools first is the most common mistake.</p></div>
+        <p class="sr-only">Three rising steps. Crawl: use the data you already have; spend analysis and linear performance pricing across your biggest categories; no new tools needed. Walk: trial an AI should-cost engine on your top 50 bought-in parts, compare it with real quotes for three months, and add a digital teardown library if you benchmark regularly. Run: approved AI assistants inside the workshop, CT scanning for teardowns that don't destroy the product, and a linked database of functions, parts, costs and suppliers. Build the skills first, then buy the software.</p>
+        <div class="fg-cwr" aria-hidden="true">
+          <div class="fg-box" data-i style="--i:0"><span class="fg-lbl">Step 1</span><h5>Crawl</h5><ul><li>Spend analysis on your biggest categories</li><li>Linear performance pricing (LPP)</li></ul><span class="fg-lbl">Data you already have</span></div>
+          <div class="fg-box" data-i style="--i:1"><span class="fg-lbl">Step 2</span><h5>Walk</h5><ul><li>Trial an AI should-cost engine on your top 50 bought-in parts</li><li>Compare it with real quotes for 3 months</li><li>Digital teardown library</li></ul><span class="fg-lbl">Trust earned, not assumed</span></div>
+          <div class="fg-box" data-i style="--i:2"><span class="fg-lbl">Step 3</span><h5>Run</h5><ul><li>Approved AI assistants in the workshop</li><li>CT scanning for teardowns</li><li>Linked database of functions, parts, costs and suppliers</li></ul><span class="fg-lbl">Built on working skills</span></div>
+        </div>
+      </div>
 
       <h3>11.9 · Ground rules: keeping AI-assisted cost work checkable</h3>
       <p>Four rules make the difference between AI being a big help and a big risk. <strong>Check every number</strong>:
@@ -1706,6 +1837,20 @@ product, ranked by likely cost."</em> Compare with your 6-3-5 output — what di
       target ≥60%), how many ideas get implemented, cost visibility (% of the parts list with a should-cost, target
       ≥80%), how fast savings arrive, average payback, and how often ideas are reused.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>A programme's year at a glance</h4>
+        <p>The rhythm is the programme: short, regular reviews rather than one big event.</p></div>
+        <p class="sr-only">Calendar of a year, months 1 to 12. Every month: the funnel review of owners, stages and dates. Every quarter, in months 3, 6, 9 and 12: planning the next products and teardowns. Every year, in month 12: the value plan for each product line, linked to its margin plan, and an internal value day. All the time: training and building skills.</p>
+        <div class="fg-cal" aria-hidden="true">
+          <span></span><span class="fg-m">1</span><span class="fg-m">2</span><span class="fg-m">3</span><span class="fg-m">4</span><span class="fg-m">5</span><span class="fg-m">6</span><span class="fg-m">7</span><span class="fg-m">8</span><span class="fg-m">9</span><span class="fg-m">10</span><span class="fg-m">11</span><span class="fg-m">12</span>
+          <b>Every month<small>Funnel review: owners, stages, dates</small></b><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span><span class="fg-dot"></span>
+          <b>Every quarter<small>Plan the next products and teardowns</small></b><i></i><i></i><span class="fg-dia"></span><i></i><i></i><span class="fg-dia"></span><i></i><i></i><span class="fg-dia"></span><i></i><i></i><span class="fg-dia"></span>
+          <b>Every year<small>Value plan per product line; value day</small></b><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="fg-star"></span>
+          <b>All the time<small>Training and skills</small></b><span class="fg-run"></span>
+        </div>
+        <p class="fg-foot">The monthly review is the one to protect. <b>It's what stops approved ideas from quietly dying.</b></p>
+      </div>
+
       <h3>12.2 · What to expect</h3>
       <p>A first proper round on a product nobody has studied before usually finds <strong>8–15%</strong> of product
       cost. Established programmes keep finding <strong>3–5% a year</strong>, and studies often return more than
@@ -1729,6 +1874,23 @@ product, ranked by likely cost."</em> Compare with your 6-3-5 output — what di
       every product line. Make sure it reports to someone neutral. A value office under engineering focuses on design and
       ignores sourcing, and one under purchasing does the opposite. Having the finance director or operations director
       as sponsor keeps both sides balanced.</p>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>Three ways to organise</h4>
+        <p>Who holds the skills, and how far they reach across the product lines.</p></div>
+        <p class="sr-only">Three organisation models. A central team of experts: deep skills, tools and standards, but it becomes a bottleneck. Champions in every product line: it can grow, but skills get spread thin. A mix of both, which works best in practice: a small central value office owns the method, training, tools and savings records, with certified champions in every product line.</p>
+        <div aria-hidden="true">
+          <div class="fg-org">
+            <div class="fg-box" data-i style="--i:0"><svg viewBox="0 0 200 106" focusable="false"><line class="fg-line" x1="100" y1="44" x2="31" y2="72"/><line class="fg-line" x1="100" y1="44" x2="77" y2="72"/><line class="fg-line" x1="100" y1="44" x2="123" y2="72"/><line class="fg-line" x1="100" y1="44" x2="169" y2="72"/><circle class="fg-hub" cx="100" cy="28" r="17"/><rect class="fg-pl" x="12" y="72" width="38" height="26" rx="5"/><rect class="fg-pl" x="58" y="72" width="38" height="26" rx="5"/><rect class="fg-pl" x="104" y="72" width="38" height="26" rx="5"/><rect class="fg-pl" x="150" y="72" width="38" height="26" rx="5"/></svg>
+              <h5>Central team of experts</h5><p class="fg-plus">Deep skills, tools and standards</p><p class="fg-minus">Becomes a bottleneck</p></div>
+            <div class="fg-box" data-i style="--i:1"><svg viewBox="0 0 200 106" focusable="false"><rect class="fg-pl" x="12" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="31" cy="85" r="6"/><rect class="fg-pl" x="58" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="77" cy="85" r="6"/><rect class="fg-pl" x="104" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="123" cy="85" r="6"/><rect class="fg-pl" x="150" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="169" cy="85" r="6"/></svg>
+              <h5>Champions in every product line</h5><p class="fg-plus">Can grow across the business</p><p class="fg-minus">Skills get spread thin</p></div>
+            <div class="fg-box is-best" data-i style="--i:2"><svg viewBox="0 0 200 106" focusable="false"><line class="fg-line" x1="100" y1="37" x2="31" y2="72"/><line class="fg-line" x1="100" y1="37" x2="77" y2="72"/><line class="fg-line" x1="100" y1="37" x2="123" y2="72"/><line class="fg-line" x1="100" y1="37" x2="169" y2="72"/><circle class="fg-hub" cx="100" cy="28" r="9"/><rect class="fg-pl" x="12" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="31" cy="85" r="6"/><rect class="fg-pl" x="58" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="77" cy="85" r="6"/><rect class="fg-pl" x="104" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="123" cy="85" r="6"/><rect class="fg-pl" x="150" y="72" width="38" height="26" rx="5"/><circle class="fg-ch" cx="169" cy="85" r="6"/></svg>
+              <span class="fg-best">Works best in practice</span><h5>A mix of both</h5><p class="fg-plus">A small value office owns the method, training, tools and savings records</p><p class="fg-plus">Certified champions in every product line</p></div>
+          </div>
+          <div class="fg-key"><span><i style="background:var(--fg-a)"></i>Central team or value office</span><span><i style="background:var(--fg-b)"></i>Champion</span><span><i style="border:1.5px solid var(--muted);border-radius:3px"></i>Product line</span></div>
+        </div>
+      </div>
       <h3>12.5 · Targets and rewards</h3>
       <p>Work back from the market: product-line margin plans → yearly cost plans → targets for each part of the design
       at each design review. Treat cost as a requirement, as important as weight. Be careful with rewards. Reward savings
@@ -1781,6 +1943,20 @@ value board. If you can't name the people, that's your first action.</p></div>
       hard part of target costing is people, not maths: sticking to the number when engineering says "it can't be done
       for that", and splitting the number up so every team owns a piece of it.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The same sum, in opposite directions</h4>
+        <p>Cost-plus starts from the design and hopes the market accepts the price. Target costing starts from the market. Figures from the EV example later in this module.</p></div>
+        <p class="sr-only">Two bars. Cost-plus: the cost estimated from the design, plus the margin, gives a price, and you hope the market accepts it. Target costing: the market price is fixed first, £29,900; take off the required 22% margin, £6,578, and the allowable cost is £23,322. The design has to fit that number.</p>
+        <div class="fg-tc" aria-hidden="true">
+          <div class="fg-tc-row" data-i style="--i:0"><h5>Cost-plus <span>· "what will it cost, so what must we charge?"</span></h5>
+            <div class="fg-stack"><span class="is-cost" style="flex:58"><b>Cost</b>estimated from the design</span><span class="is-mar" style="flex:16"><b>+ Margin</b></span><span class="is-q" style="flex:26">= price… will the market pay it?</span></div>
+            <span class="fg-arrow">Cost → add margin → <b>price</b></span></div>
+          <div class="fg-tc-row" data-i style="--i:1"><h5>Target costing <span>· "what will the market pay, so what can it cost?"</span></h5>
+            <div class="fg-stack"><span class="is-cost" style="flex:78"><b>Allowable cost £23,322</b>the design must fit this</span><span class="is-mar" style="flex:22"><b>Margin 22%</b>£6,578</span></div>
+            <span class="fg-arrow">Market price <b>£29,900</b> → take off the margin → <b>allowable cost</b></span></div>
+        </div>
+      </div>
+
       <h3>13.2 · Allowable cost, drifting cost and the value gap</h3>
       <p>Three numbers drive the process. The <strong>allowable cost</strong> comes from the market, working down from
       the price. The <strong>drifting cost</strong> is today's estimate of what the design as drawn would actually cost,
@@ -1828,6 +2004,34 @@ value board. If you can't name the people, that's your first action.</p></div>
       (−£38), a housing redesign merging three castings into one (−£61), magnet grade optimisation validated by CAE
       (−£43), and a supplier gain-share on machining cycle time (−£26). Gap closed: −£168, with £6 returned to the reserve.
       Every step uses a technique from Modules 4–11, applied before the design was frozen.</p></div>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The EV example as a picture</h4>
+        <p>Split the vehicle's allowable cost down to the motor, then close the motor's value gap one change at a time.</p></div>
+        <p class="sr-only">Top: the vehicle allowable cost of £23,322; 9.8% goes to the drive unit, £2,286; 46% of that goes to the motor, a target of £1,052. Bottom, a waterfall: the motor's drifting cost is £1,214, £162 over target. A hairpin winding saves £38, merging three housing castings into one saves £61, a better magnet grade saves £43, and a supplier gain-share on machining time saves £26. The new cost is £1,046, £6 under the £1,052 target, and the £6 goes back to the reserve.</p>
+        <div aria-hidden="true">
+          <div class="fg-cas">
+            <div class="fg-cas-row" data-i style="--i:0"><b>Vehicle<small>allowable cost</small></b><div class="fg-cas-bar">£23,322<i style="width:9.8%"></i><em>9.8%</em></div></div>
+            <div class="fg-zoom z1" data-i style="--i:1"></div>
+            <div class="fg-cas-row" data-i style="--i:1"><b>Drive unit<small>9.8% of the vehicle</small></b><div class="fg-cas-bar">£2,286<i style="width:46%"></i><em>Motor 46%</em></div></div>
+            <div class="fg-zoom z2" data-i style="--i:2"></div>
+            <div class="fg-cas-row" data-i style="--i:2"><b>Motor<small>target cost</small></b><div class="fg-cas-bar">£1,052</div></div>
+          </div>
+          <div class="fg-gap">
+            <h5>Closing the motor's £162 gap</h5>
+            <div class="fg-wf">
+              <div class="fg-wf-r is-was" data-i style="--i:3"><span>Drifting cost today</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:0;--w:97.27"></i></div><em>£1,214</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:4"><span>Hairpin winding: 8% less copper</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:80;--w:17.27"></i></div><em>−£38</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:5"><span>Housing: three castings become one</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:52.27;--w:27.73"></i></div><em>−£61</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:6"><span>Magnet grade, checked by simulation</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:32.73;--w:19.55"></i></div><em>−£43</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:7"><span>Supplier gain-share on machining time</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:20.91;--w:11.82"></i></div><em>−£26</em></div>
+              <div class="fg-wf-r" data-i style="--i:8"><span>New cost</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:0;--w:20.91"></i></div><em>£1,046</em></div>
+              <div class="fg-wf-axis"><span></span><div><span style="left:0">£1,000</span><span style="left:22.73%">£1,050</span><span style="left:45.45%">£1,100</span><span style="left:68.18%">£1,150</span><span style="left:90.91%">£1,200</span></div><span></span></div>
+            </div>
+          </div>
+        </div>
+        <p class="fg-foot">Dashed line: the £1,052 target. The changes save £168, £6 more than the gap, and the £6 goes back to the reserve. <b>The scale starts at £1,000 so the steps are easy to see.</b></p>
+      </div>
 
       <div class="tcase"><h4>Case study — documented</h4><p><b>Tata Nano: the price came first.</b> Ratan Tata
       announced the "1-lakh car" (about US$2,500) in 2003. The price was public before the design existed, which makes

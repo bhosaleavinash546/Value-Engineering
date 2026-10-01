@@ -13,6 +13,20 @@
       About <strong>one idea in eight</strong> makes it to development, and that's a healthy rate, not a disappointing
       one.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>From 380 sticky notes to a short list with owners</h4>
+        <p>Each round is more careful than the one before, because there are fewer ideas left to look at. Bars are drawn to scale.</p></div>
+        <p class="sr-only">Funnel chart, to scale. Start: 380 raw ideas from the creative day. After round 1, the quick sort into go, grow or park: about 120. After round 2, grouping, merging and the must-pass checks: 60 to 80. After round 3, ranking with the effort–impact grid, weighted matrix and Pugh: a short list of about 15. Round 4 checks each one for risk, and every survivor leaves with a named champion.</p>
+        <ol class="fg-fun" aria-hidden="true">
+          <li><div class="fg-st"><b>Raw ideas</b><span>The wall after the creative day</span></div><div class="fg-track"><span class="fg-bar" style="--w:100;--i:0"></span><span class="fg-n">380</span></div></li>
+          <li><div class="fg-st"><b>Round 1 · Quick sort</b><span>Go, grow or park, about a minute each</span></div><div class="fg-track"><span class="fg-bar" style="--w:31.6;--i:1"></span><span class="fg-n">≈120</span></div></li>
+          <li><div class="fg-st"><b>Round 2 · Group and screen</b><span>Merge duplicates, apply must-pass checks</span></div><div class="fg-track"><span class="fg-bar" style="--w:18.4;--i:2"></span><span class="fg-n">60–80</span></div></li>
+          <li><div class="fg-st"><b>Round 3 · Rank</b><span>Effort–impact, weighted matrix, Pugh</span></div><div class="fg-track"><span class="fg-bar is-win" style="--w:3.9;--i:3"></span><span class="fg-n">≈15</span></div></li>
+          <li><div class="fg-st"><b>Round 4 · Risk check</b><span>Then a named champion for each</span></div><div class="fg-track"><span class="fg-pill">Every survivor has an owner and a date</span></div></li>
+        </ol>
+        <p class="fg-foot">Parked ideas aren't deleted. <b>They're the starting list for next year's study.</b></p>
+      </div>
+
       <h3>6.2 · Round 1: quick sort into go, grow or park</h3>
       <p>First pass is fast and shallow — about a minute per idea, done as a group. Three piles only:</p>
       <ul class="tlist">
@@ -47,6 +61,20 @@
       of fill-ins means the creative phase played it too safe; a wall full of big bets means this year's savings target is
       in trouble.</p>
 
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The effort–impact grid</h4>
+        <p>Two questions per idea: how big is the benefit, and how hard is it to get? Where it lands tells you what to do with it.</p></div>
+        <p class="sr-only">Two-by-two grid. Impact runs from low at the bottom to high at the top; effort runs from low on the left to high on the right. High impact, low effort: quick wins, do these first; example, delete the second label nobody reads, 4p a unit, one drawing change. High impact, high effort: big bets, plan and fund them; example, integrate the bracket into the housing moulding, 80p a unit but new tooling and full revalidation. Low impact, low effort: fill-ins, batch them into running changes. Low impact, high effort: money pits, park them for good.</p>
+        <div class="fg-ei" aria-hidden="true">
+          <span class="fg-lbl fg-yax">Impact: low → high</span>
+          <div class="fg-box fg-q-win" data-i style="--i:0"><h5>Quick wins</h5><p>High impact, low effort</p><span class="fg-do">Do these first</span><span class="fg-ex">Delete the second label nobody reads: 4p a unit, one drawing change</span></div>
+          <div class="fg-box fg-q-bet" data-i style="--i:1"><h5>Big bets</h5><p>High impact, high effort</p><span class="fg-do">Plan and fund them</span><span class="fg-ex">Mould the bracket into the housing: 80p a unit, but new tooling and full revalidation</span></div>
+          <div class="fg-box" data-i style="--i:2"><h5>Fill-ins</h5><p>Low impact, low effort</p><span class="fg-do">Batch into running changes</span></div>
+          <div class="fg-box fg-q-pit" data-i style="--i:3"><h5>Money pits</h5><p>Low impact, high effort</p><span class="fg-do">Park them for good</span></div>
+          <span></span><span class="fg-lbl fg-xax">Effort: low → high</span>
+        </div>
+      </div>
+
       <h3>6.5 · Round 3b: the weighted decision matrix, with real numbers</h3>
       <p>For the ideas that matter (the quick wins and big bets), move from rough to precise. A weighted matrix has
       five steps. <strong>One:</strong> agree the criteria (four to six, no more). Say: net savings, technical risk,
@@ -65,7 +93,7 @@
         <p>Four real concepts for "transmit torque", already scored 1–9. Drag the weights and watch the ranking
         update. If a small change in weight changes the winner, you must report that, not hide it.</p></div>
         <div class="wm-weights" id="wmWeights"></div>
-        <div class="wm-table-wrap"><table class="wm-table" id="wmTable"></table></div>
+        <div class="wm-table-wrap" tabindex="0" role="region" aria-label="Weighted matrix scores"><table class="wm-table" id="wmTable"></table></div>
         <div class="wm-note" id="wmNote" aria-live="polite"></div>
       </div>
 
