@@ -398,3 +398,9 @@ html[data-theme="light"] .fg{--fg-s1:#1d5fd6;--fg-s2:#eb6834}
 }
 /* our own videos, served from the site */
 .tvid video{display:block;width:100%;max-width:760px;height:auto;aspect-ratio:16/9;border-radius:14px;border:1px solid var(--line);background:#0b1220}
+/* video transcripts */
+.tvid-tx{max-width:760px;margin-top:.5rem;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.tvid-tx summary{cursor:pointer;padding:.6rem .9rem;font-size:.86rem;font-weight:600;color:var(--txt);min-height:40px;display:flex;align-items:center}
+.tvid-tx summary::marker{color:var(--acc1)}
+.tvid-tx[open] summary{border-bottom:1px solid var(--line)}
+.tvid-tx p{font-size:.9rem;line-height:1.65;color:var(--muted);margin:.7rem .9rem}
