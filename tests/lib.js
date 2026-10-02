@@ -12,7 +12,7 @@ const { chromium } = require("playwright");
 
 const ROOT = path.resolve(__dirname, "..");
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript", ".css": "text/css", ".json": "application/json",
-  ".mp3": "audio/mpeg", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".svg": "image/svg+xml", ".woff2": "font/woff2",
+  ".mp3": "audio/mpeg", ".mp4": "video/mp4", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".svg": "image/svg+xml", ".woff2": "font/woff2",
   ".webmanifest": "application/manifest+json", ".xml": "application/xml", ".txt": "text/plain", ".xlsx": "application/octet-stream" };
 
 function startServer(port) {

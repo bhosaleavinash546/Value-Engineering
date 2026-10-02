@@ -7,13 +7,14 @@ Browser tests for valueengineeringhub.com. They run automatically on every push
 cd tests
 npm install
 npx playwright install chromium   # first time only
-node run.js                       # everything (about 4 minutes)
+node run.js                       # everything (about 8 minutes)
 node run.js academy narration     # just some groups
 ```
 
 | Group | What it checks |
 |---|---|
 | `pages` | All 22 pages: accessibility (WCAG 2 AA) in dark and light mode, fits a 375px phone, no script errors |
+| `modules` | Every module of both courses, not just the first: accessibility in dark and light mode, fits a 375px phone, no script errors; every video, cover image and photo exists, and videos can start before fully downloading |
 | `links` | Crawls the site: no broken links or `#anchors` |
 | `narration` | Lesson text matches the audio script word for word, timings are sound, seeking highlights the right paragraph |
 | `guides` | Homepage and the ten guides: old links redirect, every tool works, nav, phone menu, skip link |
@@ -25,4 +26,5 @@ Nothing here talks to the real Supabase project. Signed-in tests switch Supabase
 off inside the test browser only, and feedback requests are intercepted.
 
 If `narration` fails after a text change, run the **Generate narration** workflow
-for the modules it names.
+for the modules it names. When it finishes it publishes the site and re-runs these
+checks by itself.

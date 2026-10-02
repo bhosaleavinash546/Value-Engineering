@@ -13,7 +13,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,11 +28,25 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: tests/package-lock.json
+      # Keep the downloaded test browser between runs; it only changes when the
+      # Playwright version in tests/package-lock.json changes.
+      - name: Cache the test browser
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('tests/package-lock.json') }}
       - name: Install test tools
         working-directory: tests
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium
+        run: npm ci
+      - name: Install the test browser (first run after a Playwright update)
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        working-directory: tests
+        run: npx playwright install --with-deps chromium
+      - name: Install the test browser's system libraries
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        working-directory: tests
+        run: npx playwright install-deps chromium
       - name: Run site checks
         working-directory: tests
         run: node run.js
