@@ -93,7 +93,7 @@ h1,h2,h3,h4{font-family:var(--font-d);line-height:1.18;letter-spacing:-.015em;fo
 .nav-cta{padding:.55rem 1.15rem;border-radius:100px;background:var(--grad);color:#fff!important;font-weight:600;box-shadow:0 4px 24px rgba(46,111,232,.35)}
 .nav-toggle{display:none;background:none;border:0;cursor:pointer;width:38px;height:32px;position:relative;z-index:1100}
 .nav-toggle i{display:block;width:24px;height:2px;background:var(--txt);margin:5px auto;border-radius:2px;transition:transform .3s,opacity .3s}
-@media (max-width:1080px){
+@media (max-width:1360px){
   .nav-toggle{display:block}
   .nav-links{position:fixed;inset:0;background:rgba(5,7,15,.97);backdrop-filter:blur(20px);flex-direction:column;justify-content:center;gap:1.8rem;opacity:0;pointer-events:none;transition:opacity .35s}
   .nav-links a{font-size:1.3rem}
@@ -843,7 +843,7 @@ html[data-theme="light"] .hero-grid{background-image:linear-gradient(rgba(15,23,
 html[data-theme="light"] .hero-orb{opacity:.22}
 html[data-theme="light"] .nav.is-scrolled{background:rgba(255,255,255,.82)}
 html[data-theme="light"] .nav-links{background:transparent}
-@media (max-width:900px){html[data-theme="light"] .nav-links{background:rgba(244,246,251,.97)}}
+@media (max-width:1360px){html[data-theme="light"] .nav-links{background:rgba(244,246,251,.97)}}
 html[data-theme="light"] .nav-toggle i{background:var(--txt)}
 html[data-theme="light"] .dotnav a{background:rgba(15,23,42,.22)}
 html[data-theme="light"] .dotnav a::after{background:#fff;color:var(--txt)}
@@ -884,7 +884,7 @@ html[data-theme="light"] .nav-links a{color:#3d4c68}
 html[data-theme="light"] .nav-links a:hover,html[data-theme="light"] .nav-links a.is-active{color:#131c30}
 @media (max-width:1500px){.brand-tag{display:none}}
 @media (max-width:1280px){.nav-links{gap:1.05rem}.nav-links a{font-size:.86rem}}
-@media (max-width:1080px){.nav-links{gap:1.8rem}.nav-links a{font-size:1.25rem}.brand-tag{display:inline}}
+@media (max-width:1360px){.nav-links{gap:1.8rem}.nav-links a{font-size:1.25rem}.brand-tag{display:inline}}
 @media (max-width:400px){.brand-tag{display:none!important}}
 
 /* ── Hero animated bulb ── */
@@ -914,7 +914,7 @@ html[data-theme="light"] .hero-bulb svg{filter:drop-shadow(0 0 22px rgba(46,111,
 .nav-signin{font-size:.9rem;font-weight:600;color:var(--txt)!important;padding:.5rem .3rem;transition:color .25s}
 .nav-signin:hover{color:var(--acc1)!important}
 .tr-signin{margin-right:.2rem}
-@media (max-width:1080px){.nav-links .nav-signin{font-size:1.25rem}}
+@media (max-width:1360px){.nav-links .nav-signin{font-size:1.25rem}}
 
 /* ── account chip (signed-in nav state) ── */
 .acct-chip{position:relative;display:inline-flex}
@@ -1229,3 +1229,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .pricewf.ss-s2 .pw-c5 .pw-tag{left:auto;right:calc(100% + 8px)}
 }
 @media (max-width:400px){.pricewf.ss-s2 .pw-c2 .pw-tag,.pricewf.ss-s2 .pw-c3 .pw-tag{left:auto;right:calc(100% + 8px)}}
+
+/* ── Homepage: the two courses, side by side ── */
+.hero-courses{display:grid;grid-template-columns:repeat(2,minmax(0,330px));gap:1rem;margin-top:2.2rem}
+.hc-card{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.25rem 1.15rem;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.035);transition:transform .25s,border-color .25s,box-shadow .25s}
+.hc-card:hover{transform:translateY(-3px)}
+.hc-acad{border-color:rgba(57,135,229,.55);box-shadow:0 10px 30px -18px rgba(57,135,229,.8)}
+.hc-lead{border-color:rgba(217,164,74,.55);box-shadow:0 10px 30px -18px rgba(217,164,74,.8)}
+.hc-for{font-family:var(--font-m);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hc-name{font-family:var(--font-d);font-size:1.3rem;color:var(--txt)}
+.hc-meta{font-size:.9rem;color:var(--muted)}
+.hc-go{margin-top:auto;padding-top:.45rem;font-weight:700;font-size:.95rem}
+.hc-acad .hc-go{color:var(--acc1)}
+.hc-lead .hc-go{color:var(--acc3)}
+html[data-theme="light"] .hc-card{background:#fff}
+html[data-theme="light"] .hc-lead .hc-go{color:#9a6b12}
+@media (max-width:640px){.hero-courses{grid-template-columns:1fr}}
