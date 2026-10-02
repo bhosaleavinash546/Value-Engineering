@@ -1215,3 +1215,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .jm-stages li{flex:var(--g) 1 0;min-width:0;text-align:center;padding:.5rem .3rem;border:1px solid var(--line);border-radius:10px;background:var(--bg2);font-size:.74rem;color:var(--txt)}
 @media (max-width:640px){.jm-stages{padding-left:0}.jm-stages li{font-size:.66rem}}
 @media (prefers-reduced-motion:reduce){.jobmap .jm-mark,.jobmap .jm-marklab{opacity:1;transition:none}}
+/* phones: the gap bar is too narrow for its label inside, so the label sits to its left */
+@media (max-width:640px){.pricewf .pw-gap.pw-in .pw-tag{left:auto;right:calc(100% + 10px);color:var(--dv-red);font-weight:700}}
+/* phones: leave room above the first row for the "should-cost" label, and put the
+   Material label beside its bar (it doesn't fit inside at this width) */
+@media (max-width:640px){
+  .pricewf .pw-stage{height:330px}
+  .pricewf.ss-s2 .pw-item{top:calc(30px + var(--r)*35px)}
+  .pricewf.ss-s2 .pw-c0.pw-in .pw-tag{left:calc(100% + 8px);color:var(--txt);font-weight:600}
+}
+@media (max-width:640px){
+  .pricewf.ss-s2 .pw-c1.pw-left .pw-tag{left:calc(100% + 8px);right:auto}
+  .pricewf.ss-s2 .pw-c5 .pw-tag{left:auto;right:calc(100% + 8px)}
+}
+@media (max-width:400px){.pricewf.ss-s2 .pw-c2 .pw-tag,.pricewf.ss-s2 .pw-c3 .pw-tag{left:auto;right:calc(100% + 8px)}}
