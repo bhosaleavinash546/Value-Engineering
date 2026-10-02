@@ -56,44 +56,67 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   r.ok(await p.evaluate(() => document.querySelector(".tmod.is-visible").dataset.mod === "m2"), "'continue' button opens the next unfinished module");
   await ctx.close();
 
-  // ── Full exam: all correct → pass → certificate
+  // ── Full exam (demo mode marks with the dummy bank in tests/fixtures; the real bank is server-only)
   const src = fs.readFileSync(path.join(ROOT, "training.js"), "utf8");
-  const a = src.indexOf("const BANK = ["), e = src.indexOf("\n  ];", a);
-  const BANK = eval(src.slice(a + 13, e + 4)); // eslint-disable-line no-eval
-  r.ok(BANK.length === 65, `exam bank has 65 questions (found ${BANK.length})`);
+  r.ok(!src.includes("const BANK = [") && !/Right answer m\d/.test(src), "the exam answers are not shipped in the page");
   const positions = [0, 0, 0, 0];
   ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } });
   p = track(await ctx.newPage());
   await p.goto(U); await p.evaluate((d) => localStorage.setItem("vf-academy", JSON.stringify({ done: d })), ALL); await p.reload(); await p.waitForTimeout(600);
   await open(p, "exam"); await p.waitForTimeout(300);
-  r.ok((await p.textContent("#examMount")).includes("bank of 65"), "exam intro shows the 65-question bank");
-  await p.click("#examStart");
-  let found = true;
+  r.ok((await p.textContent("#examMount")).includes("two from every module"), "exam intro explains how the 30 questions are chosen");
+  await p.click("#examStart"); await p.waitForSelector(".ex-q");
+  const mods = new Set();
   for (let i = 0; i < 30; i++) {
     const q = await p.textContent(".ex-q");
-    const bq = BANK.find((x) => x[0] === q);
-    if (!bq) { found = false; break; }
+    const mm = q.match(/question (m\d+)-/); if (mm) mods.add(mm[1]);
     const btns = await p.$$(".ex-opt");
-    for (const [k, bt] of btns.entries()) if (+(await bt.getAttribute("data-i")) === bq[2]) { positions[k]++; await bt.click(); }
+    for (const [k, bt] of btns.entries()) if ((await bt.textContent()).includes("Right answer")) { positions[k]++; await bt.click(); }
     await p.click("#exNext"); await p.waitForTimeout(20);
   }
-  r.ok(found, "every exam question comes from the bank");
+  r.ok(mods.size === 13, `every module appears in the paper (${mods.size} of 13)`);
+  await p.waitForSelector(".ex-verdict");
   r.ok((await p.textContent(".ex-verdict")).includes("passed"), "all-correct exam passes");
   r.ok(Math.max(...positions) <= 18 && positions.filter(Boolean).length >= 3, `answers are shuffled across positions (A–D: ${positions.join("/")})`);
-  await p.fill("#certNameInput", "Test Learner"); await p.click("#genCert"); await p.waitForTimeout(300);
+  await p.fill("#certNameInput", "Test Learner"); await p.click("#genCert"); await p.waitForSelector("#certName");
+  await p.waitForTimeout(200);
   r.ok((await p.textContent("#certName")).includes("Test Learner"), "certificate carries the learner's name");
+  r.ok(/^VH-/.test(await p.textContent("#certId")), "certificate ID is issued by the exam service");
   const saved = await p.evaluate(() => JSON.parse(localStorage.getItem("vf-academy")));
   r.ok(Array.isArray(saved.attempts) && saved.attempts.length === 1 && saved.attempts[0].p === true && saved.attempts[0].s === 100, "exam attempt is recorded for the owner dashboard");
   await p.reload(); await p.waitForTimeout(700);
   r.ok((await p.textContent("#navProgText")).trim() === "✓ Certified", "progress badge shows ✓ Certified");
   await ctx.close();
 
-  // ── Review-mode migration from the old bank
-  ctx = await demoContext(browser);
+  // ── Failed exam: per-module results, no answers, one-hour wait
+  ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } });
   p = track(await ctx.newPage());
-  await p.goto(U); await p.evaluate(() => localStorage.setItem("vf-academy", JSON.stringify({ done: [], review: [20, 48, 49, 50, 51, 60] }))); await p.reload(); await p.waitForTimeout(600);
-  const mig = await p.evaluate(() => JSON.parse(localStorage.getItem("vf-academy")));
-  r.ok(JSON.stringify(mig.review) === "[20,48,43,44,57]" && mig.bankV === 2, `saved missed questions remap to the new bank (${JSON.stringify(mig.review)})`);
+  await p.goto(U); await p.evaluate((d) => localStorage.setItem("vf-academy", JSON.stringify({ done: d })), ALL); await p.reload(); await p.waitForTimeout(600);
+  await open(p, "exam"); await p.waitForTimeout(300);
+  await p.click("#examStart"); await p.waitForSelector(".ex-q");
+  for (let i = 0; i < 30; i++) {
+    const btns = await p.$$(".ex-opt");
+    for (const bt of btns) if (!(await bt.textContent()).includes("Right answer")) { await bt.click(); break; }
+    await p.click("#exNext"); await p.waitForTimeout(20);
+  }
+  await p.waitForSelector(".ex-verdict");
+  const failText = await p.textContent("#examMount");
+  r.ok(failText.includes("Not this time") && (await p.$$(".ex-mod-row")).length === 13, "a failed exam shows how you did in each module");
+  r.ok(!failText.includes("Right answer"), "a failed exam doesn't reveal the answers");
+  r.ok((await p.$$(".ex-goto")).length > 0, "weak modules get a 'Revisit' button");
+  await p.reload(); await p.waitForTimeout(600); await open(p, "exam"); await p.waitForTimeout(300);
+  await p.click("#examStart"); await p.waitForTimeout(400);
+  r.ok((await p.textContent("#examMount")).includes("one-hour break"), "a new attempt has to wait an hour after a fail");
+  await ctx.close();
+
+  // ── Practice exam: questions from the quick checks and challenges, explained straight away
+  ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } });
+  p = track(await ctx.newPage());
+  await p.goto(U); await p.waitForTimeout(600);
+  await p.click("#revBtn"); await p.waitForSelector("#revModal .rev-q");
+  r.ok((await p.$$("#revModal .rev-q")).length === 20, "practice exam deals 20 questions");
+  await p.click("#revModal .rev-q .rev-opt"); await p.waitForTimeout(100);
+  r.ok(/Correct|Not quite/.test(await p.textContent("#revModal .rev-q .rev-why")), "a practice answer is explained straight away");
   await ctx.close();
 
   // ── Module feedback (live config; the Supabase request is intercepted, nothing is stored)

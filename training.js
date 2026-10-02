@@ -314,182 +314,51 @@
   document.addEventListener("vh-account", (e) => onAccount(e.detail));
   if (window.VHAccount && VHAccount.user) onAccount(VHAccount.user);
 
-  /* ── Exam bank: 30 questions, [question, [options], correctIndex] ── */
-  const BANK = [
-    ["Value, in Value Engineering, is defined as:", ["Price minus discount", "Function ÷ Cost", "Cost ÷ Weight", "Quality × Speed"], 1],
-    ["Who created Value Analysis, and where?", ["Henry Ford at Ford", "Lawrence D. Miles at General Electric", "Taiichi Ohno at Toyota", "Genrich Altshuller at the Soviet patent office"], 1],
-    ["The key difference between VE and VA is:", ["VE is for services, VA for products", "VE applies during design; VA applies to products already in production", "VE is done by suppliers, VA by engineers", "There is no difference"], 1],
-    ["How many phases are in the standard VE job plan?", ["4", "5", "6", "8"], 2],
-    ["Which is the correct order of the six job-plan phases?", ["Creative → Information → Evaluation → Function Analysis → Development → Presentation", "Information → Function Analysis → Creative → Evaluation → Development → Presentation", "Information → Creative → Function Analysis → Development → Evaluation → Presentation", "Function Analysis → Information → Creative → Development → Evaluation → Presentation"], 1],
-    ["In function analysis, every function is expressed as:", ["A full sentence", "An active verb + a measurable noun", "A noun + adjective pair", "A cost code"], 1],
-    ["The basic function of an electric kettle is:", ["Indicate status", "Contain water", "Heat water", "Convey esteem"], 2],
-    ["On a FAST diagram, moving to the right answers which question?", ["WHY?", "WHEN?", "HOW?", "WHO?"], 2],
-    ["A function has cost £2.00 and worth £0.50. Its Value Index is:", ["0.25 — healthy", "1.0 — balanced", "2.5 — watch list", "4.0: a top target for the Creative Phase"], 3],
-    ["'Worth' of a function is best defined as:", ["What the customer says they'd pay", "The lowest cost that could still reliably achieve the function", "The supplier's quoted price", "The competitor's retail price"], 1],
-    ["During the Creative Phase, judgement of ideas must be:", ["Applied immediately to save time", "Held back: evaluation has its own phase", "Left to the most senior engineer", "Done by the finance representative"], 1],
-    ["Brainwriting 6-3-5 means:", ["6 rounds, 3 hours, 5 breaks", "6 people write 3 ideas in 5 minutes, then pass the sheet", "6 ideas ranked on 3 criteria by 5 judges", "6 functions, 3 costs, 5 worths"], 1],
-    ["TRIZ resolves design contradictions using:", ["Random trial and error", "About 40 principles drawn from studying patents", "Supplier negotiations", "Monte Carlo simulation"], 1],
-    ["In SCAMPER, the letter E stands for:", ["Evaluate", "Estimate", "Eliminate", "Expand"], 2],
-    ["The Pugh matrix evaluates concepts by:", ["Comparing each against the current design (datum) with +/−/same scores", "Calculating exact NPV per concept", "Voting by seniority", "Ranking by patent count"], 0],
-    ["Approximately what share of a product's lifecycle cost is committed during design?", ["20%", "50%", "80%", "99%"], 2],
-    ["A should-cost model is built primarily from:", ["Last year's price plus inflation", "Material, cycle time, machine rates, labour, overhead and a fair margin", "The average of three supplier quotes", "The sales team's target price"], 1],
-    ["The main purpose of a cleansheet model is:", ["Marketing benchmarks", "Fact-based supplier negotiation, layer by layer", "Tax optimisation", "Warranty forecasting"], 1],
-    ["Linear Performance Pricing (LPP) identifies savings by:", ["Plotting price against the main cost driver for a family of similar parts, and questioning the ones well above the line", "Reducing all prices linearly by 5%", "Indexing prices to inflation", "Comparing prices to retail"], 0],
-    ["A supplier's factory runs at only 55% of capacity. Which should-cost layer does that inflate?", ["Raw material", "Overhead", "Fair margin", "Direct labour"], 1],
-    ["The FIRST step of a competitive teardown is:", ["Disassemble as fast as possible", "Document, photograph and weigh everything before disassembly", "Send parts to suppliers for quotes", "Reverse-engineer the CAD"], 1],
-    ["Most removable cost hides in which function type?", ["Basic functions", "Secondary functions: they're design choices, not requirements", "All-time functions", "Higher-order functions"], 1],
-    ["The four classic types of value are:", ["Use, esteem, exchange, cost", "Price, quality, speed, service", "Design, material, labour, overhead", "Basic, secondary, tertiary, hidden"], 0],
-    ["DFMA primarily aims to:", ["Increase part count for flexibility", "Reduce part count and assembly time", "Improve paint finish", "Extend certification life"], 1],
-    ["Which of these is NOT a legitimate way to improve value?", ["Same function at lower cost", "More function at the same cost", "Cutting a function customers value to reduce cost", "Trimming unvalued function while cutting cost"], 2],
-    ["Target costing sets the allowable cost as:", ["Supplier quote minus 10%", "Market price minus required margin", "Last generation's cost plus features", "Engineering estimate plus contingency"], 1],
-    ["In a governed savings funnel, savings officially 'count' when:", ["The idea is generated", "The business case is drafted", "In production and checked against the fixed starting cost", "The workshop ends"], 2],
-    ["A first proper VAVE round on a product nobody has studied before usually finds about:", ["1–2%", "8–15%", "30–40%", "50%+"], 1],
-    ["SAVE International's entry-level certification is:", ["CVS", "AVS", "VMA", "PVA"], 2],
-    ["The Development Phase's key deliverable is:", ["A list of raw ideas", "A checked value proposal with savings, one-time cost, risks and dates", "A press release", "A supplier contract"], 1],
-    ["By the time concept design is frozen, roughly how much lifecycle cost is already decided, compared with actually spent?", ["10% decided, 80% spent", "70–80% decided, under 10% spent", "50% decided, 50% spent", "100% decided, 100% spent"], 1],
-    ["In the Kano model, a 'reverse' attribute is one that:", ["Everyone loves", "Some customers actively dislike it, so removing it raises value AND cuts cost", "Works backwards mechanically", "Only engineers notice"], 1],
-    ["Kano 'must-be' requirements should be delivered:", ["With maximum excellence at any cost", "At the lowest cost that does the job: customers are furious if it's missing, but doing it brilliantly earns nothing", "Only on premium variants", "After attractive features"], 1],
-    ["Which verbs should be BANNED from function statements?", ["Transmit, conduct, limit", "Provide, allow, enable: they can't be measured and often hide a solution", "Heat, cool, contain", "Position, support, seal"], 1],
-    ["A 'required secondary' function (e.g. 'suppress interference') is:", ["Optional decoration", "It must be there, but HOW you achieve it is up to you", "Always the costliest function", "Outside the scope lines"], 1],
-    ["The final validation of a FAST diagram is:", ["Manager sign-off", "Reading it aloud in both directions: a sentence that sounds wrong means a card is in the wrong place", "Counting the boxes", "Colour-coding the functions"], 1],
-    ["Which is NOT a valid way to estimate a function's worth?", ["Cheapest existing solution in any industry", "The physical minimum (the least material and energy the job needs)", "Setting worth equal to the current cost", "Your best result in the past"], 2],
-    ["In TRIZ, a physical contradiction (something must be X and not-X) is resolved by:", ["Voting", "Separation — in time, space, or condition", "Averaging the two states", "Buying better materials"], 1],
-    ["TRIZ's Ideal Final Result asks:", ["What would the most expensive solution look like?", "How could the function happen by itself, with no part, no cost and no harm?", "Which competitor is best?", "What does the patent office allow?"], 1],
-    ["Which company rolled out TRIZ across the business, training 1,000+ engineers a year, with one DVD pick-up project reported to save over $100M?", ["Ford", "Samsung", "Nokia", "Boeing"], 1],
-    ["The US federal-aid highway VE programme (2002–2011) averaged implemented savings of about:", ["$1.7 million per year", "$17 million per year", "$1.7 billion per year", "$170 per project"], 2],
-    ["The IBM Proprinter DFMA case reduced assembly time from 1,866 seconds to about:", ["930 seconds", "600 seconds", "170 seconds", "1,700 seconds"], 2],
-    ["A machine-hour rate is calculated as:", ["Machine price ÷ parts made", "(Depreciation + energy + floorspace + maintenance) ÷ (annual hours × OEE)", "Operator wage × 2", "Supplier quote ÷ cycle time"], 1],
-    ["When building a cleansheet for a competitor's part, the right assumptions are:", ["Your own region, volumes and processes", "The competitor's likely region, volumes and the processes their parts show", "Worst-case costs everywhere", "List prices for all materials"], 1],
-    ["Which statement about teardown legality is correct?", ["All reverse engineering is illegal", "Analysing products bought on the open market is legal; using confidential information obtained improperly is not, and copying a patented solution needs a licence or a different design", "Patents are secret documents", "Ethics only apply to hardware"], 1],
-    ["The 'value gap' in target costing is:", ["Market price minus list price", "The difference between the drifting (current-estimate) cost and the allowable cost", "Profit minus overhead", "The warranty reserve"], 1],
-    ["Kaizen costing is:", ["Setting cost targets before design begins", "Small, continuous cost reductions after production starts, taking over from target costing", "A European auditing standard", "A supplier penalty clause"], 1],
-    ["In design-to-cost, cost status at each design review should be treated like:", ["A finance-only report", "Weight: tracked, with a named owner and a recovery plan if it goes over", "A marketing forecast", "An optional appendix"], 1],
-    ["Why are cost DIFFERENCES between your part and a competitor's more useful than the exact estimates?", ["They are quicker to calculate", "Differences stay reliable even when both estimates could be a bit out", "Exact figures are confidential", "Differences ignore material cost"], 1],
-    ["Which is NOT one of Miles' five questions for the Information Phase?", ["What is it?", "What does it do?", "What is the competitor's profit margin?", "What else could do the job?"], 2],
-    ["Price, cost and value relate as follows:", ["They are three words for the same thing", "The market caps the price, your design sets the cost, and value is the ratio the customer experiences", "Price is always cost plus 30%", "Value equals price minus cost"], 1],
-    ["The VE facilitator should be:", ["The product's chief engineer, who knows it best", "Someone who runs the process and, on purpose, isn't the person who knows the product best", "The most senior manager present", "Someone from the supplier"], 1],
-    ["A workshop where creative thinking and evaluation happen in the same session will:", ["Save valuable time", "Make both suffer: judging ideas stops people coming up with them, so the phases must stay separate", "Produce better ideas faster", "Comply with the workshop standard"], 1],
-    ["Fact-based negotiation with a cleansheet typically recovers what share of quoted prices?", ["0–1%", "5–15%", "30–50%", "Over 60%"], 1],
-    ["When negotiating with a cleansheet, the raw-material part of the price is usually:", ["Squeezed hardest", "Linked to an index in the contract: nobody negotiates the price of copper", "Ignored", "Paid in advance"], 1],
-    ["A part sitting 25% above the LPP line should FIRST be:", ["Given a 25% price-cut demand", "Checked for specification differences that might justify the premium", "Resourced to another supplier", "Removed from the analysis"], 1],
-    ["Why share the cleansheet METHOD with a supplier rather than emailing the gap?", ["It's legally required", "Suppliers who feel checked up on hide information; suppliers who feel like partners offer it", "It shortens the meeting", "It hides your assumptions"], 1],
-    ["A proposal saves £50,000/year and needs £60,000 one-time. Its payback is roughly:", ["6 months", "14 months", "24 months", "3 months"], 1],
-    ["Before a Phase 6 decision meeting, the best preparation is:", ["Installing the projector early", "Taking the most sceptical people through the proposals before the meeting", "Emailing slides the night before", "Rehearsing the presentation"], 1],
-    ["A value proposal without an implementation date has a business case of:", ["Whatever finance estimates", "Zero: savings start on the day the change is made, not the day it's approved", "Half its gross value", "Its gross annual saving"], 1],
-    ["The testing ladder rule is:", ["Test everything as much as possible", "Only go as far up the ladder as the risk requires: too much testing slowly destroys the payback", "Skip testing for small changes", "Always end with a field trial"], 1],
-    ["AI should-cost engine outputs are best treated as:", ["Contractual target prices", "A guide for ranking options and preparing for negotiations", "Exact replacements for supplier quotes", "Marketing material"], 1],
-    ["A reliable way to ask an AI tool for VAVE ideas is:", ["A single short question", "Role + function + limits + how many + ranking", "As open as possible, with no limits", "Pasting the full BOM and asking for savings"], 1],
-    ["Which is a strict rule for using AI tools in cost work?", ["Never use them for ideation", "Check every number they give you, and keep confidential data out of public tools", "Trust figures above 90% model confidence", "Only use them after Phase 6"], 1],
-    ["The right ORDER for adopting digital cost tools is:", ["Buy the full AI suite first", "Crawl (spend analysis and LPP on data you already have) → walk (trial a should-cost engine) → run (AI assistants, CT scanning, a linked cost database)", "Start with CT scanning", "Whatever IT recommends"], 1],
-  ];
-  const PASS_MARK = 0.8;
-  const EXAM_SIZE = 30;
-  window.VH_BANK = BANK; // read-only handle for the review engine
-
-  // Bank v2 removed three duplicate questions (old positions 48, 50, 51); remap saved
-  // missed-question positions so review mode keeps pointing at the same questions.
-  if (Array.isArray(state.review) && state.bankV !== 2) {
-    const dup = { 48: 20, 50: 43, 51: 44 };
-    state.review = [...new Set(state.review.map((i) => (i in dup ? dup[i] : i - (i > 51 ? 3 : i > 50 ? 2 : i > 48 ? 1 : 0))))]
-      .filter((i) => i >= 0 && i < BANK.length);
-    state.bankV = 2; save();
-  }
-
-  /* ── Exam flow ── */
+  /* ── Final exam ──
+     The question bank lives on the server (supabase-exam.sql) and is never sent to the page:
+     each attempt gets 30 questions without answers (2 from every module + 4 scenario,
+     calculation or case-study questions), and the server marks them and issues the certificate. */
   const mount = $("#examMount");
-  let order = [], picks = [], perm = {}, qi = 0;
+  const examTitles = {};
+  courseMods.forEach((m) => { examTitles[m.dataset.mod] = m.dataset.title; });
 
   function renderExamGate() {
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
     const todo = courseMods.filter((m) => !state.done.includes(m.dataset.mod));
     const remaining = todo.length, nextMod = todo[0];
     mount.innerHTML = `<div class="ex-gate">
-      <p>Thirty questions, picked at random from a bank of ${BANK.length} covering all thirteen modules, including the case studies. You need <strong>${Math.round(PASS_MARK * 100)}% (24 of 30)</strong>
-      to earn the <strong>VAVEhub Certificate of Completion</strong>. You can retake the exam as often as you like, and
-      you'll get a new random set of 30 each time.</p>
+      <p>Thirty questions: two from every module, plus four scenario or calculation questions, drawn from a bank of
+      about 130. You need <strong>80% (24 of 30)</strong> to earn the <strong>VAVEhub Certificate of Completion</strong>.
+      If you don't pass, you'll see how you did in each module and can try again after an hour, with new questions.</p>
       ${remaining > 0
         ? `<p class="ex-warn">The exam opens once you've finished all ${courseMods.length} modules, so your certificate shows you completed the whole course. You have ${remaining} module${remaining > 1 ? "s" : ""} to go.</p>
       <button class="btn btn-primary btn-lg" id="examNextMod">Continue: ${nextMod.dataset.title} →</button>`
-        : `<button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>`}
+        : `<div class="ex-actions"><button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>
+           <button class="btn btn-ghost" id="examPractice">Try a practice exam first</button></div>`}
     </div>`;
     if (remaining > 0) $("#examNextMod").addEventListener("click", () => show(nextMod.dataset.mod));
-    else $("#examStart").addEventListener("click", startExam);
+    else {
+      $("#examStart").addEventListener("click", startExam);
+      $("#examPractice").addEventListener("click", () => window.VHPractice && window.VHPractice.open());
+    }
     $("#certWrap").hidden = true;
   }
 
   function startExam() {
-    order = BANK.map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, EXAM_SIZE);
-    picks = new Array(BANK.length).fill(null);
-    // shuffle each question's options so the right answer isn't always in the same place
-    perm = {};
-    order.forEach((bi) => { perm[bi] = BANK[bi][1].map((_, i) => i).sort(() => Math.random() - 0.5); });
-    qi = 0;
-    renderQ();
-  }
-
-  function renderQ() {
-    const bi = order[qi];
-    const [q, opts] = BANK[bi];
-    mount.innerHTML = `
-      <div class="ex-q-head"><span>Question ${qi + 1} / ${EXAM_SIZE}</span><div class="ex-bar"><i style="width:${(qi / EXAM_SIZE) * 100}%"></i></div></div>
-      <div class="ex-q">${q}</div>
-      <div class="ex-opts">${perm[bi].map((i, pos) =>
-        `<button class="ex-opt${picks[bi] === i ? " is-picked" : ""}" data-i="${i}"><span class="eo-key">${"ABCD"[pos]}</span><span>${opts[i]}</span></button>`).join("")}</div>
-      <div class="ex-nav">
-        <button class="btn btn-ghost" id="exPrev" ${qi === 0 ? "disabled" : ""}>← Previous</button>
-        <button class="btn btn-primary" id="exNext" ${picks[bi] === null ? "disabled" : ""}>${qi === EXAM_SIZE - 1 ? "Submit exam ✓" : "Next →"}</button>
-      </div>`;
-    $$(".ex-opt", mount).forEach((b) => b.addEventListener("click", () => {
-      picks[bi] = +b.dataset.i;
-      $$(".ex-opt", mount).forEach((o) => o.classList.toggle("is-picked", o === b));
-      $("#exNext").disabled = false;
-    }));
-    $("#exPrev").addEventListener("click", () => { if (qi > 0) { qi--; renderQ(); } });
-    $("#exNext").addEventListener("click", () => {
-      if (qi < EXAM_SIZE - 1) { qi++; renderQ(); } else finishExam();
-    });
-  }
-
-  function finishExam() {
-    const wrong = [];
-    const missedIdx = [];
-    let score = 0;
-    order.forEach((bi) => {
-      const [q, opts, c] = BANK[bi];
-      if (picks[bi] === c) score++;
-      else { wrong.push([q, opts[picks[bi]] ?? "—", opts[c]]); missedIdx.push(bi); }
-    });
-    const pct = Math.round((score / EXAM_SIZE) * 100);
-    const passed = score >= Math.ceil(EXAM_SIZE * PASS_MARK);
-    state.review = missedIdx; // feed the review-mistakes mode
-    state.attempts = (state.attempts || []).concat([{ t: new Date().toISOString(), s: pct, p: passed }]).slice(-20);
-    save();
-    const color = passed ? "#34d399" : "#f87171";
-    mount.innerHTML = `<div class="ex-result">
-      <div class="ex-ring"><svg viewBox="0 0 160 160"><circle class="rbg" cx="80" cy="80" r="72"/><circle class="rfg" id="exRing" cx="80" cy="80" r="72" style="stroke:${color}"/></svg>
-      <div class="rnum"><b style="color:${color}">${pct}%</b><span>${score} / ${EXAM_SIZE}</span></div></div>
-      <div class="ex-verdict ${passed ? "pass" : "fail"}">${passed ? "Congratulations — you passed!" : "Not this time — " + Math.round(PASS_MARK * 100) + "% needed"}</div>
-      <p class="ex-note">${passed
-        ? "You've shown you can use the value method across all six phases, along with today's cost-engineering tools. Enter your name to create your certificate."
-        : `You scored ${pct}%; the pass mark is ${Math.round(PASS_MARK * 100)}% (24 of 30). Look at the corrections below. You'll get a new set of questions each time.`}</p>
-      ${wrong.length && !passed ? `<div class="ex-review"><h4>Where you lost marks (${wrong.length})</h4>${wrong.map(([q, y, r]) =>
-        `<div class="ex-review-item"><b>${q}</b><span class="wrong">✗ ${y}</span> &nbsp;→&nbsp; <span class="right">✓ ${r}</span></div>`).join("")}</div>` : ""}
-      ${passed ? `<div class="ex-name"><input id="certNameInput" maxlength="60" placeholder="Your full name, as it should appear" value="${((state.exam && state.exam.name) || acctName || "").replace(/"/g, "&quot;")}" /></div>` : ""}
-      <div class="ex-actions">
-        ${passed ? '<button class="btn btn-primary" id="genCert">🎓 Generate my certificate</button>' : ""}
-        <button class="btn btn-ghost" id="exRetake">${passed ? "Retake for a better score" : "↻ Retake the exam"}</button>
-        ${!passed ? '<button class="btn btn-ghost" id="exReview2">Revisit the modules</button>' : ""}
-      </div></div>`;
-    requestAnimationFrame(() => requestAnimationFrame(() => { $("#exRing").style.strokeDashoffset = String(452 * (1 - pct / 100)); }));
-    $("#exRetake").addEventListener("click", startExam);
-    const rev = $("#exReview2");
-    if (rev) rev.addEventListener("click", () => show("m1"));
-    const gen = $("#genCert");
-    if (gen) gen.addEventListener("click", () => {
-      const name = ($("#certNameInput").value || "").trim();
-      if (!name) { $("#certNameInput").focus(); $("#certNameInput").placeholder = "Please enter your name first"; return; }
-      state.exam = { passed: true, score: pct, name, date: new Date().toISOString().slice(0, 10), id: (state.exam && state.exam.passed && state.exam.id) || "VH-" + Date.now().toString(36).toUpperCase() };
-      save(); if (window.VHCloud) VHCloud.registerCertificate(state.exam); refreshProgress(); renderCertificate();
+    $("#certWrap").hidden = true;
+    VHExamUI.start({
+      mount, course: "academy", noun: "exam", titles: examTitles,
+      signInHref: "auth.html?next=" + encodeURIComponent("training.html?open=exam"),
+      onGoto: (id) => show(id),
+      onResult: (res) => {
+        state.attempts = (state.attempts || []).concat([{ t: new Date().toISOString(), s: res.score, p: !!res.passed }]).slice(-20);
+        save();
+      },
+      onPass: (res, attempt, box) => VHExamUI.certForm(box, attempt, (state.exam && state.exam.name) || acctName, (cert) => {
+        state.exam = Object.assign({ passed: true }, cert);
+        save(); refreshProgress(); renderCertificate();
+      }),
+      onRetake: startExam,
     });
   }
 
@@ -660,6 +529,10 @@
     ],
   };
 
+      // quick-check questions also feed the practice exam
+  Object.entries(QUICK).forEach(([mod, qs]) => qs.forEach(([q, opts, c, why]) => (window.VH_PRACTICE = window.VH_PRACTICE || []).push({ mod, q, opts, c, why })));
+  // answers appear in a new order each time, so the right one isn't always in the same place
+  const qcOrder = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   $$(".qcheck").forEach((box) => {
     const id = box.dataset.qc;
     const qs = QUICK[id];
@@ -671,7 +544,7 @@
     box.innerHTML = `<div class="qcheck-head"><h4>Quick check</h4><span>${alreadyCleared ? "Cleared ✓" : "Answer both correctly to unlock completion"}</span></div>` +
       qs.map(([q, opts, c, expl], qiIdx) => `<div class="qc-item" data-qi="${qiIdx}">
         <div class="qc-q">${qiIdx + 1}. ${q}</div>
-        <div class="qc-opts">${opts.map((o, oi) => `<button class="qc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+        <div class="qc-opts">${qcOrder(opts.length).map((oi) => `<button class="qc-opt" data-oi="${oi}">${opts[oi]}</button>`).join("")}</div>
         <div class="qc-expl" role="status" aria-live="polite"></div></div>`).join("");
 
     function gate() {
@@ -698,8 +571,10 @@
           gate();
         }
       } else {
-        btn.classList.add("is-wrong");
-        expEl.textContent = "✗ Not quite — try again. Hint: " + expl;
+                btn.classList.add("is-wrong");
+        // the hint gives most of the answer away, so it only appears after a second wrong try
+        item.dataset.miss = String((+item.dataset.miss || 0) + 1);
+        expEl.textContent = +item.dataset.miss >= 2 ? "✗ Not quite. Hint: " + expl : "✗ Not quite. Try again.";
         expEl.className = "qc-expl show-wrong";
         setTimeout(() => btn.classList.remove("is-wrong"), 700);
       }
@@ -923,6 +798,7 @@
     ["The high-gloss paint on a luxury car (beyond protecting the metal)", ["Look good", "Impress people", "Convey quality", "Provide beauty"], 2,
      "\"Convey quality\" is the standard esteem function — and it is measurable through market research and price premiums. \"Look good\" has no active verb; \"impress people\" isn't testable; \"provide beauty\" uses a banned verb with an unmeasurable noun."],
   ];
+    FNCHAL.forEach(([q, opts, c, why]) => (window.VH_PRACTICE = window.VH_PRACTICE || []).push({ mod: "m4", q: q + ": which is the correctly written function?", opts, c, why }));
   const mount = $("#fncMount");
   if (mount) {
     let answered, score;
@@ -1060,29 +936,34 @@
     input.addEventListener("keydown", (e) => { if (e.key === "Escape") { results.hidden = true; input.blur(); } });
   }
 
-  /* ── 3. review mode: missed exam questions + glossary flashcards ── */
+  /* ── 3. practice exam + glossary flashcards ──
+     Practice questions come from the quick checks and scenario challenges (already on the page),
+     never from the real exam bank, which stays on the server. */
   const foot = $(".tr-side-foot");
   if (foot) {
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "btn btn-ghost rev-btn"; btn.id = "revBtn";
-    btn.textContent = "↻ Review & flashcards";
+    btn.textContent = "↻ Practice & flashcards";
     foot.appendChild(btn);
-    btn.addEventListener("click", openReview);
+    btn.addEventListener("click", () => openReview("practice"));
   }
+  window.VHPractice = { open: () => openReview("practice") };
 
-  function openReview() {
-    const st = getState();
-    const missed = (st.review || []).filter((i) => window.VH_BANK && window.VH_BANK[i]);
+  const PRACTICE_N = 20;
+  const mixUp = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  function openReview(tab) {
+    const pool = window.VH_PRACTICE || [];
     const terms = window.VH_TERMS || [];
     let modal = $("#revModal");
     if (modal) modal.remove();
     modal = document.createElement("div");
     modal.id = "revModal"; modal.className = "rev-modal";
     modal.innerHTML = `
-      <div class="rev-card" role="dialog" aria-label="Review and flashcards">
+      <div class="rev-card" role="dialog" aria-modal="true" aria-label="Practice exam and flashcards">
         <button type="button" class="rev-close" aria-label="Close">✕</button>
         <div class="rev-tabs">
-          <button type="button" class="rev-tab is-on" data-tab="missed">Missed questions (${missed.length})</button>
+          <button type="button" class="rev-tab is-on" data-tab="missed">Practice exam (${Math.min(PRACTICE_N, pool.length)})</button>
           <button type="button" class="rev-tab" data-tab="cards">Flashcards (${terms.length})</button>
         </div>
         <div class="rev-pane" id="revMissed"></div>
@@ -1097,29 +978,39 @@
       $("#revMissed").hidden = t.dataset.tab !== "missed";
       $("#revCards").hidden = t.dataset.tab !== "cards";
     }));
+    if (tab === "cards") $('.rev-tab[data-tab="cards"]', modal).click();
 
-    // missed-questions pane: requiz with instant feedback
+    // practice pane: 20 questions from across the course, with the explanation straight away
     const mp = $("#revMissed", modal);
-    if (!missed.length) {
-      mp.innerHTML = '<p class="rev-empty">No missed exam questions to review — either you haven\'t taken the exam yet, or you got everything right. 🎉</p>';
-    } else {
-      mp.innerHTML = missed.map((bi, n) => {
-        const [q, opts] = window.VH_BANK[bi];
-        return `<div class="rev-q" data-bi="${bi}"><div class="rev-qt">${n + 1}. ${q}</div>
-          <div class="rev-opts">${opts.map((o, oi) => `<button type="button" class="rev-opt" data-oi="${oi}">${o}</button>`).join("")}</div></div>`;
-      }).join("");
-      mp.addEventListener("click", (e) => {
-        const ob = e.target.closest(".rev-opt");
-        if (!ob) return;
-        const qEl = ob.closest(".rev-q");
-        const [, , correct] = window.VH_BANK[+qEl.dataset.bi];
-        $$(".rev-opt", qEl).forEach((o, oi) => {
-          o.disabled = true;
-          if (oi === correct) o.classList.add("is-right");
-          else if (o === ob) o.classList.add("is-wrong");
-        });
-      });
+    let set = [], got = 0, done = 0;
+    function deal() {
+      set = mixUp(pool).slice(0, PRACTICE_N); got = 0; done = 0;
+      mp.innerHTML = `<p class="rev-intro">${set.length} questions from across the course, with the answer explained as you go.
+        No certificate and no limit: take a new set whenever you like.</p>` +
+        set.map((it, n) => `<div class="rev-q" data-n="${n}"><div class="rev-qt">${n + 1}. ${it.q}</div>
+          <div class="rev-opts">${mixUp(it.opts.map((o, oi) => oi)).map((oi) => `<button type="button" class="rev-opt" data-oi="${oi}">${it.opts[oi]}</button>`).join("")}</div>
+          <p class="rev-why" role="status" aria-live="polite"></p></div>`).join("") +
+        `<div class="rev-score" role="status" aria-live="polite"></div>
+         <div class="ex-actions"><button type="button" class="btn btn-ghost" id="revNew">↻ New set of questions</button></div>`;
+      $("#revNew", mp).addEventListener("click", deal);
     }
+    mp.addEventListener("click", (e) => {
+      const ob = e.target.closest(".rev-opt");
+      if (!ob) return;
+      const qEl = ob.closest(".rev-q"), it = set[+qEl.dataset.n];
+      if (qEl.classList.contains("is-done")) return;
+      qEl.classList.add("is-done"); done++;
+      const right = +ob.dataset.oi === it.c;
+      if (right) got++;
+      $$(".rev-opt", qEl).forEach((o) => {
+        o.disabled = true;
+        if (+o.dataset.oi === it.c) o.classList.add("is-right");
+        else if (o === ob) o.classList.add("is-wrong");
+      });
+      $(".rev-why", qEl).textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + (it.why || "");
+      $(".rev-score", mp).textContent = `${got} of ${done} right so far` + (done === set.length ? `: ${Math.round((100 * got) / set.length)}%. The real exam needs 80%.` : "");
+    });
+    deal();
 
     // flashcards pane
     const cp = $("#revCards", modal);
@@ -1392,7 +1283,9 @@
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
   /* ── shared challenge builder (mirrors the Module-4 FNCHAL pattern) ── */
-  function buildChallenge(mountSel, questions, closingMsg) {
+    function buildChallenge(mountSel, questions, closingMsg) {
+    const chMod = (mountSel.match(/#(m\d+)/) || [])[1] || "";
+    questions.forEach(([q, opts, c, why]) => (window.VH_PRACTICE = window.VH_PRACTICE || []).push({ mod: chMod, q, opts, c, why })); // practice exam pool
     const mount = $(mountSel);
     if (!mount) return;
     let answered, score;

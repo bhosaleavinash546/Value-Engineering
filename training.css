@@ -829,3 +829,18 @@ html[data-theme="light"] .tdo a{border-bottom-color:rgba(4,120,87,.45)}
 html[data-theme="light"] .cert-status.ok{color:#0f7a52}
 html[data-theme="light"] .cert-status.no{color:#9a4a0b}
 @media print{.cert-status{display:none}}
+/* practice exam (review modal) */
+.rev-intro{font-size:.85rem;color:var(--muted);line-height:1.6;margin:.2rem .1rem .9rem}
+.rev-why{font-size:.8rem;line-height:1.55;color:var(--muted);margin:.55rem 0 0}
+.rev-why:empty{display:none}
+.rev-score{font-weight:600;font-size:.9rem;margin:.6rem .1rem}
+/* exam: loading line and per-module results */
+.ex-busy{color:var(--muted)}
+.ex-bymod .ex-mod-row{display:flex;align-items:center;gap:.8rem;padding:.45rem 0;border-bottom:1px solid var(--line-soft);font-size:.86rem}
+.ex-bymod .ex-mod-row span{flex:1;min-width:0}
+.ex-bymod .ex-mod-row b{font-family:var(--font-m);font-size:.8rem;color:#34d399;white-space:nowrap}
+.ex-bymod .ex-mod-row.is-weak b{color:#f87171}
+.ex-bymod .ex-goto{padding:.3rem .7rem;font-size:.78rem;min-height:36px}
+html[data-theme="light"] .ex-bymod .ex-mod-row b{color:#0f7a52}
+html[data-theme="light"] .ex-bymod .ex-mod-row.is-weak b{color:#b42318}
+.ex-review-item .ex-expl{display:block;margin-top:.3rem;color:var(--muted)}

@@ -106,6 +106,8 @@
   });
 
   /* ── quick checks: answer both correctly to unlock "Mark complete" ── */
+    // answers appear in a new order each time, so the right one isn't always in the same place
+  const qcOrder = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   $$(".qcheck").forEach((box) => {
     const id = box.dataset.qc, qs = C.quick[id];
     if (!qs) return;
@@ -115,7 +117,7 @@
     box.innerHTML = `<div class="qcheck-head"><h4>Quick check</h4><span>${cleared() ? "Cleared ✓" : "Answer both correctly to unlock completion"}</span></div>` +
       qs.map(([q, opts], qi) => `<div class="qc-item" data-qi="${qi}">
         <div class="qc-q">${qi + 1}. ${q}</div>
-        <div class="qc-opts">${opts.map((o, oi) => `<button class="qc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+        <div class="qc-opts">${qcOrder(opts.length).map((oi) => `<button class="qc-opt" data-oi="${oi}">${opts[oi]}</button>`).join("")}</div>
         <div class="qc-expl" role="status" aria-live="polite"></div></div>`).join("");
     if (doneBtn && !cleared()) doneBtn.disabled = true;
     box.addEventListener("click", (e) => {
@@ -134,7 +136,10 @@
         }
       } else {
         btn.classList.add("is-wrong");
-        out.textContent = "✗ Not quite. Try again. Hint: " + expl; out.className = "qc-expl show-wrong";
+                // the hint gives most of the answer away, so it only appears after a second wrong try
+        item.dataset.miss = String((+item.dataset.miss || 0) + 1);
+        out.textContent = +item.dataset.miss >= 2 ? "✗ Not quite. Hint: " + expl : "✗ Not quite. Try again.";
+        out.className = "qc-expl show-wrong";
       }
     });
   });
@@ -178,112 +183,49 @@
     });
   });
 
-  /* ── final quiz ── */
+  /* ── final quiz ──
+     Marked on the server (supabase-exam.sql): 12 questions, one from every module plus five
+     more, drawn from a bank the page never sees. Signing in is needed before starting. */
   const mount = $("#examMount");
-  const Q = C.quiz, N = Q.length, NEED = Math.ceil(N * C.passMark);
-  const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  let order = [], perm = [], picks = [], qi = 0;
+  const quizTitles = {};
+  courseMods.forEach((m) => { quizTitles[m.dataset.mod] = m.dataset.title; });
+  const signInHref = "auth.html?next=" + encodeURIComponent(C.signInNext);
 
   function renderQuizGate() {
     $("#certWrap").hidden = true;
-    if (state.quiz.passed) { renderPassed(); return; }
+    if (state.cert) { renderCertificate(); return; }
+    const needSignIn = LIVE && !acctName;
     mount.innerHTML = `<div class="ex-gate">
-      <p>${N} questions covering all seven modules. You need <strong>${NEED} of ${N} (${Math.round(C.passMark * 100)}%)</strong>
-      to pass. The questions and answers are shuffled on every attempt, you can retake the quiz as often as you like, and
-      you'll see the right answer to anything you missed.</p>
+      <p>Twelve questions: one from every module plus five more, including short situations a manager might face.
+      You need <strong>${Math.round(C.passMark * 100)}%</strong> to pass. If you don't pass, you'll see which modules to revisit
+      and can try again after an hour, with new questions.</p>
       ${doneCount() < courseMods.length ? `<p class="ex-note">You've finished ${doneCount()} of ${courseMods.length} modules. You can take the quiz now, but it's easier after all seven.</p>` : ""}
-      <button class="btn btn-primary btn-lg" id="examStart">Start the quiz →</button></div>`;
-    $("#examStart").addEventListener("click", startQuiz);
+      ${needSignIn
+        ? `<p class="ex-note">Sign in (or create a free account) first, so your result and certificate are saved. You'll come straight back here.</p>
+           <a class="btn btn-primary btn-lg" href="${signInHref}">Sign in to take the quiz →</a>`
+        : `<button class="btn btn-primary btn-lg" id="examStart">Start the quiz →</button>`}</div>`;
+    const go = $("#examStart");
+    if (go) go.addEventListener("click", startQuiz);
   }
   function startQuiz() {
-    order = shuffle(Q.map((_, i) => i));
-    perm = Q.map((q) => shuffle(q[1].map((_, i) => i)));
-    picks = new Array(N).fill(null); qi = 0;
     $("#certWrap").hidden = true;
-    renderQ();
-  }
-  function renderQ() {
-    const bi = order[qi], [q, opts] = Q[bi];
-    mount.innerHTML = `
-      <div class="ex-q-head"><span>Question ${qi + 1} / ${N}</span><div class="ex-bar"><i style="width:${(qi / N) * 100}%"></i></div></div>
-      <div class="ex-q" tabindex="-1">${q}</div>
-      <div class="ex-opts">${perm[bi].map((i, pos) =>
-        `<button class="ex-opt${picks[bi] === i ? " is-picked" : ""}" data-i="${i}"><span class="eo-key">${"ABCD"[pos]}</span><span>${opts[i]}</span></button>`).join("")}</div>
-      <div class="ex-nav">
-        <button class="btn btn-ghost" id="exPrev" ${qi === 0 ? "disabled" : ""}>← Previous</button>
-        <button class="btn btn-primary" id="exNext" ${picks[bi] === null ? "disabled" : ""}>${qi === N - 1 ? "Submit quiz ✓" : "Next →"}</button>
-      </div>`;
-    $$(".ex-opt", mount).forEach((b) => b.addEventListener("click", () => {
-      picks[bi] = +b.dataset.i;
-      $$(".ex-opt", mount).forEach((o) => o.classList.toggle("is-picked", o === b));
-      $("#exNext").disabled = false;
-    }));
-    $("#exPrev").addEventListener("click", () => { if (qi > 0) { qi--; renderQ(); $(".ex-q", mount).focus(); } });
-    $("#exNext").addEventListener("click", () => { if (qi < N - 1) { qi++; renderQ(); $(".ex-q", mount).focus(); } else finishQuiz(); });
-  }
-  function finishQuiz() {
-    let score = 0; const wrong = [];
-    order.forEach((bi) => {
-      const [q, opts, c, expl] = Q[bi];
-      if (picks[bi] === c) score++; else wrong.push([q, opts[picks[bi]] ?? "—", opts[c], expl]);
+    VHExamUI.start({
+      mount, course: "leaders", noun: "quiz", titles: quizTitles, signInHref,
+      onGoto: (id) => show(id),
+      onResult: (res) => {
+        state.quiz.attempts = (state.quiz.attempts || []).concat([{ t: new Date().toISOString(), s: res.score, p: !!res.passed }]).slice(-20);
+        state.quiz.best = Math.max(state.quiz.best || 0, res.score);
+        if (res.passed) state.quiz.passed = true;
+        save(); refreshProgress();
+      },
+      onPass: (res, attempt, box) => VHExamUI.certForm(box, attempt, acctName, (cert) => {
+        state.cert = cert;
+        save(); renderCertificate();
+      }),
+      onRetake: startQuiz,
     });
-    const pct = Math.round((score / N) * 100), passed = score >= NEED;
-    state.quiz.attempts = (state.quiz.attempts || []).concat([{ t: new Date().toISOString(), s: pct, p: passed }]).slice(-20);
-    state.quiz.best = Math.max(state.quiz.best || 0, pct);
-    if (passed) state.quiz.passed = true;
-    save(); refreshProgress();
-    const color = passed ? "#34d399" : "#f87171";
-    mount.innerHTML = `<div class="ex-result">
-      <div class="ex-ring"><svg viewBox="0 0 160 160"><circle class="rbg" cx="80" cy="80" r="72"/><circle class="rfg" id="exRing" cx="80" cy="80" r="72" style="stroke:${color}"/></svg>
-      <div class="rnum"><b style="color:${color}">${pct}%</b><span>${score} / ${N}</span></div></div>
-      <div class="ex-verdict ${passed ? "pass" : "fail"}">${passed ? "Well done, you passed!" : `Not this time: ${NEED} of ${N} needed`}</div>
-      ${wrong.length ? `<div class="ex-review"><h4>${passed ? "Worth a second look" : "Where you lost marks"} (${wrong.length})</h4>${wrong.map(([q, y, r, e]) =>
-        `<div class="ex-review-item"><b>${q}</b><span class="wrong">✗ ${y}</span> &nbsp;→&nbsp; <span class="right">✓ ${r}</span><span class="ex-expl">${e}</span></div>`).join("")}</div>` : ""}
-      <div class="ex-actions" id="quizNext"></div></div>`;
-    requestAnimationFrame(() => requestAnimationFrame(() => { $("#exRing").style.strokeDashoffset = String(452 * (1 - pct / 100)); }));
-    const actions = $("#quizNext");
-    if (passed) certOffer(actions);
-    const retake = document.createElement("button");
-    retake.className = "btn btn-ghost"; retake.textContent = passed ? "Retake for a better score" : "↻ Retake the quiz";
-    retake.addEventListener("click", startQuiz);
-    actions.appendChild(retake);
   }
 
-  /* ── certificate: sign in (live sites) to get it ── */
-  function renderPassed() {
-    if (state.cert) { renderCertificate(); return; }
-    mount.innerHTML = `<div class="ex-gate"><p><strong style="color:#34d399">✓ You passed</strong> with a best score of
-      ${state.quiz.best}%.</p><div class="ex-actions" id="quizNext"></div></div>`;
-    certOffer($("#quizNext"));
-  }
-  function certOffer(box) {
-    if (state.cert) {
-      const b = document.createElement("button"); b.className = "btn btn-primary"; b.textContent = "View your certificate →";
-      b.addEventListener("click", renderCertificate); box.appendChild(b); return;
-    }
-    if (LIVE && !acctName) {
-      const p = document.createElement("p"); p.className = "ex-note";
-      p.textContent = "Sign in (or create a free account) to get your certificate. You'll come straight back here.";
-      const a = document.createElement("a"); a.className = "btn btn-primary"; a.href = "auth.html?next=" + encodeURIComponent(C.signInNext);
-      a.textContent = "Sign in to get your certificate →";
-      box.append(p, a); return;
-    }
-    const wrap = document.createElement("div"); wrap.className = "ex-name";
-    const input = document.createElement("input");
-    input.id = "certNameInput"; input.maxLength = 60; input.placeholder = "Your full name, as it should appear"; input.value = acctName || "";
-    input.setAttribute("aria-label", "Your name for the certificate");
-    wrap.appendChild(input);
-    const b = document.createElement("button"); b.className = "btn btn-primary"; b.id = "genCert"; b.textContent = "🎓 Get my certificate";
-    b.addEventListener("click", () => {
-      const name = input.value.trim();
-      if (!name) { input.focus(); input.placeholder = "Please enter your name first"; return; }
-      state.cert = { name, score: state.quiz.best, date: new Date().toISOString().slice(0, 10), id: C.certPrefix + Date.now().toString(36).toUpperCase() };
-      save();
-      if (window.VHCloud) VHCloud.registerCertificate(state.cert);
-      renderCertificate();
-    });
-    box.append(wrap, b);
-  }
   function certToken(e) {
     const json = JSON.stringify({ n: e.name, s: e.score, d: e.date, id: e.id, k: "L" });
     return btoa(unescape(encodeURIComponent(json))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");

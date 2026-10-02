@@ -49,8 +49,17 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   const answer = async (id) => {
     for (const [qi, q] of C.quick[id].entries()) await p.click(`.qcheck[data-qc="${id}"] .qc-item[data-qi="${qi}"] .qc-opt[data-oi="${q[2]}"]`);
   };
-  await p.click(`.qcheck[data-qc="l1"] .qc-item[data-qi="0"] .qc-opt[data-oi="0"]`);
-  r.ok((await p.textContent(`.qcheck[data-qc="l1"] .qc-item[data-qi="0"] .qc-expl`)).includes("Not quite"), "a wrong quick-check answer explains why");
+    {
+    const c0 = C.quick.l1[0][2], wrong = [0, 1, 2, 3].filter((i) => i !== c0 && i < C.quick.l1[0][1].length);
+    const expl = () => p.textContent(`.qcheck[data-qc="l1"] .qc-item[data-qi="0"] .qc-expl`);
+    await p.click(`.qcheck[data-qc="l1"] .qc-item[data-qi="0"] .qc-opt[data-oi="${wrong[0]}"]`);
+    const first = await expl();
+    r.ok(first.includes("Not quite") && !first.includes("Hint"), "a first wrong quick-check answer says try again, without giving the answer away");
+    await p.click(`.qcheck[data-qc="l1"] .qc-item[data-qi="0"] .qc-opt[data-oi="${wrong[1]}"]`);
+    r.ok((await expl()).includes("Hint"), "a second wrong answer shows the hint");
+    const orders = await p.$$eval(".qcheck .qc-item", (items) => items.map((it) => [...it.querySelectorAll(".qc-opt")].map((b) => b.dataset.oi).join("")));
+    r.ok(orders.some((o) => !/^0123?$|^012$/.test(o)), "quick-check answers are shuffled");
+  }
   await answer("l1");
   r.ok(!(await p.$eval('.tmod-done[data-done="l1"]', (b) => b.disabled)), "passing the quick check unlocks 'Mark complete'");
   await p.click('.tmod-done[data-done="l1"]'); await p.waitForTimeout(300);
@@ -99,28 +108,36 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   r.ok((await p.textContent("#sideProgText")).includes("6 / 7") || (await p.textContent("#sideProgText")).includes("7 / 7"), `progress counts completed modules (${await p.textContent("#sideProgText")})`);
   r.ok(!!(await p.$('[data-mod="l3"] .mod-feedback')), "every module asks 'Was this module helpful?'");
 
-  // quiz: fail once, then pass
+  // quiz: fail once, then pass (demo mode marks with the dummy bank in tests/fixtures; the real bank is server-only)
+  r.ok(!("quiz" in C) && !src.includes("Right answer"), "the quiz answers are not shipped in the page");
+  const quizRun = async (wrongFirst) => {
+    await p.waitForSelector(".ex-q");
+    const mods = new Set(), positions = [0, 0, 0, 0];
+    for (let i = 0; i < 12; i++) {
+      const mm = (await p.textContent(".ex-q")).match(/question (l\d)-/); if (mm) mods.add(mm[1]);
+      const btns = await p.$$(".ex-opt");
+      for (const [k, b] of btns.entries()) {
+        const right = (await b.textContent()).includes("Right answer");
+        if (i < wrongFirst ? !right : right) { if (right) positions[k]++; await b.click(); break; }
+      }
+      await p.click("#exNext");
+    }
+    await p.waitForSelector(".ex-verdict");
+    return { mods, positions };
+  };
   await p.click("#examStart");
-  for (let i = 0; i < C.quiz.length; i++) {
-    const q = await p.textContent(".ex-q");
-    const item = C.quiz.find((x) => x[0] === q);
-    const wrong = [0, 1, 2, 3].find((k) => k !== item[2]);
-    await p.click(`.ex-opt[data-i="${i < 4 ? wrong : item[2]}"]`); await p.click("#exNext");
-  }
-  r.ok((await p.textContent(".ex-verdict")).includes("Not this time") && (await p.$$(".ex-review-item")).length === 4, `${C.quiz.length - 4} of ${C.quiz.length} fails and shows the four corrections with explanations`);
-  r.ok(C.quiz.length === 12 && Math.ceil(C.quiz.length * C.passMark) === 9, "12 questions, 9 needed to pass");
-  await p.click("text=Retake the quiz");
-  const positions = [0, 0, 0, 0];
-  for (let i = 0; i < C.quiz.length; i++) {
-    const q = await p.textContent(".ex-q");
-    const item = C.quiz.find((x) => x[0] === q);
-    const btns = await p.$$(".ex-opt");
-    for (const [k, b] of btns.entries()) if (+(await b.getAttribute("data-i")) === item[2]) { positions[k]++; await b.click(); }
-    await p.click("#exNext");
-  }
+  const first = await quizRun(4);
+  const failText = await p.textContent("#examMount");
+  r.ok(failText.includes("Not this time") && (await p.$$(".ex-mod-row")).length === 7 && !failText.includes("Right answer"),
+    "8 of 12 fails, shows the result for each module and doesn't reveal the answers");
+  r.ok(first.mods.size === 7, `the quiz draws from all seven modules (${first.mods.size})`);
+  await p.evaluate(() => localStorage.removeItem("vh-demo-exam")); // skip the one-hour wait for the test
+  await open(p, "quiz"); await p.waitForTimeout(300);
+  await p.click("#examStart");
+  const second = await quizRun(0);
   r.ok((await p.textContent(".ex-verdict")).includes("passed"), "all correct passes");
-  r.ok(positions.filter(Boolean).length >= 2, `answer positions are shuffled (A–D: ${positions.join("/")})`);
-  await p.fill("#certNameInput", "Test Leader"); await p.click("#genCert"); await p.waitForTimeout(300);
+  r.ok(second.positions.filter(Boolean).length >= 2, `answer positions are shuffled (A–D: ${second.positions.join("/")})`);
+  await p.fill("#certNameInput", "Test Leader"); await p.click("#genCert"); await p.waitForSelector("#certName"); await p.waitForTimeout(300);
   r.ok((await p.textContent("#certName")) === "Test Leader" && /^VL-/.test(await p.textContent("#certId")), "certificate shows the name and a VL- ID");
   r.ok(await p.$eval("#cert .cert-seal-img", (i) => i.src.endsWith("cert-seal-leaders.png")), "certificate uses the VAVE for Leaders seal");
   r.ok((await p.textContent("#cert")).includes("a one-hour overview of value analysis and value engineering for senior leaders"), "certificate uses the approved wording");
@@ -144,8 +161,8 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   await ctx.addInitScript(() => localStorage.setItem("vh-leaders", JSON.stringify({ done: ["l0", "l1", "l2", "l3", "l4", "l5", "l6"], quiz: { attempts: [{ t: new Date().toISOString(), s: 80, p: true }], best: 80, passed: true } })));
   p = track(await ctx.newPage());
   await p.goto(`${U}?open=quiz`); await p.waitForTimeout(1200);
-  const link = await p.getAttribute("#quizNext a", "href");
-  r.ok(link === "auth.html?next=leaders.html%3Fopen%3Dquiz", "passing without an account offers 'Sign in to get your certificate' and returns to the quiz");
+  const link = await p.getAttribute("#examMount a.btn-primary", "href");
+  r.ok(link === "auth.html?next=leaders.html%3Fopen%3Dquiz" && !(await p.$("#examStart")), "without an account the quiz asks the learner to sign in first and returns to the quiz");
   await ctx.close();
 
   // ── phone
@@ -161,7 +178,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   // accessibility of every module (labs included) in both themes
   const AXE = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
   for (const theme of ["dark", "light"]) {
-    ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    ctx = await demoContext(browser, { viewport: { width: 1280, height: 900 } });
     await ctx.addInitScript((t) => localStorage.setItem("vf-theme", t), theme);
     p = track(await ctx.newPage());
     await p.goto(U); await p.waitForTimeout(700);
@@ -169,7 +186,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
     const bad = [];
     for (const id of ["l0", "l1", "l2", "l3", "l4", "l5", "l6", "quiz"]) {
       await open(p, id); await p.waitForTimeout(600);
-      if (id === "quiz") { await p.click("#examStart"); await p.waitForTimeout(200); }
+      if (id === "quiz") { await p.click("#examStart"); await p.waitForSelector(".ex-q"); }
       const v = await p.evaluate(async () => (await axe.run(document.querySelector(".tmod.is-visible"), { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa"] } })).violations.map((x) => x.id));
       if (v.length) bad.push(`${id}: ${v.join(", ")}`);
     }

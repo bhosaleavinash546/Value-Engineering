@@ -1,0 +1,956 @@
+{
+ "_note": "Dummy questions for automated tests and local demo mode only. The real exam banks live in Supabase and are never published.",
+ "academy": [
+  {
+   "module": "m1",
+   "kind": "recall",
+   "q": "Demo question m1-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m1-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m1-1."
+  },
+  {
+   "module": "m1",
+   "kind": "recall",
+   "q": "Demo question m1-2 (test data only)",
+   "options": [
+    "Right answer m1-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m1-2."
+  },
+  {
+   "module": "m1",
+   "kind": "recall",
+   "q": "Demo question m1-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m1-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m1-3."
+  },
+  {
+   "module": "m1",
+   "kind": "calc",
+   "q": "Demo question m1-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m1-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m1-4."
+  },
+  {
+   "module": "m2",
+   "kind": "recall",
+   "q": "Demo question m2-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m2-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m2-1."
+  },
+  {
+   "module": "m2",
+   "kind": "recall",
+   "q": "Demo question m2-2 (test data only)",
+   "options": [
+    "Right answer m2-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m2-2."
+  },
+  {
+   "module": "m2",
+   "kind": "recall",
+   "q": "Demo question m2-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m2-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m2-3."
+  },
+  {
+   "module": "m2",
+   "kind": "calc",
+   "q": "Demo question m2-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m2-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m2-4."
+  },
+  {
+   "module": "m3",
+   "kind": "recall",
+   "q": "Demo question m3-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m3-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m3-1."
+  },
+  {
+   "module": "m3",
+   "kind": "recall",
+   "q": "Demo question m3-2 (test data only)",
+   "options": [
+    "Right answer m3-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m3-2."
+  },
+  {
+   "module": "m3",
+   "kind": "recall",
+   "q": "Demo question m3-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m3-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m3-3."
+  },
+  {
+   "module": "m3",
+   "kind": "calc",
+   "q": "Demo question m3-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m3-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m3-4."
+  },
+  {
+   "module": "m4",
+   "kind": "recall",
+   "q": "Demo question m4-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m4-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m4-1."
+  },
+  {
+   "module": "m4",
+   "kind": "recall",
+   "q": "Demo question m4-2 (test data only)",
+   "options": [
+    "Right answer m4-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m4-2."
+  },
+  {
+   "module": "m4",
+   "kind": "recall",
+   "q": "Demo question m4-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m4-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m4-3."
+  },
+  {
+   "module": "m4",
+   "kind": "calc",
+   "q": "Demo question m4-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m4-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m4-4."
+  },
+  {
+   "module": "m5",
+   "kind": "recall",
+   "q": "Demo question m5-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m5-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m5-1."
+  },
+  {
+   "module": "m5",
+   "kind": "recall",
+   "q": "Demo question m5-2 (test data only)",
+   "options": [
+    "Right answer m5-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m5-2."
+  },
+  {
+   "module": "m5",
+   "kind": "recall",
+   "q": "Demo question m5-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m5-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m5-3."
+  },
+  {
+   "module": "m5",
+   "kind": "calc",
+   "q": "Demo question m5-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m5-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m5-4."
+  },
+  {
+   "module": "m6",
+   "kind": "recall",
+   "q": "Demo question m6-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m6-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m6-1."
+  },
+  {
+   "module": "m6",
+   "kind": "recall",
+   "q": "Demo question m6-2 (test data only)",
+   "options": [
+    "Right answer m6-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m6-2."
+  },
+  {
+   "module": "m6",
+   "kind": "recall",
+   "q": "Demo question m6-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m6-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m6-3."
+  },
+  {
+   "module": "m6",
+   "kind": "calc",
+   "q": "Demo question m6-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m6-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m6-4."
+  },
+  {
+   "module": "m7",
+   "kind": "recall",
+   "q": "Demo question m7-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m7-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m7-1."
+  },
+  {
+   "module": "m7",
+   "kind": "recall",
+   "q": "Demo question m7-2 (test data only)",
+   "options": [
+    "Right answer m7-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m7-2."
+  },
+  {
+   "module": "m7",
+   "kind": "recall",
+   "q": "Demo question m7-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m7-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m7-3."
+  },
+  {
+   "module": "m7",
+   "kind": "calc",
+   "q": "Demo question m7-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m7-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m7-4."
+  },
+  {
+   "module": "m8",
+   "kind": "recall",
+   "q": "Demo question m8-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m8-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m8-1."
+  },
+  {
+   "module": "m8",
+   "kind": "recall",
+   "q": "Demo question m8-2 (test data only)",
+   "options": [
+    "Right answer m8-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m8-2."
+  },
+  {
+   "module": "m8",
+   "kind": "recall",
+   "q": "Demo question m8-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m8-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m8-3."
+  },
+  {
+   "module": "m8",
+   "kind": "calc",
+   "q": "Demo question m8-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m8-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m8-4."
+  },
+  {
+   "module": "m9",
+   "kind": "recall",
+   "q": "Demo question m9-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m9-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m9-1."
+  },
+  {
+   "module": "m9",
+   "kind": "recall",
+   "q": "Demo question m9-2 (test data only)",
+   "options": [
+    "Right answer m9-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m9-2."
+  },
+  {
+   "module": "m9",
+   "kind": "recall",
+   "q": "Demo question m9-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m9-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m9-3."
+  },
+  {
+   "module": "m9",
+   "kind": "calc",
+   "q": "Demo question m9-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m9-4",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m9-4."
+  },
+  {
+   "module": "m10",
+   "kind": "recall",
+   "q": "Demo question m10-1 (test data only)",
+   "options": [
+    "Right answer m10-1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m10-1."
+  },
+  {
+   "module": "m10",
+   "kind": "recall",
+   "q": "Demo question m10-2 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m10-2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m10-2."
+  },
+  {
+   "module": "m10",
+   "kind": "recall",
+   "q": "Demo question m10-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m10-3",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m10-3."
+  },
+  {
+   "module": "m10",
+   "kind": "calc",
+   "q": "Demo question m10-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m10-4"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m10-4."
+  },
+  {
+   "module": "m11",
+   "kind": "recall",
+   "q": "Demo question m11-1 (test data only)",
+   "options": [
+    "Right answer m11-1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m11-1."
+  },
+  {
+   "module": "m11",
+   "kind": "recall",
+   "q": "Demo question m11-2 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m11-2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m11-2."
+  },
+  {
+   "module": "m11",
+   "kind": "recall",
+   "q": "Demo question m11-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m11-3",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m11-3."
+  },
+  {
+   "module": "m11",
+   "kind": "calc",
+   "q": "Demo question m11-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m11-4"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m11-4."
+  },
+  {
+   "module": "m12",
+   "kind": "recall",
+   "q": "Demo question m12-1 (test data only)",
+   "options": [
+    "Right answer m12-1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m12-1."
+  },
+  {
+   "module": "m12",
+   "kind": "recall",
+   "q": "Demo question m12-2 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m12-2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m12-2."
+  },
+  {
+   "module": "m12",
+   "kind": "recall",
+   "q": "Demo question m12-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m12-3",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m12-3."
+  },
+  {
+   "module": "m12",
+   "kind": "calc",
+   "q": "Demo question m12-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m12-4"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m12-4."
+  },
+  {
+   "module": "m13",
+   "kind": "recall",
+   "q": "Demo question m13-1 (test data only)",
+   "options": [
+    "Right answer m13-1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for m13-1."
+  },
+  {
+   "module": "m13",
+   "kind": "recall",
+   "q": "Demo question m13-2 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer m13-2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for m13-2."
+  },
+  {
+   "module": "m13",
+   "kind": "recall",
+   "q": "Demo question m13-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Right answer m13-3",
+    "Wrong option 4"
+   ],
+   "answer": 2,
+   "explanation": "Demo explanation for m13-3."
+  },
+  {
+   "module": "m13",
+   "kind": "calc",
+   "q": "Demo question m13-4 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer m13-4"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for m13-4."
+  }
+ ],
+ "leaders": [
+  {
+   "module": "l0",
+   "kind": "recall",
+   "q": "Demo question l0-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l0-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l0-1."
+  },
+  {
+   "module": "l0",
+   "kind": "recall",
+   "q": "Demo question l0-2 (test data only)",
+   "options": [
+    "Right answer l0-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l0-2."
+  },
+  {
+   "module": "l0",
+   "kind": "calc",
+   "q": "Demo question l0-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l0-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l0-3."
+  },
+  {
+   "module": "l1",
+   "kind": "recall",
+   "q": "Demo question l1-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l1-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l1-1."
+  },
+  {
+   "module": "l1",
+   "kind": "recall",
+   "q": "Demo question l1-2 (test data only)",
+   "options": [
+    "Right answer l1-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l1-2."
+  },
+  {
+   "module": "l1",
+   "kind": "calc",
+   "q": "Demo question l1-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l1-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l1-3."
+  },
+  {
+   "module": "l2",
+   "kind": "recall",
+   "q": "Demo question l2-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l2-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l2-1."
+  },
+  {
+   "module": "l2",
+   "kind": "recall",
+   "q": "Demo question l2-2 (test data only)",
+   "options": [
+    "Right answer l2-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l2-2."
+  },
+  {
+   "module": "l2",
+   "kind": "calc",
+   "q": "Demo question l2-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l2-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l2-3."
+  },
+  {
+   "module": "l3",
+   "kind": "recall",
+   "q": "Demo question l3-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l3-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l3-1."
+  },
+  {
+   "module": "l3",
+   "kind": "recall",
+   "q": "Demo question l3-2 (test data only)",
+   "options": [
+    "Right answer l3-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l3-2."
+  },
+  {
+   "module": "l3",
+   "kind": "calc",
+   "q": "Demo question l3-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l3-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l3-3."
+  },
+  {
+   "module": "l4",
+   "kind": "recall",
+   "q": "Demo question l4-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l4-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l4-1."
+  },
+  {
+   "module": "l4",
+   "kind": "recall",
+   "q": "Demo question l4-2 (test data only)",
+   "options": [
+    "Right answer l4-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l4-2."
+  },
+  {
+   "module": "l4",
+   "kind": "calc",
+   "q": "Demo question l4-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l4-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l4-3."
+  },
+  {
+   "module": "l5",
+   "kind": "recall",
+   "q": "Demo question l5-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l5-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l5-1."
+  },
+  {
+   "module": "l5",
+   "kind": "recall",
+   "q": "Demo question l5-2 (test data only)",
+   "options": [
+    "Right answer l5-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l5-2."
+  },
+  {
+   "module": "l5",
+   "kind": "calc",
+   "q": "Demo question l5-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l5-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l5-3."
+  },
+  {
+   "module": "l6",
+   "kind": "recall",
+   "q": "Demo question l6-1 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Right answer l6-1"
+   ],
+   "answer": 3,
+   "explanation": "Demo explanation for l6-1."
+  },
+  {
+   "module": "l6",
+   "kind": "recall",
+   "q": "Demo question l6-2 (test data only)",
+   "options": [
+    "Right answer l6-2",
+    "Wrong option 2",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 0,
+   "explanation": "Demo explanation for l6-2."
+  },
+  {
+   "module": "l6",
+   "kind": "calc",
+   "q": "Demo question l6-3 (test data only)",
+   "options": [
+    "Wrong option 1",
+    "Right answer l6-3",
+    "Wrong option 3",
+    "Wrong option 4"
+   ],
+   "answer": 1,
+   "explanation": "Demo explanation for l6-3."
+  }
+ ]
+}

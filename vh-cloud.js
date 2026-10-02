@@ -53,6 +53,85 @@ window.VHCloud = (function () {
     return data && data.user ? data.user : null;
   }
 
+
+  /* ── Exams marked on the server ──
+     Live sites call the Supabase functions in supabase-exam.sql: the page only ever sees
+     questions without answers. Without Supabase (local demo and the automated tests) the
+     same rules run in the browser on a dummy bank (tests/fixtures/exam-demo-bank.json),
+     because the real question banks are never published. */
+  const DEMO_KEY = "vh-demo-exam";
+  const PASS = { academy: 80, leaders: 70 };
+  const mix = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  let demoBank = null;
+  async function loadDemoBank() {
+    if (demoBank) return demoBank;
+    try { const r = await fetch("tests/fixtures/exam-demo-bank.json", { cache: "no-store" }); if (r.ok) demoBank = await r.json(); } catch (e) {}
+    return demoBank;
+  }
+  const demoState = () => { try { return JSON.parse(localStorage.getItem(DEMO_KEY)) || { attempts: {}, certs: {} }; } catch (e) { return { attempts: {}, certs: {} }; } };
+  const demoSave = (s) => { try { localStorage.setItem(DEMO_KEY, JSON.stringify(s)); } catch (e) {} };
+  const demo = {
+    async start(course) {
+      const bank = (await loadDemoBank() || {})[course];
+      if (!bank || !bank.length) return { error: "offline" };
+      const st = demoState();
+      const lastFail = Object.values(st.attempts).filter((a) => a.course === course && a.passed === false).map((a) => a.at).sort().pop();
+      if (lastFail && Date.now() - Date.parse(lastFail) < 3600e3) return { wait_until: new Date(Date.parse(lastFail) + 3600e3).toISOString() };
+      const per = course === "academy" ? 2 : 1, extras = course === "academy" ? 4 : 5;
+      const byMod = {};
+      mix(bank.map((q, i) => i)).forEach((i) => { (byMod[bank[i].module] = byMod[bank[i].module] || []).push(i); });
+      let picked = [].concat(...Object.values(byMod).map((l) => l.slice(0, per)));
+      const rest = mix(bank.map((q, i) => i).filter((i) => !picked.includes(i) &&
+        (course === "leaders" || bank[i].kind === "apply" || bank[i].kind === "calc" || bank[i].pool === "case")));
+      picked = mix(picked.concat(rest.slice(0, extras)));
+      const perms = picked.map((i) => mix(bank[i].options.map((o, k) => k)));
+      const id = "demo-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      st.attempts[id] = { course, qids: picked, perms, at: null, passed: null };
+      demoSave(st);
+      return { attempt: id, pass: PASS[course],
+        questions: picked.map((i, n) => ({ module: bank[i].module, q: bank[i].q, options: perms[n].map((k) => bank[i].options[k]) })) };
+    },
+    async submit(id, answers) {
+      const st = demoState(), a = st.attempts[id];
+      if (!a || a.at) return { error: "This attempt has already been marked" };
+      const bank = (await loadDemoBank())[a.course];
+      const marks = a.qids.map((qi, n) => {
+        const q = bank[qi], chosen = answers[n] == null ? null : a.perms[n][answers[n]];
+        return { q, chosen, ok: chosen === q.answer };
+      });
+      const right = marks.filter((m) => m.ok).length, total = marks.length;
+      const score = Math.round((100 * right) / Math.max(total, 1)), passed = score >= PASS[a.course];
+      const by = {};
+      marks.forEach((m) => { const b = (by[m.q.module] = by[m.q.module] || [0, 0]); b[1]++; if (m.ok) b[0]++; });
+      Object.assign(a, { at: new Date().toISOString(), passed, score });
+      demoSave(st);
+      return { score, right, total, passed, pass: PASS[a.course], by_module: by,
+        review: passed ? marks.filter((m) => !m.ok).map((m) => ({ q: m.q.q, yours: m.chosen == null ? "" : m.q.options[m.chosen], right: m.q.options[m.q.answer], why: m.q.explanation })) : null,
+        wait_until: passed ? null : new Date(Date.now() + 3600e3).toISOString() };
+    },
+    async issue(id, name) {
+      const st = demoState(), a = st.attempts[id];
+      const nm = String(name || "").trim().replace(/\s+/g, " ");
+      if (!a || !a.passed) return { error: "No passed attempt found" };
+      if (nm.length < 2 || nm.length > 60) return { error: "Please enter your name (2 to 60 characters)" };
+      const prev = st.certs[a.course];
+      const cert = prev ? Object.assign(prev, { name: nm, score: Math.max(prev.score, a.score) })
+        : { id: (a.course === "leaders" ? "VL-" : "VH-") + Date.now().toString(36).toUpperCase(), name: nm, score: a.score, date: new Date().toISOString().slice(0, 10) };
+      st.certs[a.course] = cert; demoSave(st);
+      return cert;
+    },
+  };
+  async function rpc(fn, args) {
+    await ready;
+    if (!client) return { error: "offline" };
+    const u = await user(); if (!u) return { error: "signin" };
+    try {
+      const { data, error } = await client.rpc(fn, args);
+      if (error) return { error: error.message || "error" };
+      return data;
+    } catch (e) { return { error: "offline" }; }
+  }
+
   return {
     live: LIVE,
     ready,
@@ -176,5 +255,10 @@ window.VHCloud = (function () {
         return data ? { status: "valid", cert: data } : { status: "notfound" };
       } catch (e) { return { status: "error" }; }
     },
+
+    // ── exams (see the note above loadDemoBank) ──
+    examStart: (course) => (LIVE ? rpc("start_exam", { p_course: course }) : demo.start(course)),
+    examSubmit: (attempt, answers) => (LIVE ? rpc("submit_exam", { p_attempt: attempt, p_answers: answers.map((a) => (a == null ? null : a)) }) : demo.submit(attempt, answers)),
+    examIssue: (attempt, name) => (LIVE ? rpc("issue_certificate", { p_attempt: attempt, p_name: name }) : demo.issue(attempt, name)),
   };
 })();
