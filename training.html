@@ -284,7 +284,7 @@
       <h3>1.3 · VA, VE and VM</h3>
       <p><strong>Value Analysis (VA)</strong> applies the method to products already in production: take the product apart,
       question each part, redesign it and bring in the changes during production. <strong>Value Engineering (VE)</strong>
-      applies it during design, before the cost is fixed. Because about <strong>80% of lifecycle cost is decided by early
+      applies it during design, before the cost is fixed. Because <strong>70–80% of lifecycle cost is decided by early
       design choices</strong>, one pound of effort in design is worth ten pounds of effort later. <strong>Value Management
       (VM)</strong> is the management system that makes both last: targets, savings funnels, regular reviews and training.
       Together, the practice is called <strong>VAVE</strong>.</p>
@@ -321,26 +321,26 @@
       <div class="cv-head"><h4>Why Value Engineering pays most when it starts early</h4>
       <p>Cost is <em>decided</em> long before it's <em>spent</em>, and most of it is locked in during early design. The gap between the two curves is where VE makes the biggest difference.</p></div>
       <div class="jm-plot">
-        <svg viewBox="0 0 960 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Cost committed rises fast in early phases while cost spent rises late">
+        <svg viewBox="0 0 960 340" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Over a product's life, cost committed rises fast during concept design, reaching 70 to 80 percent by its end, while cost spent stays below 10 percent and only rises in production">
           <g class="jm-grid">
             <line x1="120" y1="40" x2="900" y2="40"/><line x1="120" y1="160" x2="900" y2="160"/><line x1="120" y1="280" x2="900" y2="280"/>
+            <line class="jm-stage" x1="400" y1="40" x2="400" y2="280"/><line class="jm-stage" x1="650" y1="40" x2="650" y2="280"/>
           </g>
           <g class="jm-ylab"><text x="106" y="44">100%</text><text x="106" y="164">50%</text><text x="106" y="284">0%</text></g>
-          <polygon class="jm-gap" points="120,244 276,148 432,88 588,68.8 744,54.4 900,40 900,40 744,124 588,208 432,244 276,260.8 120,272.8"/>
+          <polygon class="jm-gap" points="120,244 276,148 432,88 588,68.8 744,54.4 900,40 900,40 744,124 588,208 432,254 276,268 120,276"/>
           <polyline class="jm-curve jm-committed" pathLength="1" points="120,244 276,148 432,88 588,68.8 744,54.4 900,40"/>
-          <polyline class="jm-curve jm-spent" pathLength="1" points="120,272.8 276,260.8 432,244 588,208 744,124 900,40"/>
-          <g class="jm-clab"><text x="470" y="70" class="jm-c-committed">Cost committed</text><text x="500" y="232" class="jm-c-spent">Cost spent</text></g>
+          <polyline class="jm-curve jm-spent" pathLength="1" points="120,276 276,268 432,254 588,208 744,124 900,40"/>
+          <circle class="jm-mark" cx="400" cy="100.3" r="7"/>
+          <text class="jm-marklab" x="414" y="124">70–80% decided</text>
+          <g class="jm-clab"><text x="500" y="56" class="jm-c-committed">Cost committed</text><text x="664" y="206" class="jm-c-spent">Cost spent</text></g>
         </svg>
       </div>
-      <ol class="jm-phases">
-        <li style="--d:0"><b>1</b><span>Information</span></li>
-        <li style="--d:1"><b>2</b><span>Function Analysis</span></li>
-        <li style="--d:2"><b>3</b><span>Creative</span></li>
-        <li style="--d:3"><b>4</b><span>Evaluation</span></li>
-        <li style="--d:4"><b>5</b><span>Development</span></li>
-        <li style="--d:5"><b>6</b><span>Presentation</span></li>
+      <ol class="jm-stages">
+        <li style="--d:0;--g:280"><span>Concept</span></li>
+        <li style="--d:1;--g:250"><span>Detailed design</span></li>
+        <li style="--d:2;--g:250"><span>Production</span></li>
       </ol>
-      <p class="jm-foot">About 80% of lifecycle cost is decided by the end of <b>Function Analysis</b>. That's why a pound of VE effort at a design review is worth ten after launch.</p>
+      <p class="jm-foot">About <b>70–80% of lifecycle cost is decided by the end of concept design</b>, while less than 10% has been spent. That's why a pound of VE effort at a design review is worth ten after launch.</p>
     </div>
 
 
@@ -724,7 +724,8 @@ far off were you? That gap is why the Information Phase exists. Capture it in th
       <p>Press <strong>Next step</strong> to build a real FAST diagram for an electric kettle:</p>
 
       <div class="fast-builder" id="fastBuilder">
-        <p class="sr-only">Finished diagram: the basic function is heat water. Asking how: generate heat, then conduct current. Supply power is an assumed function outside the right scope line. Asking why: prepare beverage, the higher-order function outside the left scope line. Ensure safety and convey esteem are all-time functions above the main path. Use the Next step button to hear it built step by step.</p>
+        <p class="sr-only">Finished diagram: the basic function is heat water. Asking how: generate heat, then conduct current. Supply power is an assumed function outside the right scope line. Asking why: prepare beverage, the higher-order function outside the left scope line. Protect user, prevent scalding and convey esteem are all-time functions above the main path. Below heat water, three functions that happen at the same time: contain water, control temperature and show status. Use the Next step button to hear it built step by step.</p>
+        <div class="fb-scroll" tabindex="0" role="region" aria-label="FAST diagram. On a narrow screen, scroll sideways to see all of it.">
         <div class="fb-stage" id="fbStage" aria-hidden="true">
           <div class="fb-scope fb-scope-l" data-fstep="1"><span>scope line</span></div>
           <div class="fb-scope fb-scope-r" data-fstep="1"><span>scope line</span></div>
@@ -736,8 +737,14 @@ far off were you? That gap is why the Information Phase exists. Capture it in th
           <div class="fb-arrow fb-a2" data-fstep="4"></div>
           <div class="fb-card fb-f3" data-fstep="4"><i>secondary</i>CONDUCT CURRENT</div>
           <div class="fb-card fb-assumed" data-fstep="5"><i>assumed</i>SUPPLY POWER</div>
-          <div class="fb-card fb-at1" data-fstep="7"><i>all-time</i>ENSURE SAFETY</div>
-          <div class="fb-card fb-at2" data-fstep="7"><i>all-time</i>CONVEY ESTEEM</div>
+          <div class="fb-card fb-at1" data-fstep="7"><i>all-time</i>PROTECT USER</div>
+          <div class="fb-card fb-at2" data-fstep="7"><i>all-time</i>PREVENT SCALDING</div>
+          <div class="fb-card fb-at3" data-fstep="7"><i>all-time</i>CONVEY ESTEEM</div>
+          <div class="fb-when" data-fstep="8"><span>WHEN ↓</span></div>
+          <div class="fb-card fb-w1" data-fstep="8">CONTAIN WATER</div>
+          <div class="fb-card fb-w2" data-fstep="8">CONTROL TEMPERATURE</div>
+          <div class="fb-card fb-w3" data-fstep="8">SHOW STATUS</div>
+        </div>
         </div>
         <p class="fb-caption" id="fbCaption" role="status" aria-live="polite">Here’s the finished diagram, faded. Press <b>Next step</b> to build it one card at a time.</p>
         <div class="fb-controls">
@@ -1059,13 +1066,13 @@ Altshuller Institute case reports.</i></p></div>
       <div class="concept-viz fg">
         <div class="cv-head"><h4>From 380 sticky notes to a short list with owners</h4>
         <p>Each round is more careful than the one before, because there are fewer ideas left to look at. Bars are drawn to scale.</p></div>
-        <p class="sr-only">Funnel chart, to scale. Start: 380 raw ideas from the creative day. After round 1, the quick sort into go, grow or park: about 120. After round 2, grouping, merging and the must-pass checks: 60 to 80. After round 3, ranking with the effort–impact grid, weighted matrix and Pugh: a short list of about 15. Round 4 checks each one for risk, and every survivor leaves with a named champion.</p>
+        <p class="sr-only">Funnel chart, to scale. Start: 380 raw ideas from the creative day. After round 1, the quick sort into go, grow or park: about 120. After round 2, grouping, merging and the must-pass checks: 60 to 80. After round 3, ranking with the effort–impact grid, weighted matrix and Pugh: a short list of about 45, roughly one raw idea in eight. Round 4 checks each one for risk and bundles related ideas, leaving about 15 proposals, each with a named champion.</p>
         <ol class="fg-fun" aria-hidden="true">
           <li><div class="fg-st"><b>Raw ideas</b><span>The wall after the creative day</span></div><div class="fg-track"><span class="fg-bar" style="--w:100;--i:0"></span><span class="fg-n">380</span></div></li>
           <li><div class="fg-st"><b>Round 1 · Quick sort</b><span>Go, grow or park, about a minute each</span></div><div class="fg-track"><span class="fg-bar" style="--w:31.6;--i:1"></span><span class="fg-n">≈120</span></div></li>
           <li><div class="fg-st"><b>Round 2 · Group and screen</b><span>Merge duplicates, apply must-pass checks</span></div><div class="fg-track"><span class="fg-bar" style="--w:18.4;--i:2"></span><span class="fg-n">60–80</span></div></li>
-          <li><div class="fg-st"><b>Round 3 · Rank</b><span>Effort–impact, weighted matrix, Pugh</span></div><div class="fg-track"><span class="fg-bar is-win" style="--w:3.9;--i:3"></span><span class="fg-n">≈15</span></div></li>
-          <li><div class="fg-st"><b>Round 4 · Risk check</b><span>Then a named champion for each</span></div><div class="fg-track"><span class="fg-pill">Every survivor has an owner and a date</span></div></li>
+          <li><div class="fg-st"><b>Round 3 · Rank</b><span>Effort–impact, weighted matrix, Pugh</span></div><div class="fg-track"><span class="fg-bar" style="--w:11.8;--i:3"></span><span class="fg-n">≈45 ideas</span></div></li>
+          <li><div class="fg-st"><b>Round 4 · Risk check and bundle</b><span>Related ideas combined into proposals</span></div><div class="fg-track"><span class="fg-bar is-win" style="--w:3.9;--i:4"></span><span class="fg-n">≈15 proposals</span></div></li>
         </ol>
         <p class="fg-foot">Parked ideas aren't deleted. <b>They're the starting list for next year's study.</b></p>
       </div>
@@ -1159,7 +1166,7 @@ Altshuller Institute case reports.</i></p></div>
       Use Pugh to choose between early ideas, and the weighted matrix when the numbers can be trusted.</p>
 
       <h3>6.8 · Round 4: check the winners for risk</h3>
-      <p>The short list, maybe fifteen ideas, gets one last quick check before development spends real money on it:
+      <p>The short list, about one raw idea in eight (around 45 of the 380), gets one last quick check before development spends real money on it:
       <strong>what could go wrong, and would we see it coming?</strong> Ask three questions about each winner. Does it
       affect <em>safety or homologation</em>? (If so, the testing cost has just tripled, so score it again.) Does it
       depend on <em>one supplier, one machine or one person</em>? (If so, you need a backup plan, with its cost
@@ -1170,7 +1177,8 @@ Altshuller Institute case reports.</i></p></div>
       <h3>6.9 · From a ranked list to options you can act on</h3>
       <p>Ideas affect each other. Changing a material might rule out a process idea, or make it possible. So run a
       quick <strong>compatibility check</strong>, then group the remaining ideas by <em>when they can be brought in</em>:
-      changes during production this year, the mid-life update, or the next-generation product. Many teams present
+      changes during production this year, the mid-life update, or the next-generation product. Related ideas are bundled together too, so the 45 or so survivors usually become
+      about 15 proposals, each with its own business case. Many teams present
       these groups as three options (<strong>cautious, balanced and ambitious</strong>), so the sponsor chooses how far
       to go, not a list of parts. Finally, be honest: compare the engineering hours needed with the hours actually
       available. A shortlist you can't resource is just a wish list. It's better to deliver eight ideas than approve

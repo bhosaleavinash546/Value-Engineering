@@ -802,3 +802,22 @@ html[data-theme="light"] .tdo a{border-bottom-color:rgba(4,120,87,.45)}
   .fb-controls .btn,.td-nav .btn{white-space:normal;flex:1 1 auto}
   .fb-dots{order:-1;flex-basis:100%;justify-content:center}
 }
+
+/* FAST builder: three all-time cards and a WHEN branch (matches video 2).
+   Sized to fit the lesson column on desktop; scrolls sideways on narrower screens. */
+.fb-scroll{overflow-x:auto;border-radius:12px;-webkit-overflow-scrolling:touch}
+.fb-scroll:focus-visible{outline:2px solid var(--acc1);outline-offset:2px}
+.fb-stage{height:460px;min-width:660px}
+.fb-basic,.fb-f2,.fb-f3,.fb-assumed,.fb-ho{top:34%}
+.fb-ho{left:2%;max-width:112px}
+.fb-basic{left:21.5%}.fb-f2{left:41.5%}.fb-f3{left:64.5%;max-width:112px}
+.fb-assumed{max-width:90px}
+.fb-scope-l{left:20%}.fb-scope-r{right:16%}
+.fb-arrow{top:calc(34% + 26px)}
+.fb-at1{left:21%;top:11%}.fb-at2{left:41%;top:11%}.fb-at3{left:64%;top:11%}
+.fb-at3{border-color:var(--acc3)}
+.fb-when{position:absolute;left:calc(21.5% + 22px);top:calc(34% + 54px);height:calc(48% - 30px);border-left:2px solid var(--acc1)}
+.fb-when span{position:absolute;left:8px;top:2px;font:700 .64rem var(--font-m);color:var(--acc1);letter-spacing:.06em;white-space:nowrap}
+.fb-w1,.fb-w2,.fb-w3{left:calc(21.5% + 40px)}
+.fb-w1{top:52%}.fb-w2{top:66%}.fb-w3{top:80%}
+@media (max-width:700px){.fb-stage{height:460px}.fb-card{font-size:.72rem;max-width:none}.fb-ho,.fb-f3{max-width:112px}.fb-assumed{max-width:90px}}

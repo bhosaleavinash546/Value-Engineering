@@ -783,7 +783,8 @@
       "<b>Step 4 — Keep asking HOW?</b> HOW do we generate heat? — by <i>conducting current</i> through a resistive element. Each HOW? extends the chain one card to the right.",
       "<b>Step 5 — Stop at the assumed function.</b> HOW do we conduct current? Mains electricity <i>supplies power</i>. That's outside our control, so it sits <b>outside the right scope line</b>. Our study stops here.",
       "<b>Step 6 — Complete the WHY? side.</b> WHY do we heat water? — to <i>prepare a beverage</i>. That's the customer's higher purpose, so it sits <b>outside the left scope line</b>. Now read the chain backwards: every WHY? should make sense.",
-      "<b>Step 7 — Float the all-time functions.</b> <i>ENSURE SAFETY</i> and <i>CONVEY ESTEEM</i> act on the whole product all the time, so they float above the main path rather than joining the chain.",
+      "<b>Step 7 — Float the all-time functions.</b> <i>PROTECT USER</i>, <i>PREVENT SCALDING</i> and <i>CONVEY ESTEEM</i> apply the whole time the kettle is in use, so they float above the main path rather than joining the chain.",
+      "<b>Step 8 — Add the WHEN functions.</b> Some functions happen at the same time as the basic function. WHEN we heat water, we also <i>contain water</i>, <i>control temperature</i> and <i>show status</i>. They hang below the function they go with.",
       "<b>Done — now validate.</b> Read it aloud both ways: \"WHY conduct current? To generate heat. WHY generate heat? To heat water. ✓\" and \"HOW to heat water? Generate heat. HOW? Conduct current. ✓\" If a sentence sounds wrong, a card is in the wrong place. Reading it aloud like this is the whole point of FAST.",
     ];
     const LAST = CAPTIONS.length - 1;
@@ -798,7 +799,18 @@
       prev.disabled = step === 0;
       next.textContent = step === LAST ? "↻ Replay" : "Next step →";
       $$(".fb-dot", dots).forEach((d, i) => d.classList.toggle("on", i <= step));
+      placeArrows();
     }
+    // arrows run between the real card edges, so they never cross the card text
+    function placeArrows() {
+      const box = stage.getBoundingClientRect();
+      [["fb-a1", "fb-basic", "fb-f2"], ["fb-a2", "fb-f2", "fb-f3"]].forEach(([a, from, to]) => {
+        const el = $("." + a, stage), f = $("." + from, stage).getBoundingClientRect(), t = $("." + to, stage).getBoundingClientRect();
+        el.style.left = (f.right - box.left + 4) + "px";
+        el.style.width = Math.max(0, t.left - f.right - 10) + "px";
+      });
+    }
+    window.addEventListener("resize", placeArrows);
     next.addEventListener("click", () => { step = step === LAST ? 0 : step + 1; render(); });
     prev.addEventListener("click", () => { if (step > 0) { step--; render(); } });
     render();

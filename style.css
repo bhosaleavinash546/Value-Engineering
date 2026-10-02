@@ -1205,3 +1205,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .hero-alt{margin-top:1rem;font-size:.95rem;color:var(--muted)}
 .hero-alt a{color:var(--acc1);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* Cost-commitment chart (Academy 1, Job Plan guide): product stages under the plot */
+.jobmap .jm-stage{stroke:var(--line);stroke-dasharray:4 5}
+.jobmap .jm-mark{fill:var(--dv-blue);stroke:var(--card);stroke-width:3;opacity:0;transition:opacity .4s ease 1.4s}
+.jobmap .jm-marklab{fill:var(--txt);font:700 15px var(--font-d);opacity:0;transition:opacity .4s ease 1.5s}
+.concept-viz.in-view .jm-mark,.concept-viz.in-view .jm-marklab{opacity:1}
+.jm-stages{display:flex;gap:.4rem;list-style:none;margin:.6rem 0 0;padding:0 0 0 12.5%}
+.jm-stages li{flex:var(--g) 1 0;min-width:0;text-align:center;padding:.5rem .3rem;border:1px solid var(--line);border-radius:10px;background:var(--bg2);font-size:.74rem;color:var(--txt)}
+@media (max-width:640px){.jm-stages{padding-left:0}.jm-stages li{font-size:.66rem}}
+@media (prefers-reduced-motion:reduce){.jobmap .jm-mark,.jobmap .jm-marklab{opacity:1;transition:none}}
