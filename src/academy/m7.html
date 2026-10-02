@@ -46,6 +46,14 @@
       margin needs all five. Two rules: only go as far up the ladder as the risk requires, because too much testing
       slowly destroys the payback. And start anything with a long lead time (tooling, approving a supplier) at the same
       time as testing, with clear stop points, rather than waiting until every test has passed.</p>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The testing ladder: only climb as far as the risk needs</h4>
+        <p>Each extra step costs time and money, so the payback shrinks. Three example changes.</p></div>
+        <p class="sr-only">The five steps of the testing ladder: desk calculation, CAE or simulation, rig test, production-line trial and field trial. A packaging specification change needs step 1 only. A thinner wall in the same material needs steps 1 to 3. Reducing a safety margin needs all five.</p>
+        <div class="fg-ladder" aria-hidden="true"><span></span><span class="fg-lbl">1 · Desk calculation</span><span class="fg-lbl">2 · CAE / simulation</span><span class="fg-lbl">3 · Rig test</span><span class="fg-lbl">4 · Production-line trial</span><span class="fg-lbl">5 · Field trial</span><b data-i style="--i:0">Packaging spec change</b><i class="on" data-i style="--i:0"></i><i class="" data-i style="--i:0"></i><i class="" data-i style="--i:0"></i><i class="" data-i style="--i:0"></i><i class="" data-i style="--i:0"></i><b data-i style="--i:1">Thinner wall, same material</b><i class="on" data-i style="--i:1"></i><i class="on" data-i style="--i:1"></i><i class="on" data-i style="--i:1"></i><i class="" data-i style="--i:1"></i><i class="" data-i style="--i:1"></i><b data-i style="--i:2">Reducing a safety margin</b><i class="on" data-i style="--i:2"></i><i class="on" data-i style="--i:2"></i><i class="on" data-i style="--i:2"></i><i class="on" data-i style="--i:2"></i><i class="on" data-i style="--i:2"></i></div>
+        <p class="fg-foot">Start long-lead items, such as tooling, <b>alongside</b> the tests, with clear stop points.</p>
+      </div>
       <h3>7.5 · FMEA in ten minutes</h3>
       <p>Any VE change can create new ways for the product to fail that the current design never had. Score each
       possible failure on <strong>Severity × Occurrence × Detection</strong> (1–10 each; multiply them to get the RPN,
@@ -91,6 +99,22 @@
 One-time cost: tooling £38k + validation £7k = £45k. Payback = 45k ÷ 90k = <strong>6 months</strong>. Simulation shows the
 part is still strong enough. The DFMEA finds one new way it could fail (the condition of the cut edge), which is handled by
 servicing the die at set intervals. Ready for a decision.</p></div>
+
+      <div class="concept-viz fg">
+        <div class="cv-head"><h4>The bracket change, month by month</h4>
+        <p>The worked example's £45k one-time cost against its £90k a year saving: the running total, net of what was spent.</p></div>
+        <p class="sr-only">Line chart of the running net position over 24 months. It starts at minus £45,000, the tooling and validation cost, and rises by £7,500 a month, the £90,000 annual saving. It reaches zero, paid back, at 6 months and stands at plus £135,000 after two years.</p>
+        <div class="fg-legend" aria-hidden="true"><span><i style="background:var(--fg-s2)"></i>Still paying back</span><span><i style="background:var(--fg-s1)"></i>Net saving</span></div>
+        <svg class="fg-svg" viewBox="0 0 480 280" focusable="false" aria-hidden="true"><line class="ax" x1="60" y1="190.0" x2="460" y2="190.0"/><text class="tk" x="52" y="194.0" text-anchor="end">−£50k</text><line class="ax0" x1="60" y1="150.0" x2="460" y2="150.0"/><text class="tk" x="52" y="154.0" text-anchor="end">£0k</text><line class="ax" x1="60" y1="110.0" x2="460" y2="110.0"/><text class="tk" x="52" y="114.0" text-anchor="end">+£50k</text><line class="ax" x1="60" y1="70.0" x2="460" y2="70.0"/><text class="tk" x="52" y="74.0" text-anchor="end">+£100k</text><line class="ax" x1="60" y1="30.0" x2="460" y2="30.0"/><text class="tk" x="52" y="34.0" text-anchor="end">+£150k</text><text class="tk" x="60.0" y="248" text-anchor="middle">0</text><text class="tk" x="160.0" y="248" text-anchor="middle">6</text><text class="tk" x="260.0" y="248" text-anchor="middle">12</text><text class="tk" x="360.0" y="248" text-anchor="middle">18</text><text class="tk" x="460.0" y="248" text-anchor="middle">24</text>
+          <path d="M60.0,150.0 L60.0,186.0 L160.0,150.0 Z" style="fill:var(--fg-s2);opacity:.25"/><path d="M160.0,150.0 L460.0,42.0 L460.0,150.0 Z" style="fill:var(--fg-s1);opacity:.18"/>
+          <path class="ln1" d="M60.0,186.0 L460.0,42.0"/>
+          <circle class="s2 dot" cx="60.0" cy="186.0" r="6"/><text class="lb" x="74.0" y="210.0">−£45k: tooling and validation</text>
+          <circle class="s1 dot" cx="160.0" cy="150.0" r="6"/><text class="lb" x="172.0" y="172.0">Paid back at 6 months</text>
+          <circle class="s1 dot" cx="460.0" cy="42.0" r="6"/><text class="lb" x="450.0" y="30.0" text-anchor="end">+£135k after 2 years</text>
+          <text class="lbm" x="460" y="268" text-anchor="end">Months after the change</text>
+        </svg>
+        <p class="fg-foot">Payback = one-time cost ÷ annual saving = £45k ÷ £90k = <b>6 months</b>.</p>
+      </div>
       <div class="tcase"><h4>Case study — documented</h4><p><b>Development at giga scale: Tesla's Model Y rear underbody.</b> The idea was to replace about 70 pressed and
 welded parts (as used on the Model 3) with one or two giant aluminium castings. Reports put the saving at about
 <b>40% of the manufacturing cost</b> for that assembly, plus a big saving on equipment (hundreds of welding robots no
@@ -111,6 +135,12 @@ Associates analyses.</i></p></div>
       </ul></div>
       <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Build one business case. Pick your best idea, estimate the saving per unit × annual volume, guess the one-time cost
 and work out the payback in months. If it's under 12, you'd take it to a real board.</p></div>
+      <div class="fn-challenge" id="m7Chal">
+        <div class="fnc-head"><span class="fnc-tag">⚡ Development challenge</span><h4>Is this ready for a decision?</h4>
+        <p>Six situations from turning ideas into proposals. Choose the best answer and you'll see why straight away.</p></div>
+        <div id="m7ChalMount"></div>
+      </div>
+
       <div class="qcheck" data-qc="m7"></div>
       <button class="btn btn-primary tmod-done" data-done="m7">Mark complete & continue →</button>
     </section>

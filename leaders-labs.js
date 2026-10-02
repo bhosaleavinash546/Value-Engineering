@@ -50,10 +50,12 @@
     let answered, score;
     function render() {
       answered = new Array(QS.length).fill(false); score = 0;
+      // options appear in a new order on every attempt, so the right answer isn't always in the same place
+      const order = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
       mount.innerHTML = QS.map(([q, opts], qi) => `
         <div class="fnc-item" data-qi="${qi}">
           <div class="fnc-q"><span class="fnc-n">${qi + 1}</span>${q}</div>
-          <div class="fnc-opts">${opts.map((o, oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+          <div class="fnc-opts">${order(opts.length).map((oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${opts[oi]}</button>`).join("")}</div>
           <div class="fnc-expl" role="status" aria-live="polite"></div>
         </div>`).join("") +
         `<div class="fnc-score" role="status" aria-live="polite"></div>
@@ -68,7 +70,7 @@
       answered[qi] = true;
       const [, , correct, expl] = QS[qi], right = +btn.dataset.oi === correct;
       if (right) score++;
-      $$(".fnc-opt", item).forEach((o, oi) => { o.disabled = true; if (oi === correct) o.classList.add("is-right"); else if (o === btn) o.classList.add("is-wrong"); });
+      $$(".fnc-opt", item).forEach((o) => { o.disabled = true; if (+o.dataset.oi === correct) o.classList.add("is-right"); else if (o === btn) o.classList.add("is-wrong"); });
       const ex = $(".fnc-expl", item);
       ex.textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + expl;
       ex.className = "fnc-expl show " + (right ? "ok" : "no");

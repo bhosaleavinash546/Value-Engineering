@@ -926,10 +926,12 @@
     let answered, score;
     function renderChal() {
       answered = new Array(FNCHAL.length).fill(false); score = 0;
+      // options appear in a new order on every attempt, so the right answer isn't always in the same place
+      const order = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
       mount.innerHTML = FNCHAL.map(([q, opts], qi) => `
         <div class="fnc-item" data-qi="${qi}">
           <div class="fnc-q"><span class="fnc-n">${qi + 1}</span>${q} — which is the correctly written function?</div>
-          <div class="fnc-opts">${opts.map((o, oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+          <div class="fnc-opts">${order(opts.length).map((oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${opts[oi]}</button>`).join("")}</div>
           <div class="fnc-expl" role="status" aria-live="polite"></div>
         </div>`).join("") +
         `<div class="fnc-score" id="fncScore" role="status" aria-live="polite"></div>
@@ -946,9 +948,9 @@
       const [, , correct, expl] = FNCHAL[qi];
       const right = +btn.dataset.oi === correct;
       if (right) score++;
-      $$(".fnc-opt", item).forEach((o, oi) => {
+      $$(".fnc-opt", item).forEach((o) => {
         o.disabled = true;
-        if (oi === correct) o.classList.add("is-right");
+        if (+o.dataset.oi === correct) o.classList.add("is-right");
         else if (o === btn) o.classList.add("is-wrong");
       });
       const ex = $(".fnc-expl", item);
@@ -1395,10 +1397,12 @@
     const N = questions.length;
     function render() {
       answered = new Array(N).fill(false); score = 0;
+      // options appear in a new order on every attempt, so the right answer isn't always in the same place
+      const order = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
       mount.innerHTML = questions.map(([q, opts], qi) => `
         <div class="fnc-item" data-qi="${qi}">
           <div class="fnc-q"><span class="fnc-n">${qi + 1}</span>${q}</div>
-          <div class="fnc-opts">${opts.map((o, oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${o}</button>`).join("")}</div>
+          <div class="fnc-opts">${order(opts.length).map((oi) => `<button type="button" class="fnc-opt" data-oi="${oi}">${opts[oi]}</button>`).join("")}</div>
           <div class="fnc-expl" role="status" aria-live="polite"></div>
         </div>`).join("") +
         `<div class="fnc-score" role="status" aria-live="polite"></div>
@@ -1415,9 +1419,9 @@
       const [, , correct, expl] = questions[qi];
       const right = +btn.dataset.oi === correct;
       if (right) score++;
-      $$(".fnc-opt", item).forEach((o, oi) => {
+      $$(".fnc-opt", item).forEach((o) => {
         o.disabled = true;
-        if (oi === correct) o.classList.add("is-right");
+        if (+o.dataset.oi === correct) o.classList.add("is-right");
         else if (o === btn) o.classList.add("is-wrong");
       });
       const ex = $(".fnc-expl", item);
@@ -1713,6 +1717,108 @@
      ["Extending payment terms", "Mass reduction — less material is less money and less embodied CO₂e", "Rebranding", "Longer contracts"], 1,
      "Cost and carbon share physics: mass, energy, scrap, distance. Add a kgCO₂e column to the cleansheet and most cost savings cut carbon too."],
   ], "Worth a second go. Re-read sections 11.4 on the engines, 11.8 on the order to adopt tools and 11.9 on the ground rules, then try again.");
+
+  // Modules 1, 2, 7, 12 and 13
+  buildChallenge("#m1ChalMount", [
+    ["Your boss says \"take 10% out of every part\". What's the value-engineering response?",
+     ["Agree, and spread the cut evenly", "Ask what each part does, and where cost is higher than the job is worth", "Ask every supplier for a 10% discount", "Remove the most expensive part"], 1,
+     "Cutting every part equally ignores what each part does. VE looks for the functions that cost more than they're worth, and protects the ones customers pay for."],
+    ["You want to reduce the cost of a product that's already in production. Which is it?",
+     ["Value Analysis (VA)", "Value Engineering (VE)", "Value Management (VM)", "None of these"], 0,
+     "VA works on products already in production. VE works during design, before the cost is fixed. VM is the management system that keeps both going."],
+    ["Someone suggests removing the chrome trim to save £1.20. What should you ask first?",
+     ["Can we buy cheaper chrome?", "Is the chrome worth more to customers than it costs?", "Will engineering approve the change?", "What do competitors do?"], 1,
+     "Esteem value is real value, because customers pay for it. The question is never \"get rid of the chrome\". It's whether it's worth more than it costs."],
+    ["Which of these is NOT one of the five ways to improve value?",
+     ["Same function, lower cost", "More function, same cost", "Cut a function customers value, to save money", "Remove functions customers don't value"], 2,
+     "Cutting what customers value is how cost-cutting damages brands. Starting from functions is what prevents it."],
+    ["When does an hour of VE effort usually save the most?",
+     ["After launch, in a cost-down project", "At a design review, before the concept is frozen", "During the yearly supplier negotiation", "Near the end of the product's life"], 1,
+     "70–80% of lifecycle cost is decided by the end of concept design. Later stages can only work within decisions already made."],
+    ["A kettle sells for £35 and costs £18 to make. Which of the two does your design control most?",
+     ["The price", "The cost", "Both equally", "Neither"], 1,
+     "The market sets the price. Your design and supplier choices set the cost, and that's where VE works."],
+  ], "Worth a second go. Re-read sections 1.2 on the five ways to improve value, 1.3 on VA, VE and VM, and 1.6 on why VE pays, then try again.");
+  buildChallenge("#m2ChalMount", [
+    ["The workshop is in two weeks and nobody senior has agreed to sponsor it. What do you do?",
+     ["Run it anyway and find a sponsor afterwards", "Postpone until a sponsor who can make decisions is named", "Let the facilitator act as sponsor", "Shorten the workshop to one day"], 1,
+     "No sponsor, no study. Without someone who can provide people and money and act on decisions, a study produces slides and nothing else."],
+    ["The team is eight design engineers. What's the problem?",
+     ["It's too big", "It's all one department, so the ideas will all be the same kind", "It's too small", "There's no problem"], 1,
+     "The best ideas come when people from different departments challenge each other. Add manufacturing, purchasing, quality, finance and a key supplier."],
+    ["Who should facilitate the workshop?",
+     ["The chief engineer, who knows the product best", "A trained facilitator who runs the process but doesn't supply the answers", "The sponsor", "The supplier with the biggest share"], 1,
+     "Experts tend to defend the current design. The facilitator runs the process and keeps time, and the team supplies the ideas."],
+    ["The target says \"cut 20%, because the CEO wants it\". What's missing?",
+     ["Nothing, a clear number is enough", "Evidence: the gap to a competitor, the margin needed, or mismatches found", "A bigger number, to stretch the team", "Just a deadline"], 1,
+     "Targets set by order, with no evidence behind them, aren't believed. Base the target on a competitor gap, the margin you need, or what an earlier review found."],
+    ["Finance hasn't checked the costed parts list. What's the risk?",
+     ["None, engineers know the costs", "The workshop turns into an argument about the numbers, and the savings won't be believed", "The supplier will object", "Ideas will be slower to come"], 1,
+     "You can't do without a costed parts list that finance has checked. Involve finance from day one so nobody says \"those numbers aren't real\" later."],
+    ["The product is complex and some data is missing. Which workshop format fits?",
+     ["One long five-day week", "Two days, a two-week break to gather data, then two more days", "A single one-day sprint", "Skip the preparation and start"], 1,
+     "The split format suits complex products. The one thing you can't shorten is keeping the phases separate."],
+  ], "Worth a second go. Re-read sections 2.1 on scope and sponsorship, 2.2 on the team and 2.6 on the starting cost and target, then try again.");
+  buildChallenge("#m7ChalMount", [
+    ["A change saves 20p a unit on 150,000 units a year and has a one-time cost of £15,000. What's the payback?",
+     ["2 months", "6 months", "12 months", "18 months"], 1,
+     "Annual saving = 20p × 150,000 = £30,000. Payback = £15,000 ÷ £30,000 = half a year, so 6 months."],
+    ["A packaging specification change. How far up the testing ladder should it go?",
+     ["All five steps, to be safe", "Only as far as the risk needs, probably a desk check", "Straight to a field trial", "No checks at all"], 1,
+     "Match the testing to the risk, not to habit. Too much testing slowly destroys the payback."],
+    ["A thinner wall raises occurrence from 2 to 4 on a failure with severity 8. What now?",
+     ["Just make a note of it", "Take action, with a redesign or added controls, before counting the saving", "Ignore it, because the RPN is still low", "Cancel every change in the study"], 1,
+     "Score the change from the current design. A rise like this on a severe failure needs action. A small rise on a minor failure just needs a note."],
+    ["The new tooling takes 14 weeks; the tests take 10. When do you order the tooling?",
+     ["After every test has passed", "Alongside the tests, with clear stop points", "Before any testing starts, with no stop points", "Never, until the sponsor asks"], 1,
+     "Start long-lead items at the same time as testing, with clear stop points, rather than waiting until every test has passed."],
+    ["Volumes are falling fast. Which measure should the business case use?",
+     ["Simple payback", "NPV at the company's minimum required return", "Gross saving only", "Saving per unit only"], 1,
+     "Payback is right when volumes are steady. When they're rising or falling, use NPV."],
+    ["Two ideas save the same amount, one this quarter and one in 18 months. Which is worth more?",
+     ["The one in 18 months", "The one this quarter", "They're worth the same", "It depends on the supplier"], 1,
+     "A saving that arrives in 18 months is worth less than one that arrives this quarter. Always put a date on savings."],
+  ], "Worth a second go. Re-read sections 7.3 on the business case, 7.4 on the testing ladder, 7.5 on FMEA and 7.6 on the money, then try again.");
+  buildChallenge("#m12ChalMount", [
+    ["Twelve studies have run in three years, but savings in production are flat. What's wrong?",
+     ["Too few studies", "Activity is being measured, not results; track checked savings in production", "Too many ideas", "The facilitator"], 1,
+     "Measuring activity (studies run) instead of results (checked savings) is a classic way programmes fail."],
+    ["The programme has a £2M savings target, but no engineering time has been funded. What happens?",
+     ["The team will find the time", "The target won't be met, and morale suffers; fund the time or lower the target", "Suppliers will make up the difference", "Nothing, targets motivate people"], 1,
+     "Never set a savings target higher than the engineering time you've actually paid for."],
+    ["Who should the value office report to?",
+     ["Engineering", "Purchasing", "Someone neutral, such as the finance or operations director", "Marketing"], 2,
+     "A value office under engineering ignores sourcing, and one under purchasing ignores design. A neutral sponsor keeps both sides balanced."],
+    ["Funnel coverage is 35% of product cost. What's the usual target?",
+     ["60% or more", "About 10%", "100%", "35% is fine"], 0,
+     "Funnel coverage, the share of product cost being actively studied, should be at least 60%."],
+    ["Which savings should earn rewards?",
+     ["Ideas approved at the workshop", "Gross savings at idea stage", "Checked, net savings that are in production", "The number of workshops run"], 2,
+     "Reward savings that are checked, net and actually in production, or people will chase big numbers that only exist on paper."],
+    ["The first round found 12%. Should the programme stop there?",
+     ["Yes, the main savings are done", "No: established programmes keep finding 3–5% a year", "Only if the CEO agrees", "Switch to a different method"], 1,
+     "Stopping after the first round, just before the savings start to build up, is a common mistake."],
+  ], "Worth a second go. Re-read sections 12.1 on running the programme, 12.4 on organising it and 12.5 on targets and rewards, then try again.");
+  buildChallenge("#m13ChalMount", [
+    ["The market price is £20,000 and the business needs a 15% margin. What's the allowable cost?",
+     ["£3,000", "£17,000", "£23,000", "£20,000"], 1,
+     "Allowable cost = market price − required margin = £20,000 − £3,000 = £17,000."],
+    ["The motor's drifting cost is £1,214 and its target is £1,052. What's the value gap?",
+     ["£1,052", "£162", "£1,214", "£2,266"], 1,
+     "Value gap = drifting cost − allowable (target) cost = £1,214 − £1,052 = £162."],
+    ["A new feature adds £40 to a product that's already at its target. What does the cardinal rule say?",
+     ["Add it; the budget will absorb it", "Save £40 somewhere else first", "Raise the target by £40", "Ask purchasing to find the £40"], 1,
+     "The target cost can never be exceeded. If a feature has to be added, its cost must be saved somewhere else."],
+    ["Who should own each part of the target?",
+     ["The purchasing department", "A named engineer", "The supplier", "Finance"], 1,
+     "Make a named engineer, not a department, the owner of every target. Nobody owns a number they were never given."],
+    ["At a design review the cost status is red and there's no recovery plan. What happens?",
+     ["It passes; fix it later", "It doesn't pass until there's a recovery plan", "Raise the target to match", "Leave cost out of the review"], 1,
+     "Manage cost the way aircraft makers manage weight: a review with a red cost status and no recovery plan doesn't pass."],
+    ["Production has started. What takes over from target costing?",
+     ["Target costing carries on unchanged", "Kaizen costing: small, continuous reductions, with function and quality checks", "Nothing; the cost is now fixed", "Cost-plus pricing"], 1,
+     "Target costing sets where cost starts, and kaizen costing brings it down. Cost reductions still need the Development Phase checks."],
+  ], "Worth a second go. Re-read sections 13.1 and 13.2 on allowable cost, the value gap and the cardinal rule, 13.3 on splitting the target and 13.4 on design-to-cost, then try again.");
 })();
 
 /* ════════ Course-at-a-glance catalogue: open modules via the sidebar (keeps sign-in gating) ════════ */
