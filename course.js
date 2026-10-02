@@ -325,8 +325,9 @@
     if (acctName && LIVE) {
       VHCloud.touchProfile();
       VHCloud.loadCourse(C.id).then((cloud) => {
-        const changed = mergeCloud(cloud);
+                const changed = mergeCloud(cloud);
         save(); // push anything done before signing in
+        if (state.cert && VHCloud.ensureCertificate) VHCloud.ensureCertificate(state.cert); // retry a failed first save
         if (changed) refreshProgress();
         if (currentId === quizId) renderQuizGate();
       });

@@ -33,7 +33,9 @@
   };
   // Pull cloud progress on load (cross-device); merge completed modules & keep best exam.
   if (window.VHCloud && VHCloud.live) VHCloud.touchProfile(); // last seen, country estimate (once a day)
-  if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
+    if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
+    // a certificate whose first save failed is saved again here
+    if (state.exam && state.exam.passed && VHCloud.ensureCertificate) VHCloud.ensureCertificate(state.exam);
     if (!cloud) return;
     let changed = false;
     (cloud.done || []).forEach((m) => { if (!state.done.includes(m)) { state.done.push(m); changed = true; } });
@@ -486,7 +488,7 @@
     if (gen) gen.addEventListener("click", () => {
       const name = ($("#certNameInput").value || "").trim();
       if (!name) { $("#certNameInput").focus(); $("#certNameInput").placeholder = "Please enter your name first"; return; }
-      state.exam = { passed: true, score: pct, name, date: new Date().toISOString().slice(0, 10), id: "VH-" + Date.now().toString(36).toUpperCase() };
+      state.exam = { passed: true, score: pct, name, date: new Date().toISOString().slice(0, 10), id: (state.exam && state.exam.passed && state.exam.id) || "VH-" + Date.now().toString(36).toUpperCase() };
       save(); if (window.VHCloud) VHCloud.registerCertificate(state.exam); refreshProgress(); renderCertificate();
     });
   }
@@ -650,7 +652,7 @@
     ],
     m12: [
       ["The savings funnel should be reviewed…", ["Annually", "Monthly — every idea has an owner, a stage and a date", "Only when savings slip", "Never, it runs itself"], 1, "Reviewing monthly is what stops ideas quietly disappearing."],
-      ["SAVE International's certification levels, in order, are…", ["CVS → AVS → VMA", "VMA → AVS → CVS", "AVS → CVS → VMA", "PVA → CVS → VMA"], 1, "Value Methodology Associate → Associate Value Specialist → Certified Value Specialist."],
+      ["SAVE International's two certification levels, from entry level up, are…", ["CVS, then VMA", "VMA, then CVS", "AVS, then VMA", "PVA, then CVS"], 1, "VMA (Value Methodology Associate) is the entry level and CVS (Certified Value Specialist) is the level for leading studies. The older AVS title was retired in 2016."],
     ],
     m13: [
       ["A product will sell at £400 and the business needs a 25% margin. Its allowable cost is…", ["£100", "£300", "£375", "£500"], 1, "Allowable cost = price − margin = 400 × (1 − 0.25) = £300 — set before design, not after."],
@@ -866,7 +868,7 @@
       ["Resist flame", "not catch fire or spread fire", "FR plastic, intumescent coating"],
       ["Protect surface", "shield a surface from damage", "paint, film, case"],
       ["Exclude dust", "keep dirt out of a mechanism", "seal, boot, cover"],
-      ["Ensure safety", "prevent harm to the user (all-time function)", "guard, interlock, insulation"],
+      ["Protect user", "prevent harm to the user (all-time function)", "guard, interlock, insulation"],
       ["Damp vibration", "reduce unwanted shaking", "rubber mount, mass damper"],
       ["Retain fastener", "stop a joint working loose", "thread-locker, lock washer, nyloc"],
     ],
@@ -877,7 +879,7 @@
       ["Reduce effort", "make the product easier to use", "soft-touch grip, assist spring"],
       ["Save time", "let the user finish the task faster", "quick-release, one-touch control"],
       ["Assure user", "give confidence it is working properly", "solid click, progress light"],
-      ["Improve comfort", "make use physically pleasant", "padding, ergonomic curve"],
+      ["Spread pressure", "make contact with the body comfortable", "padding, ergonomic curve"],
       ["Aid grip", "help the hand hold the product", "knurling, rubber overmould"],
     ],
   };

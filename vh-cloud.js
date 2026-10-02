@@ -135,19 +135,30 @@ window.VHCloud = (function () {
     },
 
     // ── certificates ──
-    async registerCertificate(cert) {
-      const u = await user(); if (!u) return;
+        async registerCertificate(cert) {
+      const u = await user(); if (!u) return false;
       try {
-        await client.from("certificates").upsert({
+        const { error } = await client.from("certificates").upsert({
           id: cert.id, user_id: u.id, full_name: cert.name, score: cert.score, issued_at: new Date(cert.date).toISOString(),
         });
-      } catch (e) {}
+        return !error;
+      } catch (e) { return false; }
+    },
+    // re-save a local certificate the database doesn't have yet (e.g. the first save failed)
+    async ensureCertificate(cert) {
+      if (!cert || !cert.id || !LIVE) return;
+      const u = await user(); if (!u) return;
+      const r = await this.verifyCertificate(cert.id);
+      if (r.status === "notfound") await this.registerCertificate(cert);
     },
     // total certificates issued — public count for social proof
     async certCount() {
       if (!LIVE) return null;
       await ready; if (!client) return null;
       try {
+                const r = await client.rpc("certificate_count");
+        if (!r.error) return Number(r.data);
+        // older database without the function: fall back to counting rows
         const { count, error } = await client.from("certificates").select("id", { count: "exact", head: true });
         return error ? null : count;
       } catch (e) { return null; }
@@ -156,6 +167,10 @@ window.VHCloud = (function () {
       if (!LIVE) return { status: "demo" };
       await ready; if (!client) return { status: "demo" };
       try {
+                // checks ONE certificate by ID; the full list can't be read
+        const r = await client.rpc("verify_certificate", { cert_id: id });
+        if (!r.error) { const c = (r.data || [])[0]; return c ? { status: "valid", cert: c } : { status: "notfound" }; }
+        // older database without the function
         const { data, error } = await client.from("certificates").select("id,full_name,score,issued_at").eq("id", id).maybeSingle();
         if (error) return { status: "error" };
         return data ? { status: "valid", cert: data } : { status: "notfound" };

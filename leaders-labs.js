@@ -125,13 +125,13 @@
   (function () {
     const cards = $("#bqCards");
     if (!cards) return;
-    const F = { save: $("#bqSave"), vol: $("#bqVol"), one: $("#bqOne"), delay: $("#bqDelay") };
+    const F = { cur: $("#bqCur"), save: $("#bqSave"), vol: $("#bqVol"), one: $("#bqOne"), delay: $("#bqDelay") };
     function calc() {
-      const annual = num(F.save) * num(F.vol), one = num(F.one), delay = num(F.delay);
+      const cur = F.cur ? F.cur.value : "£", annual = num(F.save) * num(F.vol), one = num(F.one), delay = num(F.delay);
       const payback = annual > 0 ? (one / annual) * 12 : Infinity;
-      cards.innerHTML = card(money(annual, "£"), "yearly saving, once it's in production") +
+      cards.innerHTML = card(money(annual, cur), "yearly saving, once it's in production") +
         card(isFinite(payback) ? payback.toFixed(1) + " months" : "—", "payback on the one-time cost") +
-        card(money(annual / 2, "£"), "what a six-month delay would cost");
+        card(money(annual * delay / 12, cur), `what the ${delay}-month wait costs`);
       const v = $("#bqVerdict");
       if (annual <= 0) { v.className = "bc-verdict bc-no"; v.textContent = "No saving, no case. Start with a saving per unit and a volume."; }
       else if (payback <= 12) { v.className = "bc-verdict bc-go"; v.innerHTML = `<b>Likely yes.</b> Payback in ${payback.toFixed(1)} months is within the usual 12-month limit. Savings start in ${delay} month${delay === 1 ? "" : "s"}, when the change is in production, so set a date and hold people to it.`; }

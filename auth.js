@@ -371,8 +371,18 @@
   if (wanted && $("#view-" + wanted)) show(wanted);
 
   /* ── ?next= : after auth, return where the user came from (same-site only) ── */
-  const nextRaw = new URLSearchParams(location.search).get("next");
-  if (nextRaw && !/^(https?:|\/\/|javascript:)/i.test(nextRaw)) {
+  // Only addresses on this site are accepted. Parsing with URL() resolves tricks such as
+  // " javascript:", "java%09script:" or "/\\other.site" before the origin is compared.
+  const safeNext = (raw) => {
+    if (!raw) return null;
+    try {
+      const u = new URL(raw, location.href);
+      if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) return null;
+      return u.pathname + u.search + u.hash;
+    } catch (e) { return null; }
+  };
+  const nextRaw = safeNext(new URLSearchParams(location.search).get("next"));
+  if (nextRaw) {
     const goBtn = $("#view-success a.btn-primary");
     if (goBtn) { goBtn.setAttribute("href", nextRaw); goBtn.querySelector(".btn-label") ? 0 : (goBtn.textContent = "Continue →"); }
     const contBtn = $(".signed-note a.btn-primary");

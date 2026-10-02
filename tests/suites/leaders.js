@@ -73,7 +73,10 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
 
   // M4 business case: 30p × 300,000, £45,000 → 6 months, delay costs £45,000
   const bq = await p.textContent("#bqCards");
-  r.ok(bq.includes("£90,000") && bq.includes("6.0 months") && bq.includes("£45,000"), "business case matches the worked example");
+  r.ok(bq.includes("£90,000") && bq.includes("6.0 months") && bq.includes("£30,000") && bq.includes("4-month wait"), "business case matches the worked example and uses the months-to-production input");
+  await p.selectOption("#bqCur", "$"); await p.waitForTimeout(100);
+  r.ok((await p.textContent("#bqCards")).includes("$90,000"), "business case follows the chosen currency");
+  await p.selectOption("#bqCur", "£"); await p.waitForTimeout(100);
   r.ok((await p.textContent("#bqVerdict")).includes("Likely yes"), "business case gives a board verdict");
   await p.fill("#bqOne", "400000"); await p.waitForTimeout(100);
   r.ok((await p.textContent("#bqVerdict")).includes("Likely no"), "a long payback gets a 'likely no'");

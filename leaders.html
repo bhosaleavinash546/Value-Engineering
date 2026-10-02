@@ -545,12 +545,13 @@
       <div class="ve-lab" id="bqLab" data-lab="l4">
         <div class="lab-head"><span class="lab-tag">🧪 Interactive</span><h4>Business case in 60 seconds</h4>
         <p>Enter the saving per unit, yearly volume, one-time cost and months until the change goes live. It shows the
-        yearly saving, the payback, what a six-month delay would cost, and the verdict a board would likely give.</p></div>
+        yearly saving, the payback, what the wait until production costs, and the verdict a board would likely give.</p></div>
         <div class="bc-grid">
           <div class="bc-inputs">
-            <label>Saving per unit (£) <input type="number" id="bqSave" value="0.30" min="0" max="100000" step="0.01" /></label>
+            <label>Currency <select id="bqCur"><option value="£">£ GBP</option><option value="$">$ USD</option><option value="€">€ EUR</option><option value="₹">₹ INR</option></select></label>
+            <label>Saving per unit <input type="number" id="bqSave" value="0.30" min="0" max="100000" step="0.01" /></label>
             <label>Units per year <input type="number" id="bqVol" value="300000" min="0" max="1000000000" step="1000" /></label>
-            <label>One-time cost (£) <input type="number" id="bqOne" value="45000" min="0" max="1000000000" step="1000" /></label>
+            <label>One-time cost <input type="number" id="bqOne" value="45000" min="0" max="1000000000" step="1000" /></label>
             <label>Months until it's in production <input type="number" id="bqDelay" value="4" min="0" max="36" step="1" /></label>
           </div>
           <div class="bc-result">
@@ -614,8 +615,9 @@
       </ul>
       <p><strong>Why train everyone, not just a few experts?</strong> When everyone thinks in functions, ideas come up in
       everyday design reviews and supplier meetings, not only in workshops. A shared language also cuts arguments: "what
-      job does this part do?" is a question everyone can answer. Samsung trained over 1,000 engineers in one year and
-      made the skill a requirement for promotion, because a method only pays off when it becomes how people work.</p>
+      job does this part do?" is a question everyone can answer. Samsung trained more than 1,000 engineers in TRIZ in 2004
+      alone and made it an expected skill for promotion, because a method only pays off when it becomes how people work.</p>
+      <p class="lc-src">Sources: The TRIZ Journal; Altshuller Institute case reports on Samsung's TRIZ programme.</p>
 
       <h3>5.2 · Why leaders need it most</h3>
       <p>Programmes rarely fail because the ideas are weak. They fail because <strong>nobody follows through</strong>.

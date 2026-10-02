@@ -821,3 +821,11 @@ html[data-theme="light"] .tdo a{border-bottom-color:rgba(4,120,87,.45)}
 .fb-w1,.fb-w2,.fb-w3{left:calc(21.5% + 40px)}
 .fb-w1{top:52%}.fb-w2{top:66%}.fb-w3{top:80%}
 @media (max-width:700px){.fb-stage{height:460px}.fb-card{font-size:.72rem;max-width:none}.fb-ho,.fb-f3{max-width:112px}.fb-assumed{max-width:90px}}
+/* certificate page: is this certificate on record? */
+.cert-status{max-width:680px;margin:1.2rem auto 0;padding:.65rem 1rem;border-radius:10px;text-align:center;font-size:.9rem;font-weight:600;border:1px solid}
+.cert-status.ok{color:#34d399;border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.08)}
+.cert-status.no{color:#f0a35e;border-color:rgba(240,163,94,.45);background:rgba(240,163,94,.08)}
+.cert-status a{color:inherit;text-decoration:underline}
+html[data-theme="light"] .cert-status.ok{color:#0f7a52}
+html[data-theme="light"] .cert-status.no{color:#9a4a0b}
+@media print{.cert-status{display:none}}

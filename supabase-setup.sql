@@ -46,11 +46,43 @@ drop policy if exists "own progress write" on public.progress;
 create policy "own progress read"  on public.progress for select using (auth.uid() = user_id);
 create policy "own progress write" on public.progress for all    using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
--- certificates: a user inserts their own; ANYONE may read by ID (public verification)
+-- certificates: nobody can list them. Anyone can check ONE certificate by its ID, or read the total, through the
+-- two functions below. A signed-in learner can only save their own certificate, with a passing score
+-- (VE Academy "VH-" ≥ 80%, VAVE for Leaders "VL-" ≥ 70%), a real name, and one certificate per course.
 drop policy if exists "public cert read"   on public.certificates;
+drop policy if exists "own cert read"      on public.certificates;
 drop policy if exists "own cert insert"    on public.certificates;
-create policy "public cert read" on public.certificates for select using (true);
-create policy "own cert insert"  on public.certificates for insert with check (auth.uid() = user_id);
+drop policy if exists "own cert update"    on public.certificates;
+create policy "own cert read" on public.certificates for select using (auth.uid() = user_id);
+
+create or replace function public.cert_is_valid(cert_id text, name text, pct int)
+returns boolean language sql immutable as $$
+  select length(trim(coalesce(name, ''))) between 2 and 60
+     and ((cert_id ~ '^VH-[A-Z0-9]{4,16}$' and pct between 80 and 100)
+       or (cert_id ~ '^VL-[A-Z0-9]{4,16}$' and pct between 70 and 100));
+$$;
+
+create policy "own cert insert" on public.certificates for insert with check (
+  auth.uid() = user_id
+  and public.cert_is_valid(id, full_name, score)
+  and not exists (select 1 from public.certificates c
+                  where c.user_id = auth.uid() and left(c.id, 3) = left(certificates.id, 3))
+);
+create policy "own cert update" on public.certificates for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id and public.cert_is_valid(id, full_name, score));
+
+create or replace function public.verify_certificate(cert_id text)
+returns table (id text, full_name text, score int, issued_at timestamptz)
+language sql stable security definer set search_path = public as $$
+  select c.id, c.full_name, c.score, c.issued_at from public.certificates c where c.id = cert_id;
+$$;
+create or replace function public.certificate_count()
+returns bigint language sql stable security definer set search_path = public as $$
+  select count(*) from public.certificates;
+$$;
+grant execute on function public.verify_certificate(text) to anon, authenticated;
+grant execute on function public.certificate_count()      to anon, authenticated;
 
 -- ── Auto-create a profile row when a user signs up ──────────
 create or replace function public.handle_new_user()
