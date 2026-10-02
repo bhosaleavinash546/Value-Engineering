@@ -8,7 +8,7 @@
         cheaply via ETag and always matches the current timings.)
      • other same-origin assets (css/js/img) → stale-while-revalidate
    Bump VERSION / AUDIO_CACHE to purge previously cached responses. */
-const VERSION = "vh-v17";
+const VERSION = "vh-v18";
 const AUDIO_CACHE = "vh-audio-v2";
 
 self.addEventListener("install", () => self.skipWaiting());
@@ -38,6 +38,9 @@ function networkFirst(request, cacheName) {
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
+
+  // videos stream with range requests straight from the network (never cached here)
+  if (url.pathname.includes("/videos/") && url.pathname.endsWith(".mp4")) return;
 
   // narration audio + its timing/script sidecars — keep in lock-step
   if (url.pathname.includes("/audio/") && (url.pathname.endsWith(".mp3") || url.pathname.endsWith(".json"))) {

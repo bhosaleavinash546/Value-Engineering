@@ -396,3 +396,5 @@ html[data-theme="light"] .fg{--fg-s1:#1d5fd6;--fg-s2:#eb6834}
   .fg-svg .tk,.fg-svg .lbm{font-size:17px}
   .fg-svg .lb{font-size:18px}
 }
+/* our own videos, served from the site */
+.tvid video{display:block;width:100%;max-width:760px;height:auto;aspect-ratio:16/9;border-radius:14px;border:1px solid var(--line);background:#0b1220}
