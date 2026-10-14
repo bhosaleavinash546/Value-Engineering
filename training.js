@@ -95,7 +95,7 @@
         <h2>Sign in to unlock ${what}</h2>
         <p>Module&nbsp;1 is a free preview. Create your free account to open the rest of the VE Academy — your progress, quick-checks, exam attempts and certificate all save to your account and sync across devices.</p>
         <ul class="gate-list">
-          <li>All 13 modules &amp; the full 65-question exam bank</li>
+          <li>All 13 modules &amp; the final exam (132-question bank)</li>
           <li>Your Certificate of Completion, shareable on LinkedIn</li>
           <li>Progress, points, streak &amp; badges saved to your account</li>
         </ul>
