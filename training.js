@@ -342,6 +342,13 @@
       <p>Thirty questions: two from every module, plus four scenario or calculation questions, drawn from a bank of
       about 130. You need <strong>80% (24 of 30)</strong> to earn the <strong>VAVEhub Certificate of Completion</strong>.
       If you don't pass, you'll see how you did in each module and can try again after an hour, with new questions.</p>
+      <details class="ex-what"><summary>What this certificate is, and isn't</summary><ul>
+        <li>A record that you finished about 6 hours of study and passed an exam marked on our server.</li>
+        <li>The course follows SAVE International's six-phase job plan and the terms of EN 12973.</li>
+        <li>It isn't a SAVE or Institute of Value Management certification (such as VMA, CVS, QVA or PVM), and VAVEhub isn't connected with either body.</li>
+        <li>If you hold a PMI certification, you may be able to self-report the hours as PDUs. PMI decides what it accepts.</li>
+        <li>Planning to go further? Keep a <a href="toolkit/value-study-logbook.html" target="_blank" rel="noopener">value study logbook</a> from your first real study.</li>
+      </ul></details>
       ${remaining > 0
         ? `<p class="ex-warn">The exam opens once you've finished all ${courseMods.length} modules, so your certificate shows you completed the whole course. You have ${remaining} module${remaining > 1 ? "s" : ""} to go.</p>
       <button class="btn btn-primary btn-lg" id="examNextMod">Continue: ${nextMod.dataset.title} →</button>`

@@ -48,6 +48,12 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   // exam gate: all 13 modules needed
   await open(p, "exam"); await p.waitForTimeout(400);
   r.ok(!(await p.$("#examStart")) && !!(await p.$("#examNextMod")), "exam locked until all 13 modules are done");
+  r.ok(await p.evaluate(() => /isn't a SAVE or Institute of Value Management certification/.test(document.querySelector("#examMount .ex-what").textContent)), "exam intro says what the certificate is, and isn't");
+  const tm = await p.evaluate(() => [...document.querySelectorAll(".tmod:not(.tmod-exam)")].map((m) => {
+    const b = m.querySelector(".tmpl-box"); return b ? [...b.querySelectorAll("a")].map((a) => a.getAttribute("href")) : null; }));
+  r.ok(tm.length === 13 && tm.every((l) => l && l.length) && tm[6].includes("toolkit/business-case.xlsx") && tm[12].includes("toolkit/target-cost-cascade.html"),
+    "every module ends with its templates (printable and Excel)");
+  r.ok(await p.evaluate(() => !window.VHVoice.extractAll().some((m) => m.blocks.some((b) => /Templates for this module/.test(b)))), "the templates box isn't read aloud");
   await p.click("#examNextMod"); await p.waitForTimeout(400);
   await p.evaluate(() => document.querySelector('section[data-mod="m2"] .tmod-done').click()); await p.waitForTimeout(300);
   const st2 = await p.evaluate(() => JSON.parse(localStorage.getItem("vf-academy")));

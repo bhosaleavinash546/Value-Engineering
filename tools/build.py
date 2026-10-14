@@ -38,7 +38,7 @@ PAGES = [
        desc="36 proven cost-reduction levers across design, materials, manufacturing, sourcing, packaging and complexity, with typical savings for each.",
        card="36 ways to cut product cost, with typical savings and a tool that picks the best five for you.",
        tldr="This page lists 36 ways to take cost out of a product, grouped into six areas: design, materials, manufacturing, sourcing, packaging and logistics, and complexity. Each one says where it works best and roughly how much it usually saves. If you’re not sure where to begin, the Lever Selector on this page suggests five, based on your industry and your biggest problems.",
-       tries=[("Lever Selector (on this page)", "cost-levers/#selPains"), ("VE Cheat Sheet", "toolkit/ve-cheatsheet.html")], learn=("Module 9 · Cost Levers & Should-Costing", "training.html?open=m9")),
+       tries=[("Lever Selector (on this page)", "cost-levers/#selPains"), ("Should-Cost Build-Up", "toolkit/should-cost-buildup.html"), ("VE Cheat Sheet", "toolkit/ve-cheatsheet.html")], learn=("Module 9 · Cost Levers & Should-Costing", "training.html?open=m9")),
   dict(slug="ideation", old="ideation", nav="Ideation", short="Idea-Generation Techniques",
        title="12 Ways to Generate Cost-Saving Ideas",
        desc="Brainwriting 6-3-5, SCAMPER, TRIZ, FAST-driven ideation and eight more techniques for the Creative Phase — plus a Value Index simulator.",
@@ -68,7 +68,7 @@ PAGES = [
        desc="Run Value Engineering as an ongoing programme: the savings funnel from idea to audited saving, the KPIs that matter, and the review cadence.",
        card="How to keep VE going after the first study and follow ideas through to real savings.",
        tldr="A one-off study saves money once. A programme that keeps running saves money every year. Ideas move through a funnel, from first suggestion to money actually saved, and only about one in thirteen makes it all the way. So every idea needs a named owner and a date. A few simple measures and a short monthly review keep it on track.",
-       tries=[("Savings Funnel Tracker", "toolkit/savings-funnel-tracker.html")], learn=("Module 12 · Running a VE Programme", "training.html?open=m12")),
+       tries=[("Savings Funnel Tracker", "toolkit/savings-funnel-tracker.html"), ("VE Programme Charter", "toolkit/programme-charter.html")], learn=("Module 12 · Running a VE Programme", "training.html?open=m12")),
   dict(slug="toolkit", old="toolkit", nav="Toolkit", short="Free Toolkit",
        title="Free Value Engineering Templates",
        desc="Seven free, print-ready VE templates with editable Excel versions: FAST worksheet, cost matrix, workshop agenda, savings tracker and more.",
@@ -371,11 +371,48 @@ def write_sitemap():
     write("sitemap.xml", "\n".join(xml + ["</urlset>"]) + "\n")
     print(f"sitemap.xml  {len(rows)} URLs")
 
+# toolkit sheets listed in the "Templates for this module" box at the end of each Academy module:
+# (title, file name without extension, has an .xlsx version)
+TOOLKIT = {
+    "cheat": ("The VE Cheat Sheet", "ve-cheatsheet", False),
+    "agenda": ("VE Workshop Agenda", "save-workshop-agenda", True),
+    "fast": ("FAST Diagram Worksheet", "fast-worksheet", True),
+    "fcm": ("Function–Cost Matrix", "function-cost-matrix", True),
+    "ideas": ("Idea Capture Sheet", "idea-capture", True),
+    "case": ("Business Case", "business-case", True),
+    "funnel": ("Savings Funnel Tracker", "savings-funnel-tracker", True),
+    "should": ("Should-Cost Build-Up", "should-cost-buildup", True),
+    "teardown": ("Teardown BOM Capture Sheet", "teardown-bom", True),
+    "charter": ("VE Programme Charter", "programme-charter", True),
+    "target": ("Target-Cost Cascade", "target-cost-cascade", True),
+    "logbook": ("Value Study Logbook", "value-study-logbook", True),
+}
+MODULE_TEMPLATES = {
+    1: ["cheat", "logbook"], 2: ["agenda"], 3: ["fcm"], 4: ["fast", "fcm"], 5: ["ideas"], 6: ["ideas"],
+    7: ["case"], 8: ["funnel", "case"], 9: ["should"], 10: ["teardown"], 11: ["ideas"],
+    12: ["charter", "funnel", "logbook"], 13: ["target"],
+}
+
+def templates_box(i):
+    rows = []
+    for key in MODULE_TEMPLATES[i]:
+        title, f, xls = TOOLKIT[key]
+        links = f'<a href="toolkit/{f}.html" target="_blank" rel="noopener">Print or save as PDF ↗</a>'
+        if xls: links += f'<a class="tmpl-xls" href="toolkit/{f}.xlsx" download>⤓ Excel (.xlsx)</a>'
+        rows.append(f'<li><b>{html.escape(title)}</b><span>{links}</span></li>')
+    return f'<div class="tmpl-box"><h4>Templates for this module</h4><ul>{"".join(rows)}</ul></div>\n\n      '
+
 def build_academy():
     """training.html = src/academy/_head.html + m1..m13.html + _tail.html (exam, certificate, scripts).
     Edit the module files, not training.html. The narration workflow reads the built page, so any
-    change to narrated module text still needs the audio regenerating for that module."""
-    parts = [read("academy", "_head.html")] + [read("academy", f"m{i}.html") for i in range(1, 14)] + [read("academy", "_tail.html")]
+    change to narrated module text still needs the audio regenerating for that module.
+    The "Templates for this module" box is added here, before each module's quick check."""
+    mods = []
+    for i in range(1, 14):
+        src, anchor = read("academy", f"m{i}.html"), f'<div class="qcheck" data-qc="m{i}">'
+        if src.count(anchor) != 1: sys.exit(f"m{i}.html: expected one quick-check block")
+        mods.append(src.replace(anchor, templates_box(i) + anchor))
+    parts = [read("academy", "_head.html")] + mods + [read("academy", "_tail.html")]
     write("training.html", "".join(parts))
     print("training.html  13 modules")
 

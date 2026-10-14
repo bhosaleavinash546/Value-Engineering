@@ -40,3 +40,15 @@ td{border:1px solid #c9d2e6;padding:.5rem .55rem;height:2rem;vertical-align:top}
   .foot{flex-direction:column;gap:.4rem}
   .btnbar{flex-wrap:wrap;justify-content:flex-start}
 }
+
+/* added Oct 2026: business case, should-cost, charter, target cost, logbook */
+table.kv th{text-transform:none;letter-spacing:0;font-size:.78rem;font-weight:600;background:#f7f9fd}
+tr.calc th,tr.calc td{background:#eef4ff}
+td.hint{color:#5a6785;font-size:.74rem}
+.tbl+p.note{margin-top:.45rem}
+.decide{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;font-size:.85rem;font-weight:600;margin:.2rem 0 .7rem}
+.sign{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.3rem}
+.sign label,.meta2 label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:#5a6785;display:block}
+.sign .line{border-bottom:1px solid #b9c2d8;height:2rem}
+.meta.meta2{grid-template-columns:repeat(2,1fr);max-width:520px;margin-bottom:.8rem}
+@media screen and (max-width:760px){.sign{grid-template-columns:1fr}.meta.meta2{grid-template-columns:1fr 1fr}}

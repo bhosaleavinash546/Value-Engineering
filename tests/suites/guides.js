@@ -64,11 +64,23 @@ module.exports = async function guides({ browser, O, r }) {
   await done(p);
 
   p = await mk(); await p.goto(`${O}/toolkit/`); await p.waitForTimeout(900);
-  r.ok((await p.$$(".tool-card")).length >= 7, "Toolkit: lists the templates");
+  r.ok((await p.$$(".tool-card")).length >= 12, "Toolkit: lists the templates");
+  const tk = await p.evaluate(async () => {
+    const hrefs = [...document.querySelectorAll(".tool-actions a, a.tool-card")].map((a) => a.href), bad = [];
+    for (const h of hrefs) { const res = await fetch(h); if (!res.ok) bad.push(h); }
+    return { n: hrefs.length, bad };
+  });
+  r.ok(tk.n >= 23 && !tk.bad.length, `Toolkit: every printable and Excel link opens (${tk.n} links)${tk.bad.length ? ": " + tk.bad.join(", ") : ""}`);
   await done(p);
   p = await mk(); await p.goto(`${O}/toolkit/teardown-bom.html`);
   r.ok((await p.getAttribute(".ver a", "href")) === "../training.html?open=m10", "Toolkit: template links to its Academy module");
   await done(p);
+  for (const s of ["business-case", "should-cost-buildup", "programme-charter", "target-cost-cascade", "value-study-logbook"]) {
+    p = await mk(375, true); await p.goto(`${O}/toolkit/${s}.html`); await p.waitForTimeout(200);
+    const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    r.ok(ov <= 0 && (await p.getAttribute(".btnbar a[download]", "href")) === `${s}.xlsx`, `Toolkit: ${s} fits a phone and offers its Excel file`);
+    await done(p);
+  }
 
   // Homepage
   p = await mk(); await p.goto(`${O}/`); await p.waitForTimeout(1500);

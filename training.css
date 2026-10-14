@@ -228,6 +228,23 @@
 .tdo p{font-size:.86rem;color:var(--muted);margin:0}
 .tdo a{color:#4ade80;border-bottom:1px dashed rgba(74,222,128,.5)}
 
+/* ── Templates for this module ── */
+.tmpl-box{border:1px solid var(--line);border-radius:14px;padding:1rem 1.3rem;margin:1.4rem 0;background:var(--card)}
+.tmpl-box h4{font-family:var(--font-m);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc1);margin-bottom:.6rem}
+.tmpl-box ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.tmpl-box li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.4rem 1rem;font-size:.88rem}
+.tmpl-box li span{display:flex;flex-wrap:wrap;gap:.4rem}
+.tmpl-box a{font-family:var(--font-m);font-size:.74rem;text-decoration:none;padding:.45rem .75rem;border-radius:8px;border:1px solid var(--line);color:var(--acc1);min-height:36px;display:inline-flex;align-items:center}
+.tmpl-box a:hover{border-color:var(--acc1)}
+.tmpl-box a.tmpl-xls{color:#4ade80;border-color:rgba(74,222,128,.4)}
+html[data-theme="light"] .tmpl-box a.tmpl-xls{color:#047857;border-color:rgba(4,120,87,.4)}
+
+/* ── Exam: what the certificate is, and isn't ── */
+.ex-what{max-width:600px;margin:0 auto 1.4rem;text-align:left;border:1px solid var(--line);border-radius:12px;padding:.8rem 1.1rem;font-size:.85rem;color:var(--muted)}
+.ex-what summary{cursor:pointer;color:var(--txt);font-weight:600}
+.ex-what ul{margin:.6rem 0 0 1.1rem;display:grid;gap:.35rem}
+.ex-what a{color:var(--acc1);text-decoration:underline;text-underline-offset:2px}
+
 /* ── Certificate disclaimer ── */
 .cert-disclaimer{margin-top:1.1rem;font-size:.6rem;color:#94a3b8;letter-spacing:.04em}
 
@@ -753,6 +770,8 @@ html:not([data-theme="light"]) .cat-time em{color:#34d399}
 .cp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem 1.4rem}
 .cert-path h3{font:600 .7rem var(--font-m);letter-spacing:.14em;text-transform:uppercase;color:var(--acc1);margin-bottom:.35rem}
 .cert-path p{font-size:.82rem;line-height:1.6;color:var(--muted)}
+.cp-grid.cp4{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.cert-path a{color:var(--acc1);text-decoration:underline;text-underline-offset:2px}
 .cert-path-narrow .cp-grid{grid-template-columns:1fr}
 @media print{.cert-path{display:none}}
 html[data-theme="light"] .tdo h4,html[data-theme="light"] .tdo a{color:#047857}
