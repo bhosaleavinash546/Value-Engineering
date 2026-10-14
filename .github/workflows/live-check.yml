@@ -21,11 +21,12 @@ jobs:
           if echo "$n" | grep -Eq '^[0-9]+$'; then echo "✓ certificate_count works ($n certificates)"; else echo "✗ certificate_count: $n"; fail=1; fi
           v=$(call verify_certificate '{"cert_id":"VH-NOTREAL"}')
           if [ "$v" = "[]" ]; then echo "✓ verify_certificate works"; else echo "✗ verify_certificate: $v"; fail=1; fi
-          for fn in start_exam submit_exam issue_certificate admin_question_stats; do
-            r=$(call $fn '{}')
+          Z=00000000-0000-0000-0000-000000000000
+          for spec in "start_exam|{\"p_course\":\"academy\"}" "submit_exam|{\"p_attempt\":\"$Z\",\"p_answers\":[]}" "issue_certificate|{\"p_attempt\":\"$Z\",\"p_name\":\"Test\"}" "admin_question_stats|{}"; do
+            fn=${spec%%|*}; args=${spec#*|}
+            r=$(call $fn "$args")
             if echo "$r" | grep -q 'PGRST202'; then echo "✗ $fn is missing: run the Step B SQL"; fail=1; else echo "✓ $fn exists (visitors without an account are refused, as expected)"; fi
           done
-          l=$(curl -s -o /dev/null -w "%{http_code}" -X GET "$URL/rest/v1/certificates?select=id&limit=1" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
           body=$(curl -s "$URL/rest/v1/certificates?select=id&limit=1" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
           if [ "$body" = "[]" ]; then echo "✓ the certificate list is private"; else echo "✗ certificate list readable: $body"; fail=1; fi
           for page in "" training.html leaders.html verify.html; do
