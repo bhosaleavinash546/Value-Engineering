@@ -106,7 +106,7 @@
   });
 
   /* ── quick checks: answer both correctly to unlock "Mark complete" ── */
-    // answers appear in a new order each time, so the right one isn't always in the same place
+  // answers appear in a new order each time, so the right one isn't always in the same place
   const qcOrder = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   $$(".qcheck").forEach((box) => {
     const id = box.dataset.qc, qs = C.quick[id];
@@ -136,7 +136,7 @@
         }
       } else {
         btn.classList.add("is-wrong");
-                // the hint gives most of the answer away, so it only appears after a second wrong try
+        // the hint gives most of the answer away, so it only appears after a second wrong try
         item.dataset.miss = String((+item.dataset.miss || 0) + 1);
         out.textContent = +item.dataset.miss >= 2 ? "✗ Not quite. Hint: " + expl : "✗ Not quite. Try again.";
         out.className = "qc-expl show-wrong";
@@ -285,6 +285,8 @@
   if (wanted && mods.some((m) => m.dataset.mod === wanted)) { $("#catWrap").open = false; show(wanted); }
   else if (state.done.length) { $("#catWrap").open = false; show((courseMods.find((m) => !state.done.includes(m.dataset.mod)) || { dataset: { mod: quizId } }).dataset.mod, false); }
   else show(courseMods[0].dataset.mod, false);
+  try { localStorage.setItem("vh-last-course", "leaders"); } catch (e) {} // for "My learning"
+
 
   window.VHCourse = { show, state };
 })();

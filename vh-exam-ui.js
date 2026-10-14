@@ -40,6 +40,10 @@ window.VHExamUI = (function () {
         problem(`The ${o.noun} couldn't be loaded just now. Check your connection and try again.`, true);
         return;
       }
+      if (r.need_modules) {
+        problem(`Your account doesn't show all ${Object.keys(o.titles).length} modules as complete yet. Mark the remaining modules complete (or refresh the page so your progress syncs), then start the ${o.noun}.`, true);
+        return;
+      }
       if (r.wait_until) {
         m.innerHTML = `<div class="ex-gate"><p>After an attempt that doesn't pass there's a one-hour break, so the next try is a real test.
           You can start again at <strong>${clock(r.wait_until)}</strong> (in about ${minsTo(r.wait_until)} minutes).</p>

@@ -48,7 +48,7 @@
       state.attempts = (state.attempts || []).concat(cloud.attempts.filter((a) => !seen.has(a.t)))
         .sort((a, b) => (a.t < b.t ? -1 : 1)).slice(-20);
     }
-    if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); toast("✓ Progress restored from your account"); }
+    if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); toast("✓ Progress restored from your account"); resumeIfUntouched(); }
   });
 
   function toast(msg) {
@@ -79,6 +79,7 @@
   const FREE = new Set(["m1"]);
   function gated(id) { return (id === "exam" || /^m\d+$/.test(id)) && !FREE.has(id); }
   let currentId = null, gateEl = null;
+  let initialId = null, openedByLink = false; // where the page first opened, for resume-after-sign-in
 
   function renderGate(id, scroll) {
     currentId = id;
@@ -310,6 +311,16 @@
     }
     updateLocks();
     if (currentId) show(currentId, false); // re-gate or reveal now that auth changed
+    resumeIfUntouched();
+  }
+  // The account and the saved progress arrive a moment after the page opens, so a signed-in
+  // learner first sees Module 1. Move them on to where they left off, unless they've already
+  // gone somewhere else, scrolled into the page, or arrived by a link to a particular module.
+  function resumeIfUntouched() {
+    if (!acctName || openedByLink || !initialId || currentId !== initialId || window.scrollY > 200) return;
+    const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
+    const target = state.exam && state.exam.passed ? "exam" : (next ? next.dataset.mod : "exam");
+    if (target !== currentId) { show(target, false); initialId = target; }
   }
   document.addEventListener("vh-account", (e) => onAccount(e.detail));
   if (window.VHAccount && VHAccount.user) onAccount(VHAccount.user);
@@ -344,8 +355,10 @@
     $("#certWrap").hidden = true;
   }
 
-  function startExam() {
+  async function startExam() {
     $("#certWrap").hidden = true;
+    // the server checks completed modules against the saved progress, so make sure it's up to date
+    if (window.VHCloud && VHCloud.live && acctName) { try { await VHCloud.saveProgress(state); } catch (e) {} }
     VHExamUI.start({
       mount, course: "academy", noun: "exam", titles: examTitles,
       signInHref: "auth.html?next=" + encodeURIComponent("training.html?open=exam"),
@@ -447,7 +460,10 @@
     ? (state.exam && state.exam.passed ? "exam" : (firstUnread ? firstUnread.dataset.mod : "exam"))
     : "m1";
   const openParam = new URLSearchParams(location.search).get("open");
+  openedByLink = !!openParam;
   show(openParam || startId, false);
+  initialId = currentId;
+  try { localStorage.setItem("vh-last-course", "academy"); } catch (e) {} // for "My learning"
 })();
 
 /* ════════ Per-module quick checks (gate module completion) ════════ */
@@ -529,7 +545,7 @@
     ],
   };
 
-      // quick-check questions also feed the practice exam
+  // quick-check questions also feed the practice exam
   Object.entries(QUICK).forEach(([mod, qs]) => qs.forEach(([q, opts, c, why]) => (window.VH_PRACTICE = window.VH_PRACTICE || []).push({ mod, q, opts, c, why })));
   // answers appear in a new order each time, so the right one isn't always in the same place
   const qcOrder = (n) => { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -571,7 +587,7 @@
           gate();
         }
       } else {
-                btn.classList.add("is-wrong");
+        btn.classList.add("is-wrong");
         // the hint gives most of the answer away, so it only appears after a second wrong try
         item.dataset.miss = String((+item.dataset.miss || 0) + 1);
         expEl.textContent = +item.dataset.miss >= 2 ? "✗ Not quite. Hint: " + expl : "✗ Not quite. Try again.";

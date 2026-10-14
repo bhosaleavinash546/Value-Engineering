@@ -84,6 +84,7 @@ PAGES = [
 ]
 BY_OLD = {p["old"]: p for p in PAGES}
 BY_SLUG = {p["slug"]: p for p in PAGES}
+LEADERS_GUIDES = {"job-plan", "industries", "governance"}  # guides that also point managers to VAVE for Leaders
 HOME_IDS = {"top", "about", "playbook", "faq", "diagnose", "engage"}
 
 def read(*parts): return open(os.path.join(SRC, *parts), encoding="utf-8").read()
@@ -228,7 +229,12 @@ def guide_page(i, p):
     end_cards = ""
     if tries:
         end_cards += f'<div class="ge-card"><h2>Try it</h2>{tries}</div>'
-    end_cards += f'<div class="ge-card ge-learn"><h2>Learn it properly</h2><a href="{learn_h}">{html.escape(learn_t)} <span aria-hidden="true">→</span></a><p>Free, narrated and interactive — with a Certificate of Completion.</p></div>'
+        # say up front what's free, so visitors from search aren't surprised by the sign-up step
+    leaders = ('<a class="ge-leaders" href="leaders.html">Leading a team? VAVE for Leaders: 1 hour, no sign-up needed '
+               '<span aria-hidden="true">→</span></a>' if p["slug"] in LEADERS_GUIDES else "")
+    end_cards += (f'<div class="ge-card ge-learn"><h2>Learn it properly</h2><a href="{learn_h}">{html.escape(learn_t)} <span aria-hidden="true">→</span></a>'
+                  '<p>Module 1 is free to read. A free account opens the other 12 modules, the exam and your certificate.</p>'
+                  f'{leaders}</div>')
     pn = '<nav class="ge-pn" aria-label="More of the playbook">'
     pn += (f'<a class="ge-prev" href="{prev_p["slug"]}/"><small>← Previous</small>{html.escape(prev_p["short"])}</a>' if prev_p else '<a class="ge-prev" href="./#playbook"><small>← Back to</small>The playbook overview</a>')
     pn += (f'<a class="ge-next" href="{next_p["slug"]}/"><small>Next →</small>{html.escape(next_p["short"])}</a>' if next_p else '<a class="ge-next" href="training.html"><small>Next →</small>Take the free VE Academy</a>')

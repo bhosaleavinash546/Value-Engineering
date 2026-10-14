@@ -67,7 +67,7 @@ window.VHAccount = (function () {
         '<span class="acct-avatar">' + esc(initial) + '</span><span class="acct-name">' + esc(first) + '</span><span class="acct-caret">▾</span></button>' +
       '<div class="acct-menu" hidden>' +
         '<div class="acct-who">Signed in as<br><b>' + esc(user.name) + '</b>' + (user.email ? '<span>' + esc(user.email) + '</span>' : '') + '</div>' +
-        '<a href="training.html">🎓 My learning</a>' +
+        '<a href="' + myCourse() + '">🎓 My learning</a>' +
         '<a href="toolkit/">🧰 Toolkit</a>' +
         '<button type="button" data-signout>Sign out</button>' +
       '</div>';
@@ -84,6 +84,11 @@ window.VHAccount = (function () {
     return wrap;
   }
 
+  // "My learning" opens the course this browser used last (set by training.js / course.js)
+  function myCourse() {
+    try { return localStorage.getItem("vh-last-course") === "leaders" ? "leaders.html" : "training.html"; } catch (e) { return "training.html"; }
+  }
+
   async function init() {
     const user = await current();
     VHAccount.user = user;
@@ -92,7 +97,7 @@ window.VHAccount = (function () {
     const signin = $(".nav-signin");
     if (signin) signin.replaceWith(buildChip(user));
     const cta = $(".nav-cta");
-    if (cta) { cta.textContent = "My learning →"; cta.href = "training.html"; }
+    if (cta) { cta.textContent = "My learning →"; cta.href = myCourse(); }
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

@@ -431,9 +431,22 @@
         st.live ? h("a", { href: "admin.html" }, "Show real data") : "Real data appears once Supabase is connected.") : null,
       h("h1", { class: "sr-only" }, "Owner dashboard"),
       filters, kpi1, kpi2,
-      h("div", { class: "grid" }, cSign, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead),
+      h("div", { class: "grid" }, cSign, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead, questionsCard()),
       usersCard(sl),
       h("p", { class: "foot-note" }, "Countries are estimated from each learner's time zone (or their browser language if the time zone is missing). Details are recorded when a learner next opens the Academy, so people who haven't been back since this dashboard launched show as \"Unknown\" or \"Not recorded yet\"."));
+  }
+
+  /* ── exam questions that learners find hardest (all time, not filtered by period) ── */
+  function questionsCard() {
+    if (!Array.isArray(st.qstats)) return null;
+    const MIN = 20;
+    const rows = st.qstats.filter((q) => q.attempts >= MIN).slice(0, 15);
+    const t = { cols: ["Question", "Module", "Answers", "% right", "Most common wrong answer"],
+      rows: rows.map((q) => [q.q, (q.course === "leaders" ? "Leaders " : "") + q.module.toUpperCase(), fmtN(q.attempts), q.pct_right + "%", q.common_wrong || "—"]) };
+    return card("qstats", "Hardest exam questions",
+      `Questions answered at least ${MIN} times, lowest % right first. A low score with one popular wrong answer often means unclear wording; change the question in Supabase → Table Editor → exam_questions.`,
+      () => (rows.length ? tableView(t) : h("p", { class: "empty" }, `Shows once questions have been answered ${MIN} times. ${fmtN(st.qstats.reduce((n, q) => n + q.attempts, 0))} answers recorded so far.`)),
+      null, { wide: true });
   }
 
   /* ── learners table ── */
@@ -544,9 +557,18 @@
   /* ── loading ── */
   let client = null, timer = null, busy = false;
   async function fetchData() {
-    if (st.sample) return sample();
+    if (st.sample) {
+      st.qstats = [
+        { course: "academy", module: "m6", q: "Sample: weighted score with weights 40/30/20/10…", attempts: 64, pct_right: 41, common_wrong: "6.0" },
+        { course: "academy", module: "m13", q: "Sample: allowable cost from a shop price including VAT…", attempts: 58, pct_right: 47, common_wrong: "£15,000" },
+        { course: "leaders", module: "l4", q: "Sample: what a six-month delay costs…", attempts: 31, pct_right: 52, common_wrong: "£15,000" },
+      ];
+      return sample();
+    }
     const { data, error } = await client.rpc("admin_dashboard");
     if (error) throw error;
+    // how each exam question performs (needs supabase-exam.sql; missing function = no card)
+    try { const qs = await client.rpc("admin_question_stats"); st.qstats = qs.error ? null : qs.data; } catch (e) { st.qstats = null; }
     return data;
   }
   async function load(first) {

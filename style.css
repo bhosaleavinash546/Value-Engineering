@@ -1245,3 +1245,5 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 html[data-theme="light"] .hc-card{background:#fff}
 html[data-theme="light"] .hc-lead .hc-go{color:#9a6b12}
 @media (max-width:640px){.hero-courses{grid-template-columns:1fr}}
+.ge-card a.ge-leaders{margin-top:.35rem;padding-top:.7rem;border-top:1px solid var(--line-soft,var(--line));color:var(--acc3);font-size:.9rem}
+html[data-theme="light"] .ge-card a.ge-leaders{color:#8a5a0c}

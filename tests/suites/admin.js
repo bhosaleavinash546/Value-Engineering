@@ -97,6 +97,7 @@ module.exports = async function admin({ browser, O, r }) {
   const sp = await ctx.newPage(); sp.on("pageerror", (e) => errs.push(e.message));
   await sp.goto(`${O}/admin.html?sample`); await sp.waitForTimeout(1200);
   r.ok(!!(await sp.$(".sample-note")) && (await sp.$$(".cols .bar")).length > 0, "sample preview shows charts, clearly labelled");
+  r.ok((await sp.textContent('[aria-label="Hardest exam questions"]')).includes("% right"), "the dashboard lists the hardest exam questions");
   r.ok(await sp.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "fits a phone screen");
   await ctx.close();
 

@@ -109,6 +109,18 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   r.ok((await p.textContent("#examMount")).includes("one-hour break"), "a new attempt has to wait an hour after a fail");
   await ctx.close();
 
+  // ── Resume after sign-in: the account arrives a moment after the page opens (as on the live site)
+  ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } }, null);
+  p = track(await ctx.newPage());
+  await p.goto(U); await p.evaluate(() => localStorage.setItem("vf-academy", JSON.stringify({ done: ["m1", "m2", "m3"] }))); await p.reload(); await p.waitForTimeout(600);
+  const before = await p.evaluate(() => document.querySelector(".tmod.is-visible").dataset.mod);
+  await p.evaluate(() => document.dispatchEvent(new CustomEvent("vh-account", { detail: { name: "Late Learner", email: "l@example.com" } })));
+  await p.waitForTimeout(400);
+  const after = await p.evaluate(() => document.querySelector(".tmod.is-visible").dataset.mod);
+  r.ok(before === "m1" && after === "m4", `a learner whose account loads late is taken to their next module (${before} → ${after})`);
+  r.ok(await p.evaluate(() => localStorage.getItem("vh-last-course")) === "academy", "the Academy is remembered as the last course used");
+  await ctx.close();
+
   // ── Practice exam: questions from the quick checks and challenges, explained straight away
   ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } });
   p = track(await ctx.newPage());

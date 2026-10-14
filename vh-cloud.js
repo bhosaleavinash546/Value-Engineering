@@ -74,6 +74,11 @@ window.VHCloud = (function () {
     async start(course) {
       const bank = (await loadDemoBank() || {})[course];
       if (!bank || !bank.length) return { error: "offline" };
+      if (course === "academy") { // same rule as the server: all 13 modules complete first
+        let done = [];
+        try { done = (JSON.parse(localStorage.getItem("vf-academy")) || {}).done || []; } catch (e) {}
+        if (new Set(done.filter((m) => /^m([1-9]|1[0-3])$/.test(m))).size < 13) return { need_modules: true };
+      }
       const st = demoState();
       const lastFail = Object.values(st.attempts).filter((a) => a.course === course && a.passed === false).map((a) => a.at).sort().pop();
       if (lastFail && Date.now() - Date.parse(lastFail) < 3600e3) return { wait_until: new Date(Date.parse(lastFail) + 3600e3).toISOString() };

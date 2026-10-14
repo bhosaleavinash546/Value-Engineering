@@ -41,6 +41,9 @@ drop policy if exists "own attempts read" on public.exam_attempts;
 create policy "own attempts read" on public.exam_attempts for select using (auth.uid() = user_id);
 revoke insert, update, delete on public.exam_attempts from anon, authenticated;
 create index if not exists exam_attempts_user on public.exam_attempts (user_id, course, submitted_at desc);
+-- the option each learner chose for each question (index into exam_questions.options), so badly
+-- worded questions show up in the owner's "Hardest questions" table
+alter table public.exam_attempts add column if not exists answers int[];
 
 -- certificates are now issued only by issue_certificate() below
 drop policy if exists "own cert insert" on public.certificates;
@@ -64,6 +67,14 @@ declare
 begin
   if uid is null then raise exception 'Please sign in first' using errcode = '28000'; end if;
   if p_course not in ('academy', 'leaders') then raise exception 'Unknown course'; end if;
+
+  -- the Academy exam opens only once all 13 modules are marked complete in the learner's saved progress
+  if p_course = 'academy' and (
+       select count(distinct d) from progress p, jsonb_array_elements_text(coalesce(p.data -> 'done', '[]'::jsonb)) d
+        where p.user_id = uid and d ~ '^m([1-9]|1[0-3])$') < 13 then
+    return jsonb_build_object('need_modules', true);
+  end if;
+
 
   -- one hour's wait after a failed attempt
   select max(submitted_at) into last_fail from exam_attempts
@@ -144,7 +155,9 @@ begin
       into review from _marks where chosen is distinct from answer;
   end if;
 
-  update exam_attempts set submitted_at = now(), score = pct, passed = ok, by_module = mods where id = a.id;
+  update exam_attempts set submitted_at = now(), score = pct, passed = ok, by_module = mods,
+         answers = array(select chosen from _marks order by ord)
+   where id = a.id;
 
   return jsonb_build_object('score', pct, 'right', right_n, 'total', n, 'passed', ok,
                             'pass', exam_pass_mark(a.course), 'by_module', mods, 'review', review,
@@ -177,6 +190,30 @@ begin
   end if;
   return jsonb_build_object('id', c.id, 'name', c.full_name, 'score', c.score, 'date', to_char(c.issued_at, 'YYYY-MM-DD'));
 end $$;
+
+-- ── owner dashboard: how each question performs (admins only) ──
+create or replace function public.admin_question_stats()
+returns jsonb language plpgsql stable security definer set search_path = public, auth as $$
+begin
+  if not public.is_admin() then raise exception 'Not allowed'; end if;
+  return coalesce((
+    select jsonb_agg(row_to_json(s) order by s.pct_right, s.attempts desc)
+      from (
+        select q.id, q.course, q.module, q.q, count(*) as attempts,
+               round(100.0 * count(*) filter (where x.chosen = q.answer) / count(*)) as pct_right,
+               (select q.options ->> w.chosen from (
+                  select x2.chosen, count(*) n
+                    from exam_attempts a2, unnest(a2.qids, a2.answers) x2(qid, chosen)
+                   where x2.qid = q.id and x2.chosen is distinct from q.answer and x2.chosen is not null
+                   group by x2.chosen order by n desc limit 1) w) as common_wrong
+          from exam_attempts a, unnest(a.qids, a.answers) x(qid, chosen)
+          join exam_questions q on q.id = x.qid
+         where a.submitted_at is not null and a.answers is not null
+         group by q.id
+      ) s), '[]'::jsonb);
+end $$;
+revoke all on function public.admin_question_stats() from public, anon;
+grant execute on function public.admin_question_stats() to authenticated;
 
 revoke all on function public.start_exam(text)               from public;
 revoke all on function public.submit_exam(uuid, int[])        from public;
