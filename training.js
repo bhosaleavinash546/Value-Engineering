@@ -90,6 +90,7 @@
       : (mod ? "Module " + id.slice(1) + " — " + mod.dataset.title : "this module");
     const next = encodeURIComponent("training.html?open=" + id);
     if (!gateEl) { gateEl = document.createElement("section"); gateEl.className = "tmod auth-gate"; gateEl.id = "authGate"; $("#trMain").appendChild(gateEl); }
+    if (window.vhTrack) vhTrack("academy-signup-gate"); // how many readers reach the sign-up step
     gateEl.innerHTML = `
       <div class="gate-card">
         <div class="gate-lock" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
@@ -969,6 +970,7 @@
   const mixUp = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
   function openReview(tab) {
+    if (window.vhTrack) vhTrack("practice-exam");
     const pool = window.VH_PRACTICE || [];
     const terms = window.VH_TERMS || [];
     let modal = $("#revModal");

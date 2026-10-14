@@ -7,7 +7,7 @@ window.VF_CONFIG = {
   /* 1) NEWSLETTER — create a free account at https://buttondown.com,
         then set your username here (e.g. "valueforge").
         Until set, the subscribe box falls back to an email draft. */
-  buttondownUser: "",
+  buttondownUser: "bhosale.avinash546",
 
   /* 2) CONTACT FORM — create a free form at https://formspree.io,
         then paste the form ID here (e.g. "xkgwqyzb").
@@ -22,7 +22,7 @@ window.VF_CONFIG = {
   /* 4) ANALYTICS — create a free site at https://www.goatcounter.com,
         then set your code here (e.g. "valueforge" for
         valueforge.goatcounter.com). Until set, no analytics loads. */
-  goatcounterCode: "",
+  goatcounterCode: "valueengineeringhub",
 
   /* 5) AUTH (real email-OTP login) — create a free project at
         https://supabase.com, then paste your Project URL and anon
@@ -52,8 +52,39 @@ window.VF_CONFIG = {
 })();
 
 /* GoatCounter loader — privacy-friendly, no cookies */
+/* window.vhTrack("name") records a named event (sign-up gate shown, video played…) as an
+   "event" in GoatCounter. Events are queued until the counter has loaded; each one is sent
+   once per page view. Nothing is sent on local copies or when no code is set. */
 (function () {
-  var c = window.VF_CONFIG.goatcounterCode;
+  var c = window.VF_CONFIG.goatcounterCode, sent = {}, queue = [];
+  function flush() {
+    var gc = window.goatcounter;
+    if (!gc || !gc.count) return false;
+    while (queue.length) { var n = queue.shift(); try { gc.count({ path: n, title: n, event: true }); } catch (e) {} }
+    return true;
+  }
+  window.vhTrack = function (name) {
+    if (!c || !name || sent[name]) return;
+    sent[name] = true; queue.push(name);
+    if (!flush()) { var tries = 0, t = setInterval(function () { if (flush() || ++tries > 40) clearInterval(t); }, 500); }
+  };
+  // events every page can report: videos played and course labs used
+  document.addEventListener("play", function (e) {
+    var v = e.target;
+    if (v && v.tagName === "VIDEO") { var src = v.currentSrc || (v.querySelector("source") || {}).src || ""; window.vhTrack("video/" + src.split("/").pop().replace(/\.mp4.*$/, "")); }
+  }, true);
+  document.addEventListener("click", function (e) {
+    var t = e.target && e.target.closest;
+    if (!t) return;
+    var yt = e.target.closest(".vid-facade");
+    if (yt) window.vhTrack("video/youtube");
+    var lab = e.target.closest(".ve-lab");
+    if (lab) window.vhTrack("lab/" + (lab.dataset.lab || lab.id || "lab"));
+  }, true);
+  document.addEventListener("input", function (e) {
+    var lab = e.target && e.target.closest && e.target.closest(".ve-lab");
+    if (lab) window.vhTrack("lab/" + (lab.dataset.lab || lab.id || "lab"));
+  }, true);
   if (!c) return;
   var s = document.createElement("script");
   s.async = true;

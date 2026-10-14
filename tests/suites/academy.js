@@ -125,8 +125,11 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } });
   p = track(await ctx.newPage());
   await p.goto(U); await p.waitForTimeout(600);
+  await p.evaluate(() => { window.__gc = []; window.goatcounter = { count: (o) => window.__gc.push(o.path) }; });
   await p.click("#revBtn"); await p.waitForSelector("#revModal .rev-q");
   r.ok((await p.$$("#revModal .rev-q")).length === 20, "practice exam deals 20 questions");
+  await p.waitForTimeout(100);
+  r.ok((await p.evaluate(() => window.__gc)).includes("practice-exam"), "opening the practice exam is counted as an anonymous event");
   await p.click("#revModal .rev-q .rev-opt"); await p.waitForTimeout(100);
   r.ok(/Correct|Not quite/.test(await p.textContent("#revModal .rev-q .rev-why")), "a practice answer is explained straight away");
   await ctx.close();

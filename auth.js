@@ -198,6 +198,7 @@
   }
 
   /* ── SIGN UP ── */
+  $("#form-signup").addEventListener("submit", () => { if (window.vhTrack) vhTrack("signup-started"); });
   $("#form-signup").addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = $("#su-name").value.trim(), email = $("#su-email").value.trim(), pass = $("#su-pass").value;
