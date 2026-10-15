@@ -600,6 +600,7 @@
         item.dataset.miss = String((+item.dataset.miss || 0) + 1);
         expEl.textContent = +item.dataset.miss >= 2 ? "✗ Not quite. Hint: " + expl : "✗ Not quite. Try again.";
         expEl.className = "qc-expl show-wrong";
+        if (window.VHMistakes) { if (+item.dataset.miss >= 2) VHMistakes.attach(expEl, btn.textContent); else VHMistakes.clear(expEl); }
         setTimeout(() => btn.classList.remove("is-wrong"), 700);
       }
     });
@@ -858,6 +859,7 @@
       const ex = $(".fnc-expl", item);
       ex.textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + expl;
       ex.className = "fnc-expl show " + (right ? "ok" : "no");
+      if (!right && window.VHMistakes) VHMistakes.attach(ex, btn.textContent);
       if (answered.every(Boolean)) {
         const s = $("#fncScore");
         const msg = score === 8 ? "Perfect — you think in functions now!" : score >= 6 ? "Strong — review the ones you missed and you're there." : "Good practice — re-read section 4.3 on fake functions and try again.";
@@ -1033,6 +1035,7 @@
         else if (o === ob) o.classList.add("is-wrong");
       });
       $(".rev-why", qEl).textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + (it.why || "");
+      if (!right && window.VHMistakes) VHMistakes.attach($(".rev-why", qEl), ob.textContent);
       $(".rev-score", mp).textContent = `${got} of ${done} right so far` + (done === set.length ? `: ${Math.round((100 * got) / set.length)}%. The real exam needs 80%.` : "");
     });
     deal();
@@ -1347,6 +1350,7 @@
       const ex = $(".fnc-expl", item);
       ex.textContent = (right ? "✓ Correct. " : "✗ Not quite. ") + expl;
       ex.className = "fnc-expl show " + (right ? "ok" : "no");
+      if (!right && window.VHMistakes) VHMistakes.attach(ex, btn.textContent);
       if (answered.every(Boolean)) {
         const s = $(".fnc-score", mount);
         const msg = score === N ? "Perfect — you've got the judgement, not just the vocabulary!" : score >= N - 2 ? "Strong — review the ones you missed and you're there." : closingMsg;
