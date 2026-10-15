@@ -116,5 +116,18 @@ module.exports = async function guides({ browser, O, r }) {
   r.ok(p.url().endsWith("/glossary/"), "Phone menu navigates");
   await done(p);
 
+  // ── Topic page: VAVE explained
+  { const p = await browser.newPage(); p.on("pageerror", (e) => errs.push(e.message));
+  await p.goto(`${O}/vave/`); await p.waitForTimeout(700);
+  const ld = await p.evaluate(() => [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => JSON.parse(s.textContent)).flatMap((d) => d["@graph"] || [d]).map((g) => g["@type"]));
+  r.ok(ld.includes("FAQPage") && ld.includes("Article") && ld.includes("BreadcrumbList"), "VAVE page: article, breadcrumb and FAQ data for search engines");
+  r.ok((await p.$$(".guide-toc a")).length >= 8, "VAVE page: 'On this page' lists every section");
+  await p.check('input[name="vc1"][value="ve"]'); await p.check('input[name="vc2"][value="ve"]'); await p.check('input[name="vc3"][value="long"]');
+  r.ok(/Value engineering\./.test(await p.textContent("#vaveChooserOut")), "VAVE page: the VA-or-VE helper recommends value engineering for a product still in design");
+  r.ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "VAVE page: no sideways scrolling");
+  await p.goto(`${O}/`); await p.waitForTimeout(400);
+  r.ok(!!(await p.$('footer a[href="vave/"]')), "footer links to the VAVE topic page");
+  await p.close(); }
+
   r.ok(!errs.length, `no script errors${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 };

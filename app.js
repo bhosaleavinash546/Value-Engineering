@@ -889,6 +889,22 @@
   // Keyboard focus inside a card pauses via :focus-within (CSS); nothing else needed.
 })();
 
+/* ── VAVE topic page: "Which one do you need?" (value analysis or value engineering) ── */
+(function () {
+  const box = document.getElementById("vaveChooser");
+  if (!box) return;
+  const out = document.getElementById("vaveChooserOut");
+  box.addEventListener("change", () => {
+    const v = (n) => { const r = box.querySelector(`input[name="vc${n}"]:checked`); return r ? r.value : null; };
+    const a = v(1), b = v(2), c = v(3);
+    if (!a || !b || !c) { out.textContent = "Pick an answer to each question."; return; }
+    if (a === "ve" && b === "ve") out.innerHTML = "<b>Value engineering.</b> The design is still open, so this is when the method saves the most. Start with function analysis and a target cost.";
+    else if (c === "short") out.innerHTML = "<b>Value analysis, but only quick wins.</b> With under two years of sales left, one-time costs rarely pay back. Look for changes that need no new tools, and save the bigger ideas for the next design.";
+    else if (a === "va") out.innerHTML = "<b>Value analysis.</b> The product is on sale with years to run, so a study can pay back. Start from real costs, a teardown and warranty data.";
+    else out.innerHTML = "<b>A mix of both.</b> Some choices are still open: use value engineering on what can change, and value analysis on parts already tooled.";
+  });
+})();
+
 /* ── Homepage video: show the thumbnail, load the YouTube player only on click ── */
 (function () {
   document.querySelectorAll(".vid-facade[data-yt]").forEach((btn) => {

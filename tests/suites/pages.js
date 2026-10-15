@@ -5,7 +5,7 @@ const AXE = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
 
 const PAGES = [
   "index.html", "training.html", "capstone.html", "leaders.html", "leaders-playbook.html", "auth.html", "certificate.html", "verify.html", "privacy.html", "terms.html", "changelog.html", "credits.html", "404.html",
-  "job-plan/", "function-analysis/", "cost-levers/", "ideation/", "technology/", "benchmarking/", "industries/", "governance/", "toolkit/", "glossary/",
+  "vave/", "job-plan/", "function-analysis/", "cost-levers/", "ideation/", "technology/", "benchmarking/", "industries/", "governance/", "toolkit/", "glossary/",
 ];
 
 module.exports = async function pages({ browser, O, r }) {

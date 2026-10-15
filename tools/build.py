@@ -22,65 +22,76 @@ AUTHOR = "Avinash Bhosale"
 # ── the playbook: order = previous/next order and homepage card order ──
 PAGES = [
   dict(slug="job-plan", old="save", nav="Job Plan", short="The 6-Phase Job Plan",
-       title="The Value Engineering Job Plan: Six Steps",
-       desc="The six phases of a Value Engineering study, from Information to Presentation, with the activities, tools and deliverable of each phase.",
+       title="Value Engineering Job Plan: The 6 Phases Explained",
+       desc="The value engineering job plan step by step: the six phases from Information to Presentation, what happens in each, the tools used and what each phase delivers.",
        card="The six steps of a VE study, and what to do and deliver at each one.",
        tldr="A value engineering study follows six steps, always in the same order. You gather the facts first, then work out what the product actually has to do. Only then do you come up with ideas, pick the best ones, build the business case and present it. Don’t judge any idea until they’re all written down. And start as early as you can, because most of a product’s cost is locked in once the design is set.",
        tries=[("VE Workshop Agenda", "toolkit/save-workshop-agenda.html")], learn=("Modules 3–8 · one module per phase", "training.html?open=m3")),
   dict(slug="function-analysis", old="fast", nav="Function Analysis", short="Function Analysis & FAST",
-       title="How to Do Function Analysis and FAST Diagrams",
-       desc="Write verb–noun functions, build a FAST diagram and use the Value Index to find what to attack — worked step by step on an electric kettle.",
+       title="FAST Diagram: How to Make One, with a Worked Example",
+       desc="How to make a FAST diagram for value engineering: write verb–noun functions, place them with HOW–WHY logic and find poor-value functions, worked on an electric kettle.",
        card="How to describe what a product does, map it on a FAST diagram, and find where you’re overpaying.",
        tldr="Describe what the product does in two words at a time, a verb and a noun, such as “heat water” or “indicate status”. Put these functions on a FAST diagram. Read it to the right and it tells you how each function is done. Read it to the left and it tells you why. Then share the product’s cost out across the functions and compare each one with the cheapest reliable way to do the same job. The biggest gaps are where to start.",
        tries=[("FAST Diagram Worksheet", "toolkit/fast-worksheet.html"), ("Function–Cost Matrix", "toolkit/function-cost-matrix.html")], learn=("Module 4 · Function Analysis & FAST", "training.html?open=m4")),
   dict(slug="cost-levers", old="levers", nav="Cost Levers", short="36 Cost Levers",
-       title="36 Ways to Reduce Product Cost",
-       desc="36 proven cost-reduction levers across design, materials, manufacturing, sourcing, packaging and complexity, with typical savings for each.",
+       title="36 Product Cost Reduction Ideas, with Typical Savings",
+       desc="36 product cost reduction ideas across design, materials, manufacturing, sourcing, packaging and complexity, with typical savings and a tool that picks your best five.",
        card="36 ways to cut product cost, with typical savings and a tool that picks the best five for you.",
        tldr="This page lists 36 ways to take cost out of a product, grouped into six areas: design, materials, manufacturing, sourcing, packaging and logistics, and complexity. Each one says where it works best and roughly how much it usually saves. If you’re not sure where to begin, the Lever Selector on this page suggests five, based on your industry and your biggest problems.",
        tries=[("Lever Selector (on this page)", "cost-levers/#selPains"), ("Should-Cost Build-Up", "toolkit/should-cost-buildup.html"), ("VE Cheat Sheet", "toolkit/ve-cheatsheet.html")], learn=("Module 9 · Cost Levers & Should-Costing", "training.html?open=m9")),
   dict(slug="ideation", old="ideation", nav="Ideation", short="Idea-Generation Techniques",
-       title="12 Ways to Generate Cost-Saving Ideas",
+       title="12 Idea Techniques for Value Engineering Workshops",
        desc="Brainwriting 6-3-5, SCAMPER, TRIZ, FAST-driven ideation and eight more techniques for the Creative Phase, plus a simple value ratio simulator.",
        card="Twelve ways to come up with more, and better, cost-saving ideas in a workshop.",
        tldr="When you’re coming up with ideas, aim for as many as you can and leave the judging until later. This page covers twelve ways to keep the ideas coming. Brainwriting lets the quiet people in the room contribute as much as the loud ones. SCAMPER gives you a checklist to work through. TRIZ helps when improving one thing makes another worse, like a part that needs to be stronger but can’t get heavier. Whichever you use, think about the job the part does rather than the part itself.",
        tries=[("Idea Capture Sheet", "toolkit/idea-capture.html"), ("Value ratio simulator (on this page)", "ideation/#fSlider")], learn=("Module 5 · Creative Techniques", "training.html?open=m5")),
   dict(slug="technology", old="tech", nav="Technology", short="Modern Cost Technology",
-       title="Tools and Software for Cost Engineering",
-       desc="AI should-cost engines, cleansheet models, CT-scan teardown, spend analytics, generative design and LLM copilots — the modern cost stack.",
+       title="Should-Cost Software and Cost Engineering Tools",
+       desc="Should-cost software, cleansheet cost models, CT-scan teardown, spend analytics, generative design and AI copilots: what each cost engineering tool does and when to use it.",
        card="The software and tools that make cost work faster, from should-cost software to CT scanning and AI.",
        tldr="Cost work that used to take weeks can now take hours. Should-cost software reads a CAD model and estimates what a part ought to cost before any supplier quotes. CT scanning lets you see inside a competitor’s part without cutting it open. Spend analysis finds parts you’re overpaying for, using data you already have. None of this replaces a sound method, but it makes a good team a lot faster.",
        tries=[("VE Cheat Sheet", "toolkit/ve-cheatsheet.html")], learn=("Module 11 · Modern & AI-Era Techniques", "training.html?open=m11")),
   dict(slug="benchmarking", old="benchmark", nav="Benchmarking", short="Teardown & Benchmarking",
-       title="How to Do a Competitor Teardown",
-       desc="Run a competitive teardown in five steps — document, disassemble, capture the BOM, should-cost, harvest ideas — with an exploded-view SUV.",
+       title="Competitor Teardown and Benchmarking: 5 Steps",
+       desc="How to run a competitor teardown and benchmarking study in five steps: document, disassemble, capture the parts list, should-cost and turn findings into ideas.",
        card="How to take a competitor’s product apart and learn from it, with an interactive exploded view of an SUV.",
        tldr="Taking a competitor’s product apart is the most reliable way to find out what a function should cost. There are five steps. Photograph and weigh everything before you touch it. Take it apart one level at a time and time each step. Record every part. Estimate what each part costs the competitor to make. Then turn what you found into ideas for your own product. Look beyond price, too. This page covers six ways to compare.",
        tries=[("Teardown BOM Capture Sheet", "toolkit/teardown-bom.html")], learn=("Module 10 · Teardown & Benchmarking", "training.html?open=m10")),
   dict(slug="industries", old="industries", nav="Industries", short="Industry Playbooks",
-       title="Value Engineering in 8 Industries",
-       desc="Cost structures, highest-yield levers and signature moves for automotive, consumer goods, machinery, appliances, aerospace and more.",
+       title="Value Engineering Examples in 8 Industries",
+       desc="Value engineering examples for automotive, consumer goods, machinery, appliances, aerospace, electronics, medical devices and industrial products: where the cost sits and what saves most.",
        card="Where the cost sits in eight industries, and what saves the most money in each.",
        tldr="The method is the same in every industry, but what saves the most money isn’t. For eight industries, this page shows where the cost usually sits, which approaches save the most, and the one move that stands out. In cars, for example, 60–75% of the cost is in parts bought from suppliers, so sharing parts across models and working closely with suppliers pay off most. In consumer goods, it’s packaging, recipes and cutting the number of product variants.",
        tries=[("Lever Selector", "cost-levers/#selPains")], learn=("Module 1 · Foundations (free preview)", "training.html?open=m1")),
   dict(slug="governance", old="governance", nav="Governance", short="Savings Funnel & KPIs",
-       title="How to Run a Value Engineering Programme",
+       title="Value Engineering Programme: Savings Funnel and KPIs",
        desc="Run Value Engineering as an ongoing programme: the savings funnel from idea to audited saving, the KPIs that matter, and the review cadence.",
        card="How to keep VE going after the first study and follow ideas through to real savings.",
        tldr="A one-off study saves money once. A programme that keeps running saves money every year. Ideas move through a funnel, from first suggestion to money actually saved, and only about one in nineteen makes it all the way. So every idea needs a named owner and a date. A few simple measures and a short monthly review keep it on track.",
        tries=[("Savings Funnel Tracker", "toolkit/savings-funnel-tracker.html"), ("VE Programme Charter", "toolkit/programme-charter.html")], learn=("Module 12 · Running a VE Programme", "training.html?open=m12")),
   dict(slug="toolkit", old="toolkit", nav="Toolkit", short="Free Toolkit",
-       title="Free Value Engineering Templates",
+       title="Free Value Engineering Templates: FAST, Should-Cost, Excel",
        desc="Fifteen free VE templates, from a FAST worksheet and cost matrix to a programme business case and a board pack, each printable with an editable Excel or PowerPoint version.",
        card="Fifteen free worksheets and templates you can print or fill in as Excel files.",
        tldr="Fifteen practical templates, free to download. Most come as a page you can print or save as a PDF and as an Excel file you can fill in; the board pack is a PowerPoint. You can use them yourself or within your company, as long as you credit where they came from. Each one links to the course module that shows you how to use it.",
        tries=[], learn=("The VE Academy · all 13 modules", "training.html")),
   dict(slug="glossary", old="glossary", nav="Glossary", short="Glossary",
-       title="Value Engineering Glossary",
+       title="Value Engineering Glossary: Key Terms Explained",
        desc="Plain-English definitions of key Value Engineering terms — FAST, Value Index, worth, should-cost, cleansheet, LPP, DFMA and target costing.",
        card="Key VE terms explained in plain English, with a search box.",
        tldr="The terms you’ll come across on this site and in the course, explained in plain English. Start typing in the search box to find one, or share a link that goes straight to a particular term.",
        tries=[("VE Cheat Sheet", "toolkit/ve-cheatsheet.html")], learn=("The VE Academy · free course", "training.html")),
+]
+# Topic ("pillar") pages: one complete page for each main search term. Body in src/pillars/<slug>.html.
+PILLARS = [
+  dict(slug="vave", short="VAVE explained", kicker="Topic guide",
+       title="VAVE: Value Analysis and Value Engineering Explained",
+       h1='VAVE: value analysis and <span class="grad-text">value engineering</span>, explained',
+       desc="What VAVE means, the difference between value analysis and value engineering, how a study runs, what it saves, real examples and how to start. Free templates and courses.",
+       lede="VAVE stands for value analysis and value engineering: a structured way to lower a product’s cost, or raise what it does, by studying its functions instead of its parts. Value analysis is used on products already on sale; value engineering is used during design.",
+       tldr="VAVE looks at what each part of a product is for, puts a cost on each of those jobs, and finds cheaper or better ways to do the ones that cost more than they’re worth. Value analysis does this for products already on sale; value engineering does it during design, when it saves the most. A study follows six steps with a mixed team, and a first round on a product that has never had one often finds 8–15% of its cost.",
+       learn=("VAVE for Leaders · free, 1 hour", "leaders.html"),
+       tries=[("VE Workshop Agenda", "toolkit/save-workshop-agenda.html"), ("FAST Diagram Worksheet", "toolkit/fast-worksheet.html"), ("All 15 free templates", "toolkit/")]),
 ]
 BY_OLD = {p["old"]: p for p in PAGES}
 BY_SLUG = {p["slug"]: p for p in PAGES}
@@ -294,6 +305,56 @@ def guide_page(i, p):
     jsonld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False) + "\n</script>"
     return page, jsonld, url
 
+def pillar_page(p):
+    body = read("pillars", p["slug"] + ".html")
+    minutes = max(2, round(words(body) / 220))
+    url = f"{SITE}{p['slug']}/"
+    tries = "".join(f'<a href="{h}">{html.escape(t)} <span aria-hidden="true">→</span></a>' for t, h in p["tries"])
+    learn_t, learn_h = p["learn"]
+    toc = "".join(f'<a href="{p["slug"]}/#{i}">{html.escape(re.sub("<[^>]+>", "", h))}</a>'
+                  for i, h in re.findall(r'<section class="pil-sec" id="([\w-]+)">\s*<h2>(.*?)</h2>', body))
+    page = f'''<header class="guide-hero" id="top">
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span aria-hidden="true">›</span><span aria-current="page">{html.escape(p["short"])}</span></nav>
+    <p class="kicker">{p["kicker"]}</p>
+    <h1>{p["h1"]}</h1>
+    <p class="sec-lede">{p["lede"]}</p>
+    <p class="guide-meta">By <a href="./#engage">{AUTHOR}</a> · Updated <time datetime="{UPDATED}">{UPDATED_HUMAN}</time> · {minutes} min read</p>
+    <aside class="guide-tldr" aria-labelledby="tldr-{p["slug"]}"><h2 id="tldr-{p["slug"]}">In 30 seconds</h2><p>{p["tldr"]}</p></aside>
+  </div>
+</header>
+<nav class="guide-toc" aria-label="On this page"><div class="container"><span class="gt-label">On this page</span>{toc}</div></nav>
+<main id="main">
+<div class="section pil-wrap"><div class="container">
+{body}
+</div></div>
+<section class="section guide-end" id="next-steps">
+  <div class="container">
+    <div class="ge-grid"><div class="ge-card"><h2>Try it</h2>{tries}</div>
+    <div class="ge-card ge-learn"><h2>Learn it properly</h2><a href="{learn_h}">{html.escape(learn_t)} <span aria-hidden="true">→</span></a>
+    <a href="training.html">VE Academy · free course with certificate <span aria-hidden="true">→</span></a>
+    <p>Both courses are free. VAVE for Leaders needs no account; the Academy’s Module 1 is free to read and a free account opens the rest.</p></div></div>
+  </div>
+</section>
+</main>
+'''
+    faqs = re.findall(r'<summary>(.*?)<i></i></summary><p>(.*?)</p>', body, re.S)
+    plain = lambda s: html.unescape(re.sub(r"<[^>]+>", "", s)).strip()
+    graph = [
+        {"@type": "Article", "headline": p["title"], "description": p["desc"], "url": url, "mainEntityOfPage": url,
+         "inLanguage": "en-GB", "datePublished": UPDATED, "dateModified": UPDATED,
+         "author": {"@type": "Person", "name": AUTHOR, "url": "https://www.linkedin.com/in/avinash-bhosale-671bbb80"},
+         "publisher": {"@type": "Organization", "name": "VAVEhub", "url": SITE}},
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE},
+            {"@type": "ListItem", "position": 2, "name": p["short"], "item": url}]},
+    ]
+    if faqs:
+        graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": plain(q),
+                      "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in faqs]})
+    jsonld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False) + "\n</script>"
+    return page, jsonld, url
+
 def playbook_section():
     cards = "\n".join(
         f'      <a class="pb-card tilt" href="{p["slug"]}/" data-reveal><span class="pb-n">{i + 1:02d}</span>'
@@ -332,8 +393,8 @@ def build():
     # ── home ──
     home_body = "\n\n".join([read("home", "hero.html"), '<main id="main">', "", read("home", "about.html"), playbook_section(),
                              read("home", "faq.html"), read("home", "diagnose.html"), read("home", "engage.html"), "", "</main>"])
-    home = head(None, "VAVEhub — Value Engineering, Product Cost Optimisation & Benchmarking",
-                "Free value engineering (VAVE) guides and two free courses with certificates: the 6-phase job plan, FAST, 36 cost levers, should-costing and teardown benchmarking.",
+    home = head(None, "VAVEhub: Free Value Engineering Guides, Templates and Courses",
+                "Free value engineering (VAVE) guides, templates and two free courses with certificates: the job plan, FAST diagrams, 36 cost reduction ideas, should-costing and teardown.",
                 SITE, SITE + "og-image.png", "VAVEhub — Value Engineering & Product Cost Optimisation",
                 "Free value engineering courses (a 1-hour course for leaders, a 6-hour Academy) with certificates, plus ten guides and 15 templates.",
                 read("home", "head-extra.html") + "\n" + faq_jsonld(),
@@ -351,6 +412,14 @@ def build():
         doc += rewrite(body, p["slug"]) + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, p["slug"]) + "\n" + TAIL_GUIDE + "\n\n" + SCRIPTS
         write(f"{p['slug']}/index.html", doc)
         print(f"{p['slug']+'/index.html':34} {len(doc)//1024:>3} KB")
+    # ── topic (pillar) pages ──
+    for p in PILLARS:
+        body, jsonld, url = pillar_page(p)
+        doc = head(p["slug"], p["title"] + " | VAVEhub", p["desc"], url, SITE + "og-image.png", p["title"], p["desc"], jsonld)
+        doc += '<body class="guide pillar">\n\n<!-- ══════════ CHROME ══════════ -->\n' + chrome(p["slug"]) + "\n\n"
+        doc += body + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, p["slug"]) + "\n" + TAIL_GUIDE + "\n\n" + SCRIPTS
+        write(f"{p['slug']}/index.html", doc)
+        print(f"{p['slug']+'/index.html':34} {len(doc)//1024:>3} KB")
     build_academy()
     build_leaders()
     write_sitemap()
@@ -358,7 +427,7 @@ def build():
 
 def write_sitemap():
     """Sitemap is generated too, so it always lists exactly the pages that exist."""
-    rows = [("", "1.0", "weekly")] + [(p["slug"] + "/", "0.8", "monthly") for p in PAGES] + [
+    rows = [("", "1.0", "weekly")] + [(p["slug"] + "/", "0.9", "monthly") for p in PILLARS] + [(p["slug"] + "/", "0.8", "monthly") for p in PAGES] + [
         ("training.html", "0.9", "weekly"), ("leaders.html", "0.9", "monthly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly"), ("capstone.html", "0.7", "monthly")]
     for f in sorted(os.listdir(os.path.join(ROOT, "toolkit"))):
         if f.endswith(".html") and f != "index.html": rows.append((f"toolkit/{f}", "0.6", "monthly"))

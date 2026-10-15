@@ -1256,3 +1256,39 @@ html[data-theme="light"] .hc-lead .hc-go{color:#9a6b12}
 @media (max-width:640px){.hero-courses{grid-template-columns:1fr}}
 .ge-card a.ge-leaders{margin-top:.35rem;padding-top:.7rem;border-top:1px solid var(--line-soft,var(--line));color:var(--acc3);font-size:.9rem}
 html[data-theme="light"] .ge-card a.ge-leaders{color:#8a5a0c}
+
+/* ════════ Topic ("pillar") pages: long-form reading ════════ */
+.pil-wrap{padding-top:48px}
+.pil{max-width:72ch;margin-inline:auto;display:flex;flex-direction:column;gap:3.2rem}
+.pil-sec{scroll-margin-top:96px}
+.pil h2{font-size:clamp(1.45rem,2.6vw,1.85rem);margin-bottom:1rem;text-wrap:balance}
+.pil h3{font-size:1.1rem;margin-bottom:.5rem}
+.pil p,.pil li{font-size:1.04rem;line-height:1.75;color:var(--txt)}
+.pil p{margin-bottom:1rem}
+.pil ul,.pil ol{padding-left:1.3rem;margin-bottom:1rem;display:flex;flex-direction:column;gap:.55rem}
+.pil a{color:var(--acc1);text-decoration:underline;text-underline-offset:3px}
+.pil b{color:var(--txt)}
+.pil-more{font-size:.95rem!important;color:var(--muted)!important;border-left:3px solid var(--acc1);padding-left:.8rem}
+.pil-table{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:.4rem 0 1.2rem}
+.pil-table table{border-collapse:collapse;width:100%;min-width:560px;font-size:.95rem}
+.pil-table th,.pil-table td{text-align:left;vertical-align:top;padding:.75rem .9rem;border-bottom:1px solid var(--line);line-height:1.55}
+.pil-table thead th{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--card)}
+.pil-table tbody th{color:var(--txt);font-weight:600;width:24%}
+.pil-table tr:last-child>*{border-bottom:0}
+.pil-steps{counter-reset:pstep;list-style:none;padding-left:0!important}
+.pil-steps li{counter-increment:pstep;position:relative;padding-left:2.6rem}
+.pil-steps li::before{content:counter(pstep);position:absolute;left:0;top:.15rem;width:1.8rem;height:1.8rem;border-radius:50%;display:grid;place-items:center;font:700 .85rem var(--font-d);background:var(--card);border:1px solid var(--acc1);color:var(--acc1)}
+.pil-cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:1rem}
+.pil-case{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:1.1rem 1.2rem;min-width:0}
+.pil-case p{font-size:.95rem}
+.pil-src{font-size:.82rem!important;color:var(--muted)!important;margin:0!important}
+.pil-tool{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:1.3rem 1.4rem;margin-top:.6rem}
+.pil-tool fieldset{border:0;padding:0;margin:0 0 1rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.pil-tool legend{font-weight:600;margin-bottom:.5rem;color:var(--txt);width:100%}
+.pil-tool label{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:.4rem .9rem;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:.95rem;color:var(--txt)}
+.pil-tool label:has(input:checked){border-color:var(--acc1);background:color-mix(in srgb,var(--acc1) 12%,transparent)}
+.pil-tool input{accent-color:var(--acc1)}
+.pil-tool-lede{color:var(--muted)!important}
+.pil-tool-out{margin:0!important;padding:.9rem 1rem;border-radius:10px;background:color-mix(in srgb,var(--acc1) 8%,transparent);border:1px solid color-mix(in srgb,var(--acc1) 35%,transparent)}
+.pil .faq-list{display:flex;flex-direction:column;gap:.6rem}
+html[data-theme="light"] .pil-table thead th{background:#f2f5fb}
