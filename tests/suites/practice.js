@@ -110,6 +110,49 @@ module.exports = async function practice({ browser, O, r }) {
     await ctx.close();
   }
 
+  // ── Your week: spaced review and weekly goal (clock fixed to Thursday 15 October 2026)
+  {
+    const ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 }, acceptDownloads: true });
+    const p = await ctx.newPage(); p.on("pageerror", (e) => errs.push(e.message));
+    await p.clock.install({ time: new Date("2026-10-15T09:00:00") });
+    await p.goto(U); await p.waitForTimeout(600);
+    r.ok(/Finish a module and its questions come back/.test(await p.textContent("#vhWeek")), "review: explained before any module is finished");
+    const at = (s) => new Date(s).toISOString();
+    await p.evaluate((x) => localStorage.setItem("vf-academy", JSON.stringify({ done: ["m1", "m2", "m4"], doneAt: { m1: x[0], m2: x[1], m4: x[2] } })),
+      [at("2026-10-08T10:00"), at("2026-10-12T10:00"), at("2026-10-14T10:00")]);
+    await p.reload(); await p.waitForTimeout(900);
+    r.ok(/3 questions due today/.test(await p.textContent("#vhWeek")), "review: three questions due from modules finished 1+ days ago (a set started earlier today is topped up)");
+    await p.selectOption("#vwGoal", "3"); await p.waitForTimeout(200);
+    r.ok(/2 of 3/.test(await p.textContent("#vhWeek")) && /This week: 2 of 3 modules/.test(await p.textContent("#myLearn")), "weekly goal: counts this week's modules and shows in the welcome banner instead of a streak");
+    r.ok(!/streak/i.test(await p.textContent("#myLearn")), "welcome banner no longer shows a daily streak");
+    await p.click("#rvStart");
+    for (let i = 0; i < 3; i++) {
+      // pick a wrong option for the first question, the right one for the others
+      await p.evaluate((wrong) => {
+        const rv = JSON.parse(localStorage.getItem("vh-review")), k = rv.day.keys[rv.day.done.length];
+        const q = window.VH_PRACTICE.find((x) => { let h = 5381; for (let j = 0; j < x.q.length; j++) h = ((h << 5) + h + x.q.charCodeAt(j)) | 0; return "q" + (h >>> 0).toString(36) === k; });
+        const btn = [...document.querySelectorAll("#rvMount .fnc-opt")].find((b) => (+b.dataset.i === q.c) !== wrong);
+        btn.click();
+      }, i === 0);
+      await p.waitForTimeout(100);
+      await p.click("#rvMount .rv-next button"); await p.waitForTimeout(100);
+    }
+    const rv = await p.evaluate(() => JSON.parse(localStorage.getItem("vh-review")));
+    r.ok(rv.day.right === 2 && Object.values(rv.miss).every((d) => d === "2026-10-16") && Object.keys(rv.miss).length === 1, "review: a missed question is due again tomorrow");
+    r.ok(rv.mods.m1.stage === 1 && rv.mods.m1.next === "2026-10-17", "review: each reviewed module moves on to its next review");
+    r.ok(/Today's review is done: 2 of 3/.test(await p.textContent("#vhWeek")), "review: today's result is shown");
+    await p.clock.setSystemTime(new Date("2026-10-16T09:00:00")); await p.reload(); await p.waitForTimeout(800);
+    r.ok(/1 question due today, from questions you missed/.test(await p.textContent("#vhWeek")), "review: the next day brings back the missed question");
+    await p.click("#vhWeek .vw-cal summary");
+    const [dl] = await Promise.all([p.waitForEvent("download"), p.click("#vwIcs")]);
+    const ics = fs.readFileSync(await dl.path(), "utf8");
+    r.ok(/RRULE:FREQ=WEEKLY/.test(ics) && /DTSTART:20261019T083000/.test(ics) && /review=1/.test(ics), "calendar reminder: weekly, next Monday 08:30, links to the review");
+    await p.goto(`${U}?review=1`); await p.waitForTimeout(1000);
+    r.ok(!!(await p.$("#rvMount .rv-q")), "review link from the calendar opens straight into the questions");
+    const v = await axe(p, "#vhWeek"); r.ok(!v.length, `Your week: accessibility${v.length ? ": " + v.join(", ") : ""}`);
+    await ctx.close();
+  }
+
   // ── phone: the FAST board scrolls inside its box, the page doesn't
   const ctx = await demoContext(browser, { viewport: { width: 375, height: 800 }, isMobile: true, hasTouch: true });
   const p = await ctx.newPage(); p.on("pageerror", (e) => errs.push(e.message));

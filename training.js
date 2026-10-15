@@ -29,8 +29,11 @@
     // the quick-check block below writes state.qc separately; keep its passes
     try { const cur = JSON.parse(localStorage.getItem(KEY)) || {}; if (cur.qc) state.qc = Object.assign({}, cur.qc, state.qc); } catch {}
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    // the review queue and weekly goal (academy-review.js) keep their own key; they travel with the progress
+    try { const rv = JSON.parse(localStorage.getItem("vh-review")); if (rv) state.review = rv; } catch {}
     if (window.VHCloud) VHCloud.saveProgress(state);
   };
+  window.VHAcademySync = save;
   // Pull cloud progress on load (cross-device); merge completed modules & keep best exam.
   if (window.VHCloud && VHCloud.live) VHCloud.touchProfile(); // last seen, country estimate (once a day)
     if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
@@ -43,6 +46,13 @@
     if (cloud.exam && (!state.exam || (cloud.exam.score || 0) > (state.exam.score || 0))) { state.exam = cloud.exam; changed = true; }
     if (cloud.role && !state.role) state.role = cloud.role;
     if (cloud.doneAt) state.doneAt = Object.assign({}, cloud.doneAt, state.doneAt);
+    if (cloud.review) {
+      let local = null; try { local = JSON.parse(localStorage.getItem("vh-review")); } catch {}
+      if (!local || (cloud.review.t || 0) > (local.t || 0)) {
+        try { localStorage.setItem("vh-review", JSON.stringify(cloud.review)); } catch {}
+        state.review = cloud.review; document.dispatchEvent(new Event("vh-review-sync")); renderMyLearn();
+      }
+    }
     if (cloud.attempts) {
       const seen = new Set((state.attempts || []).map((a) => a.t));
       state.attempts = (state.attempts || []).concat(cloud.attempts.filter((a) => !seen.has(a.t)))
@@ -99,7 +109,7 @@
         <ul class="gate-list">
           <li>All 13 modules &amp; the final exam (132-question bank)</li>
           <li>Your Certificate of Completion, shareable on LinkedIn</li>
-          <li>Progress, points, streak &amp; badges saved to your account</li>
+          <li>Progress, points, badges and your review schedule saved to your account</li>
         </ul>
         <div class="gate-actions">
           <a class="btn btn-primary btn-lg" href="auth.html?view=signup&amp;next=${next}">Create a free account →</a>
@@ -283,14 +293,14 @@
     const total = courseMods.length, done = state.done.length;
     const pct = Math.round((done / total) * 100);
     const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
-    const streak = (state.visits && state.visits.streak) || 1;
+    const goal = window.VHWeek ? VHWeek.summary() : "";
     const certified = state.exam && state.exam.passed;
     const first = acctName.trim().split(/\s+/)[0].replace(/[<>&"]/g, "");
     box.innerHTML = `
       <div class="ml-ring"><svg viewBox="0 0 60 60"><circle class="mlr-bg" cx="30" cy="30" r="26"/><circle class="mlr-fg" cx="30" cy="30" r="26" style="stroke-dashoffset:${Math.round(163.4 * (1 - pct / 100))}"/></svg><b>${pct}%</b></div>
       <div class="ml-txt">
         <b>Welcome back, ${first} 👋</b>
-        <span>${done} of ${total} modules · ${points()} pts · ${rank(points())}${streak > 1 ? " · 🔥 " + streak + "-day streak" : ""}${certified ? " · 🎓 Certified" : ""}</span>
+        <span>${done} of ${total} modules · ${points()} pts · ${rank(points())}${goal ? " · " + goal : ""}${certified ? " · 🎓 Certified" : ""}</span>
       </div>
       <button class="btn btn-primary ml-btn" id="mlGo">${certified ? "View your certificate →" : next ? (done ? "Continue: " + next.dataset.title + " →" : "Start learning →") : "Take the exam →"}</button>`;
     $("#mlGo").addEventListener("click", () => show(certified || !next ? "exam" : next.dataset.mod));
@@ -323,6 +333,7 @@
     const target = state.exam && state.exam.passed ? "exam" : (next ? next.dataset.mod : "exam");
     if (target !== currentId) { show(target, false); initialId = target; }
   }
+  window.VHAcademyRefresh = renderMyLearn;
   document.addEventListener("vh-account", (e) => onAccount(e.detail));
   if (window.VHAccount && VHAccount.user) onAccount(VHAccount.user);
 

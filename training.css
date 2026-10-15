@@ -988,3 +988,26 @@ html[data-theme="light"] .wf-table td.is-over{color:#b91c1c}
 .tmod .ve-lab .fn-item p.fn-fb{color:var(--muted)}
 .fx-board{grid-template-columns:100px 16px repeat(4,100px) 16px 100px;gap:.5rem .4rem}
 .fx-card{font-size:.64rem;padding:.45rem .5rem}
+
+/* ═════ Your week: spaced review and weekly goal (academy-review.js) ═════ */
+.vh-week{margin:1.2rem auto 0;max-width:760px;padding:1rem 1.2rem 1.1rem;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:left}
+.vh-week-h{font:700 .7rem var(--font-m);letter-spacing:.16em;text-transform:uppercase;color:var(--acc1);margin:0 0 .7rem}
+.vh-week-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:1rem 1.6rem}
+.vw-col h3{font:700 .95rem var(--font-d);margin:0 0 .35rem;color:var(--txt)}
+.vh-week p{font-size:.84rem;line-height:1.6;color:var(--muted);margin:0 0 .6rem}
+.vh-week p b{color:var(--txt)}
+.vw-bar{height:8px;border-radius:99px;background:var(--track);overflow:hidden;margin:0 0 .7rem}
+.vw-bar i{display:block;height:100%;background:var(--acc1);border-radius:99px;transition:width .5s ease}
+.vw-goal,.vw-cal-row label{display:inline-flex;align-items:center;gap:.45rem;font-size:.8rem;color:var(--muted)}
+.vh-week select,.vh-week input[type=time]{min-height:36px;padding:.3rem .5rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--txt);font:inherit}
+.vw-cal{margin-top:.7rem;font-size:.8rem}
+.vw-cal summary{cursor:pointer;color:var(--acc1);text-decoration:underline;text-underline-offset:2px;min-height:32px;display:flex;align-items:center}
+.vw-cal-row{display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;margin:.5rem 0}
+.vh-week p.vw-small{font-size:.74rem;margin:0}
+.rv-q{margin-top:.6rem;padding:.8rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+.vh-week p.rv-meta{font:600 .66rem var(--font-m);letter-spacing:.08em;text-transform:uppercase;margin:0 0 .35rem}
+.vh-week p.rv-text{font-size:.9rem;color:var(--txt);font-weight:600;margin:0 0 .6rem}
+.vh-week p.rv-fb{font-size:.8rem;color:var(--txt);margin:.6rem 0 0}
+.vh-week p.rv-fb:empty{display:none}
+.vh-week .fd-actions{margin-top:.7rem}
+@media (max-width:720px){.vh-week-grid{grid-template-columns:1fr}}
