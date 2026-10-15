@@ -88,7 +88,10 @@ window.VHCloud = (function () {
       let picked = [].concat(...Object.values(byMod).map((l) => l.slice(0, per)));
       const rest = mix(bank.map((q, i) => i).filter((i) => !picked.includes(i) &&
         (course === "leaders" || bank[i].kind === "apply" || bank[i].kind === "calc" || bank[i].pool === "case")));
-      picked = mix(picked.concat(rest.slice(0, extras)));
+      // the small demo bank can run out of scenario questions; top up from the rest so the paper is always full
+      const extra = rest.slice(0, extras);
+      if (extra.length < extras) extra.push(...mix(bank.map((q, i) => i).filter((i) => !picked.includes(i) && !extra.includes(i))).slice(0, extras - extra.length));
+      picked = mix(picked.concat(extra));
       const perms = picked.map((i) => mix(bank[i].options.map((o, k) => k)));
       const id = "demo-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
       st.attempts[id] = { course, qids: picked, perms, at: null, passed: null };
