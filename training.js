@@ -364,7 +364,8 @@
         ? `<p class="ex-warn">The exam opens once you've finished all ${courseMods.length} modules, so your certificate shows you completed the whole course. You have ${remaining} module${remaining > 1 ? "s" : ""} to go.</p>
       <button class="btn btn-primary btn-lg" id="examNextMod">Continue: ${nextMod.dataset.title} →</button>`
         : `<div class="ex-actions"><button class="btn btn-primary btn-lg" id="examStart">Begin the exam →</button>
-           <button class="btn btn-ghost" id="examPractice">Try a practice exam first</button></div>`}
+           <button class="btn btn-ghost" id="examPractice">Try a practice exam first</button></div>
+           <p class="ex-note">Want to practise the whole job plan first? Try the <a href="capstone.html">capstone kettle study</a> (about 90 minutes, not marked).</p>`}
     </div>`;
     if (remaining > 0) $("#examNextMod").addEventListener("click", () => show(nextMod.dataset.mod));
     else {

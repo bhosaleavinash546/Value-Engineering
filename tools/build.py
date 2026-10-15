@@ -359,7 +359,7 @@ def build():
 def write_sitemap():
     """Sitemap is generated too, so it always lists exactly the pages that exist."""
     rows = [("", "1.0", "weekly")] + [(p["slug"] + "/", "0.8", "monthly") for p in PAGES] + [
-        ("training.html", "0.9", "weekly"), ("leaders.html", "0.9", "monthly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly")]
+        ("training.html", "0.9", "weekly"), ("leaders.html", "0.9", "monthly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly"), ("capstone.html", "0.7", "monthly")]
     for f in sorted(os.listdir(os.path.join(ROOT, "toolkit"))):
         if f.endswith(".html") and f != "index.html": rows.append((f"toolkit/{f}", "0.6", "monthly"))
     rows += [("privacy.html", "0.3", "yearly"), ("terms.html", "0.3", "yearly"), ("credits.html", "0.3", "yearly")]

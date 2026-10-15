@@ -85,6 +85,10 @@
         cc, country: countryName(cc),
         done, doneAt: p.doneAt || {}, role: p.role || null, streak: (p.visits && p.visits.streak) || 0,
         goal: (p.review && p.review.goal) || 0,
+        capstone: (() => { // phase gates passed in the kettle study (5 checks in phase 1, 4 in the others)
+          const c = u.courses && u.courses.capstone; if (!c || !c.gates) return null;
+          return ["p1", "p2", "p3", "p4", "p5", "p6"].filter((id, i) => { const g = c.gates[id] || []; return g.length >= (i ? 4 : 5) && g.every(Boolean); }).length;
+        })(),
         reviews: Object.values((p.review && p.review.hist) || {}).reduce((s, x) => [s[0] + x[0], s[1] + x[1]], [0, 0]),
         quick: Object.keys(p.qc || {}).length,
         attempts, best, passed: !!(p.exam && p.exam.passed) || attempts.some((a) => a.p),
@@ -528,6 +532,7 @@
           fact("Signed up", fmtDateTime(u.created)), fact("Email verified", u.confirmed ? "✓ Yes" : "✗ Not yet"),
           fact("Last signed in", fmtDateTime(u.lastSignIn)), fact("Last active", ago(u.lastActive)),
           fact("Role", u.role ? ROLE[u.role] || u.role : "Didn't choose"), fact("Visit streak", u.streak ? u.streak + (u.streak === 1 ? " day" : " days") : null),
+          fact("Capstone", u.capstone == null ? "Not started" : `${u.capstone} of 6 phase gates passed`),
           fact("Weekly goal", u.goal ? u.goal + (u.goal === 1 ? " module" : " modules") + " a week" : "None set"),
           fact("Review questions", u.reviews && u.reviews[1] ? `${u.reviews[1]} answered, ${Math.round((100 * u.reviews[0]) / u.reviews[1])}% right` : null),
           fact("Quick checks passed", u.quick + " of 13")),
