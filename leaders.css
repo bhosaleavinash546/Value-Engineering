@@ -35,6 +35,13 @@
 .rd-opts input:checked + span{border-color:var(--acc1);background:color-mix(in srgb,var(--acc1) 16%,transparent);color:var(--txt);font-weight:600}
 .rd-opts input:focus-visible + span{outline:2px solid var(--acc1);outline-offset:2px}
 .rd-next{display:block;margin-top:.4rem}
+.rd-hist{margin-top:.8rem}
+.rd-hist p{font-size:.84rem;color:var(--muted);line-height:1.6;margin:0 0 .5rem}
+.rd-hist p b{color:var(--txt)}
+.rd-hist-list{list-style:none;margin:0 0 .6rem;padding:0;display:grid;gap:.3rem;max-width:520px}
+.rd-hist-list li{display:grid;grid-template-columns:110px 1fr 60px;gap:.6rem;align-items:center;font-size:.78rem;color:var(--muted)}
+.rd-hist-list i{display:block;height:10px;border-radius:5px;background:var(--acc1);min-width:4px}
+.rd-hist-list b{font-family:var(--font-m);color:var(--txt);text-align:right}
 .bc-verdict ol{margin:.4rem 0 0;padding-left:1.3rem}
 
 /* pilot picker (Module 6) */

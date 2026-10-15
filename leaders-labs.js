@@ -142,6 +142,17 @@
     calc();
   })();
 
+  /* saved lab answers: this browser, plus the learner's account through course.js (VHCourseSync) */
+  const LK = "vh-leaders-labs";
+  const labs = () => { try { return JSON.parse(localStorage.getItem(LK)) || {}; } catch { return {}; } };
+  function keep(part, data) {
+    const all = labs(); all[part] = data; all.t = Date.now();
+    try { localStorage.setItem(LK, JSON.stringify(all)); } catch {}
+    clearTimeout(keep.t); keep.t = setTimeout(() => { if (window.VHCourseSync) window.VHCourseSync(); }, 800);
+  }
+  const fmtDay = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+
   /* ── Module 5 · leadership readiness check ── */
   (function () {
     const mount = $("#rdMount");
@@ -156,14 +167,18 @@
       ["Are savings only counted once they're in production and checked by finance?", "Count savings only at L4, checked by finance against a fixed starting cost."],
       ["Are people outside engineering trained to think in functions?", "Train design, purchasing, manufacturing, quality and finance together."],
     ];
-    const ans = new Array(QS.length).fill(null);
+    const saved = labs().rd || {};
+    const ans = (saved.ans && saved.ans.length === QS.length) ? saved.ans.slice() : new Array(QS.length).fill(null);
     mount.innerHTML = `<div class="rd-list">${QS.map(([q], i) => `
       <fieldset class="rd-q"><legend>${i + 1}. ${q}</legend>
         <div class="rd-opts">${[["2", "Yes"], ["1", "Partly"], ["0", "No"]].map(([v, t]) =>
           `<label><input type="radio" name="rd${i}" value="${v}" /><span>${t}</span></label>`).join("")}</div>
       </fieldset>`).join("")}</div>
-      <div class="bc-verdict" id="rdOut" role="status" aria-live="polite"></div>`;
+      <div class="bc-verdict" id="rdOut" role="status" aria-live="polite"></div>
+      <div class="rd-hist" id="rdHist"></div>`;
     const out = $("#rdOut");
+    const tick = () => ans.forEach((a, i) => { const r = a === null ? null : $(`input[name="rd${i}"][value="${a}"]`, mount); $$(`input[name="rd${i}"]`, mount).forEach((x) => { x.checked = x === r; }); });
+    tick();
     function update() {
       const n = ans.filter((a) => a !== null).length;
       if (n < QS.length) { out.className = "bc-verdict"; out.textContent = `Answer all eight to see your score (${n} of 8 answered).`; return; }
@@ -174,9 +189,25 @@
       out.innerHTML = `<b>${score} / 16 · ${band}</b>` + (todo.length
         ? `<span class="rd-next">Your three most important next steps:</span><ol>${todo.map((t) => `<li>${t}</li>`).join("")}</ol>`
         : `<span class="rd-next">Everything's in place. Your next step is to widen the programme to more products.</span>`);
+      // one entry per day; the history shows whether things are moving
+      const rd = labs().rd || {}, hist = (rd.hist || []).filter((h) => h.d !== todayIso()).concat([{ d: todayIso(), s: score }]).slice(-8);
+      const next = { ans: ans.slice(), hist };
+      if (JSON.stringify(next) !== JSON.stringify(rd)) keep("rd", next); // only save (and sync) when something changed
+      history(hist);
     }
+    function history(hist) {
+      const el = $("#rdHist");
+      if (!hist || !hist.length) { el.innerHTML = ""; return; }
+      const prev = hist.length > 1 ? hist[hist.length - 2] : null, last = hist[hist.length - 1];
+      el.innerHTML = `<p><b>Saved.</b> Come back after your next quarterly review and answer again to see what's changed.${prev ? ` Last time (${fmtDay(prev.d)}) you scored ${prev.s}; now ${last.s}${last.s > prev.s ? ", up " + (last.s - prev.s) : last.s < prev.s ? ", down " + (prev.s - last.s) : ", the same"}.` : ""}</p>
+        ${hist.length > 1 ? `<ol class="rd-hist-list" aria-label="Your earlier scores">${hist.map((h) => `<li><span>${fmtDay(h.d)}</span><i style="width:${(h.s / 16) * 100}%"></i><b>${h.s} / 16</b></li>`).join("")}</ol>` : ""}
+        <button type="button" class="btn btn-ghost rd-reset">Clear my answers</button>`;
+      $(".rd-reset", el).addEventListener("click", () => { ans.fill(null); tick(); keep("rd", { ans: ans.slice(), hist: (labs().rd || {}).hist || [] }); update(); el.innerHTML = ""; });
+    }
+    document.addEventListener("vh-leaders-labs-sync", () => { const s = labs().rd || {}; if (s.ans && s.ans.length === QS.length) { s.ans.forEach((a, i) => { ans[i] = a; }); tick(); update(); } });
     mount.addEventListener("change", (e) => { const m = /^rd(\d+)$/.exec(e.target.name || ""); if (m) { ans[+m[1]] = +e.target.value; update(); } });
     update();
+    if (ans.some((a) => a === null)) history((labs().rd || {}).hist);
   })();
 
   /* ── Module 6 · pilot picker ── */
@@ -191,6 +222,8 @@
       ["data", "Data", "A costed parts list exists, or can be built in two weeks"],
     ];
     const P = [["Product A", [4, 4, 4, 3, 4]], ["Product B", [5, 1, 3, 5, 3]], ["Product C", [3, 5, 2, 2, 2]]];
+    const pp = labs().pp; // your own candidates, if you've changed them before
+    if (pp && pp.names && pp.vals) P.forEach((row, p) => { if (pp.names[p]) row[0] = pp.names[p]; if (pp.vals[p] && pp.vals[p].length === 5) row[1] = pp.vals[p]; });
     mount.innerHTML = `<div class="pp-grid">${P.map(([name, vals], p) => `
       <fieldset class="pp-col"><legend class="sr-only">Candidate ${p + 1}</legend>
         <label class="pp-name">Candidate ${p + 1}<input type="text" maxlength="40" value="${name}" data-p="${p}" /></label>
@@ -224,7 +257,10 @@
       });
       out.append(head, ol);
     }
-    mount.addEventListener("input", update);
+    mount.addEventListener("input", () => {
+      update();
+      keep("pp", { names: P.map((_, p) => $(`.pp-name input[data-p="${p}"]`, mount).value), vals: P.map((_, p) => CRIT.map((_, c) => +$(`input[data-p="${p}"][data-c="${c}"]`, mount).value)) });
+    });
     update();
   })();
 })();

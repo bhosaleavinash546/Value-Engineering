@@ -110,6 +110,10 @@
   <aside class="tr-sidebar" id="trSidebar">
     <button type="button" class="tr-side-head" id="sideToggle" aria-expanded="true" aria-controls="sideBody"><span>Course content</span><span class="tr-side-cur" id="sideCur"></span></button>
     <div class="tr-side-body" id="sideBody">
+    <div class="course-search-wrap">
+      <input type="search" id="courseSearch" class="course-search" placeholder="🔍 Search the course…" aria-label="Search course content" autocomplete="off" />
+      <div id="searchResults" class="search-results" hidden></div>
+    </div>
     <nav id="modNav" aria-label="Modules"></nav>
     <div class="tr-side-foot">
       <div class="tr-side-prog"><div class="tr-side-bar"><i id="sideProgFill"></i></div><span id="sideProgText">0 / 7 modules</span></div>
@@ -593,6 +597,10 @@
         <li>Ask the five questions of every proposal, and remember that delay has a price.</li>
         <li>AI makes VAVE faster, not automatic: people still decide, check and test.</li>
       </ul></div>
+      <div class="tmpl-box"><h4>Template for this module</h4><ul>
+        <li><b>VAVE Programme Business Case</b><span><a href="toolkit/programme-business-case.html" target="_blank" rel="noopener">Print or save as PDF ↗</a><a class="tmpl-xls" href="toolkit/programme-business-case.xlsx" download>⤓ Excel (.xlsx)</a></span></li>
+      </ul></div>
+
       <div class="qcheck" data-qc="l4"></div>
       <button class="btn btn-primary tmod-done" data-done="l4">Mark complete &amp; continue →</button>
     </section>
@@ -758,6 +766,13 @@
         <li>Aim to have checked savings in production within 90 days, then choose the next products.</li>
         <li>Measure results, not activity: checked savings, how many ideas are implemented, and how fast.</li>
       </ul></div>
+      <div class="tmpl-box exec-pack"><h4>Your executive pack</h4><ul>
+        <li><b>VAVE Programme Business Case</b><span><a href="toolkit/programme-business-case.html" target="_blank" rel="noopener">Print or save as PDF ↗</a><a class="tmpl-xls" href="toolkit/programme-business-case.xlsx" download>⤓ Excel (.xlsx)</a></span></li>
+        <li><b>Study Sponsor Charter</b><span><a href="toolkit/study-sponsor-charter.html" target="_blank" rel="noopener">Print or save as PDF ↗</a><a class="tmpl-xls" href="toolkit/study-sponsor-charter.xlsx" download>⤓ Excel (.xlsx)</a></span></li>
+        <li><b>Five-slide board pack</b><span><a class="tmpl-xls" href="toolkit/vave-board-pack.pptx" download>⤓ PowerPoint (.pptx)</a></span></li>
+        <li><b>The one-page playbook</b><span><a href="leaders-playbook.html" target="_blank" rel="noopener">Print or save as PDF ↗</a></span></li>
+      </ul><p class="exec-note">Fill in the business case first; its figures go on slide 4 of the board pack. Use the pilot picker above for slide 3.</p></div>
+
       <div class="qcheck" data-qc="l6"></div>
       <button class="btn btn-primary tmod-done" data-done="l6">Mark complete &amp; go to the quiz →</button>
     </section>
@@ -809,6 +824,7 @@
 <script src="leaders-data.js"></script>
 <script src="course.js"></script>
 <script src="leaders-labs.js"></script>
+<script src="course-tools.js"></script>
 <script src="vh-diagrams.js"></script>
 <script src="vh-video.js"></script>
 <script src="vh-voice.js"></script>

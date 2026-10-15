@@ -194,5 +194,36 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
     await ctx.close();
   }
 
+  // ── search, glossary, saved readiness check and pilot picker, executive pack
+  {
+    const ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } }, null);
+    const p = track(await ctx.newPage());
+    await p.clock.install({ time: new Date("2026-07-10T09:00:00") });
+    await p.goto(`${U}?open=l5`); await p.waitForTimeout(900);
+    r.ok((await p.$$eval(".tmod .gloss", (e) => e.length)) >= 10 && !!(await p.$('.tmod .gloss[data-def*="Value analysis and value engineering"]')), "glossary: key terms get a definition on first mention");
+    r.ok(await p.evaluate(() => !window.VHVoice.extractAll().some((m) => m.blocks.some((b) => /structured way to cut a product's cost/.test(b)))), "glossary definitions aren't read out by the narration");
+    await p.fill("#courseSearch", "sponsor"); await p.waitForTimeout(200);
+    const hits = await p.$$("#searchResults .sr-hit");
+    r.ok(hits.length > 0, "search: finds course text");
+    await hits[0].click(); await p.waitForTimeout(600);
+    r.ok(await p.evaluate(() => !!document.querySelector(".tmod.is-visible .search-hit")), "search: opens the module and highlights the paragraph");
+    await p.goto(`${U}?open=l5`); await p.waitForTimeout(700);
+    for (let i = 0; i < 8; i++) await p.check(`input[name="rd${i}"][value="${i < 3 ? 2 : i < 5 ? 1 : 0}"]`, { force: true });
+    r.ok(/Saved/.test(await p.textContent("#rdHist")), "readiness check: answers are saved");
+    await p.clock.setSystemTime(new Date("2026-10-15T09:00:00")); await p.reload(); await p.waitForTimeout(700);
+    r.ok((await p.$$("#rdMount input:checked")).length === 8 && /8 \/ 16/.test(await p.textContent("#rdOut")), "readiness check: reopens with the earlier answers");
+    for (let i = 0; i < 8; i++) await p.check(`input[name="rd${i}"][value="${i < 6 ? 2 : 1}"]`, { force: true });
+    r.ok(/Last time \(10 Jul 2026\) you scored 8; now 14, up 6/.test(await p.textContent("#rdHist")) && (await p.$$("#rdHist .rd-hist-list li")).length === 2, "readiness check: a later check shows the change since last time");
+    await p.goto(`${U}?open=l6`); await p.waitForTimeout(700);
+    await p.fill('.pp-name input[data-p="0"]', "Cordless kettle"); await p.reload(); await p.waitForTimeout(700);
+    r.ok((await p.inputValue('.pp-name input[data-p="0"]')) === "Cordless kettle", "pilot picker: your candidates are saved");
+    r.ok(await p.evaluate(() => { window.VHCourseSync(); const s = JSON.parse(localStorage.getItem("vh-leaders")); return !!(s.labs && s.labs.rd && s.labs.pp); }), "saved answers travel with the course progress (and so to the account)");
+    const links = await p.$$eval(".exec-pack a", (a) => a.map((x) => x.getAttribute("href")));
+    const bad = [];
+    for (const l of links) { const res = await p.request.get(`${O}/${l}`); if (!res.ok()) bad.push(l); }
+    r.ok(links.length === 6 && !bad.length && links.some((l) => /\.pptx$/.test(l)), `executive pack: business case, charter, board pack and playbook all download${bad.length ? ": " + bad.join(", ") : ""}`);
+    await ctx.close();
+  }
+
   r.ok(!errs.length, `no script errors${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 };

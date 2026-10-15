@@ -5,6 +5,7 @@ window.VH_COURSE = {
   id: "leaders",
   name: "VAVE for Leaders",
   storageKey: "vh-leaders",
+  labsKey: "vh-leaders-labs", // readiness check and pilot picker answers (leaders-labs.js)
   certPrefix: "VL-",
   passMark: 0.7,
   signInNext: "leaders.html?open=quiz",

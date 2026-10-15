@@ -110,6 +110,10 @@
   <aside class="tr-sidebar" id="trSidebar">
     <button type="button" class="tr-side-head" id="sideToggle" aria-expanded="true" aria-controls="sideBody"><span>Course content</span><span class="tr-side-cur" id="sideCur"></span></button>
     <div class="tr-side-body" id="sideBody">
+    <div class="course-search-wrap">
+      <input type="search" id="courseSearch" class="course-search" placeholder="🔍 Search the course…" aria-label="Search course content" autocomplete="off" />
+      <div id="searchResults" class="search-results" hidden></div>
+    </div>
     <nav id="modNav" aria-label="Modules"></nav>
     <div class="tr-side-foot">
       <div class="tr-side-prog"><div class="tr-side-bar"><i id="sideProgFill"></i></div><span id="sideProgText">0 / 7 modules</span></div>

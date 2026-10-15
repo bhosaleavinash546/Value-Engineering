@@ -20,9 +20,12 @@
   state.quiz = state.quiz || { attempts: [], best: 0, passed: false };
   let acctName = "";
   const save = () => {
+    // answers saved by the course's labs (readiness check, pilot picker) travel with the progress
+    if (C.labsKey) { try { const l = JSON.parse(localStorage.getItem(C.labsKey)); if (l) state.labs = l; } catch {} }
     try { localStorage.setItem(C.storageKey, JSON.stringify(state)); } catch {}
     if (LIVE && acctName) VHCloud.saveCourse(C.id, state);
   };
+  window.VHCourseSync = save;
   function mergeCloud(cloud) {
     if (!cloud) return false;
     let changed = false;
@@ -35,6 +38,13 @@
     state.quiz.best = Math.max(state.quiz.best || 0, q.best || 0);
     if (q.passed && !state.quiz.passed) { state.quiz.passed = true; changed = true; }
     if (cloud.cert && !state.cert) { state.cert = cloud.cert; changed = true; }
+    if (C.labsKey && cloud.labs) {
+      let local = null; try { local = JSON.parse(localStorage.getItem(C.labsKey)); } catch {}
+      if (!local || (cloud.labs.t || 0) > (local.t || 0)) {
+        try { localStorage.setItem(C.labsKey, JSON.stringify(cloud.labs)); } catch {}
+        state.labs = cloud.labs; document.dispatchEvent(new Event("vh-leaders-labs-sync"));
+      }
+    }
     return changed;
   }
 

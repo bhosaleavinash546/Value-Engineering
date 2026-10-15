@@ -245,6 +245,7 @@
 .tmpl-box a:hover{border-color:var(--acc1)}
 .tmpl-box a.tmpl-xls{color:#4ade80;border-color:rgba(74,222,128,.4)}
 html[data-theme="light"] .tmpl-box a.tmpl-xls{color:#047857;border-color:rgba(4,120,87,.4)}
+.tmpl-box p.exec-note{font-size:.8rem;color:var(--muted);margin:.7rem 0 0;line-height:1.55}
 
 /* ── Exam: what the certificate is, and isn't ── */
 .ex-what{max-width:600px;margin:0 auto 1.4rem;text-align:left;border:1px solid var(--line);border-radius:12px;padding:.8rem 1.1rem;font-size:.85rem;color:var(--muted)}

@@ -75,7 +75,7 @@ module.exports = async function guides({ browser, O, r }) {
   p = await mk(); await p.goto(`${O}/toolkit/teardown-bom.html`);
   r.ok((await p.getAttribute(".ver a", "href")) === "../training.html?open=m10", "Toolkit: template links to its Academy module");
   await done(p);
-  for (const s of ["business-case", "should-cost-buildup", "programme-charter", "target-cost-cascade", "value-study-logbook"]) {
+  for (const s of ["business-case", "should-cost-buildup", "programme-charter", "target-cost-cascade", "value-study-logbook", "programme-business-case", "study-sponsor-charter"]) {
     p = await mk(375, true); await p.goto(`${O}/toolkit/${s}.html`); await p.waitForTimeout(200);
     const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     r.ok(ov <= 0 && (await p.getAttribute(".btnbar a[download]", "href")) === `${s}.xlsx`, `Toolkit: ${s} fits a phone and offers its Excel file`);
