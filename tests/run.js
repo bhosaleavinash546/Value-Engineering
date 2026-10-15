@@ -4,7 +4,7 @@
    Set CHROMIUM_PATH to use an existing Chromium instead of Playwright's own. */
 const { ROOT, startServer, launch, recorder } = require("./lib");
 
-const SUITES = ["pages", "modules", "links", "narration", "guides", "academy", "practice", "capstone", "leaders", "admin", "sync", "robust"];
+const SUITES = ["pages", "modules", "links", "narration", "guides", "academy", "practice", "capstone", "leaders", "focus", "admin", "sync", "robust"];
 const PORT = +process.env.PORT || 8490;
 
 (async () => {
