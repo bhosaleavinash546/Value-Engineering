@@ -54,6 +54,9 @@
         after.data = after.data.slice(word.length);
         const span = document.createElement("span");
         span.className = "gloss"; span.tabIndex = 0; span.setAttribute("data-def", def); span.textContent = word;
+        // the tooltip is drawn by CSS, so screen readers get the definition from a hidden element
+        const d = document.createElement("span"); d.hidden = true; d.id = "gdef-" + used.size; d.textContent = def;
+        document.body.appendChild(d); span.setAttribute("aria-describedby", d.id);
         node.parentNode.insertBefore(span, after);
         used.add(term);
         break; // one per text node; later nodes pick up the other terms

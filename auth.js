@@ -28,7 +28,9 @@
   function show(name) {
     views.forEach((v) => v.classList.toggle("is-active", v.id === "view-" + name));
     const first = $(".auth-view.is-active input");
-    if (first) setTimeout(() => first.focus(), 60);
+    const head = $(".auth-view.is-active h1");
+    if (head && !first) head.setAttribute("tabindex", "-1"); // e.g. the success view: screen readers hear the result
+    if (first || head) setTimeout(() => (first || head).focus(), 60);
     banner("signin-banner", ""); banner("signup-banner", ""); banner("forgot-banner", ""); banner("otp-banner", ""); banner("newpass-banner", "");
   }
   $$("[data-goto]").forEach((b) => b.addEventListener("click", () => show(b.dataset.goto)));
@@ -38,6 +40,8 @@
     const inp = document.getElementById(btn.dataset.pwtoggle);
     inp.type = inp.type === "password" ? "text" : "password";
     btn.textContent = inp.type === "password" ? "👁" : "🙈";
+    btn.setAttribute("aria-label", inp.type === "password" ? "Show password" : "Hide password");
+    btn.setAttribute("aria-pressed", String(inp.type !== "password"));
   }));
 
   /* ── banners & field errors ── */
@@ -72,7 +76,21 @@
       return "Your new password must be different from your old one.";
     return fallback || "Something went wrong. Please try again in a minute.";
   }
-  function fieldError(input, on) { input.closest(".field").classList.toggle("is-error", on); }
+  // the error is announced with the field, and the first field to fix gets the focus
+  let focusTimer = null;
+  function fieldError(input, on) {
+    const f = input.closest(".field");
+    f.classList.toggle("is-error", on);
+    input.setAttribute("aria-invalid", String(on));
+    const err = $(".field-err", f);
+    if (err) {
+      if (!err.id) err.id = input.id + "-err";
+      const ids = (input.getAttribute("aria-describedby") || "").split(/\s+/).filter((x) => x && x !== err.id);
+      if (on) ids.unshift(err.id);
+      if (ids.length) input.setAttribute("aria-describedby", ids.join(" ")); else input.removeAttribute("aria-describedby");
+    }
+    if (on && !focusTimer) focusTimer = setTimeout(() => { focusTimer = null; const x = $(".auth-view.is-active .field.is-error input"); if (x) x.focus(); }, 0);
+  }
   function loading(form, on) {
     const btn = $('button[type="submit"]', form);
     if (btn) { btn.classList.toggle("is-loading", on); btn.disabled = on; }
@@ -120,8 +138,11 @@
       // Real path: Supabase sends the email. Surface the ACTUAL error if the
       // send fails (signInWithOtp resolves with {error}, it does not throw).
       try {
-        const { error } = await (await supaReady()).auth.signInWithOtp({ email, options: { shouldCreateUser: mode !== "signin", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
-        if (error) banner("otp-banner", friendly(error, "We couldn't send your code. Please try again in a minute."), "err");
+        // only the sign-up form may create an account; sign-in and reset need one that already exists
+        const { error } = await (await supaReady()).auth.signInWithOtp({ email, options: { shouldCreateUser: mode === "signup", data: (extra && extra.name) ? { full_name: extra.name } : undefined } });
+        if (error && mode !== "signup" && /signups? not allowed/i.test(String(error.message || "")))
+          banner("otp-banner", "We couldn't find an account for this email. Check the spelling, or go back and create a free account.", "err");
+        else if (error) banner("otp-banner", friendly(error, "We couldn't send your code. Please try again in a minute."), "err");
       } catch (e) { banner("otp-banner", friendly(e, "We couldn't send your code. Please try again in a minute."), "err"); }
       $("#demo-otp").className = "demo-otp";
     } else {
@@ -189,7 +210,9 @@
     return _supa;
   }
 
+  let pwFailed = false;
   function succeed(title, msg, name, email) {
+    if (pwFailed) { msg += " Your password couldn't be saved, so sign in with an email code for now, or use \"Forgot password\" to set one."; pwFailed = false; }
     if (LIVE && window.VHCloud) VHCloud.touchProfile(true); // record country estimate + last seen for the owner dashboard
     if (name) store.setSession({ name, email: email || (pending && pending.email) || "", at: Date.now() });
     $("#success-title").textContent = title;
@@ -198,7 +221,7 @@
   }
 
   /* ── SIGN UP ── */
-  $("#form-signup").addEventListener("submit", () => { if (window.vhTrack) vhTrack("signup-started"); });
+  
   $("#form-signup").addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = $("#su-name").value.trim(), email = $("#su-email").value.trim(), pass = $("#su-pass").value;
@@ -206,8 +229,9 @@
     fieldError($("#su-name"), !name); if (!name) bad = true;
     fieldError($("#su-email"), !validEmail(email)); if (!validEmail(email)) bad = true;
     fieldError($("#su-pass"), pass.length < 8); if (pass.length < 8) bad = true;
-    if (!$("#su-terms").checked) { banner("signup-banner", "Please accept to continue.", "err"); bad = true; }
+    if (!$("#su-terms").checked) { banner("signup-banner", "Please accept the Terms of Use to continue.", "err"); bad = true; }
     if (bad) return;
+    if (window.vhTrack) vhTrack("signup-started"); // counted only once the form is filled in properly
     if (store.accounts()[email.toLowerCase()]) { banner("signup-banner", "An account with this email already exists — try signing in.", "err"); return; }
     loading(e.target, true);
     setTimeout(() => { loading(e.target, false); sendCode("signup", email, { name, pass }); }, 500);
@@ -271,7 +295,10 @@
     if (LIVE) {
       try {
         const { error } = await (await supaReady()).auth.verifyOtp({ email: pending.email, token: code, type: "email" });
-        if (!error && pending.pass) { try { await (await supaReady()).auth.updateUser({ password: pending.pass }); } catch (x) {} }
+        if (!error && pending.pass) {
+          // the account works with email codes either way; say so if the password itself didn't save
+          try { const r = await (await supaReady()).auth.updateUser({ password: pending.pass }); pwFailed = !!(r && r.error); } catch (x) { pwFailed = true; }
+        }
         loading(e.target, false);
         if (error) return banner("otp-banner", friendly(error, "That code is wrong or has expired. Check the digits, or request a new code."), "err");
         finishPending();
@@ -388,5 +415,10 @@
     if (goBtn) { goBtn.setAttribute("href", nextRaw); goBtn.querySelector(".btn-label") ? 0 : (goBtn.textContent = "Continue →"); }
     const contBtn = $(".signed-note a.btn-primary");
     if (contBtn) contBtn.setAttribute("href", nextRaw);
+    // learners coming from VAVE for Leaders see their own course named, not the Academy's
+    if (new URL(nextRaw, location.href).pathname.endsWith("/leaders.html")) {
+      const head = $(".ab-head"); if (head) head.innerHTML = "VAVE for Leaders,<br /><b>saved to your account.</b>";
+      ["#view-signin .av-sub", "#view-signup .av-sub"].forEach((s) => { const p = $(s); if (p) p.textContent = "Sign in to save your VAVE for Leaders progress and get your certificate."; });
+    }
   }
 })();

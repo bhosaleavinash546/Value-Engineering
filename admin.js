@@ -62,47 +62,55 @@
     const m = /^[a-z]{2,3}-([A-Z]{2})\b/.exec(lang || "");
     return m ? m[1] : null;
   }
+  // progress blobs are written by learners, so every field is type-checked before use:
+  // one bad row must not blank the dashboard
+  const obj = (x) => (x && typeof x === "object" && !Array.isArray(x) ? x : {});
+  const arr = (x) => (Array.isArray(x) ? x : []);
+  const num = (x) => (typeof x === "number" && isFinite(x) ? x : 0);
   function normalise(raw) {
-    const certs = (raw.certificates || []).map((c) => ({ id: c.id, userId: c.user_id, name: c.full_name, score: c.score, at: c.issued_at }));
+    raw = obj(raw);
+    const certs = arr(raw.certificates).filter((c) => c && typeof c.id === "string").map((c) => ({ id: c.id, userId: c.user_id, name: c.full_name, score: c.score, at: c.issued_at }));
     const certByUser = {};
     const leadCertByUser = {};
     certs.forEach((c) => {
       const map = isLeadersCert(c.id) ? leadCertByUser : certByUser;
       if (c.userId && (!map[c.userId] || c.score > map[c.userId].score)) map[c.userId] = c;
     });
-    const users = (raw.users || []).map((u) => {
-      const p = u.progress || {};
-      const done = MODS.filter((m) => (p.done || []).includes(m));
+    const users = arr(raw.users).filter((u) => u && typeof u === "object").map((u) => {
+      const p = obj(u.progress);
+      const done = MODS.filter((m) => arr(p.done).includes(m));
       const seen = [u.last_seen_at, u.last_sign_in_at, u.progress_at].filter(Boolean).map((d) => +new Date(d));
       const cc = countryOf(u.timezone, u.language);
-      const attempts = (p.attempts || []).filter((a) => a && a.t);
-      const best = attempts.reduce((m, a) => Math.max(m, a.s || 0), p.exam && p.exam.score ? p.exam.score : 0);
+      const attempts = arr(p.attempts).filter((a) => a && typeof a.t === "string").map((a) => ({ t: a.t, s: Math.min(100, Math.max(0, num(a.s))), p: !!a.p }));
+      const exam = obj(p.exam);
+      const best = attempts.reduce((m, a) => Math.max(m, a.s), num(exam.score));
       return {
         id: u.id, email: u.email || "", name: (u.name || "").trim() || (u.email || "").split("@")[0],
         created: u.created_at, lastSignIn: u.last_sign_in_at, lastSeen: u.last_seen_at,
         lastActive: seen.length ? new Date(Math.max(...seen)).toISOString() : null,
         confirmed: !!u.confirmed, tz: u.timezone, lang: u.language, device: u.device, source: u.source,
         cc, country: countryName(cc),
-        done, doneAt: p.doneAt || {}, role: p.role || null, streak: (p.visits && p.visits.streak) || 0,
-        goal: (p.review && p.review.goal) || 0,
+        done, doneAt: obj(p.doneAt), role: typeof p.role === "string" ? p.role : null, streak: num(obj(p.visits).streak),
+        goal: num(obj(p.review).goal),
         capstone: (() => { // phase gates passed in the kettle study (5 checks in phase 1, 4 in the others)
-          const c = u.courses && u.courses.capstone; if (!c || !c.gates) return null;
-          return ["p1", "p2", "p3", "p4", "p5", "p6"].filter((id, i) => { const g = c.gates[id] || []; return g.length >= (i ? 4 : 5) && g.every(Boolean); }).length;
+          const c = obj(obj(u.courses).capstone); if (!c.gates || typeof c.gates !== "object") return null;
+          return ["p1", "p2", "p3", "p4", "p5", "p6"].filter((id, i) => { const g = arr(c.gates[id]); return g.length >= (i ? 4 : 5) && g.every(Boolean); }).length;
         })(),
-        reviews: Object.values((p.review && p.review.hist) || {}).reduce((s, x) => [s[0] + x[0], s[1] + x[1]], [0, 0]),
-        quick: Object.keys(p.qc || {}).length,
-        attempts, best, passed: !!(p.exam && p.exam.passed) || attempts.some((a) => a.p),
+        reviews: Object.values(obj(obj(p.review).hist)).filter(Array.isArray).reduce((s, x) => [s[0] + num(x[0]), s[1] + num(x[1])], [0, 0]),
+        quick: Object.keys(obj(p.qc)).length,
+        // a pass counts when the server issued a certificate; the learner's own copy is only a fallback
+        attempts, best, passed: !!certByUser[u.id] || (!!exam.passed && certs.some((c) => c.id === exam.id)) || (!certs.length && attempts.some((a) => a.p)),
         cert: certByUser[u.id] || null,
         leaders: (() => {
-          const L = (u.courses && u.courses.leaders) || null;
-          if (!L) return null;
-          const q = L.quiz || {};
-          return { done: LMODS.filter((m) => (L.done || []).includes(m)), doneAt: L.doneAt || {}, attempts: (q.attempts || []).filter((a) => a && a.t),
-            best: q.best || 0, passed: !!q.passed, at: L.updated_at || null, cert: leadCertByUser[u.id] || null };
+          const L = obj(obj(u.courses).leaders);
+          if (!Object.keys(L).length) return null;
+          const q = obj(L.quiz);
+          return { done: LMODS.filter((m) => arr(L.done).includes(m)), doneAt: obj(L.doneAt), attempts: arr(q.attempts).filter((a) => a && typeof a.t === "string"),
+            best: Math.min(100, num(q.best)), passed: !!leadCertByUser[u.id] || (!certs.length && !!q.passed), at: L.updated_at || null, cert: leadCertByUser[u.id] || null };
         })(),
       };
     });
-    const feedback = (raw.feedback || []).map((f) => ({ module: f.module, helpful: !!f.helpful, comment: f.comment || "", at: f.created_at }));
+    const feedback = arr(raw.feedback).filter((f) => f && typeof f === "object").map((f) => ({ module: f.module, helpful: !!f.helpful, comment: f.comment || "", at: f.created_at }));
     return { at: raw.generated_at || new Date().toISOString(), users, certs, feedback };
   }
 

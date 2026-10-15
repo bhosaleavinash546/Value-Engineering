@@ -47,8 +47,7 @@ create policy "own progress read"  on public.progress for select using (auth.uid
 create policy "own progress write" on public.progress for all    using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- certificates: nobody can list them. Anyone can check ONE certificate by its ID, or read the total, through the
--- two functions below. A signed-in learner can only save their own certificate, with a passing score
--- (VE Academy "VH-" ≥ 80%, VAVE for Leaders "VL-" ≥ 70%), a real name, and one certificate per course.
+-- two functions below. Learners can read their own certificate; only the exam functions can create one.
 drop policy if exists "public cert read"   on public.certificates;
 drop policy if exists "own cert read"      on public.certificates;
 drop policy if exists "own cert insert"    on public.certificates;
@@ -62,15 +61,9 @@ returns boolean language sql immutable as $$
        or (cert_id ~ '^VL-[A-Z0-9]{4,16}$' and pct between 70 and 100));
 $$;
 
-create policy "own cert insert" on public.certificates for insert with check (
-  auth.uid() = user_id
-  and public.cert_is_valid(id, full_name, score)
-  and not exists (select 1 from public.certificates c
-                  where c.user_id = auth.uid() and left(c.id, 3) = left(certificates.id, 3))
-);
-create policy "own cert update" on public.certificates for update
-  using (auth.uid() = user_id)
-  with check (auth.uid() = user_id and public.cert_is_valid(id, full_name, score));
+-- Certificates are written only by issue_certificate() in supabase-exam.sql, after an exam marked on
+-- the server. Learners can read their own but can't add or change one, even if this file is run again.
+revoke insert, update, delete on public.certificates from anon, authenticated;
 
 create or replace function public.verify_certificate(cert_id text)
 returns table (id text, full_name text, score int, issued_at timestamptz)

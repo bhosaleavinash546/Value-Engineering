@@ -98,6 +98,8 @@
   window.VHWeek = { summary: () => { const w = week(load()); return w.goal ? `This week: ${Math.min(w.n, w.goal)} of ${w.goal} module${w.goal > 1 ? "s" : ""}${w.n >= w.goal ? " ✓" : ""}` : ""; } };
 
   // ── calendar reminder (.ics) ──
+  // calendar lines longer than 75 characters continue on the next line after a space (RFC 5545)
+  const fold = (line) => { const out = []; let s = line; while (s.length > 74) { out.push(s.slice(0, 74)); s = s.slice(74); } out.push(s); return out.join("\r\n "); };
   function ics(dow, time) {
     const [hh, mm] = time.split(":").map(Number);
     const d = new Date(); d.setHours(hh, mm, 0, 0);
@@ -111,7 +113,7 @@
       `UID:vavehub-review-${Date.now()}@valueengineeringhub.com`, `DTSTAMP:${utc}`, `DTSTART:${stamp(d)}`, `DTEND:${stamp(end)}`,
       "RRULE:FREQ=WEEKLY", "SUMMARY:VE Academy: review and next module (20 min)",
       `DESCRIPTION:Three review questions and your next module.\\n${url}`, `URL:${url}`,
-      "BEGIN:VALARM", "TRIGGER:-PT10M", "ACTION:DISPLAY", "DESCRIPTION:VE Academy", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      "BEGIN:VALARM", "TRIGGER:-PT10M", "ACTION:DISPLAY", "DESCRIPTION:VE Academy", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].map(fold).join("\r\n");
   }
 
   // ── the panel ──
@@ -187,7 +189,13 @@
       r.hist = r.hist || {}; r.hist[day.d] = [day.right, day.done.length];
       const finished = day.done.length >= day.keys.length;
       if (finished) {
-        day.from.forEach((m) => { const s = r.mods[m]; if (!s || s.stage >= 4) return; s.stage++; s.next = s.stage < 4 ? addDays(today(), GAPS[s.stage - 1]) : null; });
+        // a module moves to its next, longer gap only if today's question on it was right; otherwise it stays put
+        const missed = new Set(day.keys.filter((x) => r.miss[x] && BYKEY[x]).map((x) => BYKEY[x].mod));
+        day.from.forEach((m) => {
+          const s = r.mods[m]; if (!s || s.stage >= 4) return;
+          if (missed.has(m)) { s.next = addDays(today(), 2); return; } // the missed question itself comes back tomorrow
+          s.stage++; s.next = s.stage < 4 ? addDays(today(), GAPS[s.stage - 1]) : null;
+        });
         track("review-done");
       }
       store(r);

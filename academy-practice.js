@@ -25,12 +25,12 @@
       "Write an active verb and a measurable noun: generate heat, seal container, transmit force.", "m4", "Module 4.3"],
     "value-index": ["Chasing cost instead of value",
       "The most expensive part isn't automatically the best target, and the basic function is the one job you can't remove.",
-      "Compare cost with worth. Value Index = cost ÷ worth, and anything above 2.0 is a target, whatever its size.", "m4", "Module 4.7"],
+      "Compare cost with worth. Value Index = cost ÷ worth, and anything above 2.0 is out of line. Then rank those by the money at stake: (cost − worth) × volume.", "m4", "Module 4.7"],
     "no-baseline": ["No agreed starting cost",
       "Without a costed parts list checked by finance, the study turns into an argument about the numbers, and nobody believes the savings.",
       "Freeze a starting cost that finance has checked before the study, and measure every saving against it.", "m2", "Module 2.6"],
     "judging-early": ["Judging ideas too early",
-      "Criticism in the creative phase stops people offering ideas, and the odd ones are often where the best ones start.",
+      "Criticism in the Creative phase stops people offering ideas, and the odd ones are often where the best ones start.",
       "Write every idea down without comment. Judgement waits for the Evaluation phase.", "m5", "Module 5.2"],
     "gut-decision": ["Deciding by rank or gut feel",
       "The loudest or most senior voice isn't evidence, and criteria chosen after seeing the ideas get bent to suit a favourite.",
@@ -50,32 +50,38 @@
   };
   // wrong answers in the quick checks, challenges and practice exam that show a known mistake
   const BY_OPTION = {
-    "Agree, and spread the cut evenly": "cost-cutting", "Can we buy cheaper chrome?": "cost-cutting", "Raise the price": "cost-cutting",
-    "A pricing problem, not an engineering one": "cost-cutting", "The price": "cost-cutting", "Nothing, a clear number is enough": "cost-cutting",
-    "A bigger number, to stretch the team": "cost-cutting",
+    "Agree, and spread the cut evenly": "cost-cutting", "Can we buy cheaper chrome?": "cost-cutting", "Every part needs the same 10% cost cut": "cost-cutting",
+    "The price is set too low for the market it's in": "cost-cutting", "A pricing problem, not an engineering one": "cost-cutting", "The price": "cost-cutting",
+    "Nothing: a clear number is enough": "cost-cutting", "A bigger number, to stretch the team": "cost-cutting",
     "Provide heat": "function-words", "Make water hot": "function-words", "Boil kettle": "function-words", "Provide stability": "function-words",
-    "Hold laptop": "function-words", "Stop movement": "function-words", "Enable driving": "function-words", "Provide visibility": "function-words",
-    "Light road": "function-words", "Ensure protection": "function-words", "Cover wire": "function-words", "Make wire safe": "function-words",
-    "Close bottle": "function-words", "Provide closure": "function-words", "Keep water inside": "function-words", "Provide grip": "function-words",
+    "Hold laptop": "function-words", "Stop laptop": "function-words", "Enable driving": "function-words", "Provide visibility": "function-words",
+    "Shine brightly": "function-words", "Ensure protection": "function-words", "Cover wire": "function-words", "Make wire safe": "function-words",
+    "Cap bottle": "function-words", "Provide closure": "function-words", "Keep water inside": "function-words", "Provide grip": "function-words",
     "Help user": "function-words", "Hold mug": "function-words", "Retract tip": "function-words", "Provide clicking": "function-words",
     "Make pen work": "function-words", "Look good": "function-words", "Impress people": "function-words", "Provide beauty": "function-words",
-    "Fasten flange — it's specific": "function-words",
-    "Cut the costliest part": "value-index", "Remove the most expensive part": "value-index", "In the basic function": "value-index", "0.80 — healthy": "value-index",
-    "Nothing — precision comes later": "no-baseline", "Finance fixes it afterwards": "no-baseline", "The facilitator estimates live": "no-baseline",
-    "None, engineers know the costs": "no-baseline", "The current, inflation-adjusted cost": "no-baseline", "Report the saving as lost": "no-baseline",
-    "Open a debate": "judging-early", "Delete the idea": "judging-early", "Explain why it can't work": "judging-early", "Ask them to be serious": "judging-early",
-    "Move on quickly": "judging-early",
+    "Fasten flange": "function-words",
+    "The costliest part should be cut first": "value-index", "Remove the most expensive part first": "value-index", "In the basic function": "value-index",
+    "0.80: healthy": "value-index", "0.20: healthy": "value-index", "1.25: attack now": "value-index",
+    "Nothing: precision comes later": "no-baseline", "Finance corrects the figures afterwards": "no-baseline", "The facilitator estimates costs live": "no-baseline",
+    "None: engineers know the costs": "no-baseline", "The latest supplier quote, whatever it is": "no-baseline", "The cost in this year's budget": "no-baseline",
+    "Report the saving as lost": "no-baseline", "Reset the starting cost to today's prices": "no-baseline",
+    "Ask the manager to explain the objection fully": "judging-early", "Put the idea to a quick vote and move on": "judging-early",
+    "Take the idea off the board to keep things moving": "judging-early", "Explain why it can't work": "judging-early", "Ask them to suggest something realistic": "judging-early",
+    "Move on quickly to keep the energy up": "judging-early", "Switch to a weighted matrix": "judging-early", "Vote on the best ideas so far": "judging-early",
     "Let the chief engineer pick favourites": "gut-decision", "After seeing the idea list": "gut-decision", "During the final vote": "gut-decision",
-    "Hide it and keep the original winner": "gut-decision", "Add it to the spec": "gut-decision", "Defer to seniority": "gut-decision", "Let the manager decide": "gut-decision",
-    "Simple payback": "thin-business-case", "Gross saving only": "thin-business-case", "Saving per unit only": "thin-business-case",
-    "They're worth the same": "thin-business-case", "The one in 18 months": "thin-business-case", "Just do it: margins are waste": "thin-business-case",
-    "No checks at all": "thin-business-case", "After every test has passed": "thin-business-case",
-    "When the workshop ends": "counting-early", "When the business case is approved": "counting-early", "When tooling is ordered": "counting-early",
-    "Ideas approved at the workshop": "counting-early", "Gross savings at idea stage": "counting-early", "The number of workshops run": "counting-early",
-    "Too few studies": "counting-early", "Claiming it first": "counting-early", "Splitting it 50/50": "counting-early", "Applause from management": "counting-early",
-    "A polished slide deck": "counting-early", "Better slides": "counting-early", "A longer presentation": "counting-early",
-    "Demand 25% off": "price-squeeze", "Squeezed first — it's pure profit": "price-squeeze", "Accept the quote — there's no other data": "price-squeeze",
-    "Threaten to resource": "price-squeeze", "Ask every supplier for a 10% discount": "price-squeeze",
+    "Once the first ideas are scored": "gut-decision", "Hide it and keep the original winner": "gut-decision", "Add it to the spec to avoid a row": "gut-decision",
+    "Defer to the most senior person present": "gut-decision", "Overrule them so the study can move on": "gut-decision", "Nothing: leaders should set the direction": "gut-decision",
+    "Simple payback, months to break even": "thin-business-case", "Total gross saving over the life": "thin-business-case", "Saving per unit at today's volume": "thin-business-case",
+    "They're worth the same": "thin-business-case", "The one in 18 months": "thin-business-case", "The later one, as it's less risky": "thin-business-case",
+    "Remove it: old margins are usually waste": "thin-business-case", "Halve it, then watch the warranty claims closely": "thin-business-case",
+    "After every test has passed": "thin-business-case", "Note it and review it at launch": "thin-business-case", "Ignore it: occurrence 4 is still low": "thin-business-case",
+    "When the workshop's report is signed off": "counting-early", "When the business case is approved": "counting-early", "When the tooling has been ordered": "counting-early",
+    "Ideas approved at the workshop": "counting-early", "Gross savings at the idea stage": "counting-early", "The number of workshops each person runs": "counting-early",
+    "Too few studies for the product range": "counting-early", "Whoever logs it first keeps it": "counting-early", "Splitting the claim 50/50 each time": "counting-early",
+    "Applause and support from the management team": "counting-early", "A polished slide deck the board has seen": "counting-early",
+    "Slides the board can take away afterwards": "counting-early", "A vote of thanks recorded in the minutes": "counting-early",
+    "Ask the supplier for 25% off": "price-squeeze", "Squeezed first": "price-squeeze", "Cut to match yours": "price-squeeze", "Accept the quote: there's no other data": "price-squeeze",
+    "Threaten to move the business": "price-squeeze", "Ask every supplier for a 10% discount": "price-squeeze",
     "If costs drift up, raise the price": "target-creep", "Suppliers absorb all overruns": "target-creep", "Targets are only guidance until production starts": "target-creep",
     "Add it; the budget will absorb it": "target-creep", "Raise the target by £40": "target-creep", "It passes; fix it later": "target-creep",
     "Raise the target to match": "target-creep", "Leave cost out of the review": "target-creep",
@@ -284,14 +290,14 @@
       { title: "Bracket C", mass: 0.329, yld: 94, price: 2.1, rate: 75, cycle: 8, wage: 32, scrap: 6, oh: 30, sga: 8, margin: 6, quote: 1.75 },
     ],
     check: ["In the worked example, why is scrap worked out on layers 1–3 rather than on material alone?",
-      ["Because a scrapped part has used machine time and labour as well as material", "Because scrap is always a share of the quote", "Because material is never scrapped", "To make the should-cost bigger"], 0,
+      ["A scrapped part has used press time and labour too", "Scrap is always worked out as a share of the quote", "Material is never scrapped, only machine time", "It makes the should-cost safer for negotiating"], 0,
       "By the time a part is scrapped, it has used material, press time and labour. All three are lost."],
     done: (v, g, el) => {
       const share = (v.gap / g.quote) * 100;
       el.className = "fd-out sc-gap " + (v.gap > 0.02 ? "sc-gap-over" : "sc-gap-ok");
       el.innerHTML = v.gap > 0.02
         ? `Should-cost <b>${gbp(v.total)}</b> against a quote of <b>£${g.quote.toFixed(2)}</b>: a gap of <b>${gbp(v.gap)}</b>, ${share.toFixed(0)}% of the quote.` +
-          (g.oh >= 30 ? " The overhead layer is the one to ask about: 30% usually means a half-empty plant." : " Take the layer that's out of line to the supplier, not a percentage.")
+          (g.oh >= 30 ? " The overhead layer is the one to ask about. A 30% overhead rate is high for a press shop: ask how busy the plant is." : " Take the layer that's out of line to the supplier, not a percentage.")
         : `Should-cost <b>${gbp(v.total)}</b> against a quote of <b>£${g.quote.toFixed(2)}</b>. The quote is fair. Pushing further would cut into a fair margin, so spend your effort on another part.`;
     },
   });
@@ -303,7 +309,7 @@
     { title: "A robot vacuum cleaner", shop: 240, vat: 20, retail: 30, margin: 25, focus: 0,
       fns: [["Navigate room (sensors, software)", 18, 22], ["Remove dirt (motor, brushes)", 30, 29.5], ["Store energy (battery)", 22, 25.1], ["Contain dirt (bin, body)", 15, 13.2], ["Control cleaning (board, app)", 10, 12.8]] },
     { title: "An electric kettle", shop: 18, vat: 20, retail: 30, margin: 25, focus: 0,
-      fns: [["Heat water (element)", 25, 2.1], ["Contain water (body, lid)", 20, 1.7], ["Control temperature (thermostat)", 10, 1.3], ["Conduct current (base, connector)", 12, 1.2], ["Convey esteem (chrome trim)", 8, 1.3], ["Assemble and pack", 20, 1.4]] },
+      fns: [["Heat water (element)", 25, 2.1], ["Contain water (body, lid)", 20, 1.7], ["Control temperature (thermostat)", 10, 1.3], ["Conduct current (base, connector)", 12, 1.2], ["Convey esteem (trim, body finish)", 8, 1.3], ["Assemble and pack", 20, 1.4]] },
   ];
   faded($("#tcMount"), {
     id: "m13",
@@ -331,7 +337,7 @@
     ],
     problems: PRODUCTS,
     check: ["What does the allowable cost tell the design team?",
-      ["The most the product may cost to make, so the business still earns the margin it needs", "The price to charge customers", "What the product costs to make today", "The supplier's target price"], 0,
+      ["The most it can cost to make, keeping the margin", "The price to charge customers in the shops", "What the product costs to make today, with overheads", "The price the supplier must quote for the parts"], 0,
       "It's worked out from the market price downwards, before the design is fixed. The design has to fit it."],
     done: (v, g, el) => { el.className = "fd-out"; el.innerHTML = waterfall(g, v); },
   });
@@ -363,7 +369,7 @@
   /* ═════ 3 · FAST diagram builder ═════ */
   const FAST_SETS = [
     { name: "Pocket torch", product: "a pocket LED torch",
-      cards: { vis: "Improve visibility", emit: "Emit light", conv: "Convert energy", cond: "Conduct current", sw: "Switch circuit", pow: "Supply power",
+      cards: { vis: "Aid vision", emit: "Emit light", conv: "Convert energy", cond: "Conduct current", sw: "Switch circuit", pow: "Supply power",
         focus: "Focus beam", heat: "Dissipate heat", water: "Resist water", est: "Convey esteem", bad1: "Provide illumination", bad2: "Aluminium tube" },
       ho: "vis", basic: "emit", assumed: "pow",
       how: [["vis", "emit"], ["emit", "conv"], ["conv", "cond"], ["cond", "sw"], ["sw", "pow"], ["cond", "pow"]],
@@ -404,14 +410,19 @@
         $("[data-go]", box).focus();
       });
     }
+    let boardAbort = null;
     function board(si) {
       const S = FAST_SETS[si];
+      // listeners on the mount itself are dropped when the board is drawn again (reset, another product)
+      if (boardAbort) boardAbort.abort();
+      boardAbort = new AbortController();
+      const sig = { signal: boardAbort.signal };
       const placed = Object.assign({}, S.pre), locked = new Set(Object.keys(S.pre));
       let selected = null; // { card, from: slotId | null }
       track("lab/m4f-" + si);
       mount.innerHTML = `<ol class="fd-track" aria-label="Your progress"><li class="is-done"><span>1</span>Worked example</li>
           <li class="${si === 0 ? "is-on" : "is-done"}"${si === 0 ? ' aria-current="step"' : ""}><span>2</span>Part-built</li><li class="${si === 1 ? "is-on" : ""}"${si === 1 ? ' aria-current="step"' : ""}><span>3</span>From scratch</li></ol>
-        <h5 class="fx-title">FAST diagram for ${S.product}</h5>
+        <h5 class="fx-title" tabindex="-1">FAST diagram for ${S.product}</h5>
         <p class="fd-note">${si === 0 ? "Four cards are placed for you." : "Nothing is placed this time."} Put the HOW chain between the scope lines, the WHEN functions below it and the all-the-time functions above. One slot can stay empty.</p>
         <div class="fx-scroll" tabindex="0" role="region" aria-label="FAST diagram board. On a narrow screen, scroll sideways.">
           <div class="fx-board">
@@ -468,15 +479,15 @@
         const slot = c.closest(".fx-slot");
         selected = { card: c.dataset.card, from: slot ? slot.dataset.slot : null };
         e.dataTransfer.setData("text/plain", c.dataset.card); e.dataTransfer.effectAllowed = "move";
-      });
-      mount.addEventListener("dragover", (e) => { if (e.target.closest(".fx-slot, .fx-pool")) e.preventDefault(); });
+      }, sig);
+      mount.addEventListener("dragover", (e) => { if (e.target.closest(".fx-slot, .fx-pool")) e.preventDefault(); }, sig);
       mount.addEventListener("drop", (e) => {
         const slot = e.target.closest(".fx-slot"), toPool = e.target.closest(".fx-pool");
         if (!selected || (!slot && !toPool)) return;
         e.preventDefault();
         if (slot) put(selected.card, slot.dataset.slot, selected.from);
         else { if (selected.from && !locked.has(selected.from)) delete placed[selected.from]; selected = null; draw(); }
-      });
+      }, sig);
       $(".fx-reset", mount).addEventListener("click", () => board(si));
       $(".fx-check", mount).addEventListener("click", () => check());
 
@@ -541,6 +552,7 @@
         }
       }
       draw();
+      $(".fx-title", mount).focus({ preventScroll: true }); // the button that opened the board is gone; keyboard users start at its title
     }
     intro();
   }
@@ -571,7 +583,7 @@
         <tr><th scope="row">Worth (cheapest known way)</th>${WORTH.map((w) => `<td>£${w.toFixed(2)}</td>`).join("")}<td></td></tr>
         <tr><th scope="row">Value Index</th>${FN.map((_, j) => `<td class="fc-vi" data-j="${j}"></td>`).join("")}<td></td></tr>
       </tfoot></table></div>
-      <p class="lab-hint">Value Index = cost ÷ worth (Module 4 covers worth in full). Up to 1.2 is healthy, 1.2–2.0 is worth watching, and above 2.0 is a target.</p>
+      <p class="lab-hint">Value Index = cost ÷ worth (Module 4 covers worth in full). Up to 1.2 is healthy, over 1.2 to 2.0 is worth watching, and over 2.0 is a target.</p>
       <fieldset class="fc-pick"><legend>Which functions would you attack first?</legend>${FN.map((f, j) => `<label><input type="checkbox" value="${j}" /> ${f}</label>`).join("")}</fieldset>
       <div class="fd-actions"><button type="button" class="btn btn-primary" id="fcCheck">Check</button><button type="button" class="btn btn-ghost" id="fcFill">Fill in a typical answer</button></div>
       <div class="fx-fb" id="fcFb" role="status" aria-live="polite"></div>`;
@@ -621,7 +633,7 @@
         if (!picked.length) msgs.push(["no", "Tick the functions you'd attack first."]);
         good = good && !miss.length && !extra.length && picked.length > 0;
       } else msgs.push(["no", "Fix the shares above, then pick your targets."]);
-      fb.innerHTML = `<p class="fx-sum ${good ? "is-ok" : "is-bad"}">${good ? "✓ That's the Information phase pointing the creative phase at the right targets." : "Not quite yet."}</p>
+      fb.innerHTML = `<p class="fx-sum ${good ? "is-ok" : "is-bad"}">${good ? "✓ That's function analysis pointing the Creative phase at the right targets." : "Not quite yet."}</p>
         <ul class="fx-list">${msgs.map(([k, m]) => `<li class="${k === "ok" ? "is-ok" : "is-bad"}">${k === "ok" ? "✓" : "✗"} ${esc(m)}</li>`).join("")}</ul>`;
       if (mk) VHMistakes.attach($(".fx-list", fb), mk);
     });
@@ -641,7 +653,7 @@
       ["Lighter carton. Approved in January. The owner left the company in April and nothing has happened since.", "L3", true, 25, "Still L3, but stuck with no owner. Raise it: name a new owner and date, or drop it on purpose."],
       ["New motor supplier. In production since June. Finance confirmed £60k a year against the fixed starting cost.", "L4", false, 60, "In production and checked: L4. It counts."],
       ["Snap-fits instead of screws. Logged eight months ago. No owner has ever been named and it has never been checked.", "L1", true, 50, "Still L1 after eight months with no owner. Every idea needs an owner, a stage and a date, or it's dropped: raise it."],
-      ["Aluminium to steel heat sink. Finance has checked the £55k a year saving. Simulation shows it runs 4 °C hotter; the business case is being written.", "L2", false, 55, "Saving checked, not yet approved: L2. The heat result goes in the business case as a risk."],
+      ["Die-cast to extruded aluminium heat sink. Finance has checked the £55k a year saving. Simulation shows it runs 2 °C hotter; the business case is being written.", "L2", false, 55, "Saving checked, not yet approved: L2. The heat result goes in the business case as a risk."],
     ];
     mount.innerHTML = `<p class="lab-hint">Stages from Module 8: <b>L1</b> idea · <b>L2</b> validated (saving checked by finance) · <b>L3</b> approved · <b>L4</b> implemented (in production and checked against the fixed starting cost).</p>
       <ol class="fn-list">${IDEAS.map(([t], i) => `<li class="fn-item" data-i="${i}"><p>${t}</p>

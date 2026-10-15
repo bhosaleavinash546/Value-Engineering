@@ -4,6 +4,7 @@
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
   const num = (el) => Math.max(0, parseFloat(el.value) || 0);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   function money(v, cur) {
     const loc = cur === "₹" ? "en-IN" : "en-GB";
     if (cur === "₹" && v >= 1e7) return "₹" + (v / 1e7).toLocaleString(loc, { maximumFractionDigits: 2 }) + " crore";
@@ -26,7 +27,7 @@
         card(m > 0 ? money(sales, cur) : "—", "extra sales needed to earn the same profit") +
         (rev > 0 ? card("+" + pts.toLocaleString("en-GB", { maximumFractionDigits: 2 }) + " pts", "on your profit margin") : "");
       $("#peVerdict").textContent = annual > 0 && m > 0
-        ? `At a ${F.margin.value}% margin, every ${cur}1 saved is worth ${cur}${(1 / m).toLocaleString("en-GB", { maximumFractionDigits: 1 })} of new sales. This saving does the work of ${money(sales, cur)} in extra sales.` +
+        ? `At a ${F.margin.value}% margin, every ${cur}1 saved is worth ${cur}${(1 / m).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} of new sales. This saving does the work of ${money(sales, cur)} in extra sales.` +
           (rev > 0 ? ` That's ${pts.toLocaleString("en-GB", { maximumFractionDigits: 2 })} percentage points on your profit margin.` : "")
         : "Enter a saving, a volume and a margin above zero.";
     }
@@ -136,7 +137,7 @@
       if (annual <= 0) { v.className = "bc-verdict bc-no"; v.textContent = "No saving, no case. Start with a saving per unit and a volume."; }
       else if (payback <= 12) { v.className = "bc-verdict bc-go"; v.innerHTML = `<b>Likely yes.</b> Payback in ${payback.toFixed(1)} months is within the usual 12-month limit. Savings start in ${delay} month${delay === 1 ? "" : "s"}, when the change is in production, so set a date and hold people to it.`; }
       else if (payback <= 24) { v.className = "bc-verdict bc-mid"; v.innerHTML = `<b>Borderline.</b> ${payback.toFixed(1)} months is over the usual 12-month limit. Ask whether the one-time cost can come down, or whether it can join a planned design update.`; }
-      else { v.className = "bc-verdict bc-no"; v.innerHTML = `<b>Likely no, for now.</b> ${payback.toFixed(1)} months is too long for a change to a product already in production. Keep it for the next new design, when tooling is being bought anyway.`; }
+      else { v.className = "bc-verdict bc-no"; v.innerHTML = `<b>Likely no, for now.</b> ${payback.toFixed(1)} months is too long for most changes to a product already on sale. Keep it for the next new design, when tooling is being bought anyway.`; }
     }
     Object.values(F).forEach((el) => el.addEventListener("input", calc));
     calc();
@@ -168,7 +169,8 @@
       ["Are people outside engineering trained to think in functions?", "Train design, purchasing, manufacturing, quality and finance together."],
     ];
     const saved = labs().rd || {};
-    const ans = (saved.ans && saved.ans.length === QS.length) ? saved.ans.slice() : new Array(QS.length).fill(null);
+    const clean = (a) => (a === 0 || a === 1 || a === 2 ? a : null); // only 0, 1 or 2 is a real answer
+    const ans = (Array.isArray(saved.ans) && saved.ans.length === QS.length) ? saved.ans.map(clean) : new Array(QS.length).fill(null);
     mount.innerHTML = `<div class="rd-list">${QS.map(([q], i) => `
       <fieldset class="rd-q"><legend>${i + 1}. ${q}</legend>
         <div class="rd-opts">${[["2", "Yes"], ["1", "Partly"], ["0", "No"]].map(([v, t]) =>
@@ -187,7 +189,7 @@
       const todo = QS.map((q, i) => [ans[i], q[1]]).filter(([a]) => a < 2).sort((a, b) => a[0] - b[0]).slice(0, 3).map(([, t]) => t);
       out.className = "bc-verdict " + cls;
       out.innerHTML = `<b>${score} / 16 · ${band}</b>` + (todo.length
-        ? `<span class="rd-next">Your three most important next steps:</span><ol>${todo.map((t) => `<li>${t}</li>`).join("")}</ol>`
+        ? `<span class="rd-next">${todo.length === 1 ? "Your most important next step:" : `Your ${todo.length === 2 ? "two" : "three"} most important next steps:`}</span><ol>${todo.map((t) => `<li>${t}</li>`).join("")}</ol>`
         : `<span class="rd-next">Everything's in place. Your next step is to widen the programme to more products.</span>`);
       // one entry per day; the history shows whether things are moving
       const rd = labs().rd || {}, hist = (rd.hist || []).filter((h) => h.d !== todayIso()).concat([{ d: todayIso(), s: score }]).slice(-8);
@@ -204,7 +206,7 @@
         <button type="button" class="btn btn-ghost rd-reset">Clear my answers</button>`;
       $(".rd-reset", el).addEventListener("click", () => { ans.fill(null); tick(); keep("rd", { ans: ans.slice(), hist: (labs().rd || {}).hist || [] }); update(); el.innerHTML = ""; });
     }
-    document.addEventListener("vh-leaders-labs-sync", () => { const s = labs().rd || {}; if (s.ans && s.ans.length === QS.length) { s.ans.forEach((a, i) => { ans[i] = a; }); tick(); update(); } });
+    document.addEventListener("vh-leaders-labs-sync", () => { const s = labs().rd || {}; if (Array.isArray(s.ans) && s.ans.length === QS.length) { s.ans.forEach((a, i) => { ans[i] = clean(a); }); tick(); update(); } });
     mount.addEventListener("change", (e) => { const m = /^rd(\d+)$/.exec(e.target.name || ""); if (m) { ans[+m[1]] = +e.target.value; update(); } });
     update();
     if (ans.some((a) => a === null)) history((labs().rd || {}).hist);
@@ -223,10 +225,14 @@
     ];
     const P = [["Product A", [4, 4, 4, 3, 4]], ["Product B", [5, 1, 3, 5, 3]], ["Product C", [3, 5, 2, 2, 2]]];
     const pp = labs().pp; // your own candidates, if you've changed them before
-    if (pp && pp.names && pp.vals) P.forEach((row, p) => { if (pp.names[p]) row[0] = pp.names[p]; if (pp.vals[p] && pp.vals[p].length === 5) row[1] = pp.vals[p]; });
+    // saved values come from this browser or the account copy, so they're checked before use
+    if (pp && Array.isArray(pp.names) && Array.isArray(pp.vals)) P.forEach((row, p) => {
+      if (typeof pp.names[p] === "string" && pp.names[p].trim()) row[0] = pp.names[p].slice(0, 40);
+      if (Array.isArray(pp.vals[p]) && pp.vals[p].length === 5) row[1] = pp.vals[p].map((v) => Math.min(5, Math.max(1, Math.round(+v) || 3)));
+    });
     mount.innerHTML = `<div class="pp-grid">${P.map(([name, vals], p) => `
       <fieldset class="pp-col"><legend class="sr-only">Candidate ${p + 1}</legend>
-        <label class="pp-name">Candidate ${p + 1}<input type="text" maxlength="40" value="${name}" data-p="${p}" /></label>
+        <label class="pp-name">Candidate ${p + 1}<input type="text" maxlength="40" value="${esc(name)}" data-p="${p}" /></label>
         ${CRIT.map(([k, label, hint], c) => `<label class="pp-row"><span>${label} <b id="ppv${p}${c}">${vals[c]}</b></span>
           <input type="range" min="1" max="5" step="1" value="${vals[c]}" data-p="${p}" data-c="${c}" aria-describedby="pph${c}" />
           ${p === 0 ? `<small id="pph${c}">${hint}</small>` : `<small aria-hidden="true">${hint}</small>`}</label>`).join("")}

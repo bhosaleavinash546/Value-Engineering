@@ -5,8 +5,8 @@
 
       <h3>13.1 · Preventing cost is better than removing it</h3>
       <p>Everything so far in this course removes cost that's already there. This module is about never letting it in.
-      By the time a concept design is frozen, <strong>70–80% of lifecycle cost is already decided</strong>, but almost
-      none has been spent. So the cheapest VAVE workshop is the one you never needed because you set a target.
+      It's often said that by the time a concept design is frozen, <strong>70–80% of lifecycle cost is already
+      decided</strong>, while almost none has been spent. The exact figure is debated, but the direction isn't. So the cheapest VAVE workshop is the one you never needed because you set a target.
       <strong>Target costing</strong> (Toyota's <em>genka kikaku</em>, developed from the 1960s) turns the usual thinking
       upside down. The traditional "cost-plus" approach asks: <em>what will it cost, and what price does that mean we
       have to charge?</em> Target costing asks: <em>what will the market pay, and what cost does that allow?</em></p>
@@ -37,9 +37,12 @@
       <p>The discipline comes from the <strong>cardinal rule</strong> (Cooper &amp; Slagmulder), the one rule you never
       break: <em>the target cost can never be exceeded</em>. If a feature has to be added, its cost must be saved
       somewhere else: another feature cut back, a design simplified, or a make-or-buy decision changed. What the rule
-      really stops is the slow creep where every team adds "just 2%" and the product ends up well over budget. If the gap
-      really can't be closed, the honest options are to change what's in the product or not launch it. Don't pretend the
-      margin will turn up later.</p>
+      really stops is the slow creep where every team adds "just 2%" and the product ends up well over budget.</p>
+      <p>Strictly, the allowable cost and the target cost can differ. If the allowable cost can't be reached with any
+      known design, Cooper &amp; Slagmulder set an achievable <strong>target cost</strong> and record the shortfall openly
+      as a <strong>strategic cost-reduction challenge</strong> for the next generation. The cardinal rule then applies to
+      that target. If even an achievable target can't be met, the honest options are to change what's in the product or
+      not launch it. Don't pretend the margin will turn up later.</p>
 
       <figure class="tvid tvid-own">
         <video controls preload="none" playsinline poster="videos/target-costing.webp" width="1280" height="720" aria-label="Video: Target costing: designing an EV motor to a price">
@@ -74,13 +77,13 @@
       The two work as one system. Target costing decides where the cost <em>starts</em>, and kaizen costing brings it
       down further. A mature product company does both, plus regular VAVE rounds (Module 12) when a big change is
       needed. One warning: kaizen targets applied blindly year after year are how quality starts to spiral downwards.
-      Cost reductions need the same function and quality checks as in the Development Phase (Module 7).</p>
+      Cost reductions need the same function and quality checks as in the Development phase (Module 7).</p>
 
-      <div class="tex"><h4>Worked example — cascading an EV traction-motor target</h4><p>A compact EV must bring the maker
+      <div class="tex"><h4>Worked example: cascading an EV traction-motor target</h4><p>A compact EV must bring the maker
       £29,900 per car (its price after VAT and the dealer's margin), with a 22% gross margin → vehicle allowable cost <b>£23,322</b>. Benchmarking allocates 9.8% to the
       drive unit → <b>£2,286</b>. The motor's share of the drive unit is 46% → <b>£1,052</b>. The current drifting cost is
-      £1,214, a <b>£162 value gap (13%)</b>. The team closes it with a hairpin winding that cuts copper mass 8%
-      (−£38), a housing redesign merging three castings into one (−£61), magnet grade optimisation validated by CAE
+      £1,214, a <b>£162 value gap (13%)</b>. The team closes it with a hairpin winding: 8% less copper and an
+      automated winding line (−£38), a housing redesign merging three castings into one (−£61), magnet grade optimisation validated by CAE
       (−£43), and a supplier gain-share on machining cycle time (−£26). Gap closed: −£168, with £6 returned to the reserve.
       Every step uses a technique from Modules 4–11, applied before the design was frozen.</p></div>
 
@@ -100,7 +103,7 @@
             <h5>Closing the motor's £162 gap</h5>
             <div class="fg-wf">
               <div class="fg-wf-r is-was" data-i style="--i:3"><span>Drifting cost today</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:0;--w:97.27"></i></div><em>£1,214</em></div>
-              <div class="fg-wf-r is-step" data-i style="--i:4"><span>Hairpin winding: 8% less copper</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:80;--w:17.27"></i></div><em>−£38</em></div>
+              <div class="fg-wf-r is-step" data-i style="--i:4"><span>Hairpin winding: less copper, automated winding</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:80;--w:17.27"></i></div><em>−£38</em></div>
               <div class="fg-wf-r is-step" data-i style="--i:5"><span>Housing: three castings become one</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:52.27;--w:27.73"></i></div><em>−£61</em></div>
               <div class="fg-wf-r is-step" data-i style="--i:6"><span>Magnet grade, checked by simulation</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:32.73;--w:19.55"></i></div><em>−£43</em></div>
               <div class="fg-wf-r is-step" data-i style="--i:7"><span>Supplier gain-share on machining time</span><div class="fg-wf-t" style="--tgt:23.64"><i style="--a:20.91;--w:11.82"></i></div><em>−£26</em></div>
@@ -112,13 +115,14 @@
         <p class="fg-foot">Dashed line: the £1,052 target. The changes save £168, £6 more than the gap, and the £6 goes back to the reserve. <b>The scale starts at £1,000 so the steps are easy to see.</b></p>
       </div>
 
-      <div class="tcase"><h4>Case study — documented</h4><p><b>Tata Nano: the price came first.</b> Ratan Tata
+      <div class="tcase"><h4>Case study (documented)</h4><p><b>Tata Nano: the price came first.</b> Ratan Tata
       announced the "1-lakh car" (about US$2,500) in 2003. The price was public before the design existed, which makes
-      it the clearest large-scale example of target costing on record. The team designed to the number: a 624&nbsp;cc
+      it one of the clearest public examples of designing to a price. The team designed to the number: a 624&nbsp;cc
       two-cylinder engine, a single windscreen wiper, three wheel nuts instead of four, no radio as standard, and
-      modular construction. Suppliers were given open target prices. The Nano launched in 2008 at the promised ₹1 lakh
-      (base model, ex-factory). Its later sales problems teach their own lesson. You can hit a target cost and still get
-      the value wrong: being known as "the cheapest car" hurt its esteem value. Cost is half of value, never all of it.
+      modular construction. Suppliers were given open target prices. The Nano was unveiled in January 2008 and went on
+      sale in 2009 at the promised ₹1 lakh (base model, ex-factory). Hitting the price was not the same as hitting a
+      profitable cost: Tata later reported heavy losses on the Nano. Its sales problems teach a second lesson. Being
+      known as "the cheapest car" hurt its esteem value. Cost is half of value, never all of it.
       <b>Toyota</b>, meanwhile, has used <em>genka kikaku</em> on every model since the 1960s. Profit is planned at the
       drawing board, not negotiated afterwards, and it's still the example the textbooks are based on. <i>Sources: Tata Motors launch records; Cooper &amp; Slagmulder,
       "Target Costing and Value Engineering"; IMA/CAM-I target-costing studies.</i></p></div>
@@ -142,7 +146,7 @@
         <li>Setting the target from past costs ("last car minus 3%") instead of working back from the market price</li>
         <li>One overall target that's never split up: nobody owns a number they were never given</li>
         <li>Quietly breaking the cardinal rule: small overruns in every team add up to a big overrun for the product</li>
-        <li>Treating the target as purchasing's problem: 70–80% of the cost is decided by design choices</li>
+        <li>Treating the target as purchasing's problem: most of the cost is decided by design choices</li>
         <li>Cost-reduction targets after production starts, with no function or quality check: the warranty bill arrives two years later</li>
       </ul></div>
       <div class="tkey"><h4>Key takeaways</h4><ul>
@@ -152,7 +156,7 @@
         <li>Design-to-cost means managing cost the way aircraft makers manage weight: an owner, a status at each review, and a recovery plan.</li>
         <li>Target costing sets where cost starts, and kaizen costing brings it down once production starts.</li>
       </ul></div>
-      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Take a product you know. Find its realistic street
+      <div class="tdo"><h4>Now do it: hands-on assignment</h4><p>Take a product you know. Find its realistic street
       price, subtract the margin the business needs, and split the allowable cost across its five biggest systems,
       based on your best guess of how much each is worth to the customer. Now compare that with what you think each
       system actually costs. Where's the biggest value gap, and which module of this course would you use on it first?</p></div>

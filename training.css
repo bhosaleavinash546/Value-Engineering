@@ -20,6 +20,10 @@
   .tr-nav-right{gap:.55rem;min-width:0;flex-shrink:1}
   .tr-progress-pill{width:96px;height:28px}.tr-progress-pill span{font-size:.58rem;letter-spacing:.04em}}
 @media (max-width:400px){.tr-progress-pill{display:none}}
+/* 200% zoom on a laptop (about 680px wide): keep the header on one line by dropping the secondary links */
+@media (max-width:900px){.tr-nav .tr-guides{display:none}}
+@media (max-width:760px){.tr-nav .tr-back{display:none}.tr-nav-right{gap:.6rem;min-width:0}.tr-progress-pill{width:120px}}
+.tmod-done{white-space:normal}
 
 /* ── Hero ── */
 .tr-hero{border-bottom:1px solid var(--line);background:radial-gradient(90% 130% at 50% -20%,rgba(46,111,232,.18),transparent 60%),var(--bg2)}
@@ -69,6 +73,7 @@
 
 /* ── Module content ── */
 .tr-main{min-width:0;scroll-margin-top:84px}
+#trLayout,#authGate{scroll-margin-top:84px} /* clear the sticky nav when a module or the gate is scrolled into view */
 .tmod{display:none;border:1px solid var(--line);border-radius:calc(var(--r) + 4px);background:var(--card);padding:2.4rem 2.6rem}
 .tmod.is-visible{display:block;animation:panel-in .5s var(--ease-spring)}
 .tmod-tag{font-family:var(--font-m);font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc3)}
@@ -162,15 +167,15 @@
 .tr-footer p{font-size:.78rem;color:var(--muted);margin:.2rem 0}
 .tr-footer a b{color:var(--acc1)}
 
-/* ── Print: certificate only ── */
+/* ── Print: when a certificate is on screen, print only the certificate; otherwise print the page as it is ── */
 @media print{
-  body.tr-body *{visibility:hidden}
+  body.tr-body:has(#certWrap:not([hidden])) *{visibility:hidden}
   #certWrap,#certWrap .cert,#certWrap .cert *{visibility:visible}
-  #certWrap{position:absolute;inset:0;margin:0}
+  #certWrap:not([hidden]){position:absolute;inset:0;margin:0;page:cert}
   .cert{box-shadow:none;border-radius:0;max-width:none}
   .cert-v2,.cert-frame,.cert-seal-img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .cert-actions{display:none}
-  @page{size:landscape;margin:10mm}
+  @page cert{size:landscape;margin:10mm}
 }
 
 /* ── Worked example box ── */
@@ -187,8 +192,8 @@
 .qc-item{margin-bottom:1.1rem}
 .qc-item:last-child{margin-bottom:0}
 .qc-q{font-size:.92rem;font-weight:600;color:var(--txt);margin-bottom:.6rem}
-.qc-opts{display:flex;flex-wrap:wrap;gap:.5rem}
-.qc-opt{border:1px solid var(--line);border-radius:100px;background:var(--card);color:var(--muted);padding:.45rem 1rem;font-size:.8rem;font-family:var(--font-b);cursor:pointer;transition:all .25s}
+.qc-opts{display:grid;gap:.5rem}
+.qc-opt{width:100%;text-align:left;min-height:44px;line-height:1.4;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--txt);padding:.6rem 1rem;font-size:.86rem;font-family:var(--font-b);cursor:pointer;transition:all .25s}
 .qc-opt:hover{border-color:var(--acc1);color:var(--txt)}
 .qc-opt.is-right{background:rgba(28,127,75,.25);border-color:#2ea36b;color:#7ce3ad;pointer-events:none}
 .qc-opt.is-wrong{background:rgba(190,50,50,.15);border-color:#c0504f;color:#f3a1a0;animation:qc-shake .3s}
@@ -197,7 +202,7 @@
 .qc-expl{font-size:.78rem;margin-top:.5rem;display:none}
 .qc-expl.show-wrong{display:block;color:#f3a1a0}
 .qc-expl.show-right{display:block;color:#7ce3ad}
-.tmod-done:disabled{opacity:.45;cursor:not-allowed;transform:none!important;box-shadow:none}
+.tmod-done:disabled{cursor:not-allowed;transform:none!important;box-shadow:none} /* the shared disabled style already greys it out */
 
 /* ── Certificate share page ── */
 .cert-page{max-width:1000px;margin-inline:auto;padding:3rem 4vw 4rem}
@@ -329,13 +334,14 @@ html[data-theme="light"] .tpit h4,html[data-theme="light"] .tpit li::before{colo
 .gate-list li{position:relative;padding-left:1.7rem;font-size:.88rem;color:var(--txt)}
 .gate-list li::before{content:"✓";position:absolute;left:0;top:0;color:var(--acc1);font-weight:800}
 .gate-actions{display:flex;flex-direction:column;gap:.7rem;align-items:center}
-.gate-actions .btn{width:100%;max-width:340px}
+.gate-actions .btn{width:100%;max-width:340px;white-space:nowrap} /* short labels: the arrow stays on the line */
 .gate-foot{margin-top:1.3rem;font-size:.78rem;color:var(--muted)}
 .gate-foot a{color:var(--acc1);font-weight:600}
 
 /* locked modules in the sidebar */
 .mod-link{position:relative}
 .mod-link.is-locked .mtxt b{color:var(--muted)}
+.mod-link.is-locked{padding-right:2.2rem}
 .mod-link.is-locked::after{content:"🔒";position:absolute;right:.7rem;top:50%;transform:translateY(-50%);font-size:.72rem;opacity:.65}
 .mod-link.is-locked.is-active::after{opacity:.9}
 
@@ -581,6 +587,7 @@ body.vo-off .vo-bar{display:none!important}
 .sc-inputs h5,.bc-inputs h5{font:700 .68rem var(--font-m);letter-spacing:.14em;text-transform:uppercase;color:var(--acc1);margin:.9rem 0 .4rem}
 .sc-inputs h5:first-child,.bc-inputs h5:first-child{margin-top:0}
 .sc-inputs label,.bc-inputs label{display:flex;align-items:center;justify-content:space-between;gap:.7rem;font-size:.78rem;color:var(--muted);margin-bottom:.35rem}
+.sc-inputs select,.bc-inputs select{padding:.38rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--txt);font:600 .8rem var(--font-b);cursor:pointer}
 .sc-inputs input,.bc-inputs input{width:110px;padding:.38rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--txt);font:600 .8rem var(--font-m);text-align:right}
 .sc-inputs input:focus,.bc-inputs input:focus{outline:none;border-color:var(--acc1)}
 .bc-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;margin-bottom:1rem}
@@ -787,7 +794,8 @@ html[data-theme="light"] .tdo a{border-bottom-color:rgba(4,120,87,.45)}
 
 /* ── Touch screens: comfortable tap targets for course controls ── */
 @media (pointer:coarse), (max-width:960px){
-  .role-chip, .qc-opt, .vo-play, .vo-rate, .tmod-print{min-height:40px}
+  .role-chip, .vo-play, .vo-rate, .tmod-print{min-height:40px}
+  .qc-opt, .fnc-opt, .tmpl-xls, .tr-main select, .vh-week select{min-height:44px}
   .vo-seek{height:28px}
   .tr-byline a, .tr-footer a{display:inline-block;padding:.5rem .2rem}
 }
@@ -1015,6 +1023,7 @@ html[data-theme="light"] .wf-table td.is-over{color:#b91c1c}
 .rv-q{margin-top:.6rem;padding:.8rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
 .vh-week p.rv-meta{font:600 .66rem var(--font-m);letter-spacing:.08em;text-transform:uppercase;margin:0 0 .35rem}
 .vh-week p.rv-text{font-size:.9rem;color:var(--txt);font-weight:600;margin:0 0 .6rem}
+.vh-week .rv-text:focus{outline:none} /* focused for screen readers only; it isn't a control */
 .vh-week p.rv-fb{font-size:.8rem;color:var(--txt);margin:.6rem 0 0}
 .vh-week p.rv-fb:empty{display:none}
 .vh-week .fd-actions{margin-top:.7rem}

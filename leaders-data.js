@@ -12,8 +12,8 @@ window.VH_COURSE = {
 
   quick: {
     l1: [
-      ["When is most of a product's lifetime cost decided?", ["During production", "During early design", "When purchasing negotiates with suppliers", "When the product is withdrawn"], 1,
-        "70–80% is decided by design choices, before suppliers quote."],
+      ["When is most of a product's cost decided?", ["During production", "During early design", "When purchasing negotiates with suppliers", "When the product is withdrawn"], 1,
+        "By the end of design, about 70–80% of a product's cost is already fixed by design choices, before suppliers quote."],
       ["Your margin is 10%. A VAVE idea saves £50,000 a year. How much extra sales would bring in the same profit?", ["£55,000", "£500,000", "£5,000", "£5 million"], 1,
         "£50,000 ÷ 10% = £500,000."],
     ],

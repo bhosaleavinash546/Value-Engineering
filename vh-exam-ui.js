@@ -18,7 +18,7 @@ window.VHExamUI = (function () {
        titles: { m1: "Foundations…", … },     module names for the results
        signInHref,                              where "Sign in" goes
        onGoto(moduleId),                        open a module
-       onResult(res),                           record the attempt locally
+       onResult(res, attempt),                  record the attempt locally
        onPass(res, attempt, actionsEl),         offer the certificate
        onRetake()                               start again (optional)
      } */
@@ -29,6 +29,9 @@ window.VHExamUI = (function () {
       m.innerHTML = `<div class="ex-gate"><p role="alert">${html}</p><div class="ex-actions">${retry ? '<button class="btn btn-primary" id="exAgain">Try again</button>' : ""}</div></div>`;
       if (retry) $("#exAgain", m).addEventListener("click", () => start(o));
     };
+    // a paper started in this tab and not yet sent (a reload, a slip of the back button) carries on where it was
+    const kept = resumeGet(o.course);
+    if (kept) { run(o, kept.paper, kept); return; }
     busy(`Preparing your ${o.noun}…`);
     VHCloud.examStart(o.course).then((r) => {
       if (!r || r.error) {
@@ -54,13 +57,31 @@ window.VHExamUI = (function () {
     });
   }
 
-  function run(o, paper) {
+  /* the paper in progress is kept for this tab only (sessionStorage), for up to three hours; it holds no answers */
+  const RKEY = (course) => "vh-exam-run-" + course;
+  function resumeGet(course) {
+    try {
+      const k = JSON.parse(sessionStorage.getItem(RKEY(course)));
+      if (k && k.paper && Array.isArray(k.paper.questions) && Date.now() - k.at < 3 * 3600e3) return k;
+    } catch (e) {}
+    resumeClear(course); return null;
+  }
+  function resumeClear(course) { try { sessionStorage.removeItem(RKEY(course)); } catch (e) {} }
+  const leaving = (e) => { e.preventDefault(); e.returnValue = ""; };
+
+  function run(o, paper, kept) {
     const m = o.mount, qs = paper.questions || [], N = qs.length;
-    const picks = new Array(N).fill(null);
-    let qi = 0;
+    const picks = kept && Array.isArray(kept.picks) && kept.picks.length === N ? kept.picks : new Array(N).fill(null);
+    let qi = kept ? Math.min(N - 1, Math.max(0, +kept.qi || 0)) : 0;
+    const at = kept ? kept.at : Date.now();
+    const keep = () => { try { sessionStorage.setItem(RKEY(o.course), JSON.stringify({ paper, picks, qi, at })); } catch (e) {} };
+    keep();
+    window.addEventListener("beforeunload", leaving); // the browser asks before the page is closed mid-exam
     function renderQ(focus) {
       const q = qs[qi];
+      keep();
       m.innerHTML = `
+        ${kept && qi === +kept.qi && !kept.shown ? `<p class="ex-note" role="status">Welcome back. Your answers so far have been kept.</p>` : ""}
         <div class="ex-q-head"><span>Question ${qi + 1} / ${N}</span><div class="ex-bar"><i style="width:${(qi / N) * 100}%"></i></div></div>
         <div class="ex-q" tabindex="-1">${q.q}</div>
         <div class="ex-opts" role="group" aria-label="Answers">${q.options.map((t, pos) =>
@@ -70,23 +91,32 @@ window.VHExamUI = (function () {
           <button class="btn btn-primary" id="exNext" ${picks[qi] === null ? "disabled" : ""}>${qi === N - 1 ? `Submit ${o.noun} ✓` : "Next →"}</button>
         </div>`;
       $$(".ex-opt", m).forEach((b) => b.addEventListener("click", () => {
-        picks[qi] = +b.dataset.pos;
+        picks[qi] = +b.dataset.pos; keep();
         $$(".ex-opt", m).forEach((x) => { x.classList.toggle("is-picked", x === b); x.setAttribute("aria-pressed", String(x === b)); });
         $("#exNext", m).disabled = false;
       }));
       $("#exPrev", m).addEventListener("click", () => { if (qi > 0) { qi--; renderQ(true); } });
       $("#exNext", m).addEventListener("click", () => { if (qi < N - 1) { qi++; renderQ(true); } else submit(); });
       if (focus) $(".ex-q", m).focus(); // keyboard and screen-reader users land on the new question
+      if (kept) kept.shown = true;
     }
     function submit() {
       m.innerHTML = `<div class="ex-gate"><p class="ex-busy" role="status">Marking your ${o.noun}…</p></div>`;
       VHCloud.examSubmit(paper.attempt, picks).then((res) => {
+        if (res && res.error && /already been marked|expired|not the latest/i.test(res.error)) {
+          window.removeEventListener("beforeunload", leaving); resumeClear(o.course);
+          m.innerHTML = `<div class="ex-gate"><p role="alert">This paper can't be marked now (it was already marked, or it's more than three hours old). Start the ${o.noun} again to get a new set of questions.</p>
+            <div class="ex-actions"><button class="btn btn-primary" id="exFresh">Start again</button></div></div>`;
+          $("#exFresh", m).addEventListener("click", () => start(o));
+          return;
+        }
         if (!res || res.error) {
           m.innerHTML = `<div class="ex-gate"><p role="alert">Your answers couldn't be sent. Check your connection, then try again.</p>
             <div class="ex-actions"><button class="btn btn-primary" id="exResend">Send my answers again</button></div></div>`;
           $("#exResend", m).addEventListener("click", submit);
           return;
         }
+        window.removeEventListener("beforeunload", leaving); resumeClear(o.course);
         result(o, res, paper.attempt);
       });
     }
@@ -95,7 +125,7 @@ window.VHExamUI = (function () {
 
   function result(o, res, attempt) {
     const m = o.mount, passed = !!res.passed, pct = res.score;
-    if (o.onResult) o.onResult(res);
+    if (o.onResult) o.onResult(res, attempt);
     const color = passed ? "#34d399" : "#f87171";
     const by = res.by_module || {};
     const order = Object.keys(o.titles).filter((k) => by[k]);

@@ -6,9 +6,12 @@
         would drift out of sync the moment narration is regenerated —
         old audio played against new text. Network-first revalidates
         cheaply via ETag and always matches the current timings.)
-     • other same-origin assets (css/js/img) → stale-while-revalidate
+     • scripts and styles (js/css)      → network-first, cache fallback
+       (a fresh page must never run last week's script: after a release the
+        HTML and its JS/CSS change together)
+     • other same-origin assets (images, fonts) → stale-while-revalidate
    Bump VERSION / AUDIO_CACHE to purge previously cached responses. */
-const VERSION = "vh-v27";
+const VERSION = "vh-v28";
 const AUDIO_CACHE = "vh-audio-v2";
 
 self.addEventListener("install", () => self.skipWaiting());
@@ -48,8 +51,8 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // pages: network-first with offline fallback to cache
-  if (e.request.mode === "navigate" || url.pathname.endsWith(".html")) {
+  // pages, scripts and styles: network-first with offline fallback to cache
+  if (e.request.mode === "navigate" || /\.(html|js|css)$/.test(url.pathname)) {
     e.respondWith(networkFirst(e.request, VERSION));
     return;
   }

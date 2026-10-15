@@ -25,8 +25,10 @@
 
     <!-- VALUE CALCULATOR -->
     <div class="calc" data-reveal>
-      <div class="calc-head"><h3>Try it: <span class="grad-text">Value Index simulator</span></h3>
-      <p>Move the sliders to see the idea behind value engineering. More function or less cost means better value.</p></div>
+      <div class="calc-head"><h3>Try it: <span class="grad-text">the value ratio</span> (function ÷ cost)</h3>
+      <p>Move the sliders to see the idea behind value engineering. More function or less cost means better value, so a
+      higher ratio is better. This isn’t the Value Index used in function analysis, which is cost ÷ worth, where a
+      higher number means a bigger problem.</p></div>
       <div class="calc-body">
         <div class="calc-sliders">
           <label>Function delivered <b id="fVal">70</b><input type="range" id="fSlider" min="10" max="100" value="70" /></label>
@@ -34,7 +36,7 @@
         </div>
         <div class="calc-out">
           <div class="calc-ring"><svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"/></svg>
-          <div class="calc-num"><b id="viNum">1.00</b><span>Value Index</span></div></div>
+          <div class="calc-num"><b id="viNum">1.00</b><span>Value ratio</span></div></div>
           <p class="calc-verdict" id="viVerdict" aria-live="polite">Balanced. Now try to raise the function or lower the cost.</p>
         </div>
       </div>

@@ -14,8 +14,8 @@ import html, json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "src")
 SITE = "https://valueengineeringhub.com/"
-UPDATED = "2026-09-27"
-UPDATED_HUMAN = "27 September 2026"
+UPDATED = "2026-10-15"
+UPDATED_HUMAN = "15 October 2026"
 PUBLISHED = "2026-07-04"
 AUTHOR = "Avinash Bhosale"
 
@@ -41,10 +41,10 @@ PAGES = [
        tries=[("Lever Selector (on this page)", "cost-levers/#selPains"), ("Should-Cost Build-Up", "toolkit/should-cost-buildup.html"), ("VE Cheat Sheet", "toolkit/ve-cheatsheet.html")], learn=("Module 9 · Cost Levers & Should-Costing", "training.html?open=m9")),
   dict(slug="ideation", old="ideation", nav="Ideation", short="Idea-Generation Techniques",
        title="12 Ways to Generate Cost-Saving Ideas",
-       desc="Brainwriting 6-3-5, SCAMPER, TRIZ, FAST-driven ideation and eight more techniques for the Creative Phase — plus a Value Index simulator.",
+       desc="Brainwriting 6-3-5, SCAMPER, TRIZ, FAST-driven ideation and eight more techniques for the Creative Phase, plus a simple value ratio simulator.",
        card="Twelve ways to come up with more, and better, cost-saving ideas in a workshop.",
        tldr="When you’re coming up with ideas, aim for as many as you can and leave the judging until later. This page covers twelve ways to keep the ideas coming. Brainwriting lets the quiet people in the room contribute as much as the loud ones. SCAMPER gives you a checklist to work through. TRIZ helps when improving one thing makes another worse, like a part that needs to be stronger but can’t get heavier. Whichever you use, think about the job the part does rather than the part itself.",
-       tries=[("Idea Capture Sheet", "toolkit/idea-capture.html"), ("Value Index simulator (on this page)", "ideation/#fSlider")], learn=("Module 5 · Creative Techniques", "training.html?open=m5")),
+       tries=[("Idea Capture Sheet", "toolkit/idea-capture.html"), ("Value ratio simulator (on this page)", "ideation/#fSlider")], learn=("Module 5 · Creative Techniques", "training.html?open=m5")),
   dict(slug="technology", old="tech", nav="Technology", short="Modern Cost Technology",
        title="Tools and Software for Cost Engineering",
        desc="AI should-cost engines, cleansheet models, CT-scan teardown, spend analytics, generative design and LLM copilots — the modern cost stack.",
@@ -67,13 +67,13 @@ PAGES = [
        title="How to Run a Value Engineering Programme",
        desc="Run Value Engineering as an ongoing programme: the savings funnel from idea to audited saving, the KPIs that matter, and the review cadence.",
        card="How to keep VE going after the first study and follow ideas through to real savings.",
-       tldr="A one-off study saves money once. A programme that keeps running saves money every year. Ideas move through a funnel, from first suggestion to money actually saved, and only about one in thirteen makes it all the way. So every idea needs a named owner and a date. A few simple measures and a short monthly review keep it on track.",
+       tldr="A one-off study saves money once. A programme that keeps running saves money every year. Ideas move through a funnel, from first suggestion to money actually saved, and only about one in nineteen makes it all the way. So every idea needs a named owner and a date. A few simple measures and a short monthly review keep it on track.",
        tries=[("Savings Funnel Tracker", "toolkit/savings-funnel-tracker.html"), ("VE Programme Charter", "toolkit/programme-charter.html")], learn=("Module 12 · Running a VE Programme", "training.html?open=m12")),
   dict(slug="toolkit", old="toolkit", nav="Toolkit", short="Free Toolkit",
        title="Free Value Engineering Templates",
-       desc="Seven free, print-ready VE templates with editable Excel versions: FAST worksheet, cost matrix, workshop agenda, savings tracker and more.",
-       card="Seven free worksheets you can print, or fill in as Excel files.",
-       tldr="Seven practical worksheets, free to download. Each one comes as a page you can print or save as a PDF, and as an Excel file you can fill in. You can use them yourself or within your company, as long as you credit where they came from. Each one links to the course module that shows you how to use it.",
+       desc="Fifteen free VE templates, from a FAST worksheet and cost matrix to a programme business case and a board pack, each printable with an editable Excel or PowerPoint version.",
+       card="Fifteen free worksheets and templates you can print or fill in as Excel files.",
+       tldr="Fifteen practical templates, free to download. Most come as a page you can print or save as a PDF and as an Excel file you can fill in; the board pack is a PowerPoint. You can use them yourself or within your company, as long as you credit where they came from. Each one links to the course module that shows you how to use it.",
        tries=[], learn=("The VE Academy · all 13 modules", "training.html")),
   dict(slug="glossary", old="glossary", nav="Glossary", short="Glossary",
        title="Value Engineering Glossary",
@@ -100,7 +100,7 @@ TOC = {
     "cost-levers": [("lever-grid", "leverGrid", "All 36 levers"), ("selector", "lever-selector", "Lever Selector")],
     "job-plan": [("concept-viz", "why-early", "Why start early"), ("save-stepper", "six-steps", "The six steps")],
     "function-analysis": [("fast-board", "fast-diagram", "FAST diagram"), ("matrix-wrap", "cost-vs-worth", "Cost vs worth")],
-    "ideation": [("idea-grid", "techniques", "The techniques"), ("calc", "vi-simulator", "Value Index simulator")],
+    "ideation": [("idea-grid", "techniques", "The techniques"), ("calc", "vi-simulator", "Value ratio simulator")],
     "technology": [("tech-grid", "tools", "The tools"), ("sc-anatomy", "inside-should-cost", "Inside a should-cost")],
     "benchmarking": [("concept-viz", "teardown-view", "Teardown view"), ("td-steps", "five-steps", "Five steps"),
                      ("bench-wrap", "six-ways", "Six ways to compare"), ("bm-case", "case-study", "Case study")],
@@ -333,9 +333,9 @@ def build():
     home_body = "\n\n".join([read("home", "hero.html"), '<main id="main">', "", read("home", "about.html"), playbook_section(),
                              read("home", "faq.html"), read("home", "diagnose.html"), read("home", "engage.html"), "", "</main>"])
     home = head(None, "VAVEhub — Value Engineering, Product Cost Optimisation & Benchmarking",
-                "Free Value Engineering (VAVE) playbook and certified course: the 6-phase job plan, FAST, 36 cost levers, should-costing and teardown benchmarking.",
+                "Free value engineering (VAVE) guides and two free courses with certificates: the 6-phase job plan, FAST, 36 cost levers, should-costing and teardown benchmarking.",
                 SITE, SITE + "og-image.png", "VAVEhub — Value Engineering & Product Cost Optimisation",
-                "6-phase VE job plan · 36 cost levers · TRIZ, SCAMPER & FAST ideation · Should-cost, teardown & benchmarking · 8 industry playbooks.",
+                "Free value engineering courses (a 1-hour course for leaders, a 6-hour Academy) with certificates, plus ten guides and 15 templates.",
                 read("home", "head-extra.html") + "\n" + faq_jsonld(),
                 extra='<meta name="keywords" content="value engineering, value analysis, VAVE, product cost optimisation, cost reduction, should-cost, cleansheet, teardown benchmarking, value methodology job plan, FAST diagram, TRIZ, DFMA, target costing, design to cost" />\n')
     home += "<body>\n\n<!-- ══════════ CHROME ══════════ -->\n" + chrome(None) + "\n\n"

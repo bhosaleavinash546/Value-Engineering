@@ -86,6 +86,7 @@ window.VF_CONFIG = {
     if (lab) window.vhTrack("lab/" + (lab.dataset.lab || lab.id || "lab"));
   }, true);
   if (!c) return;
+  if (/\/admin\.html$/.test(location.pathname)) return; // the owner's dashboard isn't counted (and its CSP blocks the counter)
   var s = document.createElement("script");
   s.async = true;
   s.dataset.goatcounter = "https://" + c + ".goatcounter.com/count";

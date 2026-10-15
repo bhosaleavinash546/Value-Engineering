@@ -15,21 +15,22 @@
   const LIVE = !!(window.VHCloud && VHCloud.live);
 
   /* ── state: this browser first, then the account copy (merged) ── */
-  const state = (() => { try { return JSON.parse(localStorage.getItem(C.storageKey)) || {}; } catch { return {}; } })();
-  state.done = state.done || []; state.doneAt = state.doneAt || {}; state.qc = state.qc || {};
-  state.quiz = state.quiz || { attempts: [], best: 0, passed: false };
-  let acctName = "";
+  const state = (() => { try { const s = JSON.parse(localStorage.getItem(C.storageKey)); return s && typeof s === "object" && !Array.isArray(s) ? s : {}; } catch { return {}; } })();
+  state.done = Array.isArray(state.done) ? state.done : []; state.doneAt = state.doneAt && typeof state.doneAt === "object" ? state.doneAt : {}; state.qc = state.qc && typeof state.qc === "object" ? state.qc : {};
+  state.quiz = state.quiz && typeof state.quiz === "object" ? state.quiz : { attempts: [], best: 0, passed: false };
+  if (!Array.isArray(state.quiz.attempts)) state.quiz.attempts = [];
+  let acctName = "", cloudReady = false; // nothing is uploaded until the account copy has been read and merged
   const save = () => {
     // answers saved by the course's labs (readiness check, pilot picker) travel with the progress
     if (C.labsKey) { try { const l = JSON.parse(localStorage.getItem(C.labsKey)); if (l) state.labs = l; } catch {} }
     try { localStorage.setItem(C.storageKey, JSON.stringify(state)); } catch {}
-    if (LIVE && acctName) VHCloud.saveCourse(C.id, state);
+    if (LIVE && acctName && cloudReady) VHCloud.saveCourse(C.id, state);
   };
   window.VHCourseSync = save;
   function mergeCloud(cloud) {
-    if (!cloud) return false;
+    if (!cloud || typeof cloud !== "object") return false;
     let changed = false;
-    (cloud.done || []).forEach((m) => { if (!state.done.includes(m)) { state.done.push(m); changed = true; } });
+    (Array.isArray(cloud.done) ? cloud.done : []).forEach((m) => { if (typeof m === "string" && !state.done.includes(m)) { state.done.push(m); changed = true; } });
     state.doneAt = Object.assign({}, cloud.doneAt, state.doneAt);
     state.qc = Object.assign({}, cloud.qc, state.qc);
     const q = cloud.quiz || {};
@@ -204,6 +205,13 @@
   function renderQuizGate() {
     $("#certWrap").hidden = true;
     if (state.cert) { renderCertificate(); return; }
+    if ($(".ex-q", mount)) return; // a quiz is in progress: leave it as it is
+    const pc = state.pendingCert;
+    if (pc && pc.attempt && Date.now() - (pc.at || 0) < 30 * 864e5) { // passed, but the certificate wasn't created yet
+      mount.innerHTML = `<div class="ex-gate"><p class="ex-pass"><strong>You passed with ${+pc.score || 0}%.</strong> Enter your name to create your certificate.</p><div class="ex-actions" id="exPending"></div></div>`;
+      VHExamUI.certForm($("#exPending", mount), pc.attempt, acctName, issued);
+      return;
+    }
     const needSignIn = LIVE && !acctName;
     mount.innerHTML = `<div class="ex-gate">
       <p>Twelve questions: one from every module plus five more, including short situations a manager might face.
@@ -222,18 +230,21 @@
     VHExamUI.start({
       mount, course: "leaders", noun: "quiz", titles: quizTitles, signInHref,
       onGoto: (id) => show(id),
-      onResult: (res) => {
+      onResult: (res, attempt) => {
+        if (res.passed && attempt) state.pendingCert = { attempt, score: res.score, at: Date.now() }; // survives a reload before the name is entered
         state.quiz.attempts = (state.quiz.attempts || []).concat([{ t: new Date().toISOString(), s: res.score, p: !!res.passed }]).slice(-20);
         state.quiz.best = Math.max(state.quiz.best || 0, res.score);
         if (res.passed) state.quiz.passed = true;
         save(); refreshProgress();
       },
-      onPass: (res, attempt, box) => VHExamUI.certForm(box, attempt, acctName, (cert) => {
-        state.cert = cert;
-        save(); renderCertificate();
-      }),
+      onPass: (res, attempt, box) => VHExamUI.certForm(box, attempt, acctName, issued),
       onRetake: startQuiz,
     });
+  }
+
+  function issued(cert) {
+    state.cert = cert; delete state.pendingCert;
+    save(); renderCertificate();
   }
 
   function certToken(e) {
@@ -266,23 +277,28 @@
     });
     $("#certName").textContent = e.name;
     $("#certScore").textContent = e.score + "%";
-    $("#certDate").textContent = new Date(e.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const [cy, cm, cd] = String(e.date).slice(0, 10).split("-").map(Number); // the date as issued, not shifted by time zone
+    $("#certDate").textContent = new Date(cy, cm - 1, cd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     $("#certId").textContent = e.id;
     $("#certWrap").hidden = false;
   }
 
   /* ── account: sync progress when signed in ── */
+  let pulling = false;
   function onAccount(user) {
     acctName = user && user.name ? user.name : "";
     if (acctName && LIVE) {
       VHCloud.touchProfile();
-      VHCloud.loadCourse(C.id).then((cloud) => {
-                const changed = mergeCloud(cloud);
-        save(); // push anything done before signing in
+      const pull = (retry) => VHCloud.loadCourse(C.id).then((cloud) => {
+        if (cloud === false) { if (retry) setTimeout(() => pull(false), 15000); return; } // the read failed: upload nothing
+        cloudReady = true;
+        const changed = mergeCloud(cloud);
+        save(); // push the merged copy, including anything done before signing in
         if (state.cert && VHCloud.ensureCertificate) VHCloud.ensureCertificate(state.cert); // retry a failed first save
         if (changed) refreshProgress();
         if (currentId === quizId) renderQuizGate();
       });
+      if (!pulling) { pulling = true; pull(true); }
     }
     if (currentId === quizId) renderQuizGate();
   }

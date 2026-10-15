@@ -25,8 +25,8 @@ html[data-theme="light"] .auth-brand{background:
   linear-gradient(160deg,#1e3a8a,#0f2456 70%)}
 
 .ab-top,.ab-mid,.ab-bot{position:relative;z-index:2}
-.ab-brand{display:flex;align-items:center;gap:.6rem;font-family:var(--font-d);font-weight:800;font-size:1.55rem;color:#fff}
-.ab-brand .logo-mark{width:34px;height:34px;color:#5aa2ff}
+.ab-brand{display:flex;align-items:center;gap:0;font-family:var(--font-d);font-weight:800;font-size:1.55rem;color:#fff}
+.ab-brand .logo-mark{width:34px;height:34px;color:#5aa2ff;margin-right:.6rem}
 .ab-brand span{color:#5aa2ff}
 
 .ab-mid{max-width:440px}
@@ -74,7 +74,7 @@ html[data-theme="light"] .auth-brand{background:
 .ap-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:auto}
 .ap-back{font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .25s}
 .ap-back:hover{color:var(--txt)}
-.ap-brand-mobile{display:none;align-items:center;gap:.5rem;font-family:var(--font-d);font-weight:800;font-size:1.2rem;color:var(--txt)}
+.ap-brand-mobile{display:none;align-items:center;gap:0;font-family:var(--font-d);font-weight:800;font-size:1.2rem;color:var(--txt)}
 .ap-brand-mobile .logo-mark{width:26px;height:26px;color:var(--acc1)}
 .ap-brand-mobile span{color:var(--acc1)}
 @media (max-width:920px){.ap-brand-mobile{display:flex}.ap-back{display:none}}
@@ -178,3 +178,6 @@ html[data-theme="light"] .auth-brand{background:
 .signed-note .sn-text b{color:var(--txt)}
 .signed-note .sn-btn{padding:.42rem .8rem;font-size:.78rem;margin-left:auto}
 .signed-note .sn-btn + .sn-btn{margin-left:0}
+.field-row > :only-child{margin-left:auto} /* "Forgot password?" sits on the right on its own */
+
+.ap-brand-mobile .logo-mark{margin-right:.5rem} /* the wordmark reads VAVEhub, with no gap */

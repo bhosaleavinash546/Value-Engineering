@@ -93,6 +93,8 @@
   }
 
   // escape anything user- or database-controlled before it enters innerHTML
+  // a plain date (2026-10-15) is read as a local date, so it isn't shown a day early west of London
+  const asDate = (v) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v || "")); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date(v); };
   function esc(v) {
     return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
@@ -114,7 +116,12 @@
     const res = await window.VHCloud.verifyCertificate(id);
     btn.classList.remove("is-loading"); btn.disabled = false;
     if (res.status === "valid") {
-      const c = res.cert, d = new Date(c.issued_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      // a VAVE for Leaders ID gets its own explanation, not the VE Academy one
+      const grid = document.querySelector(".cert-path .cp-grid");
+      if (grid && !grid.dataset.academy) grid.dataset.academy = grid.innerHTML;
+      if (grid) grid.classList.toggle("cp4", !/^VL-/.test(res.cert.id));
+      if (grid) grid.innerHTML = !/^VL-/.test(res.cert.id) ? grid.dataset.academy : '<div><h3>What it shows</h3><p>The holder completed VAVE for Leaders, a free one-hour overview course in seven modules, and passed a 12-question quiz at 70% or above. It is an awareness certificate, not the VE Academy certificate.</p></div>';
+      const c = res.cert, d = asDate(String(c.issued_at).slice(0, 10)).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
       const what = /^VL-/.test(c.id)
         ? "</b> completed <i>VAVE for Leaders</i>, the one-hour overview course for senior leaders, scoring <b style='color:var(--txt)'>"
         : "</b> passed the Value Engineering 360° Practitioner exam with a score of <b style='color:var(--txt)'>";
@@ -125,10 +132,11 @@
       // demo/offline: try decoding a token pasted from a share link
       const t = decodeToken(id);
       if (t && t.n && t.id) {
-        const d = new Date(t.d).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-        card("info", "Certificate details (unverified)", "<b style='color:var(--txt)'>" + esc(t.n) + "</b> · score <b style='color:var(--txt)'>" + esc(t.s) + "%</b> · issued " + esc(d) + " · ID " + esc(t.id) + ".<br><span style='font-size:.8rem'>Central verification isn't enabled yet — these details are read from the share link itself.</span>");
+        const d = asDate(t.d).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+        card("info", "Certificate details (unverified)", "<b style='color:var(--txt)'>" + esc(t.n) + "</b> · score <b style='color:var(--txt)'>" + esc(t.s) + "%</b> · issued " + esc(d) + " · ID " + esc(t.id) + ".<br><span style='font-size:.8rem'>" + (window.VHCloud && VHCloud.live ? "Our records couldn't be reached just now, so these details are read from the share link itself." : "Central verification isn't enabled yet. These details are read from the share link itself.") + "</span>");
       } else {
-        card("info", "Verification not available", "Central verification is not enabled on this deployment yet. Paste the full certificate share link to read its details, or contact VAVEhub with the ID.");
+        if (window.VHCloud && VHCloud.live) card("info", "Verification is temporarily unavailable", "Our records couldn't be reached just now. Please try again in a few minutes.");
+        else card("info", "Verification not available", "Central verification isn't enabled on this copy of the site. Paste the full certificate share link to read its details, or contact VAVEhub with the ID.");
       }
     }
   }

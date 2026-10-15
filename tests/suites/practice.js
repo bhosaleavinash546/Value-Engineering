@@ -139,7 +139,10 @@ module.exports = async function practice({ browser, O, r }) {
     }
     const rv = await p.evaluate(() => JSON.parse(localStorage.getItem("vh-review")));
     r.ok(rv.day.right === 2 && Object.values(rv.miss).every((d) => d === "2026-10-16") && Object.keys(rv.miss).length === 1, "review: a missed question is due again tomorrow");
-    r.ok(rv.mods.m1.stage === 1 && rv.mods.m1.next === "2026-10-17", "review: each reviewed module moves on to its next review");
+    const missedMod = await p.evaluate((k) => { const q = window.VH_PRACTICE.find((x) => { let h = 5381; for (let j = 0; j < x.q.length; j++) h = ((h << 5) + h + x.q.charCodeAt(j)) | 0; return "q" + (h >>> 0).toString(36) === k; }); return q && q.mod; }, rv.day.keys[0]);
+    const moved = rv.day.from.filter((m) => m !== missedMod);
+    r.ok(moved.length > 0 && moved.every((m) => rv.mods[m].stage === 1 && rv.mods[m].next === "2026-10-17"), "review: a module answered correctly moves on to its next review");
+    r.ok(!rv.day.from.includes(missedMod) || (rv.mods[missedMod].stage === 0 && rv.mods[missedMod].next === "2026-10-17"), "review: a module whose question was missed keeps its stage");
     r.ok(/Today's review is done: 2 of 3/.test(await p.textContent("#vhWeek")), "review: today's result is shown");
     await p.clock.setSystemTime(new Date("2026-10-16T09:00:00")); await p.reload(); await p.waitForTimeout(800);
     r.ok(/1 question due today, from questions you missed/.test(await p.textContent("#vhWeek")), "review: the next day brings back the missed question");

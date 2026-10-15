@@ -22,21 +22,21 @@
           <div class="cw-col cw-step" style="--base:77;--h:2;--i:5"><b class="cw-val">-2</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Logistics</span></div>
           <div class="cw-col cw-anchor cw-target" style="--base:0;--h:77;--i:6"><b class="cw-val">77</b><i class="cw-track"><i class="cw-bar"></i></i><span class="cw-lbl">Target</span></div>
         </div>
-        <p class="cw-foot">A 23-point cost reduction, built up from checked ideas. Each step has an owner and a date. Without those, a cost walk is just a nice picture, not a plan.</p>
+        <p class="cw-foot">A 23-point cost reduction, at the top of the usual range, built up from checked ideas. Each step has an owner and a date. Without those, a cost walk is just a nice picture, not a plan.</p>
       </div>
       <h3>7.2 · Engineering checks</h3>
       <p>Reduce the risk before you commit. Use <strong>CAE simulation</strong> (computer modelling) to check a thinner
       wall or a smaller safety margin. Use a <strong>design FMEA</strong> to find new ways the product could fail. And
       use a <strong>DVP&amp;R</strong> (design verification plan and report) sized to how risky the change is. For
-      sourcing ideas, a <strong>should-cost model</strong> or a supplier quote confirms the saving. In regulated
-      industries, ask early whether the change needs re-certification, re-testing or PPAP (customer approval of
-      production parts).</p>
+      sourcing ideas, a <strong>should-cost model</strong> or a supplier quote confirms the saving. Ask early what
+      re-approval the change needs: PPAP (customer approval of production parts) in automotive, a first-article
+      inspection (AS9102) in aerospace, a design-change review in medical devices.</p>
 
       <h3>7.3 · The business case</h3>
       <p>The basic sums are always the same: <strong>annual saving = saving per unit × volume</strong>, and
-      <strong>payback = one-time cost ÷ annual saving</strong>. Most changes to products already in production should
-      pay back in under <strong>12 months</strong>, and well-run VE studies return more than <strong>10:1</strong>
-      overall. Be honest about savings: show them before and after the one-time costs, and give a date. A saving that
+      <strong>payback = one-time cost ÷ annual saving</strong>. Many companies expect changes to products already in
+      production to pay back within <strong>12 months</strong>. Published programmes, such as the US Federal Highway
+      Administration's VE programme, report returns well above <strong>10:1</strong>. Be honest about savings: show them before and after the one-time costs, and give a date. A saving that
       arrives in 18 months is worth less than one that arrives this quarter.</p>
 
       
@@ -59,13 +59,17 @@
       possible failure on <strong>Severity × Occurrence × Detection</strong> (1–10 each; multiply them to get the RPN,
       the risk priority number). But score the <em>change from the current design</em>, not the absolute figure. A
       thinner wall that raises occurrence from 2 to 4 on a failure with severity 8 needs action. One that goes from 2 to
-      3 on a failure with severity 2 just needs a note. For serious or regulated systems, move up to a full DFMEA with
-      the whole team. That isn't red tape. It's what makes the saving safe to count.</p>
+      3 on a failure with severity 2 just needs a note. Many companies, and all automotive suppliers using the 2019
+      AIAG &amp; VDA handbook, now use Action Priority tables instead of the RPN, because the RPN treats a severity of 10
+      the same as an occurrence of 10. The idea is the same: a severe failure needs action even if it's unlikely. For
+      serious or regulated systems, move up to a full DFMEA with the whole team. It's what lets finance count the
+      saving.</p>
       <h3>7.6 · The money: sums finance will sign off</h3>
-      <p><strong>Net saving</strong> = the saving per part, minus the one-time costs spread over time (tooling,
-      testing, engineering hours, scrapped stock and re-approval). <strong>Payback</strong> = one-time cost ÷ annual net
-      saving. That's the right measure when volumes are steady. When volumes are rising or falling, use
-      <strong>NPV</strong> (net present value) at the company's minimum required return. And put a date on everything:
+      <p><strong>Annual saving</strong> = saving per part × annual volume. <strong>One-time cost</strong> = tooling +
+      testing + engineering hours + scrapped stock + re-approval. <strong>Payback</strong> = one-time cost ÷ annual
+      saving. <strong>Net saving over the life</strong> = annual saving × years of production left − one-time cost.
+      Payback is a quick screen. When options differ in timing, life or volume profile, compare them by
+      <strong>NPV</strong> (net present value) at the company's required return. And put a date on everything:
       savings start on the day the change is <em>made</em>, not the day it's approved. A proposal without a date has a
       business case of zero.</p>
 
@@ -115,13 +119,14 @@ servicing the die at set intervals. Ready for a decision.</p></div>
         </svg>
         <p class="fg-foot">Payback = one-time cost ÷ annual saving = £52.8k ÷ £90k = <b>about 7 months</b>.</p>
       </div>
-      <div class="tcase"><h4>Case study — documented</h4><p><b>Development at giga scale: Tesla's Model Y rear underbody.</b> The idea was to replace about 70 pressed and
-welded parts (as used on the Model 3) with one or two giant aluminium castings. Reports put the saving at about
-<b>40% of the manufacturing cost</b> for that assembly, plus a big saving on equipment (hundreds of welding robots no
-longer needed), and a rear body about 30% lighter. It also brought real new risks (repairs, casting quality) that had to
-be engineered and tested before the savings were real. It's a textbook Phase 5: a bold idea, thorough development and a
-fixed start date. <i>Sources: Tesla statements; Charged EVs / Electrek reporting; Munro &
-Associates analyses.</i></p></div>
+      <div class="tcase"><h4>Case study (documented)</h4><p><b>Development at giga scale: Tesla's Model Y rear underbody.</b> The idea was to replace about 70 pressed and
+welded parts (as used on the Model 3) with one or two giant aluminium castings. Tesla put the saving at about
+<b>40% of the manufacturing cost</b> for that assembly, plus a big saving on equipment (hundreds
+of welding robots no longer needed). It also brought real new risks (repairs, casting quality) that had to be
+engineered and tested before the savings were real. It's a textbook Phase 5: a bold idea, thorough development and a
+fixed start date. Tesla has since scaled back some of its larger single-casting plans, which is a reminder that
+development decides how far an idea goes. <i>Sources: Tesla Battery Day, 22 Sept 2020; Charged EVs; Munro &amp;
+Associates teardown.</i></p></div>
 
       <figure class="tphoto">
         <img src="photos/tesla-giga-casting.webp" alt="A large cast aluminium Tesla body section, photographed hanging on a wall" width="1000" height="971" loading="lazy" decoding="async" />
@@ -133,7 +138,7 @@ Associates analyses.</i></p></div>
         <li>Check with simulation and FMEA. Reducing the risk is what makes savings real.</li>
         <li>Aim for payback in under 12 months, and report savings after costs, with dates.</li>
       </ul></div>
-      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Build one business case. Pick your best idea, estimate the saving per unit × annual volume, guess the one-time cost
+      <div class="tdo"><h4>Now do it: hands-on assignment</h4><p>Build one business case. Pick your best idea, estimate the saving per unit × annual volume, guess the one-time cost
 and work out the payback in months. If it's under 12, you'd take it to a real board.</p></div>
       <div class="fn-challenge" id="m7Chal">
         <div class="fnc-head"><span class="fnc-tag">⚡ Development challenge</span><h4>Is this ready for a decision?</h4>

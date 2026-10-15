@@ -11,6 +11,28 @@ window.VHAccount = (function () {
 
   const SESSION_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // demo sessions expire after 30 days
 
+  /* Shared computers: course progress in this browser belongs to whoever signed in last ("vh-owner").
+     When someone else signs in, it's cleared before the course pages read it, so one person's
+     progress never ends up in another person's account. Runs before training.js / course.js / capstone.js. */
+  const COURSE_KEYS = ["vf-academy", "vh-review", "vh-capstone", "vh-leaders", "vh-leaders-labs", "vh-mistakes", "vh-last-course", "vh-feedback"];
+  (function checkOwner() {
+    try {
+      let who = "";
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (/^sb-.+-auth-token$/.test(k)) { const t = JSON.parse(localStorage.getItem(k)); if (t && t.user && t.user.id) who = "u:" + t.user.id; }
+      }
+      if (!who) { const s = JSON.parse(localStorage.getItem("vh-session")); if (s && s.email) who = "e:" + String(s.email).toLowerCase(); }
+      if (!who) return; // signed out: leave things as they are
+      const prev = localStorage.getItem("vh-owner");
+      if (prev && prev !== who) {
+        COURSE_KEYS.forEach((k) => localStorage.removeItem(k));
+        try { Object.keys(sessionStorage).filter((k) => k.indexOf("vh-exam-run-") === 0).forEach((k) => sessionStorage.removeItem(k)); } catch (e) {}
+      }
+      localStorage.setItem("vh-owner", who);
+    } catch (e) {}
+  })();
+
   function localSession() {
     try {
       const s = JSON.parse(localStorage.getItem("vh-session"));
@@ -63,9 +85,9 @@ window.VHAccount = (function () {
     const wrap = document.createElement("div");
     wrap.className = "acct-chip";
     wrap.innerHTML =
-      '<button class="acct-btn" type="button" aria-haspopup="true" aria-expanded="false">' +
+      '<button class="acct-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="acctMenu">' +
         '<span class="acct-avatar">' + esc(initial) + '</span><span class="acct-name">' + esc(first) + '</span><span class="acct-caret">▾</span></button>' +
-      '<div class="acct-menu" hidden>' +
+      '<div class="acct-menu" id="acctMenu" hidden>' +
         '<div class="acct-who">Signed in as<br><b>' + esc(user.name) + '</b>' + (user.email ? '<span>' + esc(user.email) + '</span>' : '') + '</div>' +
         '<a href="' + myCourse() + '">🎓 My learning</a>' +
         '<a href="toolkit/">🧰 Toolkit</a>' +
@@ -79,7 +101,10 @@ window.VHAccount = (function () {
       btn.setAttribute("aria-expanded", String(open));
     });
     document.addEventListener("click", () => { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); } });
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape" || menu.hidden) return;
+      menu.hidden = true; btn.setAttribute("aria-expanded", "false"); btn.focus(); // back to the button that opened it
+    });
     $("[data-signout]", wrap).addEventListener("click", signOut);
     return wrap;
   }

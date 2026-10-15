@@ -42,7 +42,7 @@
 
   /* ── Reveal engine (spring reveals with auto-stagger) ── */
   $$("[data-stagger]").forEach((group) => {
-    $$("[data-reveal]", group).forEach((el, i) => el.style.setProperty("--rd", i * 70 + "ms"));
+    $$("[data-reveal]", group).forEach((el, i) => el.style.setProperty("--rd", Math.min(i, 6) * 70 + "ms")); // long grids don't trickle in
   });
   $$("[data-reveal][data-delay]").forEach((el) => el.style.setProperty("--rd", el.dataset.delay + "ms"));
   const revealIO = new IntersectionObserver(
@@ -87,7 +87,8 @@
   const spyLinks = $$(".nav-links a[data-spy]").filter((a) => (a.getAttribute("href") || "").startsWith("#"));
   const spyIO = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (!e.isIntersecting) return;
+      // leaving the section clears its link, so it doesn't stay underlined down the rest of the page
+      if (!e.isIntersecting) { spyLinks.forEach((a) => { if (a.getAttribute("href") === "#" + e.target.id) a.classList.remove("is-active"); }); return; }
       spyLinks.forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === "#" + e.target.id));
     });
   }, { rootMargin: "-40% 0px -55% 0px" });
@@ -127,7 +128,8 @@
       // idle once the ring has caught up with the pointer: no work while the mouse is still
       if (Math.abs(mx - rx) + Math.abs(my - ry) > 0.3) requestAnimationFrame(loop); else running = false;
     }
-    document.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; if (!running) { running = true; requestAnimationFrame(loop); } });
+    document.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; if (!running) { running = true; requestAnimationFrame(loop); } }, { passive: true });
+    document.addEventListener("mousemove", () => document.documentElement.classList.add("cursor-live"), { once: true }); // nothing shows at the corner before the mouse moves
     document.addEventListener("mouseover", (e) => {
       ring.classList.toggle("is-hover", !!e.target.closest("a,button,input,.lever,.idea,.tech-card"));
     });
@@ -893,6 +895,7 @@
     const id = btn.dataset.yt, img = btn.querySelector("img");
     // not every upload has a full-HD thumbnail; YouTube then returns a 120px placeholder
     if (img) img.addEventListener("load", () => { if (img.naturalWidth <= 120) img.src = "https://i.ytimg.com/vi/" + id + "/hqdefault.jpg"; });
+    if (img) img.addEventListener("error", () => img.remove()); // YouTube blocked (common on work networks): the gradient stays, not a broken image
     btn.addEventListener("click", () => {
       const f = document.createElement("iframe");
       f.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0&modestbranding=1&playsinline=1";

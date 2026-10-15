@@ -169,9 +169,11 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   r.ok(ov <= 0, "phone: no sideways scrolling");
   await ctx.close();
 
-  // ── Account page counts the right number of questions
+  // ── Account page names both courses, and a Leaders learner sees their own course
   p = track(await browser.newPage()); await p.goto(`${O}/auth.html`); await p.waitForTimeout(500);
-  r.ok(await p.evaluate(() => [...document.querySelectorAll("b")].some((b) => b.textContent === "132")), "sign-up page mentions the 132-question bank");
+  r.ok(await p.evaluate(() => /13 \+ 7/.test(document.querySelector(".ab-stats").textContent)), "sign-up page counts the modules of both courses");
+  await p.goto(`${O}/auth.html?next=leaders.html`); await p.waitForTimeout(500);
+  r.ok(/VAVE for Leaders/.test(await p.textContent("#view-signin .av-sub")), "sign-in from VAVE for Leaders names that course");
   await p.close();
 
   r.ok(!errs.length, `no script errors${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);

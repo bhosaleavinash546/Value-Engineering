@@ -1,5 +1,6 @@
+@import url("../fonts/fonts.css");
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#1a2233;background:#f4f6fb;line-height:1.5;padding:2rem 1rem}
+body{font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;color:#1a2233;background:#f4f6fb;line-height:1.5;padding:2rem 1rem}
 .sheet{max-width:900px;margin:0 auto;background:#fff;border:1px solid #dde3f0;border-radius:12px;padding:2.2rem 2.4rem;box-shadow:0 4px 24px rgba(20,30,60,.08)}
 .brand{font-weight:800;font-size:1.05rem;letter-spacing:-.01em}
 .brand b{color:#2563eb}
@@ -52,3 +53,6 @@ td.hint{color:#5a6785;font-size:.74rem}
 .sign .line{border-bottom:1px solid #b9c2d8;height:2rem}
 .meta.meta2{grid-template-columns:repeat(2,1fr);max-width:520px;margin-bottom:.8rem}
 @media screen and (max-width:760px){.sign{grid-template-columns:1fr}.meta.meta2{grid-template-columns:1fr 1fr}}
+
+/* long formulas wrap inside the page instead of running off it */
+code{white-space:normal;overflow-wrap:anywhere}

@@ -44,10 +44,13 @@ create index if not exists exam_attempts_user on public.exam_attempts (user_id, 
 -- the option each learner chose for each question (index into exam_questions.options), so badly
 -- worded questions show up in the owner's "Hardest questions" table
 alter table public.exam_attempts add column if not exists answers int[];
+-- the marked result, so a paper sent twice (a lost reply, a double click) gets the same answer back
+alter table public.exam_attempts add column if not exists result jsonb;
 
 -- certificates are now issued only by issue_certificate() below
 drop policy if exists "own cert insert" on public.certificates;
 drop policy if exists "own cert update" on public.certificates;
+revoke insert, update, delete on public.certificates from anon, authenticated;
 
 create or replace function public.exam_pass_mark(p_course text)
 returns int language sql immutable as $$ select case when p_course = 'leaders' then 70 else 80 end $$;
@@ -127,11 +130,20 @@ declare
   uid uuid := auth.uid();
   a exam_attempts%rowtype;
   n int; right_n int; pct int; ok boolean;
-  mods jsonb; review jsonb;
+  mods jsonb; review jsonb; res jsonb;
 begin
   select * into a from exam_attempts where id = p_attempt and user_id = uid for update;
   if not found then raise exception 'Attempt not found'; end if;
-  if a.submitted_at is not null then raise exception 'This attempt has already been marked'; end if;
+  if a.submitted_at is not null then
+    if a.result is not null then return a.result; end if;   -- sent twice: the first marking stands
+    raise exception 'This attempt has already been marked';
+  end if;
+  -- only the newest paper counts, and only for three hours (so nobody can keep several papers open
+  -- and submit whichever they have researched)
+  if exists (select 1 from exam_attempts x where x.user_id = uid and x.course = a.course and x.started_at > a.started_at) then
+    raise exception 'This paper is not the latest one. Start the exam again.';
+  end if;
+  if a.started_at < now() - interval '3 hours' then raise exception 'This paper has expired. Start the exam again.'; end if;
 
   create temporary table if not exists _marks (ord int, module text, q text, opts jsonb, chosen int, answer int, expl text) on commit drop;
   delete from _marks;
@@ -155,13 +167,15 @@ begin
       into review from _marks where chosen is distinct from answer;
   end if;
 
-  update exam_attempts set submitted_at = now(), score = pct, passed = ok, by_module = mods,
-         answers = array(select chosen from _marks order by ord)
-   where id = a.id;
-
-  return jsonb_build_object('score', pct, 'right', right_n, 'total', n, 'passed', ok,
+  res := jsonb_build_object('score', pct, 'right', right_n, 'total', n, 'passed', ok,
                             'pass', exam_pass_mark(a.course), 'by_module', mods, 'review', review,
                             'wait_until', case when ok then null else now() + interval '1 hour' end);
+
+  update exam_attempts set submitted_at = now(), score = pct, passed = ok, by_module = mods,
+         answers = array(select chosen from _marks order by ord), result = res
+   where id = a.id;
+
+  return res;
 end $$;
 
 -- ── certificate: only after a passed attempt; one per learner per course ──

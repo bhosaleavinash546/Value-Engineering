@@ -26,20 +26,20 @@
   const BANNED = ["provide", "allow", "enable", "facilitate", "ensure", "help", "make"];
   const WORKED = {
     p1: { scope: "In scope: the K-17's body, lid, controls, base and trim, and how it's assembled and packed. Out of scope: the heating element (a safety-certified part on a contract renewed last year) and the mains cable.",
-      start: "9.00", target: "7.88", why: "The allowable cost. It sells for £18 with VAT; after VAT and the retailer's 30% the business receives £10.50, and it needs a 25% margin, which leaves £7.88. That's a 12.5% cut.",
+      start: "9.00", target: "7.88", why: "The allowable cost. It sells for £18 with VAT; after VAT and the retailer's 30% the business receives £10.50, and it needs a 25% margin, which leaves £7.875, shown as £7.88. That's a cut of about 12.5%.",
       top: ["Heating element", "Body (moulded, coloured)", "Assembly and packing"],
       req: "“Customers expect chrome.” The survey says 60% of buyers don't care either way, and reviews say it shows fingerprints. Keep the look, but question how we get it." },
     p2: { basic: "Heat water", fns: ["Contain water", "Control temperature", "Conduct current", "Convey esteem", "Indicate status", "Pour water"], targets: ["Control temperature", "Convey esteem"] },
     p3: { ideas: ["Convey esteem: moulded-in colour and an in-mould film instead of the chrome trim", "Convey esteem: metallic-effect plastic, as used on car interior trim",
-      "Convey esteem: drop the trim, change the handle colour instead", "Control temperature: one combined thermostat and switch from a catalogue", "Control temperature: bimetal disc instead of the electronic board",
-      "Control temperature: borrow the boil-dry sensor design from rice cookers", "Contain water: thinner body wall with ribs where it's needed", "Contain water: filter moulded into the lid",
+      "Convey esteem: drop the trim, change the handle colour instead", "Control temperature: one combined thermostat and switch from a catalogue", "Control temperature: remove the separate boil-dry cut-out and rely on the thermostat alone",
+      "Control temperature: borrow the switch-off sensor design from rice cookers", "Contain water: thinner body wall with ribs where it's needed", "Contain water: filter moulded into the lid",
       "Conduct current: standard 360° base connector from a catalogue", "Conduct current: shorter internal wiring by moving the switch", "Assemble: snap-fit base cover, three screws instead of seven",
       "Assemble: one-piece lid and hinge, which also fixes the hinge failures", "Pack: smaller carton, 12 per outer instead of 8", "Indicate status: light pipe from the existing LED instead of a second LED"].join("\n") },
     p4: [["Convey esteem: moulded-in colour and an in-mould film instead of the chrome trim", "0.62", 7, 8, 7], ["Control temperature: one combined thermostat and switch from a catalogue", "0.38", 6, 7, 6],
       ["Assemble: snap-fit base cover, three screws instead of seven", "0.15", 4, 8, 8], ["Contain water: filter moulded into the lid", "0.08", 3, 7, 7]],
     p5: { saving: "0.62", volume: "250000", tooling: "48000", test: "6000", hours: "80", rate: "65", months: "4", step: "3",
       risk: "The film could lift near the hot base. Rig test: 500 boil cycles and a scratch test before ordering the full tool; the trial tool is ordered alongside, with a stop point." },
-    p6: [["Approve", "Sam Patel, design", "Mar 2027", "L3"], ["Approve with conditions", "Ana Ruiz, purchasing", "May 2027", "L2"], ["Approve", "Lee Chen, manufacturing", "Feb 2027", "L3"], ["Needs more data", "Sam Patel, design", "Jan 2027", "L1"]],
+    p6: [["Approve", "Sam Patel, design", "Mar 2027", "L3"], ["Approve with conditions", "Ana Ruiz, purchasing", "May 2027", "L2"], ["Approve with conditions", "Lee Chen, manufacturing", "Feb 2027", "L2"], ["Needs more data", "Sam Patel, design", "Jan 2027", "L1"]],
   };
   const PHASES = [
     { id: "p1", n: 1, title: "Information", mod: "m3", gate: ["The starting cost is £9.00, checked by finance, and it's fixed for the whole study",
@@ -48,34 +48,53 @@
     { id: "p3", n: 3, title: "Creative", mod: "m5", gate: ["At least 12 ideas, none crossed out", "Every idea starts with the function it serves", "At least two ideas for each target function", "At least one idea is borrowed from another industry or product"] },
     { id: "p4", n: 4, title: "Evaluation", mod: "m6", gate: ["The criteria and weights were fixed before scoring", "Ideas that fail a must-pass check (safety, standards) were screened out first", "The ranking was checked by moving each weight 10 points", "Every idea taken forward has a named champion"] },
     { id: "p5", n: 5, title: "Development", mod: "m7", gate: ["Finance has checked the saving per unit", "All one-time costs are in: tooling, testing, engineering", "Testing goes only as far up the ladder as the risk needs", "There is a start date, and long-lead items start alongside the tests"] },
-    { id: "p6", n: 6, title: "Presentation and implementation", mod: "m8", gate: ["Every idea has a decision, an owner and a date", "The cost walk reaches the target, or the gap left is explained", "Savings will be counted only at L4, checked against the £9.00 starting cost", "The next review date is in the diary"] },
+    { id: "p6", n: 6, title: "Presentation and implementation", short: "Presentation", mod: "m8", gate: ["Every idea has a decision, an owner and a date", "The cost walk reaches the target, or the gap left is explained", "Savings will be counted only at L4, checked against the £9.00 starting cost", "The next review date is in the diary"] },
   ];
 
   /* ── saved work ── */
   const KEY = "vh-capstone";
-  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  const tidy = (c) => { c = c && typeof c === "object" && !Array.isArray(c) ? c : {}; if (!c.gates || typeof c.gates !== "object") c.gates = {}; c.phase = +c.phase || 1; return c; };
+  const load = () => { try { return tidy(JSON.parse(localStorage.getItem(KEY))); } catch { return tidy({}); } };
   let cap = load();
-  cap.gates = cap.gates || {}; cap.phase = cap.phase || 1;
-  let saveTimer = null;
+  // the account copy is read before anything is uploaded, so opening the page on a new device can't wipe it
+  const LIVE = !!(window.VHCloud && VHCloud.live);
+  let cloudReady = !LIVE, cloudPending = false, saveTimer = null;
+  const saveNote = (msg) => { const n = $("#capSave"); if (n) n.textContent = msg; };
+  function upload(now) {
+    if (!LIVE) return;
+    if (!cloudReady) { cloudPending = true; return; }
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      if (!(await VHCloud.user())) return; // signed out: this browser only
+      const ok = await VHCloud.saveCourse("capstone", cap);
+      saveNote(ok ? "Your work is saved in this browser and to your account." : "Saved in this browser. Your account couldn't be reached just now; we'll try again with your next change.");
+    }, now ? 0 : 1200);
+  }
   function save(now) {
     cap.t = Date.now();
     try { localStorage.setItem(KEY, JSON.stringify(cap)); } catch {}
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(async () => {
-      if (window.VHCloud && VHCloud.live && (await VHCloud.saveCourse("capstone", cap))) $("#capSave").textContent = "Your work is saved in this browser and to your account.";
-    }, now ? 0 : 1200);
+    upload(now);
   }
-  if (window.VHCloud && VHCloud.live) VHCloud.loadCourse("capstone").then((cloud) => {
-    if (cloud && (cloud.t || 0) > (cap.t || 0)) { cap = Object.assign({ gates: {} }, cloud); try { localStorage.setItem(KEY, JSON.stringify(cap)); } catch {} show(cap.phase); }
-    if (cloud !== null) $("#capSave").textContent = "Your work is saved in this browser and to your account.";
-  });
+  function pullCloud(retry) {
+    VHCloud.loadCourse("capstone").then((cloud) => {
+      if (cloud === false) { if (retry) setTimeout(() => pullCloud(false), 15000); else saveNote("Saved in this browser. Your account copy couldn't be reached, so nothing has been uploaded."); return; }
+      cloudReady = true;
+      const pending = cloudPending; cloudPending = false;
+      if (cloud && typeof cloud === "object" && (cloud.t || 0) > (cap.t || 0)) {
+        cap = tidy(Object.assign({}, cloud)); try { localStorage.setItem(KEY, JSON.stringify(cap)); } catch {} show(cap.phase, true);
+        saveNote("Your work is saved in this browser and to your account.");
+      } else if (cap.t && (pending || !cloud || (cloud.t || 0) < cap.t)) upload(true); // this browser has newer work
+      else if (cloud) saveNote("Your work is saved in this browser and to your account.");
+    });
+  }
+  if (LIVE) pullCloud(true);
   const P = (id) => (cap[id] = cap[id] || {});
   const passed = (id) => { const g = cap.gates[id] || []; const ph = PHASES.find((x) => x.id === id); return ph.gate.every((_, i) => g[i]); };
 
   /* ── layout pieces ── */
   function steps() {
     stepsEl.innerHTML = PHASES.map((ph) => `<li><button type="button" data-go="${ph.n}" class="${cap.phase === ph.n ? "is-on" : ""}${passed(ph.id) ? " is-done" : ""}"${cap.phase === ph.n ? ' aria-current="step"' : ""}>
-      <span>${passed(ph.id) ? "✓" : ph.n}</span>${ph.title}</button></li>`).join("") +
+      <span>${passed(ph.id) ? "✓" : ph.n}</span>${ph.short || ph.title}</button></li>`).join("") +
       `<li><button type="button" data-go="7" class="${cap.phase === 7 ? "is-on" : ""}"${cap.phase === 7 ? ' aria-current="step"' : ""}><span>📄</span>Your study</button></li>`;
   }
   stepsEl.addEventListener("click", (e) => { const b = e.target.closest("[data-go]"); if (b) { show(+b.dataset.go); const h = cap.phase === 7 ? report : $("#capH", mount); if (h) h.focus({ preventScroll: true }); } });
@@ -242,7 +261,7 @@
         <td class="cap-sc" id="p4t${i}"></td></tr>`; }).join("")}</tbody></table></div>`;
     const worked = `<div class="tbl-scroll" tabindex="0" role="region" aria-label="Worked scoring"><table class="cap-table"><thead><tr><th>Idea</th><th>Saving</th><th>S / R / E</th><th>Score</th></tr></thead><tbody>
       ${WORKED.p4.map((r) => `<tr><td>${esc(r[0])}</td><td>£${r[1]}</td><td>${r[2]} / ${r[3]} / ${r[4]}</td><td>${rowScore(r).toFixed(1)}</td></tr>`).join("")}</tbody></table></div>
-      <p>The bimetal-disc idea was screened out first: it changes the boil-dry protection, which is a must-pass safety item. Moving each weight by 10 points doesn't change the top two.
+      <p>The idea to remove the separate boil-dry cut-out was screened out first: boil-dry protection is a must-pass safety item. Moving each weight by 10 points never changes the winner. Second place is close: with saving at 40% and effort at 30%, the snap-fit edges ahead of the thermostat, so both go forward.
       The champions: Sam Patel (trim), Ana Ruiz (thermostat), Lee Chen (snap-fit).</p>`;
     mount.innerHTML = frame(ph, facts, work, worked);
     const check = () => {
@@ -329,7 +348,7 @@
       </tbody></table></div><div id="p6walk"></div>`;
     const worked = `<div class="tbl-scroll" tabindex="0" role="region" aria-label="Worked decision log"><table class="cap-table"><thead><tr><th>Idea</th><th>Decision</th><th>Owner</th><th>By</th><th>Stage</th></tr></thead><tbody>
       ${WORKED.p4.map((r, i) => `<tr><td>${esc(r[0])}</td>${WORKED.p6[i].map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
-      <p>Approved and conditional ideas save £1.15 a kettle: £9.00 → £7.85, just under the £7.88 target. The filter idea (£0.08) waits for more data.
+      <p>Approved and conditional ideas save £1.15 a kettle: £9.00 → £7.85, just under the £7.88 target. That's only 3p of headroom. If one idea slips, the target is missed, so keep the filter idea and two parked ideas warm. The filter idea (£0.08) waits for more data. The thermostat and snap-fit ideas are approved subject to finance checking their business cases, so they sit at L2 until then.
       Nothing is reported as saved yet: none is at L4. The next review is booked for the first Thursday of next month.</p>`;
     mount.innerHTML = frame(ph, facts, work, worked);
     const check = () => {
@@ -388,7 +407,7 @@
         <h3>6 · Decisions</h3>
         <table class="rp-table"><thead><tr><th>Idea</th><th>Decision</th><th>Owner</th><th>By</th><th>Stage</th></tr></thead><tbody>
           ${p4rows.length ? p4rows.map((r, i) => { const x = p6rows[i] || []; return `<tr><td>${esc(r[0])}</td><td>${dash(x[0])}</td><td>${dash(x[1])}</td><td>${dash(x[2])}</td><td>${dash(x[3])}</td></tr>`; }).join("") : `<tr><td colspan="5">${dash("")}</td></tr>`}</tbody></table>
-        <p class="rp-concl">${go.length ? (after <= ALLOW + 0.005 ? `The approved ideas take the K-17 from £9.00 to ${gbp(after)}, inside the £7.88 target: ${gbp0((START - after) * VOLUME)} a year at ${VOLUME.toLocaleString("en-GB")} kettles. Savings will be reported only when each change is in production and checked by finance against the £9.00 starting cost.`
+        <p class="rp-concl">${go.length ? (after <= ALLOW + 0.005 ? `The approved ideas take the K-17 from £9.00 to ${gbp(after)}, inside the £7.88 target: ${gbp0((START - after) * VOLUME)} a year at ${VOLUME.toLocaleString("en-GB")} kettles, before one-time costs. Savings will be reported only when each change is in production and checked by finance against the £9.00 starting cost.`
           : `The approved ideas take the K-17 from £9.00 to ${gbp(after)}, ${gbp(after - ALLOW)} short of the £7.88 target. The gap needs another idea or a decision from the sponsor.`) : "No decisions recorded yet."}</p>
         <footer class="rp-foot">Page 2 of 2 · Figures are illustrative. The method follows SAVE International's six-phase job plan.</footer></div>`;
     $("#rpPrint").addEventListener("click", () => { track("capstone/print"); window.print(); });
@@ -397,8 +416,9 @@
 
   /* ── switching phases ── */
   const VIEWS = [null, p1, p2, p3, p4, p5, p6];
-  function show(n) {
-    cap.phase = Math.min(7, Math.max(1, n || 1)); save(true);
+  function show(n, quiet) {
+    const to = Math.min(7, Math.max(1, n || 1));
+    if (to !== cap.phase || !quiet) { cap.phase = to; if (!quiet) save(true); }
     // a fresh container drops the previous phase's listeners
     const fresh = mount.cloneNode(false); mount.replaceWith(fresh); mount = fresh;
     steps();
@@ -407,5 +427,5 @@
     VIEWS[cap.phase]();
   }
   track("capstone/open");
-  show(cap.phase);
+  show(cap.phase, true); // opening the page changes nothing, so nothing is saved
 })();

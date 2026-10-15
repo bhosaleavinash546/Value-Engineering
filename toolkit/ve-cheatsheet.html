@@ -13,7 +13,7 @@
 .kv{font-size:.8rem;margin:0 0 .8rem 1.05rem}
 .kv li{margin-bottom:.28rem}
 .kv b{color:#1d4ed8}
-code{font-family:'Consolas','Menlo',monospace;font-size:.78rem;background:#eef1fa;border:1px solid #c9d2e6;border-radius:4px;padding:.05rem .3rem;white-space:nowrap}
+code{font-family:'Consolas','Menlo',monospace;font-size:.78rem;background:#eef1fa;border:1px solid #c9d2e6;border-radius:4px;padding:.05rem .3rem;white-space:normal;overflow-wrap:anywhere}
 .vi-ok{color:#047857;font-weight:700}.vi-watch{color:#b45309;font-weight:700}.vi-attack{color:#b91c1c;font-weight:700}
 @media print{.cols{grid-template-columns:1fr 1fr}}
 @media (max-width:720px){.cols{grid-template-columns:1fr}code{white-space:normal;word-break:break-word}}
@@ -21,14 +21,14 @@ code{font-family:'Consolas','Menlo',monospace;font-size:.78rem;background:#eef1f
 <div class="btnbar"><a class="btn ghost" href="./" style="text-decoration:none">← All templates</a><button class="btn" onclick="window.print()">Print / Save as PDF</button></div>
 <div class="sheet">
 <div class="head"><div><div class="brand">VAVE<b>hub</b> · Toolkit 07</div><h1>The VE Cheat Sheet</h1>
-<p class="sub">The whole discipline on one printable page — pin it above your desk. Full explanations in the free 13-module course at the VAVEhub VE Academy.</p></div><div class="ver"><b>v1.0 · Updated Sep 2026</b><a href="../training.html">Covers all 13 VE Academy modules →</a></div></div>
+<p class="sub">The whole discipline on one printable page — pin it above your desk. Full explanations in the free 13-module course at the VAVEhub VE Academy.</p></div><div class="ver"><b>v1.1 · Updated Oct 2026</b><a href="../training.html">Covers all 13 VE Academy modules →</a></div></div>
 
 <div class="cols">
 <div>
 <h2>The equation</h2>
 <ul class="kv">
   <li><b>Value = Function ÷ Cost.</b> Improve the ratio, not just the denominator.</li>
-  <li>Five legit moves: same function / lower cost · more function / same cost · more function / lower cost · function grows faster than cost · trim unvalued function, cut cost sharply.</li>
+  <li>Five ways to improve value: same function / lower cost · more function / same cost · more function / lower cost · function grows faster than cost · trim unvalued function, cut cost sharply.</li>
 </ul>
 
 <h2>The VE job plan — 6 phases</h2>
@@ -53,9 +53,9 @@ code{font-family:'Consolas','Menlo',monospace;font-size:.78rem;background:#eef1f
 <h2>Value Index verdicts</h2>
 <div class="tbl"><table class="mini">
 <tr><th>VI = Cost ÷ Worth</th><th>Verdict</th></tr>
-<tr><td>&lt; 1.2</td><td class="vi-ok">Healthy — leave it alone</td></tr>
-<tr><td>1.2 – 2.0</td><td class="vi-watch">Watch list — challenge at next change</td></tr>
-<tr><td>&gt; 2.0</td><td class="vi-attack">Attack — prime creative-phase target</td></tr>
+<tr><td>up to 1.2</td><td class="vi-ok">Healthy: leave it alone</td></tr>
+<tr><td>over 1.2 to 2.0</td><td class="vi-watch">Watch: challenge it at the next change</td></tr>
+<tr><td>over 2.0</td><td class="vi-attack">Target first in the Creative phase</td></tr>
 </table></div>
 <p class="note" style="margin-top:.5rem"><b>Worth</b> = the lowest cost that could still reliably perform the function (cheapest solution in any industry, physics floor, or historical best).</p>
 
@@ -72,49 +72,49 @@ code{font-family:'Consolas','Menlo',monospace;font-size:.78rem;background:#eef1f
 <h2>Key formulas</h2>
 <ul class="kv">
   <li><code>VI = Cost ÷ Worth</code></li>
-  <li><code>Should-cost = material + process + labour + overhead + fair margin</code></li>
-  <li><code>Machine rate = (depreciation + energy + floorspace + maintenance) ÷ (annual hrs × OEE)</code></li>
+  <li><code>Should-cost = material + process + labour + scrap + overhead + SG&amp;A + fair margin</code></li>
+  <li><code>Machine rate = (depreciation + interest on capital + energy + floorspace + maintenance) ÷ (annual hrs × OEE)</code></li>
   <li><code>Payback = one-time cost ÷ annual saving</code></li>
   <li><code>Buy-to-fly = material bought ÷ material in finished part</code></li>
-  <li><code>Allowable cost = market price − required margin</code></li>
+  <li><code>Allowable cost = net selling price (after VAT and dealer margin) − required margin</code></li>
   <li><code>Value gap = drifting cost − allowable cost</code></li>
 </ul>
 
 <h2>Lever families (with examples)</h2>
 <div class="tbl"><table class="mini">
 <tr><th style="width:38%">Family</th><th>Sample levers</th></tr>
-<tr><td><b>Design &amp; DFMA</b></td><td>Part-count reduction, integration, snap-fits, symmetry</td></tr>
-<tr><td><b>Material &amp; spec</b></td><td>Grade optimisation, wall thinning, tolerance relaxation, standard parts</td></tr>
-<tr><td><b>Manufacturing</b></td><td>Process substitution, cycle time, scrap &amp; OEE, near-net-shape</td></tr>
+<tr><td><b>Product design</b></td><td>Part-count reduction, integration, snap-fits, tolerance relaxation, removing features customers don't value</td></tr>
+<tr><td><b>Materials</b></td><td>Grade optimisation, wall thinning, recycled material, near-net-shape blanks</td></tr>
+<tr><td><b>Manufacturing</b></td><td>Process substitution, cycle time, scrap &amp; OEE, automation</td></tr>
 <tr><td><b>Sourcing</b></td><td>Should-cost negotiation, LPP outliers, best-cost country, gain-share</td></tr>
-<tr><td><b>Feature &amp; variant</b></td><td>Kano-based de-contenting, SKU rationalisation, modularity</td></tr>
-<tr><td><b>Lifecycle</b></td><td>Packaging, logistics density, energy, service &amp; warranty design</td></tr>
+<tr><td><b>Packaging &amp; logistics</b></td><td>Packaging spec, returnable packs, fuller loads, sea instead of air</td></tr>
+<tr><td><b>Complexity &amp; lifecycle</b></td><td>SKU rationalisation, modularity, standard parts, service &amp; warranty design</td></tr>
 </table></div>
 
 <h2>Teardown discipline</h2>
 <ul class="kv">
   <li><b>First step:</b> photograph, weigh, measure everything — <i>before</i> disassembly.</li>
-  <li>Cost their BOM at <b>their</b> region, volumes &amp; processes; trust deltas over absolutes.</li>
+  <li>Cost their BOM at <b>their</b> region, volumes &amp; processes; trust the differences more than the absolute figures.</li>
   <li>Benchmark <b>value ratios</b> (torque/£, lumens/£), not absolutes.</li>
 </ul>
 
 <h2>Target costing</h2>
 <ul class="kv">
   <li>Set the allowable cost <b>before design</b>; cascade vehicle → system → part → supplier target price, each with a named owner.</li>
-  <li><b>Cardinal rule:</b> the target is never exceeded — content trades, it doesn't drift.</li>
+  <li><b>Cardinal rule:</b> the target is never exceeded. If something is added, something else is saved.</li>
   <li>Run cost like mass: gate status + recovery plan. After SOP, hand over to kaizen costing.</li>
 </ul>
 
 <h2>Savings funnel &amp; expectations</h2>
 <ul class="kv">
-  <li><b>L1</b> idea → <b>L2</b> validated → <b>L3</b> implemented → <b>L4</b> audited vs. <b>frozen baseline</b>. Only L4 counts.</li>
-  <li>First structured wave: <b>8–15%</b> of product cost. Mature programme: <b>3–5%/yr</b>. Study ROI &gt; <b>10:1</b>.</li>
-  <li>~<b>80%</b> of lifecycle cost is committed during design — go early.</li>
+  <li><b>L1</b> Idea → <b>L2</b> Validated → <b>L3</b> Approved → <b>L4</b> Implemented (in production, checked by finance against the <b>fixed starting cost</b>). Only L4 counts.</li>
+  <li>First round: <b>8–15%</b> of product cost. Mature programme: <b>3–5%/yr</b>. Study ROI &gt; <b>10:1</b>.</li>
+  <li>About <b>70–80%</b> of a product's cost is fixed by the time the design is finished (a rule of thumb), so start early.</li>
 </ul>
 </div>
 </div>
 
 <div class="tips"><b>The five Miles questions</b> — ask them of any part, any day: What is it? What does it do? What does it cost? What is it worth? What else could do the job?</div>
 
-<div class="foot"><span>© Avinash Bhosale · VAVEhub Toolkit — free for personal &amp; internal company use with attribution; commercial redistribution or resale prohibited. SAVE International®, TRIZ® and DFMA® are trademarks of their respective owners.</span><span>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/">Avinash Bhosale</a></span></div>
+<div class="foot"><span>© Avinash Bhosale · VAVEhub Toolkit — free for personal &amp; internal company use with attribution; commercial redistribution or resale prohibited. SAVE International® and DFMA® are trademarks of their respective owners.</span><span>Designed &amp; Developed by <a href="https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/">Avinash Bhosale</a></span></div>
 </div></body></html>

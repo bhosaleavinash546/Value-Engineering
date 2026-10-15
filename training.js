@@ -9,41 +9,60 @@
   /* ── State (localStorage) ── */
   const KEY = "vf-academy";
   const state = (() => {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+    try { const s = JSON.parse(localStorage.getItem(KEY)); return s && typeof s === "object" && !Array.isArray(s) ? s : {}; } catch { return {}; }
   })();
-  state.done = state.done || [];
+  // anything of the wrong shape (an old version, a hand edit) is dropped rather than breaking the page
+  state.done = Array.isArray(state.done) ? state.done.filter((d) => typeof d === "string") : [];
+  if (!state.doneAt || typeof state.doneAt !== "object") state.doneAt = {};
+  if (state.exam && (typeof state.exam !== "object" || !state.exam.id || !/^\d{4}-\d{2}-\d{2}/.test(state.exam.date || ""))) delete state.exam;
+  if (state.attempts && !Array.isArray(state.attempts)) delete state.attempts;
   let acctName = "";
   // Visit streak — consecutive days the learner showed up.
   (function trackStreak() {
-    const today = new Date().toISOString().slice(0, 10);
-    const v = state.visits || {};
+    const day = (t) => { const d = new Date(t); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+    const today = day(Date.now());
+    const v = state.visits && typeof state.visits === "object" ? state.visits : {};
     if (v.last !== today) {
-      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+      const yesterday = day(Date.now() - 864e5);
       v.streak = v.last === yesterday ? (v.streak || 0) + 1 : 1;
       v.last = today;
       state.visits = v;
       try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
     }
   })();
+  // C2: the account copy is read and merged before anything is uploaded, so a stale device can't overwrite it
+  let cloudReady = !(window.VHCloud && VHCloud.live), cloudPending = false, saveWarned = false;
   const save = () => {
     // the quick-check block below writes state.qc separately; keep its passes
     try { const cur = JSON.parse(localStorage.getItem(KEY)) || {}; if (cur.qc) state.qc = Object.assign({}, cur.qc, state.qc); } catch {}
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
     // the review queue and weekly goal (academy-review.js) keep their own key; they travel with the progress
     try { const rv = JSON.parse(localStorage.getItem("vh-review")); if (rv) state.review = rv; } catch {}
-    if (window.VHCloud) VHCloud.saveProgress(state);
+    if (window.VHCloud) {
+      if (!cloudReady) { cloudPending = true; return; }
+      VHCloud.saveProgress(state).then((ok) => {
+        // say once if the account couldn't be reached; the next save tries again
+        if (ok === false && VHCloud.live && acctName && !saveWarned) { saveWarned = true; toast("Saved in this browser. Your account couldn't be reached, so we'll try again with your next change."); }
+        if (ok) saveWarned = false;
+      });
+    }
   };
   window.VHAcademySync = save;
   // Pull cloud progress on load (cross-device); merge completed modules & keep best exam.
   if (window.VHCloud && VHCloud.live) VHCloud.touchProfile(); // last seen, country estimate (once a day)
-    if (window.VHCloud && VHCloud.live) VHCloud.loadProgress().then((cloud) => {
     // a certificate whose first save failed is saved again here
-    if (state.exam && state.exam.passed && VHCloud.ensureCertificate) VHCloud.ensureCertificate(state.exam);
-    if (!cloud) return;
+  if (window.VHCloud && VHCloud.live && state.exam && state.exam.passed && VHCloud.ensureCertificate) VHCloud.ensureCertificate(state.exam);
+  function pullCloud(retry) {
+    VHCloud.loadProgress().then((cloud) => {
+    if (cloud === false) { if (retry) setTimeout(() => pullCloud(false), 15000); return; } // the read failed: upload nothing
+    const pending = cloudPending;
+    cloudReady = true; cloudPending = false;
+    if (!cloud || typeof cloud !== "object") { if (pending || state.done.length) save(); return; } // nothing in the account yet
     let changed = false;
-    (cloud.done || []).forEach((m) => { if (!state.done.includes(m)) { state.done.push(m); changed = true; } });
+    const cloudDone = Array.isArray(cloud.done) ? cloud.done.length : 0;
+    (Array.isArray(cloud.done) ? cloud.done : []).forEach((m) => { if (typeof m === "string" && !state.done.includes(m)) { state.done.push(m); changed = true; } });
     if (cloud.qc) { state.qc = Object.assign({}, cloud.qc, state.qc); }
-    if (cloud.exam && (!state.exam || (cloud.exam.score || 0) > (state.exam.score || 0))) { state.exam = cloud.exam; changed = true; }
+    if (cloud.exam && typeof cloud.exam === "object" && cloud.exam.id && (!state.exam || (cloud.exam.score || 0) > (state.exam.score || 0))) { state.exam = cloud.exam; changed = true; }
     if (cloud.role && !state.role) state.role = cloud.role;
     if (cloud.doneAt) state.doneAt = Object.assign({}, cloud.doneAt, state.doneAt);
     if (cloud.review) {
@@ -53,13 +72,16 @@
         state.review = cloud.review; document.dispatchEvent(new Event("vh-review-sync")); renderMyLearn();
       }
     }
-    if (cloud.attempts) {
+    if (Array.isArray(cloud.attempts)) {
       const seen = new Set((state.attempts || []).map((a) => a.t));
       state.attempts = (state.attempts || []).concat(cloud.attempts.filter((a) => !seen.has(a.t)))
         .sort((a, b) => (a.t < b.t ? -1 : 1)).slice(-20);
     }
     if (changed) { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} refreshProgress(); toast("✓ Progress restored from your account"); resumeIfUntouched(); }
-  });
+    if (pending || state.done.length > cloudDone) save(); // upload the merged copy
+    });
+  }
+  if (window.VHCloud && VHCloud.live) pullCloud(true);
 
   function toast(msg) {
     let t = $("#vhToast");
@@ -115,10 +137,16 @@
           <a class="btn btn-primary btn-lg" href="auth.html?view=signup&amp;next=${next}">Create a free account →</a>
           <a class="btn btn-ghost" href="auth.html?view=signin&amp;next=${next}">I already have an account</a>
         </div>
-        <p class="gate-foot">Free forever · no card required · <a href="index.html">explore the public site</a></p>
+        <p class="gate-foot">Free · no card required · <a href="index.html">explore the public site</a></p>
       </div>`;
     gateEl.classList.add("is-visible");
-    if (scroll !== false) $("#trLayout").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (narrow.matches) setSide(false); // phones: fold the course list so the gate is in view
+    $("h2", gateEl).setAttribute("tabindex", "-1");
+    if (scroll !== false) { gateEl.scrollIntoView({ behavior: "smooth", block: "start" }); $("h2", gateEl).focus({ preventScroll: true }); }
+  }
+  // I2: the address bar follows the module, so reload and bookmarks open where the learner is
+  function setUrl(id) {
+    try { const u = new URL(location.href); u.searchParams.set("open", id); history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {}
   }
 
   /* ── "Was this module helpful?" — anonymous; the rating is sent on click, a comment is optional ── */
@@ -167,7 +195,8 @@
     if (nxt && nxt.dataset.mod !== "exam") btn.textContent = "Mark complete & go to Module " + (i + 2) + " →";
   });
 
-  function show(id, scroll) {
+  function show(id, scroll, focus) {
+    if (focus) setUrl(id); // only when the learner chose the module, so a plain reload still resumes where they are
     if (gated(id) && !acctName) { renderGate(id, scroll); return; }
     currentId = id;
     if (gateEl) gateEl.classList.remove("is-visible");
@@ -178,6 +207,7 @@
     if (narrow.matches) setSide(false);
     updateSideCur();
     if (scroll !== false) (narrow.matches ? $("#trMain") : $("#trLayout")).scrollIntoView({ behavior: "smooth", block: "start" });
+    if (focus) { const h = $(".tmod.is-visible h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); } }
   }
 
   const narrow = window.matchMedia("(max-width:960px)");
@@ -263,7 +293,7 @@
 
   modNav.addEventListener("click", (e) => {
     const l = e.target.closest(".mod-link");
-    if (l) show(l.dataset.target);
+    if (l) show(l.dataset.target, true, true);
   });
 
   $$(".tmod-done").forEach((btn) => btn.addEventListener("click", () => {
@@ -272,7 +302,7 @@
     save(); refreshProgress();
     const order = mods.map((m) => m.dataset.mod);
     const next = order[order.indexOf(id) + 1];
-    show(next || "exam");
+    show(next || "exam", true, true);
   }));
 
   $("#startBtn").addEventListener("click", () => {
@@ -321,7 +351,9 @@
       }
     }
     updateLocks();
+    const gateFocused = !!(gateEl && gateEl.contains(document.activeElement));
     if (currentId) show(currentId, false); // re-gate or reveal now that auth changed
+    if (gateFocused) { const h = $(".tmod.is-visible h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); } } // the gate that had focus is gone
     resumeIfUntouched();
   }
   // The account and the saved progress arrive a moment after the page opens, so a signed-in
@@ -347,15 +379,23 @@
 
   function renderExamGate() {
     if (state.exam && state.exam.passed) { renderCertificate(); return; }
+    if ($(".ex-q", mount)) return; // an exam is in progress: leave it as it is
+    const pc = state.pendingCert;
+    if (pc && pc.attempt && Date.now() - (pc.at || 0) < 30 * 864e5) { // passed, but the certificate wasn't created yet
+      mount.innerHTML = `<div class="ex-gate"><p class="ex-pass"><strong>You passed with ${+pc.score || 0}%.</strong> Enter your name to create your certificate.</p><div class="ex-actions" id="exPending"></div></div>`;
+      VHExamUI.certForm($("#exPending", mount), pc.attempt, acctName, issued);
+      $("#certWrap").hidden = true;
+      return;
+    }
     const todo = courseMods.filter((m) => !state.done.includes(m.dataset.mod));
     const remaining = todo.length, nextMod = todo[0];
     mount.innerHTML = `<div class="ex-gate">
       <p>Thirty questions: two from every module, plus four scenario or calculation questions, drawn from a bank of
-      about 130. You need <strong>80% (24 of 30)</strong> to earn the <strong>VAVEhub Certificate of Completion</strong>.
+      132. You need <strong>80% (24 of 30)</strong> to earn the <strong>VAVEhub Certificate of Completion</strong>.
       If you don't pass, you'll see how you did in each module and can try again after an hour, with new questions.</p>
       <details class="ex-what"><summary>What this certificate is, and isn't</summary><ul>
         <li>A record that you finished about 6 hours of study and passed an exam marked on our server.</li>
-        <li>The course follows SAVE International's six-phase job plan and the terms of EN 12973.</li>
+        <li>The course follows SAVE International's six-phase job plan, the terms of EN 1325 and, for value management, EN 12973.</li>
         <li>It isn't a SAVE or Institute of Value Management certification (such as VMA, CVS, QVA or PVM), and VAVEhub isn't connected with either body.</li>
         <li>If you hold a PMI certification, you may be able to self-report the hours as PDUs. PMI decides what it accepts.</li>
         <li>Planning to go further? Keep a <a href="toolkit/value-study-logbook.html" target="_blank" rel="noopener">value study logbook</a> from your first real study.</li>
@@ -378,21 +418,25 @@
   async function startExam() {
     $("#certWrap").hidden = true;
     // the server checks completed modules against the saved progress, so make sure it's up to date
-    if (window.VHCloud && VHCloud.live && acctName) { try { await VHCloud.saveProgress(state); } catch (e) {} }
+    if (window.VHCloud && VHCloud.live && acctName && cloudReady) { try { await VHCloud.saveProgress(state); } catch (e) {} }
     VHExamUI.start({
       mount, course: "academy", noun: "exam", titles: examTitles,
       signInHref: "auth.html?next=" + encodeURIComponent("training.html?open=exam"),
       onGoto: (id) => show(id),
-      onResult: (res) => {
+      onResult: (res, attempt) => {
         state.attempts = (state.attempts || []).concat([{ t: new Date().toISOString(), s: res.score, p: !!res.passed }]).slice(-20);
+        if (res.passed && attempt) state.pendingCert = { attempt, score: res.score, at: Date.now() }; // survives a reload before the name is entered
         save();
       },
-      onPass: (res, attempt, box) => VHExamUI.certForm(box, attempt, (state.exam && state.exam.name) || acctName, (cert) => {
-        state.exam = Object.assign({ passed: true }, cert);
-        save(); refreshProgress(); renderCertificate();
-      }),
+      onPass: (res, attempt, box) => VHExamUI.certForm(box, attempt, (state.exam && state.exam.name) || acctName, issued),
       onRetake: startExam,
     });
+  }
+
+  function issued(cert) {
+    state.exam = Object.assign({ passed: true }, cert);
+    delete state.pendingCert;
+    save(); refreshProgress(); renderCertificate();
   }
 
   function certToken(e) {
@@ -426,7 +470,8 @@
     });
     $("#certName").textContent = e.name;
     $("#certScore").textContent = e.score + "%";
-    $("#certDate").textContent = new Date(e.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const [cy, cm, cd] = String(e.date).slice(0, 10).split("-").map(Number); // the date as issued, not shifted by time zone
+    $("#certDate").textContent = new Date(cy, cm - 1, cd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     $("#certId").textContent = e.id;
     $("#certWrap").hidden = false;
   }
@@ -479,9 +524,10 @@
   const startId = acctName
     ? (state.exam && state.exam.passed ? "exam" : (firstUnread ? firstUnread.dataset.mod : "exam"))
     : "m1";
-  const openParam = new URLSearchParams(location.search).get("open");
+  let openParam = new URLSearchParams(location.search).get("open");
+  if (openParam && !mods.some((m) => m.dataset.mod === openParam)) openParam = null; // an old or mistyped link
   openedByLink = !!openParam;
-  show(openParam || startId, false);
+  if (openParam) show(openParam, true, true); else show(startId, false); // a link to a module scrolls to it
   initialId = currentId;
   try { localStorage.setItem("vh-last-course", "academy"); } catch (e) {} // for "My learning"
 })();
@@ -492,76 +538,64 @@
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
   const KEY = "vf-academy";
   const state = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } })();
-  state.qc = state.qc || {};
-  state.done = state.done || [];
+  state.qc = state.qc && typeof state.qc === "object" ? state.qc : {};
+  state.done = Array.isArray(state.done) ? state.done : [];
   let acctName = "";
-  // Visit streak — consecutive days the learner showed up.
-  (function trackStreak() {
-    const today = new Date().toISOString().slice(0, 10);
-    const v = state.visits || {};
-    if (v.last !== today) {
-      const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
-      v.streak = v.last === yesterday ? (v.streak || 0) + 1 : 1;
-      v.last = today;
-      state.visits = v;
-      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
-    }
-  })();
   // merge into the latest stored copy: the main Academy block may have saved newer progress since this page loaded
   const save = () => { try { const cur = JSON.parse(localStorage.getItem(KEY)) || {}; cur.qc = Object.assign({}, cur.qc, state.qc); localStorage.setItem(KEY, JSON.stringify(cur)); } catch {} };
 
   const QUICK = {
     m1: [
       ["A product delivers the same function as its rival but costs 20% less to make. Its value is…", ["Lower", "Higher", "The same", "Impossible to say"], 1, "Same function ÷ lower cost = a higher Function/Cost ratio."],
-      ["Which of these is NOT one of the four types of value?", ["Use value", "Esteem value", "Exchange value", "Discount value"], 3, "The four types: use, esteem, exchange and cost value."],
+      ["Which of these is NOT one of the four types of value?", ["Use value", "Esteem value", "Exchange value", "Function value"], 3, "The four types are use, esteem, exchange and cost value. Function is what you divide by cost to measure value. It isn't a type of value."],
     ],
     m2: [
-      ["The ideal VE workshop team is…", ["Only design engineers", "6–10 people from different departments, with a trained facilitator", "The entire department", "External consultants only"], 1, "Ideas come from people with different jobs. The facilitator runs the process but doesn't supply the answers."],
-      ["The one non-negotiable data item before the workshop is…", ["The marketing brochure", "A costed parts list (BOM) checked by finance", "The org chart", "A patent list"], 1, "Without a starting cost you can trust, there's no study. Everything builds on the costed parts list."],
+      ["The ideal VE workshop team is…", ["The design engineers who know it", "6–10 people from different departments", "The whole department, so nobody feels left out", "Two senior engineers and an outside consultant"], 1, "Ideas come from people with different jobs challenging each other. Add a trained facilitator who runs the process but doesn't supply the answers."],
+      ["The one data item you can't start the workshop without is…", ["A costed parts list checked by finance", "A full set of competitor teardown reports", "Quotes from three other suppliers", "Five years of customer complaint records"], 0, "Without a starting cost you can trust, there's no study. Everything builds on the costed parts list."],
     ],
     m3: [
-      ["Which of these is one of Miles' five questions?", ["What is it worth?", "Who approved it?", "Can we outsource it?", "What's the discount?"], 0, "What is it? What does it do? What does it cost? What is it worth? What else could do the job?"],
-      ["Pareto thinking in the Information Phase means…", ["Analysing every part equally", "Focusing on the ~20% of parts that make up ~80% of the cost", "Ignoring cheap parts forever", "Sorting the parts list alphabetically"], 1, "Put your effort where the money is."],
+      ["Before any ideas, the team works through the classic VE questions. Which of these is one of them?", ["What is it worth?", "Who designed it?", "How was it made last time?", "Which supplier is cheapest?"], 0, "The five questions: What is it? What does it do? What does it cost? What is it worth? What else could do the job?"],
+      ["Pareto thinking in the Information phase means…", ["Studying the few parts that hold most of the cost", "Giving every part the same share of analysis time", "Dropping every part under £1 from the study", "Starting with the parts that get the most complaints"], 0, "Roughly 20% of the parts carry about 80% of the cost. Put your effort where the money is."],
     ],
     m4: [
-      ["'Fasten flange' vs. 'join components' — the better function statement is…", ["Fasten flange — it's specific", "Join components: a more general function opens up more solutions", "Both are equal", "Neither is valid"], 1, "'Fasten flange' locks you into bolts; 'join components' opens welding, adhesives, snap-fits and integration."],
-      ["A function costs £1.00 and its worth is £0.80. Its Value Index is…", ["0.80 — healthy", "1.25 — watch list", "2.00 — attack", "8.00 — attack"], 1, "VI = Cost ÷ Worth = 1.00/0.80 = 1.25, in the 1.2–2.0 watch zone."],
+      ["'Fasten flange' or 'join components': which is the better function statement?", ["Fasten flange", "Join components", "Both are equally good", "Neither is a valid function"], 1, "'Fasten flange' locks you into bolts or rivets. 'Join components' says less about today's solution, so it lets in welding, adhesives, snap-fits and one-piece designs."],
+      ["A function costs £1.00 and its worth is £0.80. Its Value Index is…", ["0.80: healthy", "1.25: watch list", "0.20: healthy", "1.25: attack now"], 1, "VI = cost ÷ worth = £1.00 ÷ £0.80 = 1.25. That's over 1.2 and up to 2.0, so it goes on the watch list."],
     ],
     m5: [
-      ["Mid-brainstorm, a manager says 'that will never work'. The facilitator should…", ["Open a debate", "Hold back the judgement: criticism waits for the Evaluation Phase", "Delete the idea", "End the session"], 1, "Osborn's first rule: never judge ideas at this stage. Evaluation has its own phase."],
+      ["Mid-brainstorm, a manager says 'that will never work'. The facilitator should…", ["Remind the room that judging waits for later", "Ask the manager to explain the objection fully", "Put the idea to a quick vote and move on", "Take the idea off the board to keep things moving"], 0, "Osborn's first rule: no judging while ideas are being generated. The objection can be raised in the Evaluation phase."],
       ["A 6-3-5 brainwriting session produces how many ideas in ~30 minutes?", ["18", "35", "108", "635"], 2, "6 people × 3 ideas × 6 passes = 108 ideas, silently."],
     ],
     m6: [
-      ["The Pugh matrix compares candidate concepts against…", ["A theoretical ideal", "The current design (the datum)", "The cheapest competitor", "The cost target"], 1, "Each concept scores +/−/same per criterion versus the datum design."],
-      ["Parked ideas should be…", ["Deleted to keep things tidy", "Kept, because they're the starting point for future rounds", "Emailed to everyone", "Patented immediately"], 1, "Today's 'not yet' could be next year's plan. Park ideas, don't delete them."],
+      ["The Pugh matrix compares candidate concepts against…", ["A theoretical ideal design", "The current design, as a datum", "The cheapest competitor's product", "The target cost set for the product"], 1, "Each concept scores better, same or worse on each criterion than the datum, usually the current design."],
+      ["Parked ideas should be…", ["Kept on file, ready for future rounds", "Deleted, so the list stays focused", "Scored again in the same workshop", "Handed to purchasing to follow up"], 0, "Today's 'not yet' could be next year's plan. Park ideas, don't delete them."],
     ],
     m7: [
-      ["A change saves £0.30/unit on 300,000 units/yr and costs £45k one-time. Payback?", ["1.5 months", "6 months", "18 months", "3 years"], 1, "Annual saving £90k; 45k ÷ 90k = 0.5 years = 6 months."],
-      ["Before reducing an old safety margin, you should…", ["Just do it: margins are waste", "Check it with simulation or testing, and check the relevant standards", "Ask the supplier's opinion", "Raise the price instead"], 1, "Reducing the risk with simulation and standards is what makes the saving real and safe."],
+      ["A change saves £0.30 a unit on 300,000 units a year. Its one-time cost is £52.8k (tooling, validation and engineering). Payback?", ["About 2 months", "About 7 months", "About 18 months", "About 3 years"], 1, "Annual saving = £0.30 × 300,000 = £90k. Payback = £52.8k ÷ £90k = 0.59 years, about 7 months."],
+      ["Before reducing an old safety margin, you should…", ["Check it by test and against the standards", "Remove it: old margins are usually waste", "Halve it, then watch the warranty claims closely", "Ask the supplier whether they'd accept it"], 0, "Checking the change with simulation or testing, and against the relevant standards, is what makes the saving real and safe."],
     ],
     m8: [
-      ["The true output of the Presentation Phase is…", ["Applause from management", "Recorded yes/no decisions with owners and dates", "A polished slide deck", "A wall poster"], 1, "A presentation without decisions is a rehearsal."],
-      ["Implemented savings are audited against…", ["The current, inflation-adjusted cost", "The fixed starting cost (frozen baseline)", "The competitor's price", "The sales forecast"], 1, "Fixing the starting cost stops inflation and product-mix changes from blurring the result."],
+      ["The real output of the Presentation phase is…", ["Logged decisions with owners and dates", "A polished slide deck the board has seen", "Applause and support from the management team", "A report filed for the next study team"], 0, "A presentation without decisions is a rehearsal."],
+      ["Implemented savings are measured against…", ["The fixed starting cost agreed in preparation", "The latest supplier quote, whatever it is", "The cost in this year's budget", "The best competitor's cost estimate"], 0, "Savings are measured against the fixed starting cost. Commodity price swings are taken out with an index, but the baseline itself never moves."],
     ],
     m9: [
-      ["Most of your product cost sits in purchased materials. Which groups of levers work best first?", ["Packaging & logistics", "Sourcing + design", "Overhead allocation", "Warranty design"], 1, "Where the cost sits decides the levers: Mostly bought-in parts → should-cost sourcing plus design changes."],
-      ["A supplier's plant runs at 60% utilisation. Which should-cost layer inflates?", ["Raw material", "Overhead", "Margin", "Freight"], 1, "Overhead is spread over fewer parts — you're paying for empty machine time. A negotiable fact."],
+      ["Most of your product cost sits in purchased materials. Which groups of levers work best first?", ["Packaging & logistics", "Sourcing + design", "Overhead allocation", "Warranty design"], 1, "Where the cost sits decides the levers. Mostly bought-in parts means should-cost sourcing plus design changes."],
+      ["A supplier's plant runs at 60% utilisation. Which should-cost layer inflates?", ["Raw material", "Overhead", "Margin", "Freight"], 1, "Overhead is spread over fewer parts, so you're paying for empty machine time. That's a fact you can raise with the supplier."],
     ],
     m10: [
-      ["The FIRST step of a teardown is…", ["Disassemble as fast as possible", "Photograph, weigh and measure everything", "Send parts out for quotes", "Scan to CAD"], 1, "Document before disassembly — you only get one first teardown."],
-      ["Functional benchmarking compares…", ["Absolute performance only", "Performance per pound (torque/£, lumens/£)", "Brand awareness", "Advertising spend"], 1, "Value ratios, not raw figures. That's how VE looks at benchmarking."],
+      ["The FIRST step of a teardown is…", ["Photograph, weigh and measure everything", "Take it apart and time every step", "Scan it to CAD before anything else", "Cost each visible part from the outside"], 0, "Record it before you take it apart. You only get one first teardown."],
+      ["Functional benchmarking compares…", ["Performance per pound (lumens per £)", "Top performance figures, side by side", "Feature lists, item by item", "Retail prices across the market"], 0, "Value ratios, not raw figures. That's how VE looks at benchmarking."],
     ],
     m11: [
-      ["The right division of labour with AI in VAVE is…", ["AI replaces the workshop team", "AI generates and drafts; people judge, check and decide", "AI sets the prices", "AI signs supplier contracts"], 1, "AI speeds up analysis and produces more ideas; judgement and checking stay with people."],
-      ["CT scanning is used in teardowns to…", ["Sterilise components", "See internal structures non-destructively", "Paint-match surfaces", "Estimate freight cost"], 1, "Wall thicknesses, hidden joints and internal architecture — without cutting the part open."],
+      ["The right division of labour with AI in VAVE is…", ["AI drafts; people check and decide", "AI decides; people check its working", "AI runs the workshop; people sign off", "AI sets targets; people find the ideas"], 0, "AI speeds up analysis and produces more ideas. Judgement and checking stay with people."],
+      ["CT scanning is used in teardowns to…", ["See inside without taking it apart", "Identify the exact material grade", "Measure the assembly time directly", "Estimate each part's cost on its own"], 0, "CT shows wall thicknesses, hidden joints and the internal layout without cutting the part open. It shows density differences, not the material grade, so materials still need a test."],
     ],
     m12: [
-      ["The savings funnel should be reviewed…", ["Annually", "Monthly — every idea has an owner, a stage and a date", "Only when savings slip", "Never, it runs itself"], 1, "Reviewing monthly is what stops ideas quietly disappearing."],
-      ["SAVE International's two certification levels, from entry level up, are…", ["CVS, then VMA", "VMA, then CVS", "AVS, then VMA", "PVA, then CVS"], 1, "VMA (Value Methodology Associate) is the entry level and CVS (Certified Value Specialist) is the level for leading studies. The older AVS title was retired in 2016."],
+      ["The savings funnel should be reviewed…", ["Monthly", "Quarterly", "Yearly", "Only when savings slip"], 0, "A monthly review gives every idea an owner, a stage and a date. That's what stops ideas quietly disappearing."],
+      ["SAVE International's two certification levels, from entry level up, are…", ["VMA, then CVS", "CVS, then VMA", "QVA, then PVM", "PVM, then CVS"], 0, "VMA (Value Methodology Associate) is the entry level and CVS (Certified Value Specialist) is the level for leading studies. QVA and PVM are the Institute of Value Management's qualifications in the UK."],
     ],
     m13: [
-      ["A product will sell at £400 and the business needs a 25% margin. Its allowable cost is…", ["£100", "£300", "£375", "£500"], 1, "Allowable cost = price − margin = 400 × (1 − 0.25) = £300 — set before design, not after."],
-      ["The 'cardinal rule' of target costing says…", ["If costs drift up, raise the price", "The target cost can never be exceeded: savings are found elsewhere instead of letting cost creep up", "Suppliers absorb all overruns", "Targets are only guidance until production starts"], 1, "Cooper & Slagmulder's rule: the number stays fixed, and features, design or make-or-buy decisions change around it."],
+      ["The net selling price (after VAT and the retailer's share) is £400, and the business needs a 25% margin. Its allowable cost is…", ["£100", "£300", "£375", "£500"], 1, "Allowable cost = net selling price − margin = £400 × (1 − 0.25) = £300. It's set before design, not after."],
+      ["The 'cardinal rule' of target costing says…", ["If costs drift up, raise the price", "The target cost is never exceeded", "Suppliers absorb all overruns", "Targets are only guidance until production starts"], 1, "Cooper & Slagmulder's rule: the number stays fixed. If something adds cost, the same amount is saved somewhere else, through features, design or make-or-buy decisions."],
     ],
   };
 
@@ -625,19 +659,19 @@
   "use strict";
   const TERMS = [
     ["FAST", "Function Analysis System Technique — maps functions on a HOW→/←WHY logic axis between scope lines."],
-    ["Value Index", "Cost ÷ Worth for a function. Above 1.2, watch; above 2.0, attack."],
+    ["Value Index", "Cost ÷ worth for a function (some texts use worth ÷ cost). Over 1.2, watch it; over 2.0, it's a target."],
     ["should-cost", "A bottom-up estimate of what a part ought to cost: material, cycle time, machine rates, labour, overhead, fair margin."],
     ["cleansheet", "A fully transparent, layer-by-layer should-cost model used for fact-based negotiation."],
     ["LPP", "Linear Performance Pricing — regressing price against a cost driver across a part family to expose outliers."],
     ["target costing", "Market price − required margin = allowable cost, set before design starts and cascaded down."],
     ["design-to-cost", "Managing cost as a design requirement with the same authority as mass, performance or safety."],
     ["kaizen costing", "Continuous, incremental cost reduction during production — the running-change counterpart to target costing."],
-    ["teardown", "Systematic disassembly and costing of a product — yours or a competitor's — to harvest facts and ideas."],
+    ["teardown", "Systematic disassembly and costing of a product, yours or a competitor's, to find facts and ideas."],
     ["DFMA", "Design for Manufacture & Assembly — minimum-part-count logic and assembly-friendly geometry, quantified."],
     ["buy-to-fly", "Raw material bought ÷ material in the finished part. Aerospace titanium can start at 8:1."],
     ["OEE", "Overall Equipment Effectiveness = availability × performance × quality — the denominator of machine cost per part."],
     ["TCO", "Total Cost of Ownership — purchase price plus lifetime energy, service, warranty and disposal cost."],
-    ["PPAP", "Production Part Approval Process — the automotive gate every implemented VAVE change must clear."],
+    ["PPAP", "Production Part Approval Process: the automotive customer-approval process that most product or process changes must go through."],
     ["TRIZ", "Theory of Inventive Problem Solving — resolves design contradictions using 40 principles distilled from patents."],
     ["Kano", "A way of sorting customer requirements into must-haves, performance features, delighters, things customers don’t care about and things they dislike. It shows which features you can safely remove."],
     ["Pugh matrix", "A way of comparing ideas: score each one as better, worse or the same as the current design on each criterion."],
@@ -672,6 +706,9 @@
         span.tabIndex = 0;
         span.setAttribute("data-def", def);
         span.textContent = word;
+        // the tooltip is drawn by CSS, so screen readers get the definition from a hidden element
+        const dd = document.createElement("span"); dd.hidden = true; dd.id = "gdef-" + used.size; dd.textContent = def;
+        document.body.appendChild(dd); span.setAttribute("aria-describedby", dd.id);
         node.parentNode.insertBefore(span, after);
         used.add(term);
         break; // one wrap per text node; later nodes catch the other terms
@@ -816,24 +853,24 @@
     renderLib("all");
   }
 
-  /* ── 3. Function Identification Challenge: 8 examples × 4 options ── */
+  /* ── 3. "Name the function" challenge: 8 examples × 4 options ── */
   const FNCHAL = [
     ["The heating element inside an electric kettle", ["Provide heat", "Generate heat", "Make water hot", "Boil kettle"], 1,
-     "\"Generate heat\" — active verb, measurable noun. \"Provide\" is a banned verb; \"make water hot\" is three words and vague; \"boil kettle\" names the product, not the job."],
-    ["The rubber feet under a laptop", ["Provide stability", "Hold laptop", "Increase friction", "Stop movement"], 2,
-     "\"Increase friction\" is what the rubber physically does, and friction is measurable. \"Provide stability\" uses a banned verb; \"hold laptop\" describes the part's location, not its job; \"stop movement\" isn't measurable as stated."],
-    ["A car headlight", ["Enable driving", "Emit light", "Provide visibility", "Light road"], 1,
-     "\"Emit light\" — you can measure lumens. \"Enable\" and \"provide\" are banned verbs; \"light road\" describes where the light goes, not the function the part performs."],
+     "\"Generate heat\": an active verb and a measurable noun. \"Provide\" is a banned verb; \"make water hot\" is three words and vague; \"boil kettle\" names the product, not the job."],
+    ["The rubber feet under a laptop", ["Provide stability", "Hold laptop", "Increase friction", "Stop laptop"], 2,
+     "\"Increase friction\" is what the rubber physically does, and friction is measurable. \"Provide stability\" uses a banned verb; \"hold laptop\" describes where the part is, not its job; \"stop laptop\" just names the product."],
+    ["A car headlight", ["Enable driving", "Emit light", "Provide visibility", "Shine brightly"], 1,
+     "\"Emit light\": you can measure it in lumens. \"Enable\" and \"provide\" are banned verbs, and \"shine brightly\" has no noun, so it doesn't say what is being produced."],
     ["The plastic insulation around a mains wire", ["Ensure protection", "Cover wire", "Make wire safe", "Block current"], 3,
-     "\"Block current\" is the measurable job — electricity must not pass through it. \"Ensure\" is banned; \"cover wire\" describes the solution's geometry; \"make wire safe\" is vague and unmeasurable."],
-    ["A water bottle cap", ["Seal container", "Close bottle", "Provide closure", "Keep water inside"], 0,
-     "\"Seal container\" — a seal is testable (pressure, leak rate). \"Close bottle\" names the product; \"provide closure\" uses a banned verb; \"keep water inside\" is four words hiding the same job."],
+     "\"Block current\" is the measurable job: electricity must not pass through it. \"Ensure\" is banned; \"cover wire\" describes the solution's shape; \"make wire safe\" is vague and can't be measured."],
+    ["A water bottle cap", ["Seal container", "Cap bottle", "Provide closure", "Keep water inside"], 0,
+     "\"Seal container\": a seal can be tested for pressure and leak rate. \"Cap bottle\" uses the part itself as the verb, so it's a solution, not a function. \"Provide closure\" uses a banned verb, and \"keep water inside\" is three words hiding the same job."],
     ["The handle of a hot coffee mug", ["Provide grip", "Help user", "Transmit force", "Hold mug"], 2,
-     "The handle's primary job is to \"transmit force\" — it carries the lifting force from your hand to the mug (it also performs a second function: isolate heat). \"Provide\" is banned; \"help user\" is unmeasurable; \"hold mug\" is the product in disguise."],
+     "The handle's main job is to \"transmit force\": it carries the lifting force from your hand to the mug (it also has a second function, isolate heat). \"Provide\" is banned; \"help user\" can't be measured; \"hold mug\" is the product in disguise."],
     ["The spring inside a retractable ballpoint pen", ["Store energy", "Retract tip", "Provide clicking", "Make pen work"], 0,
-     "The spring itself does one job: \"store energy\" (and release it). Retracting the tip is the combined job of spring + latch mechanism; \"provide clicking\" is banned and describes a side effect; \"make pen work\" is hopelessly vague."],
+     "The spring itself does one job: \"store energy\" (and release it). Retracting the tip is the combined job of the spring and the latch; \"provide clicking\" is banned and describes a side effect; \"make pen work\" is far too vague."],
     ["The high-gloss paint on a luxury car (beyond protecting the metal)", ["Look good", "Impress people", "Convey quality", "Provide beauty"], 2,
-     "\"Convey quality\" is the standard esteem function — and it is measurable through market research and price premiums. \"Look good\" has no active verb; \"impress people\" isn't testable; \"provide beauty\" uses a banned verb with an unmeasurable noun."],
+     "\"Convey quality\" is the standard esteem function. You can't measure quality with a gauge, so esteem functions are measured with customer research and price premiums. \"Look good\" has no noun, so it doesn't say what is being made attractive; \"impress people\" can't be tested; \"provide beauty\" uses a banned verb."],
   ];
     FNCHAL.forEach(([q, opts, c, why]) => (window.VH_PRACTICE = window.VH_PRACTICE || []).push({ mod: "m4", q: q + ": which is the correctly written function?", opts, c, why }));
   const mount = $("#fncMount");
@@ -874,7 +911,7 @@
       if (!right && window.VHMistakes) VHMistakes.attach(ex, btn.textContent);
       if (answered.every(Boolean)) {
         const s = $("#fncScore");
-        const msg = score === 8 ? "Perfect — you think in functions now!" : score >= 6 ? "Strong — review the ones you missed and you're there." : "Good practice — re-read section 4.3 on fake functions and try again.";
+        const msg = score === 8 ? "8 out of 8. You think in functions now." : score >= 6 ? "Strong — review the ones you missed and you're there." : "Good practice — re-read section 4.3 on fake functions and try again.";
         s.innerHTML = `You scored <b>${score} / 8</b>. ${msg}`;
         s.classList.add("show");
         $("#fncReset").hidden = false;
@@ -995,7 +1032,8 @@
     const pool = window.VH_PRACTICE || [];
     const terms = window.VH_TERMS || [];
     let modal = $("#revModal");
-    if (modal) modal.remove();
+    if (modal) { if (modal._close) modal._close(); else modal.remove(); }
+    const opener = document.activeElement; // focus goes back here on close
     modal = document.createElement("div");
     modal.id = "revModal"; modal.className = "rev-modal";
     modal.innerHTML = `
@@ -1009,9 +1047,25 @@
         <div class="rev-pane" id="revCards" hidden></div>
       </div>`;
     document.body.appendChild(modal);
-    $(".rev-close", modal).addEventListener("click", () => modal.remove());
-    modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
-    document.addEventListener("keydown", function escClose(e) { if (e.key === "Escape") { modal.remove(); document.removeEventListener("keydown", escClose); } });
+    // a proper dialog for keyboard users: focus moves in, Tab stays inside, Escape closes, focus returns
+    function onKey(e) {
+      if (e.key === "Escape") { close(); return; }
+      if (e.key !== "Tab") return;
+      const f = $$("button:not([disabled]), [href], [tabindex]:not([tabindex='-1'])", modal).filter((x) => x.offsetParent !== null);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    function close() {
+      modal.remove(); document.removeEventListener("keydown", onKey);
+      if (opener && opener.focus && document.contains(opener)) opener.focus();
+    }
+    document.addEventListener("keydown", onKey);
+    modal._close = close;
+    $(".rev-close", modal).addEventListener("click", close);
+    modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+    requestAnimationFrame(() => $(".rev-tab.is-on", modal).focus());
     $$(".rev-tab", modal).forEach((t) => t.addEventListener("click", () => {
       $$(".rev-tab", modal).forEach((x) => x.classList.toggle("is-on", x === t));
       $("#revMissed").hidden = t.dataset.tab !== "missed";
@@ -1059,9 +1113,9 @@
     function renderCard() {
       const [term, def] = deck[ci] || ["—", "—"];
       cp.innerHTML = `
-        <div class="fc-card${flipped ? " is-flipped" : ""}" id="fcCard" role="button" tabindex="0" aria-label="Flashcard — click to flip">
-          <div class="fc-face fc-front"><span>${term}</span><em>tap to reveal</em></div>
-          <div class="fc-face fc-back"><span>${def}</span></div>
+        <div class="fc-card${flipped ? " is-flipped" : ""}" id="fcCard" role="button" tabindex="0" aria-pressed="${flipped}" aria-describedby="fcHint">
+          <div class="fc-face fc-front"${flipped ? ' aria-hidden="true"' : ""}><span>${term}</span><em id="fcHint">tap to reveal</em></div>
+          <div class="fc-face fc-back"${flipped ? "" : ' aria-hidden="true"'}><span>${def}</span></div>
         </div>
         <div class="fc-nav">
           <button type="button" class="btn btn-ghost" id="fcPrev" ${ci === 0 ? "disabled" : ""}>← Prev</button>
@@ -1069,7 +1123,11 @@
           <button type="button" class="btn btn-primary" id="fcNext" ${ci === deck.length - 1 ? "disabled" : ""}>Next →</button>
         </div>`;
       const card = $("#fcCard", cp);
-      const flip = () => { flipped = !flipped; card.classList.toggle("is-flipped", flipped); };
+      // the card is named by the face that is showing, so screen readers hear the term, then the definition
+      const flip = () => {
+        flipped = !flipped; card.classList.toggle("is-flipped", flipped); card.setAttribute("aria-pressed", String(flipped));
+        $(".fc-front", card).setAttribute("aria-hidden", String(flipped)); $(".fc-back", card).setAttribute("aria-hidden", String(!flipped));
+      };
       card.addEventListener("click", flip);
       card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
       $("#fcPrev", cp).addEventListener("click", () => { if (ci > 0) { ci--; flipped = false; renderCard(); } });
@@ -1120,14 +1178,14 @@
     const PARAMS = ["Weight", "Strength / stiffness", "Speed / cycle time", "Reliability", "Cost to make", "Ease of assembly"];
     // curated pairs from the classic contradiction matrix, with a concrete idea each
     const M = {
-      "Strength / stiffness|Weight": [[1, "Segmentation", "ribbed or hollow sections — an I-beam is TRIZ before TRIZ"], [40, "Composite materials", "glass-filled polymer instead of solid metal"], [15, "Dynamics", "stiff only where and when the load is — variable wall thickness"]],
-      "Weight|Strength / stiffness": [[1, "Segmentation", "honeycomb or lattice core carries the load at a fraction of the mass"], [35, "Parameter change", "switch material state or grade — HSLA steel, thinner gauge"], [8, "Anti-weight", "let another part or structure carry part of the load"]],
+      "Strength / stiffness|Weight": [[1, "Segmentation", "divide it into parts: a truss or lattice instead of a solid section"], [40, "Composite materials", "glass-filled polymer instead of solid metal"], [15, "Dynamics", "stiff only where and when the load is — variable wall thickness"]],
+      "Weight|Strength / stiffness": [[28, "Replace mechanical system", "replace a mechanical part with a field: a magnetic catch instead of a heavy latch"], [27, "Cheap short-lived object", "a light, replaceable insert takes the wear instead of a heavy permanent part"], [18, "Mechanical vibration", "tune the structure's natural frequency so a lighter section survives the real loads"], [40, "Composite materials", "glass- or carbon-fibre composite: strong for its weight"]],
       "Speed / cycle time|Reliability": [[10, "Preliminary action", "pre-position, pre-heat or pre-assemble before the fast step"], [11, "Cushion in advance", "add a self-check or backup so speed can't cause a failure"], [28, "Replace mechanical system", "sensor + servo instead of a rushed mechanical linkage"]],
       "Reliability|Cost to make": [[6, "Universality", "one part doing two jobs fails in fewer interfaces"], [25, "Self-service", "the part maintains itself — self-locking, self-cleaning"], [2, "Taking out", "remove the fragile function from the harsh zone entirely"]],
       "Cost to make|Reliability": [[27, "Cheap short-lived object", "a replaceable £0.10 wear insert instead of a £5 hardened part"], [1, "Segmentation", "isolate the wear zone into a small replaceable element"], [35, "Parameter change", "cheaper grade plus a local coating where it matters"]],
       "Cost to make|Strength / stiffness": [[1, "Segmentation", "stamped and folded sheet replaces a machined billet"], [40, "Composite materials", "over-mould a cheap core with a strong skin"], [10, "Preliminary action", "work-harden or form features in the same press stroke"]],
       "Ease of assembly|Reliability": [[13, "The other way round", "assemble from the other direction — gravity holds it"], [26, "Copying", "one snap-fit geometry copied everywhere: nothing to mix up"], [3, "Local quality", "add a lead-in chamfer — the part aligns itself"]],
-      "Ease of assembly|Cost to make": [[6, "Universality", "one fastener family for the whole product"], [1, "Segmentation", "modules assembled offline, mated in one motion"], [2, "Taking out", "eliminate the fastener — snap-fit is the ideal final result"]],
+      "Ease of assembly|Cost to make": [[6, "Universality", "one fastener family for the whole product"], [1, "Segmentation", "modules assembled offline, mated in one motion"], [2, "Taking out", "eliminate the fastener: a snap-fit gets close, and one moulding instead of two is the ideal result"]],
       "Weight|Cost to make": [[35, "Parameter change", "thinner high-strength grade — less material at slightly higher £/kg"], [2, "Taking out", "delete the part: can a neighbour perform its function?"], [31, "Porous materials", "foamed core where solid adds only weight"]],
       "Speed / cycle time|Cost to make": [[10, "Preliminary action", "combine operations into one tool stroke"], [5, "Merging", "process parts in parallel, not sequence"], [28, "Replace mechanical system", "cure with UV instead of a 20-minute oven"]],
       "Strength / stiffness|Cost to make": [[3, "Local quality", "harden or thicken only the loaded zone"], [17, "Another dimension", "a bend or flange adds stiffness for free"], [40, "Composite materials", "selective reinforcement only along the load path"]],
@@ -1174,9 +1232,9 @@
       const n = ideas();
       verdict.hidden = false;
       verdict.innerHTML = n >= 9
-        ? `<b>${n} ideas — the speed of a good workshop. 🎉</b> That's the 6-3-5 rhythm: three ideas every five minutes, sustained. Now imagine six people doing this simultaneously.`
+        ? `<b>${n} ideas in three minutes.</b> You're writing faster than you're judging, which is the point. Now imagine six people doing this.`
         : n >= 5
-          ? `<b>${n} ideas — solid.</b> The last few before the buzzer are usually the interesting ones; run it again on the same function and you'll pass nine.`
+          ? `<b>${n} ideas: solid.</b> The last few before the buzzer are often the most original. Run it again on the same function and you'll pass nine.`
           : `<b>${n} ideas.</b> Normal for a first sprint — you're still judging your own ideas. Rules: no judging, no deleting, write the silly ones too.`;
     }
     go.addEventListener("click", () => {
@@ -1210,7 +1268,7 @@
       const sga = sub * v("scSga") / 100;
       const margin = (sub + sga) * v("scMargin") / 100;
       const total = sub + sga + margin;
-      const layers = [["Raw material", mat], ["Process & machine", proc], ["Direct labour", lab], ["Scrap & yield", scrap], ["Overhead", oh], ["SG&A", sga], ["Fair margin", margin]];
+      const layers = [["Raw material", mat], ["Process & machine", proc], ["Direct labour", lab], ["Scrap", scrap], ["Overhead", oh], ["SG&A", sga], ["Fair margin", margin]];
       rows.innerHTML = layers.map((l, i) =>
         `<tr><td><i class="sc-dot" style="background:${COLORS[i]}"></i>${l[0]}</td><td>${eur(l[1])}</td></tr>`).join("");
       $("#scTotal").textContent = eur(total);
@@ -1222,7 +1280,7 @@
         const pc = (gap / total * 100).toFixed(0);
         gapEl.className = "sc-gap sc-gap-over";
         gapEl.innerHTML = `Quote ${eur(q)} vs should-cost <b>${eur(total)}</b> → gap <b>${eur(gap)}</b> per part (${pc}% above should).` +
-          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} parts a year, that's <b>£${Math.round(gap * vol).toLocaleString("en-GB")}</b> you could save.` : "");
+          (vol > 0 ? ` At ${vol.toLocaleString("en-GB")} parts a year, that's up to <b>£${Math.round(gap * vol).toLocaleString("en-GB")}</b> a year to discuss.` : "");
       } else {
         gapEl.className = "sc-gap sc-gap-ok";
         gapEl.innerHTML = `Quote ${eur(q)} is at or below the should-cost of <b>${eur(total)}</b>. Either your buyer is excellent or one of your assumptions is wrong. Check how busy you've assumed the machine is first.`;
@@ -1287,15 +1345,15 @@
     const STEPS = [
       { t: "Two mice on the bench — the competitor's next to yours. Nothing has been touched yet; the first move is a camera, not a screwdriver.",
         cards: [["🖱️", "Theirs", "£24 retail"], ["🖱️", "Ours", "£29 retail"]] },
-      { t: "Step 1 — Buy and record. Photograph, weigh and measure everything before the first screw comes out. You only get one first teardown.",
+      { t: "Step 1: record it. Photograph, weigh and measure everything before the first screw comes out. You only get one first teardown.",
         cards: [["📷", "48 photos", "every face, every label"], ["⚖️", "87 g vs 112 g", "theirs is 22% lighter"], ["📏", "Dimensions logged", "against a scale reference"]] },
-      { t: "Step 2 — Take it apart, level by level, with a stopwatch. The time it takes to take apart shows you their assembly cost.",
+      { t: "Step 2: take it apart, level by level, with a stopwatch. The time it takes is a clue to their assembly cost.",
         cards: [["⏱", "48 s to open", "ours takes 92 s"], ["🔩", "2 screws", "ours has 6 + 2 clip types"], ["🧩", "Snap-fit chassis", "one moulding holds everything"]] },
-      { t: "Step 3 — Record every part. Every part logged: material, mass, process evidence, supplier marks, fastener count.",
+      { t: "Step 3: record every part. Log each one: material, mass, process evidence, supplier marks, fastener count.",
         cards: [["📋", "9 parts vs 14", "five fewer things to buy, fit and fail"], ["🏷", "PCB supplier mark", "same board house as our B-supplier"], ["🔧", "Tool marks", "2-cavity mould, set up for medium volumes"]] },
-      { t: "Step 4 — Should-cost each part using THEIR assumptions: their region, their volumes, their processes. Give every estimate a range. Differences are reliable even when exact figures aren't.",
-        cards: [["💶", "Their BOM ≈ £3.10", "estimate, ±15%"], ["💶", "Our BOM ≈ £4.60", "same method, same bands"], ["Δ", "Top shell −£0.60", "biggest difference on one part"]] },
-      { t: "Step 5 — Turn findings into ideas. Findings become Creative Phase ideas with owners and dates. That's the difference between a real teardown and teardown tourism.",
+      { t: "Step 4: should-cost each part using THEIR assumptions: their region, their volumes, their processes. Give every estimate a range. Differences are reliable even when exact figures aren't, as long as both sides are costed the same way.",
+        cards: [["💷", "Their BOM ≈ £3.10", "estimate, ±15%"], ["💷", "Our BOM ≈ £4.60", "same method, same bands"], ["Δ", "Top shell −£0.60", "biggest difference on one part"]] },
+      { t: "Step 5: turn findings into ideas. Findings become Creative phase ideas with owners and dates. That's the difference between a real teardown and teardown tourism.",
         cards: [["💡", "Snap-fit chassis", "copy it: remove 4 screws"], ["💡", "Single-screw service path", "adapt to our architecture"], ["🧱", "Cost walk: −£1.50", "design −0.9 · sourcing −0.4 · assembly −0.2"]] },
     ];
     let s = 0;
@@ -1365,7 +1423,7 @@
       if (!right && window.VHMistakes) VHMistakes.attach(ex, btn.textContent);
       if (answered.every(Boolean)) {
         const s = $(".fnc-score", mount);
-        const msg = score === N ? "Perfect — you've got the judgement, not just the vocabulary!" : score >= N - 2 ? "Strong — review the ones you missed and you're there." : closingMsg;
+        const msg = score === N ? "Full marks. You've got the judgement as well as the terms." : score >= N - 2 ? "Strong — review the ones you missed and you're there." : closingMsg;
         s.innerHTML = `You scored <b>${score} / ${N}</b>. ${msg}`;
         s.classList.add("show");
         $(".fncReset", mount).hidden = false;
@@ -1414,29 +1472,29 @@
   /* ── 2 · Module 5 technique challenge ── */
   buildChallenge("#m5ChalMount", [
     ["Your team keeps proposing small tweaks to the current bracket instead of fresh concepts. What's the fix?",
-     ["Write the function on the board and ideate on that, not the part", "Invite more senior engineers", "Give everyone longer to think", "Use a bigger whiteboard"], 0,
-     "The existing part anchors everyone. Naming the function — 'support load' — and hiding the current design opens up all the options again."],
+     ["Brainstorm the function, not the part", "Bring in senior engineers who know the bracket", "Give everyone a week to think it over first", "Show the current drawing so ideas stay realistic"], 0,
+     "The existing part anchors everyone. Name the function ('support load'), hide the current design, and all the options open up again."],
     ["Two people dominate every brainstorm and the quiet experts never get a word in. Best technique?",
-     ["Classic brainstorming, but firmer", "Brainwriting 6-3-5", "Cancel the session", "Let the manager decide"], 1,
-     "6-3-5 is silent and written: everyone contributes exactly three ideas per round, so the loudest voice and the quietest expert get equal airtime."],
+     ["Brainstorming with a firmer chair", "Silent brainwriting (6-3-5)", "An open vote on each idea", "Ask the two talkers to hold back"], 1,
+     "6-3-5 is silent and written: everyone writes three ideas per round, so the loudest voice and the quietest expert get the same space."],
     ["You're stuck on 'make it stiffer, but it keeps getting heavier'. Which tool is built for exactly this?",
-     ["SCAMPER", "Analogy", "TRIZ contradiction matrix", "A show of hands"], 2,
-     "'Improve A, worsen B' is a textbook technical contradiction — TRIZ's matrix returns the inventive principles that historically resolved it."],
+     ["SCAMPER, one letter at a time", "Morphological analysis", "TRIZ contradiction matrix", "Brainwriting 6-3-5"], 2,
+     "'Improve A, worsen B' is a textbook technical contradiction. TRIZ's matrix returns the inventive principles that have resolved it before."],
     ["The flow has dried up and the room is tired, but you still need twenty more ideas. What keeps the ideas coming?",
-     ["End the session early", "Run SCAMPER letter by letter", "Repeat the same question louder", "Break for two hours"], 1,
-     "SCAMPER is a mechanical checklist — Substitute, Combine, Adapt… — that keeps producing ideas even when people have run dry."],
-    ["A torch has three sub-functions with several options each, and you suspect the winning combination has never been built. Which technique?",
-     ["Morphological analysis", "Classic brainstorming", "Pugh matrix", "Pick the cheapest option"], 0,
-     "Morphological analysis lists every option per sub-function and combines them systematically — ideal for surfacing untried combinations."],
+     ["Run SCAMPER letter by letter", "Switch to a weighted matrix", "Vote on the best ideas so far", "Break for lunch and restart"], 0,
+     "SCAMPER is a checklist (Substitute, Combine, Adapt and so on) that keeps producing ideas when people have run dry. Sorting and voting belong to the Evaluation phase."],
+    ["A torch has three sub-functions with several options each, and you want to check every combination, including ones nobody on the team has thought of. Which technique?",
+     ["Morphological analysis", "Classic brainstorming", "A Pugh matrix against the current torch", "The TRIZ contradiction matrix"], 0,
+     "Morphological analysis lists every option for each sub-function and combines them systematically, so untried combinations come to the surface."],
     ["Someone says 'make the bracket out of cardboard' and the room laughs. What should the facilitator do?",
-     ["Write it down without judging it", "Explain why it can't work", "Ask them to be serious", "Move on quickly"], 0,
-     "Defer all judgement. Wild ideas widen the search — 'cardboard bracket' provokes 'how much load does this really see?', which finds the real weight saving."],
+     ["Write it down without comment", "Explain why it can't work", "Ask them to suggest something realistic", "Move on quickly to keep the energy up"], 0,
+     "Hold back all judgement. Wild ideas widen the search: 'cardboard bracket' leads to 'how much load does this really see?', which finds the real weight saving."],
     ["You want to deliver 'contain fluid' at a tenth of today's cost. Where do you look first?",
-     ["The internal cost database", "Another industry or nature (analogy & biomimicry)", "The current supplier's quote", "Last year's report"], 1,
-     "Analogy and biomimicry borrow solutions from other industries and nature — a drinks carton contains fluid for pennies; nature is full of cheap containment."],
+     ["Other industries and nature", "The internal cost database", "The current supplier's cost breakdown", "Last year's VE study on the same part"], 0,
+     "Analogy and biomimicry borrow solutions from other industries and from nature. A drinks carton contains fluid for pennies."],
     ["The boss shares their favourite idea first and the room's thinking narrows around it. What went wrong?",
-     ["Nothing — leaders should lead", "Anchoring — the senior voice should speak last", "Not enough ideas were on the board", "The boss happened to be right"], 1,
-     "Whatever the senior person says first shapes how everyone else thinks. In ideation, the most senior person speaks last."],
+     ["Nothing: leaders should set the direction", "Anchoring: the boss should speak last", "The session needed a warm-up exercise first", "Too few ideas were on the board by then"], 1,
+     "Whatever the senior person says first shapes how everyone else thinks. In idea generation, the most senior person speaks last."],
   ], "Worth a second go. Re-read section 5.2 on Osborn's rules and 5.11 on the order of the tools, then try again.");
 
   /* ── 3 · Module 6 weighted-matrix sandbox ── */
@@ -1479,7 +1537,7 @@
         note.innerHTML = `⚠ Winner changed to <b>${scored[0].name}</b> (was ${DEFAULT_WINNER} at the default weights). If the ranking changes when you adjust a weight slightly, the decision depends on how much risk you'll accept. <b>Tell the sponsor, don't hide it.</b>`;
       } else {
         note.className = "wm-note";
-        note.innerHTML = `At these weights the winner is <b>${scored[0].name}</b> (${best.toFixed(2)}). Drag <em>Net savings</em> up and <em>Low technical risk</em> down and watch a riskier, higher-saving concept overtake it.`;
+        note.innerHTML = `At these weights the winner is <b>${scored[0].name}</b> (${best.toFixed(2)}). Drag <em>Net savings</em> up and the other weights down, and watch a riskier, higher-saving concept overtake it.`;
       }
     }
     wrap.addEventListener("input", calc);
@@ -1490,27 +1548,27 @@
   buildChallenge("#m6ChalMount", [
     ["You have 380 raw ideas from the creative day. What's the very first move?",
      ["Deep-analyse every single one", "Fast triage into go / grow / park", "Let the chief engineer pick favourites", "Build the top three immediately"], 1,
-     "Never deep-study 380 ideas — you'll stall by idea 60. Triage is a shallow, fast first pass: go / grow / park."],
-    ["An idea saves £3 per unit but breaks a homologation rule. Where does it belong in the matrix?",
-     ["Give it a low risk score", "Screen it out: it fails a must-pass check", "Average it with the rest", "Hand it to a champion"], 1,
-     "Safety and regulatory compliance are knockout screens, not scored criteria. No saving can trade against them — it's out."],
+     "Never deep-study 380 ideas: you'll stall by idea 60. The first pass is fast and shallow: go, grow or park, a few seconds each."],
+    ["An idea saves £3 per unit but breaks a homologation rule. What do you do with it?",
+     ["Screen it out before any scoring starts", "Score it, with a low mark for risk", "Keep it in and let the weights decide", "Hand it to a champion to find a way round"], 0,
+     "Safety and regulatory compliance are must-pass checks, not scored criteria. No saving can be traded against them, so the idea is out."],
     ["Your weighted matrix uses BOTH 'annual savings' and 'payback period' as criteria. What's the problem?",
-     ["Nothing — more criteria is better", "Double counting — both measure money", "Too few criteria overall", "Weights don't matter anyway"], 1,
+     ["Nothing: more criteria are fairer", "It counts the same money twice", "Payback needs more weight", "Too few criteria overall"], 1,
      "Both criteria measure money, so money is counted twice and dominates unfairly. Pick one and pair it with investment."],
     ["Early concepts are too foggy to score honestly on a 1–9 scale. Which tool fits?",
-     ["A weighted matrix with guessed numbers", "A Pugh matrix (+ / S / − versus a datum)", "The effort–impact grid", "A coin flip"], 1,
-     "When exact scores would just be guesses, Pugh compares each concept against a datum with just better / same / worse — honest and fast."],
+     ["A Pugh matrix against a datum design", "A weighted matrix with rough scores", "An effort–impact grid scored to one decimal place", "A paired comparison of the concepts' costs"], 0,
+     "When exact scores would only be guesses, Pugh compares each concept with a datum as better, same or worse. That's honest and fast."],
     ["A tiny change to one criterion's weight flips your top-ranked concept. What should you do?",
-     ["Hide it and keep the original winner", "Report the sensitivity to the sponsor", "Delete the criterion", "Stop using weights"], 1,
+     ["Report the sensitivity to the sponsor", "Hide it and keep the original winner", "Average the two rankings and pick the top one", "Remove the criterion that caused the flip"], 0,
      "A winner that flips on a small weight change means the choice depends on how much risk you'll accept. The sponsor needs to discuss that, so don't hide it."],
     ["When should the evaluation criteria be fixed?",
-     ["After seeing the idea list", "Before anyone sees the ideas", "During the final vote", "It makes no difference"], 1,
-     "Criteria chosen after the ideas appear get bent toward someone's favourite. Agree them with the sponsor before the list is revealed."],
+     ["After seeing the idea list", "Before anyone sees the ideas", "During the final vote", "Once the first ideas are scored"], 1,
+     "Criteria chosen after the ideas appear get bent towards someone's favourite. Agree them with the sponsor before the list is revealed."],
     ["You want to separate quick wins from money pits in about ten minutes. Which tool?",
-     ["A full FMEA", "The effort–impact 2×2 grid", "A weighted matrix", "A Pugh matrix"], 1,
-     "The effort–impact grid is the crude, fast first ranking: high impact + low effort = quick wins; low impact + high effort = money pits to park."],
+     ["A full FMEA on each idea", "The effort–impact grid", "A weighted matrix with five criteria", "A Pugh matrix against the datum"], 1,
+     "The effort–impact grid is the quick first ranking. High impact and low effort are quick wins. Low impact and high effort are money pits: drop them, and record why."],
     ["Evaluation is done and the ideas are ranked. What must every survivor leave with?",
-     ["A patent application", "A named champion and a gate date", "A press release", "A budget code"], 1,
+     ["A named champion and a gate date", "A budget code and a list of the team who proposed it", "A patent search on the main idea", "A second score from a different panel"], 0,
      "Ideas handed to 'the team' reappear untouched next year. Every survivor needs one named champion to carry it into development, plus a date."],
   ], "Worth a second go. Re-read sections 6.2–6.7 on the funnel and the ranking tools, then try again.");
 
@@ -1518,227 +1576,227 @@
   buildChallenge("#m10ChalMount", [
     ["The competitor units just arrived at the lab. What happens first?",
      ["Remove the fasteners while enthusiasm is high", "Photograph, weigh and measure everything", "Should-cost the visible parts", "Send parts to suppliers for quotes"], 1,
-     "You get exactly one first teardown. Document every state before changing it — the photo archive settles every argument the study will ever face."],
-    ["Why capture disassembly TIME for every operation?",
-     ["To bill the lab hours correctly", "Taking it apart shows you their assembly cost", "To finish before the deadline", "It makes the report longer"], 1,
-     "The stopwatch tells you about their factory: a product that comes apart in 48 seconds went together in about a minute of paid labour."],
+     "You get one first teardown. Record every state before changing it: the photo archive settles every argument the study will face."],
+    ["Why record how long each step of the disassembly takes?",
+     ["It hints at their assembly cost", "To bill the lab hours correctly", "To prove their product is lower quality", "To check the product meets its repair rules"], 0,
+     "A product that comes apart in 48 seconds probably went together quickly. One that takes 92 seconds and three tool changes almost certainly cost more to assemble. Treat the time as a clue, then estimate assembly time properly with a DFA method."],
     ["When should-costing the competitor's parts, whose assumptions do you use?",
-     ["Your region, your volumes — for comparability", "Their likely region, volumes and processes", "Whichever gives the bigger saving", "Industry averages only"], 1,
-     "Cost their parts at THEIR assumptions, evidenced by the parts themselves. Then compare the differences — differences stay reliable even when exact figures are uncertain."],
-    ["Their hinge costs £1.10 ±15% and yours £2.30 ±15%. What's the robust conclusion?",
-     ["The numbers are too uncertain to use", "A real gap of roughly £1.20 exists — investigate it", "Their hinge must be lower quality", "Switch to their supplier immediately"], 1,
-     "Differences are reliable even when exact figures aren't: even at the worst ends of both bands, a large gap remains — that's a finding."],
+     ["Their likely region, volumes and processes", "Your own region and volumes, for a fair comparison", "Whichever set gives the bigger saving", "Published industry averages for each process"], 0,
+     "Cost their parts at their assumptions, using evidence from the parts themselves. Then compare: differences stay reliable when exact figures don't, as long as both sides are costed the same way."],
+    ["Their hinge costs £1.10 ±15% and yours £2.30 ±15%. What can you conclude?",
+     ["The numbers are too uncertain to use", "A real gap exists: investigate it", "Their hinge is probably lower quality: check it first", "Ask your supplier to match £1.10"], 1,
+     "Even at the worst ends of both bands (about £1.27 against £1.96), a large gap remains. Differences are reliable even when exact figures aren't."],
     ["A friendly shared supplier offers you the competitor's part drawings. You should:",
-     ["Accept — it saves teardown time", "Refuse: confidential information obtained improperly contaminates the study", "Accept but don't tell anyone", "Ask for their price list instead"], 1,
-     "That's the clearest limit of all. Open-market teardown is lawful; someone else's confidential documents are not. Refuse and say why."],
+     ["Refuse the drawings and say why", "Accept: it saves weeks of work", "Look, but keep them out of the report", "Ask for a summary instead"], 0,
+     "That's the clearest limit of all. Open-market teardown is lawful; someone else's confidential documents are not, and using them taints the whole study."],
     ["The teardown found their clever snap-fit chassis. It's patented. What can you do?",
-     ["Copy it — patents don't apply to internals", "Read the patent freely, then license it or design around it", "Nothing — patented ideas are off-limits even to study", "Wait for a lawsuit to clarify"], 1,
-     "Patents are public documents you SHOULD read. Learning is free; copying needs a licence or a design-around. Involve counsel when adopting, not when analysing."],
+     ["Copy it: patents don't cover internal parts", "Study it, then license or design around it", "Nothing: you can't even study a patented idea", "Copy it, then apply for your own patent"], 1,
+     "Patents are public documents you should read. Learning from them is free; copying needs a licence or a design-around. Involve your lawyers when you adopt an idea, not when you analyse it."],
     ["Your teardown produced a beautiful 80-page report and nothing else. What went wrong?",
-     ["Nothing — the report is the deliverable", "Teardown tourism: the findings never became ideas with owners in the funnel", "The report should have been longer", "Too few photos"], 1,
-     "The bench work is finished only when deltas become creative-phase seeds with owners, dates and a place in the savings funnel."],
+     ["The findings never became ideas", "Nothing: the report is the deliverable", "The report went to too few people", "The parts weren't costed in enough detail"], 0,
+     "That's teardown tourism. The bench work is finished only when the differences become Creative-phase ideas with owners, dates and a place in the savings funnel."],
     ["A rival's product is 20% cheaper at retail. What does that alone prove about their cost?",
-     ["They build it 20% cheaper", "Almost nothing — they might be selling at a loss to win market share", "Their quality is 20% lower", "Their labour is offshore"], 1,
-     "Price alone tells you almost nothing. That's why benchmarking runs six dimensions — cost, functional, design, process, feature and patent/IP — together."],
+     ["Almost nothing on its own", "They build it 20% cheaper", "Their margin is 20% lower", "Their parts are 20% cheaper"], 0,
+     "Price alone tells you very little: they might be selling at a loss to win market share, or taking a smaller margin. That's why benchmarking looks at six dimensions together: cost, functional, design, process, feature and patent/IP."],
   ], "Worth a second go. Re-read sections 10.3–10.7 on the five steps and 10.11 on the limits, then try again.");
 
   /* ── 6 · Modules 1–3 foundations challenge ── */
   buildChallenge("#m3ChalMount", [
     ["Marketing calls a product 'too expensive to build'. The VE translation is:",
-     ["Cut the costliest part", "The functions cost more than the market will pay for them, and that's an engineering problem you can solve", "Raise the price", "Outsource production"], 1,
-     "The market caps the price, and your design choices set the cost. Putting the complaint in terms of functions and cost turns a budget complaint into an engineering problem you can solve."],
+     ["Its functions cost more than they're worth", "The price is set too low for the market it's in", "Every part needs the same 10% cost cut", "The costliest part should be cut first"], 0,
+     "The market caps the price, and your design choices set the cost. Put the complaint in terms of functions and cost, and it becomes an engineering problem you can solve."],
     ["A rival's kettle has identical functions to yours but costs £2.60 less to make. In VE terms, your kettle has:",
-     ["Lower quality", "Lower value — same function at higher cost", "Higher esteem value", "A pricing problem, not an engineering one"], 1,
+     ["Lower value", "Lower quality", "Higher esteem value", "A pricing problem, not an engineering one"], 0,
      "Value = Function ÷ Cost. The same function at a higher cost is lower value, and the rival's kettle proves the gap can be closed."],
     ["Someone proposes deleting the brushed-metal finish customers love, to save £0.80. Which value type is being ignored?",
-     ["Use value", "Esteem value — customers pay for desirability", "Exchange value", "Cost value"], 1,
-     "Esteem value is real value. The VE question is never 'get rid of the chrome'. It's 'is the chrome worth more to customers than it costs?' If it is, it stays."],
+     ["Use value", "Esteem value", "Exchange value", "Cost value"], 1,
+     "Esteem value is real value: customers pay for how a product looks and feels. Ask whether the finish is worth more to customers than it costs. If it is, it stays."],
     ["Your VE study kicks off Monday but the BOM costs are still 'roughly right'. What happens?",
-     ["Nothing — precision comes later", "The workshop becomes an argument about the baseline instead of the product", "Finance fixes it afterwards", "The facilitator estimates live"], 1,
-     "If finance hasn't checked the starting cost, every finding gets argued over again. You can't start without a costed parts list checked by finance."],
-    ["The obvious choice for facilitator is the product's chief engineer, who knows the product best. Why is that wrong?",
-     ["Experts are too busy", "Experts defend the designs they created. The facilitator runs the process but doesn't supply the answers", "Engineers can't run meetings", "It violates the method's rules"], 1,
-     "The person who knows the product best has the most invested in the current design. Facilitators run the method and keep time. The answers come from the team."],
-    ["Which team produces the best VE ideas?",
-     ["Eight design engineers who know the product inside out", "Six to ten people from different departments: design, manufacturing, purchasing, quality, finance and service", "The two most senior people available", "An external consultancy alone"], 1,
-     "A team from one department comes up with the same kind of ideas. The best ideas come when design, manufacturing and purchasing challenge each other."],
-    ["The loudest stakeholder insists 'customers absolutely need this feature'. In the Information Phase, you should:",
-     ["Add it to the spec", "Check the evidence (usage data, Kano category, warranty text), not who is loudest", "Overrule them", "Defer to seniority"], 1,
-     "Requirements should be based on evidence, not opinions. Kano mapping and usage data settle in minutes what people would otherwise argue about for hours."],
+     ["The team argues about the numbers", "Nothing: precision comes later", "Finance corrects the figures afterwards", "The facilitator estimates costs live"], 0,
+     "If finance hasn't checked the starting cost, the workshop becomes an argument about the baseline instead of the product. You can't start without a costed parts list checked by finance."],
+    ["The only trained facilitator available is also the project's cost engineer. What's the main risk?",
+     ["They may steer ideas towards their own views", "They won't understand the product well enough", "Finance won't accept a facilitator's figures", "The workshop will take longer than planned"], 0,
+     "A facilitator runs the process but doesn't supply the answers. Someone with a stake in the costs can steer the room without meaning to. Agree up front that someone else speaks for the cost data, or borrow a facilitator from another team."],
+    ["Your team has design, manufacturing and purchasing. Which addition matters most for the savings to be believed?",
+     ["Someone from finance", "A second design engineer", "A marketing manager", "An outside consultant"], 0,
+     "Finance checks the starting cost and the savings. Without them in the room from day one, nobody believes the numbers later."],
+    ["The loudest stakeholder insists 'customers absolutely need this feature'. In the Information phase, you should:",
+     ["Check the evidence behind the claim", "Add it to the spec to avoid a row", "Overrule them so the study can move on", "Defer to the most senior person present"], 0,
+     "Requirements should rest on evidence, such as usage data, the Kano category and warranty returns, not on who is loudest. That evidence settles in minutes what people would otherwise argue about for hours."],
     ["Where is most of the cost you can remove?",
-     ["In the basic function", "In secondary functions: design choices that look like requirements", "In the packaging", "In supplier margins"], 1,
-     "You can't touch the basic function. Most secondary functions are just how this design happens to work, and every one can be changed."],
+     ["In the secondary functions", "In the basic function", "In the supplier's profit margin", "In packaging and freight"], 0,
+     "You can't remove the basic function, though you can change how it's delivered. Most secondary functions exist only because of this design, so most can be changed or removed. The exceptions are those required by law or safety standards."],
   ], "Worth a second go. Re-read sections 1.1–1.5 on value, 2.2 on the team and 3.3 on requirements, then try again.");
 
   /* ── 7 · Module 8 implementation gauntlet ── */
   buildChallenge("#m8ChalMount", [
-    ["Your idea saves £0.25/unit at 200,000 units/year, and needs £60,000 one-time. Payback?",
-     ["About 7 months", "About 14 months: over the usual 12-month limit", "About 3 months", "It can't be calculated"], 1,
-     "Annual saving = 0.25 × 200,000 = £50k. Payback = 60k ÷ 50k × 12 ≈ 14.4 months — over the 12-month bar, so cut the one-time cost or bundle it."],
+    ["Your idea saves £0.30 a unit on 160,000 units a year, and needs £60,000 one-time. Payback?",
+     ["About 15 months", "About 10 months", "About 5 months", "About 2 years"], 0,
+     "Annual saving = £0.30 × 160,000 = £48k. Payback = £60k ÷ £48k × 12 = 15 months. That's over the usual 12-month limit, so cut the one-time cost or bundle it with another change."],
     ["The decision board loved the presentation, applauded, and moved to the next agenda item. What's missing?",
-     ["A longer presentation", "The decision log: a clear yes or no, an owner and a date for each proposal", "Better slides", "More attendees"], 1,
-     "Applause is not an output. A Phase 6 that ends without logged decisions is a rehearsal — every proposal needs a verdict, an owner and a date."],
+     ["A logged decision for each proposal", "A longer question-and-answer session", "Slides the board can take away afterwards", "A vote of thanks recorded in the minutes"], 0,
+     "Applause isn't an output. A Phase 6 that ends without logged decisions is a rehearsal: every proposal needs a yes or no, an owner and a date."],
     ["Purchasing claims the same £180k saving your VE study claims. What prevents this?",
-     ["Claiming it first", "Reconciling with purchasing's ledger so the same pound is never counted twice", "Splitting it 50/50", "Escalating to the CFO"], 1,
-     "Double-counting destroys programme credibility faster than any failed idea. One savings ledger, reconciled — agreed in the measurement rules."],
-    ["Copper prices spiked and wiped out your design saving on paper. The audit should:",
-     ["Report the saving as lost", "Adjust the starting cost using an index, so material price changes don't hide real design savings", "Wait for prices to fall", "Exclude copper parts"], 1,
-     "Measure against the fixed starting cost, adjusted using an index. A real £0.30 design saving exists whether copper rises or falls — the rules must show it."],
+     ["One shared, reconciled savings ledger", "Whoever logs it first keeps it", "Splitting the claim 50/50 each time", "Asking the CFO to decide each case"], 0,
+     "Double counting destroys a programme's credibility faster than any failed idea. Keep one savings ledger, matched with purchasing's records, under the agreed measurement rules."],
+    ["Copper prices spiked and wiped out your £0.30 design saving on paper. The savings check should:",
+     ["Report the saving as lost", "Take the copper price change out with an index", "Wait for copper prices to fall again", "Reset the starting cost to today's prices"], 1,
+     "Measure against the fixed starting cost, with commodity price changes taken out using an index. The £0.30 design saving is real whether copper rises or falls, and the rules must show it."],
     ["An approved idea has sat at L3 for four months; its champion left the company. The funnel review should:",
-     ["Close it as lost", "Reassign it to a named owner with a new gate date — or kill it consciously", "Wait for a volunteer", "Escalate to the board"], 1,
-     "Ideas without an owner are cause number five. The monthly review exists precisely to reassign or consciously kill — never to let ideas fade silently."],
-    ["When does a saving officially 'count' in a governed programme?",
-     ["When the workshop ends", "At L4: in production and checked against the fixed starting cost", "When the business case is approved", "When tooling is ordered"], 1,
-     "L1 ideas and L3 approvals are potential. Only implemented, finance-audited savings are real — that discipline is why the numbers are believed."],
+     ["Give it a new owner and a new date", "Leave it at L3 until someone volunteers", "Send it back to L1 to be checked again", "Ask the board to approve it again"], 0,
+     "A champion leaving is cause number five. The monthly review exists to give ownerless ideas a new owner within a month, or to drop them on purpose, never to let them fade."],
+    ["A saving appears in the monthly report. At what point should it be counted as real?",
+     ["At L4, in production and checked by finance", "When the business case is approved", "When the tooling has been ordered", "When the workshop's report is signed off"], 0,
+     "L1 ideas and L3 approvals are potential. Only savings in production, checked by finance against the fixed starting cost, are real. That discipline is why people believe the numbers."],
     ["Two sceptical executives sit on the decision board. The best move before the meeting is:",
-     ["Hope they're absent", "Brief them in advance: take them through the proposals one-to-one beforehand", "Schedule them last", "Send a longer read-ahead"], 1,
-     "Surprises make executives defensive, and defensive executives say no. Pre-wiring surfaces objections while they're still fixable."],
-    ["Wave two of your programme is running slower and costlier than wave one. The likeliest cause is:",
-     ["Harder products", "Lessons, design rules and cost standards weren't fed back", "Team fatigue", "Bad luck"], 1,
-     "Wave two should always be cheaper and faster: reused ideas, updated design rules, refreshed should-costs. If it isn't, the retro and feedback loop are being skipped."],
+     ["Go through it with each of them beforehand", "Send them a longer pack to read in advance", "Put their proposals last on the agenda", "Ask the sponsor to answer their questions"], 0,
+     "Surprises make executives defensive, and defensive executives say no. Briefing them one-to-one first brings objections out while they can still be fixed."],
+    ["The second round of your programme is running slower and costing more than the first. The likeliest cause is:",
+     ["Lessons weren't fed back into the system", "The products in round two are harder", "The team is tired after the first round", "Suppliers had already given their best prices"], 0,
+     "The second round should be cheaper and faster: reused ideas, updated design rules, refreshed should-costs. If it isn't, the review after each round and the feedback of lessons are being skipped."],
   ], "Worth a second go. Re-read sections 8.4–8.7 on the one-pager, the checking rules and the five causes, then try again.");
 
   /* ── 8 · Module 9 should-cost challenge ── */
   buildChallenge("#m9ChalMount", [
     ["A supplier refuses to share their cost breakdown. Your move?",
-     ["Accept the quote — there's no other data", "Build a cleansheet from physics and market rates — you don't need their permission", "Threaten to resource", "Ask for three more quotes"], 1,
-     "That's the whole point of should-costing: material mass, cycle-time physics and public rate benchmarks rebuild their cost structure without a single confidential number."],
+     ["Build your own should-cost model", "Accept the quote: there's no other data", "Threaten to move the business", "Ask three other suppliers to quote"], 0,
+     "That's the point of should-costing: material mass, cycle-time physics and published rates rebuild their cost structure without a single confidential number."],
     ["Which steel price belongs in the material layer of a cleansheet?",
-     ["The supplier's list price", "An indexed commodity market price for the grade and region", "Last year's contract price", "The cheapest price ever paid"], 1,
-     "List prices are negotiating positions, not costs. Commodity indices are the honest, updatable basis — and they set up the index clause for the contract."],
+     ["A commodity index for the grade", "The steel mill's published list price", "Last year's contract price, plus inflation", "The lowest price you've paid this year"], 0,
+     "List prices are negotiating positions, not costs. A commodity index is honest and easy to update, and it sets up the index clause for the contract."],
     ["Your cleansheet says £1.42; the quote is £1.85. The WRONG next move is:",
-     ["A joint workshop walking the layers together", "Emailing the cleansheet with 'explain the gap'", "Checking your utilisation assumption first", "Preparing layer-by-layer questions"], 1,
-     "'Explain the gap' by email creates a defensive supplier and a worse relationship. Share the method, walk the layers together — suppliers who feel checked up on hide things, and suppliers who feel like partners offer them."],
+     ["A joint session going through the layers", "Email it and ask them to explain the gap", "Checking your own utilisation assumption", "Preparing questions layer by layer"], 1,
+     "'Explain the gap' by email makes a supplier defensive. Share the method and go through the layers together. Suppliers who feel checked up on hide things; suppliers who feel like partners offer them."],
     ["Bracket F sits 25% above your LPP regression line. Before targeting it you must:",
-     ["Demand 25% off", "Check for spec differences — F might carry a justified special requirement", "Remove it from the chart", "Change supplier"], 1,
-     "LPP finds the odd ones out, not the answers. F's special coating was justified; bracket D's premium wasn't. Specs first, negotiation second."],
-    ["Which should-cost layer is the classic hiding place for an underutilised plant?",
-     ["Raw material", "Overhead — allocated across too few production hours", "Fair margin", "Direct labour"], 1,
-     "A 55%-utilised plant spreads its fixed costs over half the hours, doubling the overhead per part. You shouldn't pay for their empty machine time. That's something to discuss, not an extra charge."],
-    ["In the three-way negotiation split, the supplier's margin gets:",
-     ["Squeezed first — it's pure profit", "Respected — the savings come from indexing material and engineering out conversion waste", "Indexed to inflation", "Deferred to next year"], 1,
-     "Squeezing legitimate margin buys one cheap year and a resentful supplier. Cleansheet negotiation attacks waste and mispricing, never fair profit — and gain-share keeps their ideas coming."],
+     ["Check its spec against the others", "Ask the supplier for 25% off", "Refit the line without it and move on", "Move it to a cheaper supplier"], 0,
+     "LPP finds the odd ones out, not the answers. F's special coating was justified; bracket D's premium wasn't. Check the spec first, then negotiate."],
+    ["A supplier's plant is busy for 55% of its hours instead of a normal 85%. Roughly how much more overhead does each part carry?",
+     ["About 1.5 times", "About 3 times", "About 30% more", "No more: overhead is fixed"], 0,
+     "Fixed costs are spread over the hours actually worked. 85 ÷ 55 ≈ 1.5, so each part carries about 1.5 times the overhead it would at a normal 85%. You shouldn't pay for their empty machine time. Raise it as a question, not an accusation."],
+    ["In the three-way split of a should-cost negotiation, the supplier's fair margin is:",
+     ["Respected, not cut", "Squeezed first", "Cut to match yours", "Traded for volume"], 0,
+     "Squeezing a fair margin buys one cheap year and a resentful supplier. The savings come from indexing material and taking waste out of processing costs, and gain-share keeps their ideas coming."],
     ["Your machine-rate assumption uses 85% utilisation; the supplier's plant runs at 60%. Your should-cost is:",
-     ["Correct — they should be efficient", "Too low as a prediction, but exactly the right starting point for discussing who pays for unused capacity", "Wrong and unusable", "Too high"], 1,
-     "The model shows what the part SHOULD cost at competent utilisation. The gap versus their reality is precisely the negotiation: why should your part fund their empty hours?"],
-    ["An AI engine returns £4.12 for your CAD housing in 58 seconds. That number is best used as:",
-     ["The target price in the contract", "A directional estimate for ranking options and preparing negotiation — verified before any business case", "Proof the supplier is lying", "A replacement for the RFQ"], 1,
-     "AI should-costs are directional: perfect for ranking designs and walking in prepared, never a substitute for verified quotes. Sounding confident isn't the same as being accurate."],
+     ["Below their real cost, but a fair basis to talk", "Wrong: rebuild it at 60% before you talk to them", "Right: it predicts what they'll quote", "Too high: their quote should come in lower"], 0,
+     "The model shows what the part should cost at competent utilisation. The gap against their reality is the discussion: why should your part pay for their empty hours?"],
+    ["An AI engine returns £4.12 for a housing in under a minute. That number is best used as:",
+     ["A guide to check against real quotes", "The target price for the contract", "Proof the supplier is overcharging", "A replacement for the request for quotes"], 0,
+     "AI should-costs are a guide: good for ranking designs and preparing for a negotiation, never a substitute for checked quotes. Sounding confident isn't the same as being accurate."],
   ], "Worth a second go. Re-read section 9.1 on why should-cost matters, 9.5 on the seven steps and 9.7 on negotiation, then try again.");
 
   /* ── 9 · Module 11 AI-era challenge ── */
   buildChallenge("#m11ChalMount", [
     ["An engineer pastes the full supplier-quoted BOM into a public chatbot to 'find savings'. This is:",
-     ["Efficient modern practice", "A confidentiality breach — supplier prices belong only in your company's approved tools", "Fine if anonymised later", "Good, because public models are smarter"], 1,
-     "Treat a pasted BOM like an emailed one: confidential data never enters public tools. Use your company's approved tools — the capability is the same, the exposure isn't."],
+     ["A breach of confidentiality", "Fine, if part names are removed", "Fine, if the chat is deleted", "Good practice for speed"], 0,
+     "Treat a pasted BOM like an emailed one: confidential data never goes into public tools. Use your company's approved tools; the capability is the same, the exposure isn't."],
     ["The LLM's business-case draft claims a '23% typical saving for this commodity'. Before it reaches the board you must:",
-     ["Round it to 25%", "Verify the number against a source — AI tools sound confident even when they're wrong", "Delete the claim", "Ask the model to double-check itself"], 1,
-     "Every number that reaches a business case gets a human check against a real source. Confident-sounding answers can mislead you — that's exactly why verification is a hard rule."],
-    ["Your AI should-cost engine's estimates drifted 12% above real quotes over a year. The likely cause is:",
-     ["Suppliers cutting prices unrealistically", "Aged rate cards and silent model changes — compare against real quotes regularly", "The CAD models got worse", "Inflation"], 1,
-     "Rate libraries age and models update silently. Teams that re-benchmark quarterly catch drift; teams that don't slowly lose finance's trust in every AI number."],
-    ["The best FIRST investment for a team starting its digital cost stack is:",
-     ["An enterprise AI copilot suite", "A spend cube and LPP on data you already own", "CT scanning equipment", "A cost knowledge graph"], 1,
-     "Crawl before you run: spend analytics needs no new tools, finds outliers in weeks, and its savings fund everything that follows. Buying tools first just produces nicely formatted guesses."],
+     ["Check it against a real source", "Ask the model to double-check itself", "Keep it, but mark it as an AI estimate", "Replace it with your own best guess"], 0,
+     "Every number that reaches a business case gets a human check against a real source. AI tools sound confident even when they're wrong, which is why checking is a hard rule."],
+    ["Your AI should-cost engine's estimates drifted 12% away from real quotes over a year. The likely cause is:",
+     ["Out-of-date rates and model updates", "Engineers rounding the inputs", "A new buyer collecting the quotes", "The CAD files getting larger over time"], 0,
+     "Rate libraries age and models update without notice. Compare against real quotes every quarter to catch drift; teams that don't slowly lose finance's trust in every AI number."],
+    ["The best FIRST investment for a team starting its digital cost tools is:",
+     ["Spend analysis and LPP on your own data", "An AI assistant licence for every engineer", "A CT scanner for competitor teardowns", "A linked database of parts, costs and suppliers"], 0,
+     "Crawl before you run. Spend analysis needs no new tools, finds outliers in weeks, and its savings pay for what follows. Buying tools first just produces well-formatted guesses."],
     ["A feature-based engine returns different costs for the same part from two CAD files. Why?",
-     ["The engine is broken", "The result is only as good as the input: a careless model gives the wrong cost", "Random variation", "Currency differences"], 1,
-     "The engine reads manufacturing features from the geometry. Missing draft angles or wrong wall thicknesses change the simulated process — poor CAD, wrong cost."],
+     ["The CAD models differ in detail", "The engine has a fault in its maths", "The engine adds random noise to its estimates", "Each file was costed in a different currency"], 0,
+     "The engine reads manufacturing features from the geometry. Missing draft angles or wrong wall thicknesses change the simulated process: poor CAD, wrong cost."],
     ["Where should the human stay in charge in an AI-assisted workshop?",
-     ["Typing speed", "Judging, deciding and owning — AI drafts, counts and clusters", "Formatting slides", "Scheduling"], 1,
-     "The division of labour is constant across every phase: AI generates and drafts; engineers judge, validate and sign. People always make the decisions."],
+     ["Judging, deciding and signing off", "Drafting the first idea list", "Grouping ideas into themes", "Counting and sorting the votes"], 0,
+     "AI drafts, counts and groups; engineers judge, check and sign off. People always make the decisions."],
     ["Your team wants to automate function analysis before ever having run one manually. The risk is:",
-     ["None — that's what tools are for", "You can't check what you can't do yourself — automated output can't be judged by a team that never mastered the method", "It's too expensive", "The tool needs training data"], 1,
-     "A drafted function tree is only useful to someone who can spot where it's wrong. Master the manual method first; then AI becomes a multiplier instead of a black box."],
-    ["The same cleansheet lever cuts cost AND carbon. Which is it?",
-     ["Extending payment terms", "Mass reduction — less material is less money and less embodied CO₂e", "Rebranding", "Longer contracts"], 1,
-     "Cost and carbon share physics: mass, energy, scrap, distance. Add a kgCO₂e column to the cleansheet and most cost savings cut carbon too."],
+     ["Nobody can tell when the output is wrong", "None: that's what the tools are for", "The software licences cost too much", "The tool needs your past studies to learn"], 0,
+     "A drafted function tree is only useful to someone who can spot where it's wrong. Learn the manual method first; then AI speeds you up instead of being a black box."],
+    ["Which change is most likely to cut both cost and carbon?",
+     ["Making the part lighter", "Longer payment terms", "Moving production closer to home", "Shipping by air to cut stock"], 0,
+     "Cost and carbon share physics: less material means less money and less embodied CO₂e. Moving production closer to home usually cuts transport emissions but may cost more. A kgCO₂e column in the cleansheet shows which is which."],
   ], "Worth a second go. Re-read sections 11.4 on the engines, 11.8 on the order to adopt tools and 11.9 on the ground rules, then try again.");
 
   // Modules 1, 2, 7, 12 and 13
   buildChallenge("#m1ChalMount", [
     ["Your boss says \"take 10% out of every part\". What's the value-engineering response?",
-     ["Agree, and spread the cut evenly", "Ask what each part does, and where cost is higher than the job is worth", "Ask every supplier for a 10% discount", "Remove the most expensive part"], 1,
-     "Cutting every part equally ignores what each part does. VE looks for the functions that cost more than they're worth, and protects the ones customers pay for."],
+     ["Agree, and spread the cut evenly", "Find where cost is higher than worth", "Ask every supplier for a 10% discount", "Remove the most expensive part first"], 1,
+     "Cutting every part equally ignores what each part does. VE asks what each part does and looks for the functions that cost more than they're worth, while protecting the ones customers pay for."],
     ["You want to reduce the cost of a product that's already in production. Which is it?",
      ["Value Analysis (VA)", "Value Engineering (VE)", "Value Management (VM)", "None of these"], 0,
      "VA works on products already in production. VE works during design, before the cost is fixed. VM is the management system that keeps both going."],
     ["Someone suggests removing the chrome trim to save £1.20. What should you ask first?",
-     ["Can we buy cheaper chrome?", "Is the chrome worth more to customers than it costs?", "Will engineering approve the change?", "What do competitors do?"], 1,
-     "Esteem value is real value, because customers pay for it. The question is never \"get rid of the chrome\". It's whether it's worth more than it costs."],
+     ["Can we buy cheaper chrome?", "Is it worth more than it costs?", "Will engineering approve the change?", "Do our competitors still use chrome?"], 1,
+     "Esteem value is real value, because customers pay for it. So the question isn't \"can we get rid of it?\" but \"is it worth more to customers than it costs?\""],
     ["Which of these is NOT one of the five ways to improve value?",
-     ["Same function, lower cost", "More function, same cost", "Cut a function customers value, to save money", "Remove functions customers don't value"], 2,
-     "Cutting what customers value is how cost-cutting damages brands. Starting from functions is what prevents it."],
+     ["Same function, lower cost", "More function, same cost", "Less of a valued function, lower cost", "Remove functions customers don't value"], 2,
+     "Cutting a function customers value, just to save money, is how cost-cutting damages brands. Starting from functions is what prevents it."],
     ["When does an hour of VE effort usually save the most?",
      ["After launch, in a cost-down project", "At a design review, before the concept is frozen", "During the yearly supplier negotiation", "Near the end of the product's life"], 1,
-     "70–80% of lifecycle cost is decided by the end of concept design. Later stages can only work within decisions already made."],
+     "A figure often quoted is that 70–80% of lifecycle cost is committed by the end of concept design. The exact number is debated, but the direction isn't: later stages can only work within decisions already made."],
     ["A kettle sells for £35 and costs £18 to make. Which of the two does your design control most?",
      ["The price", "The cost", "Both equally", "Neither"], 1,
      "The market sets the price. Your design and supplier choices set the cost, and that's where VE works."],
   ], "Worth a second go. Re-read sections 1.2 on the five ways to improve value, 1.3 on VA, VE and VM, and 1.6 on why VE pays, then try again.");
   buildChallenge("#m2ChalMount", [
     ["The workshop is in two weeks and nobody senior has agreed to sponsor it. What do you do?",
-     ["Run it anyway and find a sponsor afterwards", "Postpone until a sponsor who can make decisions is named", "Let the facilitator act as sponsor", "Shorten the workshop to one day"], 1,
-     "No sponsor, no study. Without someone who can provide people and money and act on decisions, a study produces slides and nothing else."],
+     ["Run it anyway and find a sponsor afterwards", "Postpone until a sponsor is named", "Let the facilitator sponsor it", "Shorten it to one day and report upwards"], 1,
+     "No sponsor, no study. Without someone who can provide people and money and act on the decisions, a study produces slides and nothing else."],
     ["The team is eight design engineers. What's the problem?",
-     ["It's too big", "It's all one department, so the ideas will all be the same kind", "It's too small", "There's no problem"], 1,
-     "The best ideas come when people from different departments challenge each other. Add manufacturing, purchasing, quality, finance and a key supplier."],
-    ["Who should facilitate the workshop?",
-     ["The chief engineer, who knows the product best", "A trained facilitator who runs the process but doesn't supply the answers", "The sponsor", "The supplier with the biggest share"], 1,
-     "Experts tend to defend the current design. The facilitator runs the process and keeps time, and the team supplies the ideas."],
+     ["It's too big to manage well", "It's all from one department", "It's too small for a full study", "There's no problem: they know it best"], 1,
+     "A team from one department comes up with the same kind of ideas. The best ideas come when people from different departments challenge each other, so add manufacturing, purchasing, quality, finance and a key supplier."],
+    ["Who is best placed to run the workshop?",
+     ["The chief engineer, who knows it best", "A trained facilitator from outside the project", "The sponsor, who has the authority", "The cost engineer who built the BOM"], 1,
+     "Experts tend to defend the current design. The facilitator runs the process and keeps time but doesn't supply the answers, and the team supplies the ideas."],
     ["The target says \"cut 20%, because the CEO wants it\". What's missing?",
-     ["Nothing, a clear number is enough", "Evidence: the gap to a competitor, the margin needed, or mismatches found", "A bigger number, to stretch the team", "Just a deadline"], 1,
-     "Targets set by order, with no evidence behind them, aren't believed. Base the target on a competitor gap, the margin you need, or what an earlier review found."],
+     ["Nothing: a clear number is enough", "Evidence behind the number", "A bigger number, to stretch the team", "A deadline and a named owner"], 1,
+     "A target set because someone senior picked a number, with no evidence behind it, isn't believed. Base it on a competitor gap, the margin you need, or what an earlier review found."],
     ["Finance hasn't checked the costed parts list. What's the risk?",
-     ["None, engineers know the costs", "The workshop turns into an argument about the numbers, and the savings won't be believed", "The supplier will object", "Ideas will be slower to come"], 1,
-     "You can't do without a costed parts list that finance has checked. Involve finance from day one so nobody says \"those numbers aren't real\" later."],
+     ["None: engineers know the costs", "Nobody will believe the savings", "The supplier will object to the figures", "Ideas will be slower to come"], 1,
+     "The workshop turns into an argument about the numbers, and the savings won't be believed. Involve finance from day one so nobody says \"those numbers aren't real\" later."],
     ["The product is complex and some data is missing. Which workshop format fits?",
-     ["One long five-day week", "Two days, a two-week break to gather data, then two more days", "A single one-day sprint", "Skip the preparation and start"], 1,
-     "The split format suits complex products. The one thing you can't shorten is keeping the phases separate."],
+     ["A five-day week, back to back", "A three-day version, days merged", "A split: two days, a break, two more", "A one-day sprint with the data you have"], 2,
+     "The split format suits complex products: the two-week break is for gathering the missing data. The one thing you can't shorten is keeping the phases separate."],
   ], "Worth a second go. Re-read sections 2.1 on scope and sponsorship, 2.2 on the team and 2.6 on the starting cost and target, then try again.");
   buildChallenge("#m7ChalMount", [
     ["A change saves 20p a unit on 150,000 units a year and has a one-time cost of £15,000. What's the payback?",
      ["2 months", "6 months", "12 months", "18 months"], 1,
      "Annual saving = 20p × 150,000 = £30,000. Payback = £15,000 ÷ £30,000 = half a year, so 6 months."],
     ["A packaging specification change. How far up the testing ladder should it go?",
-     ["All five steps, to be safe", "Only as far as the risk needs, probably a desk check", "Straight to a field trial", "No checks at all"], 1,
-     "Match the testing to the risk, not to habit. Too much testing slowly destroys the payback."],
+     ["All five steps", "A desk check", "A field trial", "A rig test"], 1,
+     "Match the testing to the risk, not to habit. A packaging change needs step 1 only, and too much testing slowly destroys the payback."],
     ["A thinner wall raises occurrence from 2 to 4 on a failure with severity 8. What now?",
-     ["Just make a note of it", "Take action, with a redesign or added controls, before counting the saving", "Ignore it, because the RPN is still low", "Cancel every change in the study"], 1,
-     "Score the change from the current design. A rise like this on a severe failure needs action. A small rise on a minor failure just needs a note."],
+     ["Note it and review it at launch", "Act on it before counting the saving", "Ignore it: occurrence 4 is still low", "Drop every change in the study"], 1,
+     "Score the change from the current design. A rise like this on a severe failure needs action, such as a redesign or added controls. A small rise on a minor failure just needs a note."],
     ["The new tooling takes 14 weeks; the tests take 10. When do you order the tooling?",
-     ["After every test has passed", "Alongside the tests, with clear stop points", "Before any testing starts, with no stop points", "Never, until the sponsor asks"], 1,
+     ["After every test has passed", "Alongside the tests, with clear stop points", "Before any testing starts, with no stop points", "Once the first rig test has passed"], 1,
      "Start long-lead items at the same time as testing, with clear stop points, rather than waiting until every test has passed."],
-    ["Volumes are falling fast. Which measure should the business case use?",
-     ["Simple payback", "NPV at the company's minimum required return", "Gross saving only", "Saving per unit only"], 1,
-     "Payback is right when volumes are steady. When they're rising or falling, use NPV."],
+    ["One option saves early on a falling volume; another saves later on a rising one. How should you compare them?",
+     ["Their NPV at the company's required return", "Simple payback, months to break even", "Total gross saving over the life", "Saving per unit at today's volume"], 0,
+     "Payback is a quick screen. When options differ in timing, life or volume profile, compare them by NPV at the company's required return."],
     ["Two ideas save the same amount, one this quarter and one in 18 months. Which is worth more?",
-     ["The one in 18 months", "The one this quarter", "They're worth the same", "It depends on the supplier"], 1,
-     "A saving that arrives in 18 months is worth less than one that arrives this quarter. Always put a date on savings."],
+     ["The one in 18 months", "The one this quarter", "They're worth the same", "The later one, as it's less risky"], 1,
+     "A saving that arrives in 18 months is worth less than one that arrives this quarter: money now can earn a return, and later savings carry more risk. Always put a date on savings."],
   ], "Worth a second go. Re-read sections 7.3 on the business case, 7.4 on the testing ladder, 7.5 on FMEA and 7.6 on the money, then try again.");
   buildChallenge("#m12ChalMount", [
     ["Twelve studies have run in three years, but savings in production are flat. What's wrong?",
-     ["Too few studies", "Activity is being measured, not results; track checked savings in production", "Too many ideas", "The facilitator"], 1,
-     "Measuring activity (studies run) instead of results (checked savings) is a classic way programmes fail."],
+     ["They count activity, not results", "Too few studies for the product range", "Too many ideas spread too thin", "The facilitator lacks experience"], 0,
+     "Measuring activity (studies run) instead of results (checked savings in production) is a classic way programmes fail."],
     ["The programme has a £2M savings target, but no engineering time has been funded. What happens?",
-     ["The team will find the time", "The target won't be met, and morale suffers; fund the time or lower the target", "Suppliers will make up the difference", "Nothing, targets motivate people"], 1,
-     "Never set a savings target higher than the engineering time you've actually paid for."],
+     ["The target will be missed, and morale suffers", "The team will find the time somehow", "Suppliers will make up the difference", "Nothing: stretch targets motivate people"], 0,
+     "Never set a savings target higher than the engineering time you've paid for. Fund the time or lower the target, or morale suffers too."],
     ["Who should the value office report to?",
-     ["Engineering", "Purchasing", "Someone neutral, such as the finance or operations director", "Marketing"], 2,
-     "A value office under engineering ignores sourcing, and one under purchasing ignores design. A neutral sponsor keeps both sides balanced."],
+     ["The engineering director", "The purchasing director", "A neutral director, such as finance", "The head of the biggest product line"], 2,
+     "A value office under engineering ignores sourcing, and one under purchasing ignores design. A neutral sponsor, such as the finance or operations director, keeps both sides balanced."],
     ["Funnel coverage is 35% of product cost. What's the usual target?",
      ["60% or more", "About 10%", "100%", "35% is fine"], 0,
      "Funnel coverage, the share of product cost being actively studied, should be at least 60%."],
     ["Which savings should earn rewards?",
-     ["Ideas approved at the workshop", "Gross savings at idea stage", "Checked, net savings that are in production", "The number of workshops run"], 2,
+     ["Ideas approved at the workshop", "Gross savings at the idea stage", "Checked net savings in production", "The number of workshops each person runs"], 2,
      "Reward savings that are checked, net and actually in production, or people will chase big numbers that only exist on paper."],
     ["The first round found 12%. Should the programme stop there?",
-     ["Yes, the main savings are done", "No: established programmes keep finding 3–5% a year", "Only if the CEO agrees", "Switch to a different method"], 1,
-     "Stopping after the first round, just before the savings start to build up, is a common mistake."],
+     ["Yes: the main savings are done", "No: later rounds find 3–5% a year", "Only if the next target is approved", "Switch to a different method next"], 1,
+     "Established programmes keep finding 3–5% a year. Stopping after the first round, just before the savings start to build up, is a common mistake."],
   ], "Worth a second go. Re-read sections 12.1 on running the programme, 12.4 on organising it and 12.5 on targets and rewards, then try again.");
   buildChallenge("#m13ChalMount", [
-    ["The market price is £20,000 and the business needs a 15% margin. What's the allowable cost?",
+    ["The net selling price is £20,000 and the business needs a 15% margin. What's the allowable cost?",
      ["£3,000", "£17,000", "£23,000", "£20,000"], 1,
-     "Allowable cost = market price − required margin = £20,000 − £3,000 = £17,000."],
+     "Allowable cost = net selling price − required margin = £20,000 − £3,000 = £17,000."],
     ["The motor's drifting cost is £1,214 and its target is £1,052. What's the value gap?",
      ["£1,052", "£162", "£1,214", "£2,266"], 1,
      "Value gap = drifting cost − allowable (target) cost = £1,214 − £1,052 = £162."],
@@ -1749,11 +1807,11 @@
      ["The purchasing department", "A named engineer", "The supplier", "Finance"], 1,
      "Make a named engineer, not a department, the owner of every target. Nobody owns a number they were never given."],
     ["At a design review the cost status is red and there's no recovery plan. What happens?",
-     ["It passes; fix it later", "It doesn't pass until there's a recovery plan", "Raise the target to match", "Leave cost out of the review"], 1,
-     "Manage cost the way aircraft makers manage weight: a review with a red cost status and no recovery plan doesn't pass."],
+     ["It passes; fix it later", "It doesn't pass until there's a plan", "Raise the target to match", "Leave cost out of the review"], 1,
+     "Manage cost the way aircraft makers manage weight: a review with a red cost status and no recovery plan doesn't pass until there is one."],
     ["Production has started. What takes over from target costing?",
-     ["Target costing carries on unchanged", "Kaizen costing: small, continuous reductions, with function and quality checks", "Nothing; the cost is now fixed", "Cost-plus pricing"], 1,
-     "Target costing sets where cost starts, and kaizen costing brings it down. Cost reductions still need the Development Phase checks."],
+     ["Target costing, unchanged", "Kaizen costing, in small steps", "Nothing: the cost is now fixed", "Cost-plus pricing"], 1,
+     "Target costing sets where cost starts, and kaizen costing brings it down in small, continuous steps. Those reductions still need the Development phase checks on function and quality."],
   ], "Worth a second go. Re-read sections 13.1 and 13.2 on allowable cost, the value gap and the cardinal rule, 13.3 on splitting the target and 13.4 on design-to-cost, then try again.");
 })();
 

@@ -49,8 +49,8 @@ window.VHCloud = (function () {
   async function user() {
     if (!LIVE) return null;
     await ready; if (!client) return null;
-    const { data } = await client.auth.getUser();
-    return data && data.user ? data.user : null;
+    // the stored session (refreshed by the SDK when it expires) rather than a network round trip on every save
+    try { const { data } = await client.auth.getSession(); return data && data.session ? data.session.user : null; } catch (e) { return null; }
   }
 
 
@@ -98,7 +98,8 @@ window.VHCloud = (function () {
     },
     async submit(id, answers) {
       const st = demoState(), a = st.attempts[id];
-      if (!a || a.at) return { error: "This attempt has already been marked" };
+      if (!a) return { error: "This attempt has already been marked" };
+      if (a.at && a.result) return a.result; // sent twice (a lost reply, a double click): the first marking stands
       const bank = (await loadDemoBank())[a.course];
       const marks = a.qids.map((qi, n) => {
         const q = bank[qi], chosen = answers[n] == null ? null : a.perms[n][answers[n]];
@@ -108,11 +109,12 @@ window.VHCloud = (function () {
       const score = Math.round((100 * right) / Math.max(total, 1)), passed = score >= PASS[a.course];
       const by = {};
       marks.forEach((m) => { const b = (by[m.q.module] = by[m.q.module] || [0, 0]); b[1]++; if (m.ok) b[0]++; });
-      Object.assign(a, { at: new Date().toISOString(), passed, score });
-      demoSave(st);
-      return { score, right, total, passed, pass: PASS[a.course], by_module: by,
+      const result = { score, right, total, passed, pass: PASS[a.course], by_module: by,
         review: passed ? marks.filter((m) => !m.ok).map((m) => ({ q: m.q.q, yours: m.chosen == null ? "" : m.q.options[m.chosen], right: m.q.options[m.q.answer], why: m.q.explanation })) : null,
         wait_until: passed ? null : new Date(Date.now() + 3600e3).toISOString() };
+      Object.assign(a, { at: new Date().toISOString(), passed, score, result });
+      demoSave(st);
+      return result;
     },
     async issue(id, name) {
       const st = demoState(), a = st.attempts[id];
@@ -190,16 +192,21 @@ window.VHCloud = (function () {
     },
 
     // ── progress: push/pull the course state blob ──
+    // saves return true/false; loads return the data, null when nothing is saved yet, or false when the read failed
     async saveProgress(state) {
-      const u = await user(); if (!u) return;
-      try { await client.from("progress").upsert({ user_id: u.id, data: state, updated_at: new Date().toISOString() }); } catch (e) {}
+      const u = await user(); if (!u) return false;
+      try {
+        const { error } = await client.from("progress").upsert({ user_id: u.id, data: state, updated_at: new Date().toISOString() });
+        return !error;
+      } catch (e) { return false; }
     },
     async loadProgress() {
       const u = await user(); if (!u) return null;
       try {
-        const { data } = await client.from("progress").select("data").eq("user_id", u.id).maybeSingle();
+        const { data, error } = await client.from("progress").select("data").eq("user_id", u.id).maybeSingle();
+        if (error) return false;
         return data ? data.data : null;
-      } catch (e) { return null; }
+      } catch (e) { return false; }
     },
 
     // ── other courses (e.g. VAVE for Leaders): one row per learner per course ──
@@ -213,9 +220,10 @@ window.VHCloud = (function () {
     async loadCourse(course) {
       const u = await user(); if (!u) return null;
       try {
-        const { data } = await client.from("course_progress").select("data").eq("user_id", u.id).eq("course", course).maybeSingle();
+        const { data, error } = await client.from("course_progress").select("data").eq("user_id", u.id).eq("course", course).maybeSingle();
+        if (error) return false;
         return data ? data.data : null;
-      } catch (e) { return null; }
+      } catch (e) { return false; }
     },
 
     // ── certificates ──

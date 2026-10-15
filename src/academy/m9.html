@@ -12,16 +12,16 @@
       weigh, what the machine must cost per hour, and what a fair margin looks like. Then you go into the negotiation
       knowing roughly what the supplier knows. The conversation changes straight away, from "give us 5%" (random, and
       resisted) to "your quote suggests your press shop is only 55% busy. Is that right?" (specific, and something they
-      can answer). One is haggling. The other is engineering.</p>
+      can answer). The first is haggling; the second is a question about facts.</p>
 
       <h3>9.2 · Six groups of cost levers</h3>
       <ul class="tlist">
-        <li><b>Product design</b> — part-count reduction, DFMA, material substitution, tolerance optimisation, de-speccing, platforms, safety-factor right-sizing</li>
-        <li><b>Materials</b> — grade optimisation, recyclates, near-net-shape blanks, nesting &amp; yield, scrap monetisation</li>
-        <li><b>Manufacturing</b> — process substitution, automation, cycle-time/OEE, yield, tooling strategy, make-vs-buy, footprint</li>
-        <li><b>Sourcing</b> — should-cost negotiation, LPP, competitive RFQs, bundling, best-cost-country, supplier VAVE, indexation</li>
-        <li><b>Packaging &amp; logistics</b> — pack spec, returnables, cube utilisation, mode shift</li>
-        <li><b>Complexity &amp; lifecycle</b> — SKU rationalisation, commonality, warranty-cost design</li>
+        <li><b>Product design</b>: part-count reduction, DFMA, material substitution, tolerance optimisation, de-speccing (removing requirements nobody needs), platforms, right-sizing safety factors</li>
+        <li><b>Materials</b>: grade optimisation, recycled material, near-net-shape blanks, nesting and yield (how much of the sheet or bar ends up in the part), selling scrap for its full value</li>
+        <li><b>Manufacturing</b>: process substitution, automation, cycle time and OEE (overall equipment effectiveness), yield, tooling strategy, make or buy, footprint (where you make it)</li>
+        <li><b>Sourcing</b>: should-cost negotiation, LPP, competitive quotes, bundling parts into one contract, best-cost country (the lowest total cost, not just the lowest wage), supplier VAVE, linking prices to an index</li>
+        <li><b>Packaging &amp; logistics</b>: pack specification, returnable packaging, cube utilisation (how full each box or lorry is), mode shift (sea instead of air)</li>
+        <li><b>Complexity &amp; lifecycle</b>: fewer product variants (SKUs), commonality of parts, designing out warranty costs</li>
       </ul>
       <p>Rule of thumb: where most of the cost is decides which levers work best. When most cost is in bought-in parts
       (as in most cars) → sourcing and design. When it's mostly labour → DFMA (design for manufacture and assembly) and
@@ -29,11 +29,14 @@
 
       <h3>9.3 · What's inside a should-cost</h3>
       <p>A quoted price is one number you can't see inside. A should-cost model breaks it into layers you can negotiate:
-      <strong>raw material</strong> (mass × market price ÷ yield), <strong>process &amp; machine</strong>
-      (cycle time × machine-hour rate), <strong>direct labour</strong>, <strong>scrap &amp; yield</strong>,
+      <strong>raw material</strong> (mass ÷ material yield × market price; the yield accounts for the offcut and
+      skeleton you pay for), <strong>process &amp; machine</strong> (cycle time × machine-hour rate), <strong>direct
+      labour</strong>, <strong>scrap</strong> (parts rejected after processing, as a % of the first three layers),
       <strong>overhead</strong> (driven by how busy the plant is), <strong>SG&amp;A</strong> (sales, general and admin
       costs), and a fair <strong>margin</strong>. Each layer is built from physics and market rates, and each is a
-      separate conversation with the supplier. Negotiating with the facts from a cleansheet usually saves
+      separate conversation with the supplier. Tooling is usually amortised over the contract volume or paid
+      separately, so agree which before you compare. Packaging and freight to your plant sit outside the part price but
+      inside the landed cost. In practitioners' experience, negotiating with the facts from a cleansheet often saves
       <strong>5–15%</strong> on quoted prices, without cutting into the supplier's fair profit.</p>
 
       <div class="concept-viz pricewf" data-scrollstages>
@@ -76,23 +79,24 @@
 
       <h3>9.4 · Linear Performance Pricing</h3>
       <p>When you buy a family of similar parts, plot their price against the main thing that drives cost (weight,
-      power or area) and draw a best-fit line. Parts above the line cost more per kilo (or per watt, or per square metre)
-      than similar parts. That gives you a ready-made list of parts to negotiate, from data you already have.</p>
+      power or area) and draw a best-fit line. Parts above the line cost more than similar parts of the same mass (or
+      power, or area). That gives you a ready-made list of parts to negotiate, from data you already have.</p>
 
       
       <h3>9.5 · Building a cleansheet in seven steps</h3>
       <ul class="tlist">
-        <li><b>1 · Scope</b> — part drawing, material spec, annual volume, sourcing region. Cost is meaningless without these four.</li>
-        <li><b>2 · Material</b> — net mass ÷ process yield = gross mass, × market price from a commodity index (never a list price).</li>
-        <li><b>3 · Process route</b> — the operations a competent maker would use, with cycle times from physics and machine specs, not guesswork.</li>
-        <li><b>4 · Machine rate</b> — (depreciation + energy + floorspace + maintenance) ÷ (annual hours × OEE). How busy you assume the machine is can move this by ±30%.</li>
-        <li><b>5 · Labour</b> — operators per machine × the local wage including on-costs; the level of automation is what you can change.</li>
-        <li><b>6 · Overhead & SG&A</b> — typical local percentages, sense-checked; this is where the cost of a half-empty factory hides.</li>
-        <li><b>7 · Margin</b> — a fair profit, typical for this kind of part. Then sense-check the total against LPP curves and real quotes.</li>
+        <li><b>1 · Scope</b>: part drawing, material spec, annual volume, sourcing region. Cost is meaningless without these four.</li>
+        <li><b>2 · Material</b>: net mass ÷ material yield = gross mass, × market price from a commodity index (never a list price).</li>
+        <li><b>3 · Process route</b>: the operations a competent maker would use, with cycle times from physics and machine specs, not guesswork.</li>
+        <li><b>4 · Machine rate</b>: (depreciation + interest on capital + energy + floorspace + maintenance) ÷ (annual hours × OEE). How busy you assume the machine is can move this by ±30%.</li>
+        <li><b>5 · Labour</b>: operators per machine × the local wage including on-costs; the level of automation is what you can change.</li>
+        <li><b>6 · Overhead & SG&A</b>: typical local percentages, sense-checked; this is where the cost of a half-empty factory hides.</li>
+        <li><b>7 · Margin</b>: a fair profit, typical for this kind of part. Then sense-check the total against LPP curves and real quotes.</li>
       </ul>
       <h3>9.6 · LPP with real numbers</h3>
-      <p>Plot your eight stamped brackets: price (y) against mass (x). Regression: price ≈ £0.85 + £1.9/kg. Six parts
-      sit close to the line. Bracket D is 18% above it and bracket F is 25% above. Before celebrating, check the specs:
+      <p>Plot your eight stamped brackets: price (y) against mass (x). Fit a line through the six comparable brackets,
+      leaving out the suspected outliers: price ≈ £0.85 + £1.90/kg. Those six sit close to the line. Bracket D is 18%
+      above it and bracket F is 25% above. Before celebrating, check the specs:
       F has a special coating (justified), but D doesn't (a target). One hour with data you already have produced a
       negotiation list worth more than a month of meetings. That's LPP: cheap, quick and completely objective.</p>
 
@@ -119,7 +123,7 @@
           <div class="sc-inputs">
             <h5>Material</h5>
             <label>Net mass (kg) <input type="number" id="scMass" value="0.58" min="0.01" max="50" step="0.01" /></label>
-            <label>Process yield (%) <input type="number" id="scYield" value="94" min="30" max="100" step="1" /></label>
+            <label>Material yield (%) <input type="number" id="scYield" value="94" min="30" max="100" step="1" /></label>
             <label>Steel price (£/kg) <input type="number" id="scMat" value="1.00" min="0.1" max="30" step="0.05" /></label>
             <h5>Process &amp; labour</h5>
             <label>Cycle time (s) <input type="number" id="scCycle" value="12.5" min="0.5" max="600" step="0.5" /></label>
@@ -168,7 +172,7 @@
 £0.22, SG&A £0.08, fair margin £0.06 → should-cost <strong>£1.42</strong>. The 43p gap came from an out-of-date steel
 price and an overhead rate based on a factory only 55% busy. The price was negotiated to £1.51 with a clause linking it to
 a steel index. The supplier keeps a fair margin, and the buyer stops paying for empty machine time.</p></div>
-      <div class="tcase"><h4>Case study — documented</h4><p><b>The founding proof of design-for-cost: IBM's Proprinter.</b> In the mid-1980s IBM used Boothroyd &
+      <div class="tcase"><h4>Case study (documented)</h4><p><b>The most quoted proof of design for assembly: IBM's Proprinter.</b> In the mid-1980s IBM used Boothroyd &
 Dewhurst's DFA method (design for assembly, which scores how easy a product is to put together) on its new printer,
 comparing it with the Epson MX-80. The results are the most quoted numbers in the field: parts reduced <b>152 → 32</b>, assembly operations <b>185 → 32</b>, assembly time
 <b>1,866 → 170 seconds</b> (−91%), with every screw and fastener replaced by snap-fits. One product and one
@@ -183,8 +187,8 @@ DFMA case history (dfma.com).</i></p></div>
       <div class="concept-viz fg">
         <div class="cv-head"><h4>The Proprinter in three numbers</h4>
         <p>Each pair of bars is drawn to its own scale: the grey bar is the starting point.</p></div>
-        <p class="sr-only">IBM Proprinter redesign, before and after. Parts: 152 to 32, down 79%. Assembly operations: 185 to 32, down 83%. Assembly time: 1,866 to 170 seconds, down 91%.</p>
-        <div class="fg-legend" aria-hidden="true"><span><i style="background:var(--fg-n)"></i>Before</span><span><i style="background:var(--fg-s1)"></i>After the redesign</span></div><div class="fg-bars fg-pairs" aria-hidden="true"><div class="fg-pair" data-i style="--i:0"><b>Parts</b><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:82"><i class="n" style="flex:1"></i></span><span class="fg-bval">152 <small>before</small></span></div><em>−79%</em><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:17.3"><i class="p1" style="flex:1"></i></span><span class="fg-bval">32 <small>after</small></span></div></div><div class="fg-pair" data-i><b>Assembly operations</b><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:82"><i class="n" style="flex:1"></i></span><span class="fg-bval">185 <small>before</small></span></div><em>−83%</em><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:14.2"><i class="p1" style="flex:1"></i></span><span class="fg-bval">32 <small>after</small></span></div></div><div class="fg-pair" data-i><b>Assembly time</b><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:82"><i class="n" style="flex:1"></i></span><span class="fg-bval">1,866 s <small>before</small></span></div><em>−91%</em><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:7.5"><i class="p1" style="flex:1"></i></span><span class="fg-bval">170 s <small>after</small></span></div></div></div>
+        <p class="sr-only">Epson MX-80 against IBM Proprinter. Parts: 152 to 32, down 79%. Assembly operations: 185 to 32, down 83%. Assembly time: 1,866 to 170 seconds, down 91%.</p>
+        <div class="fg-legend" aria-hidden="true"><span><i style="background:var(--fg-n)"></i>Before: Epson MX-80</span><span><i style="background:var(--fg-s1)"></i>After: IBM Proprinter</span></div><div class="fg-bars fg-pairs" aria-hidden="true"><div class="fg-pair" data-i style="--i:0"><b>Parts</b><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:82"><i class="n" style="flex:1"></i></span><span class="fg-bval">152 <small>before</small></span></div><em>−79%</em><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:17.3"><i class="p1" style="flex:1"></i></span><span class="fg-bval">32 <small>after</small></span></div></div><div class="fg-pair" data-i><b>Assembly operations</b><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:82"><i class="n" style="flex:1"></i></span><span class="fg-bval">185 <small>before</small></span></div><em>−83%</em><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:14.2"><i class="p1" style="flex:1"></i></span><span class="fg-bval">32 <small>after</small></span></div></div><div class="fg-pair" data-i><b>Assembly time</b><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:82"><i class="n" style="flex:1"></i></span><span class="fg-bval">1,866 s <small>before</small></span></div><em>−91%</em><div class="fg-btrack"><span class="fg-bseg" data-grow style="--w:7.5"><i class="p1" style="flex:1"></i></span><span class="fg-bval">170 s <small>after</small></span></div></div></div>
       </div>
       <div class="tpit"><h4>Common pitfalls</h4><ul><li>Building a cleansheet without understanding the process: without the physics, it's just a spreadsheet</li><li>Using list prices for materials instead of indexed market prices</li><li>Squeezing the supplier's margin instead of engineering out waste</li><li>Running LPP on parts with specs that can't be compared</li><li>Treating negotiation as a one-off event instead of an ongoing programme with shared savings</li></ul></div>
       <div class="tkey"><h4>Key takeaways</h4><ul>
@@ -192,7 +196,7 @@ DFMA case history (dfma.com).</i></p></div>
         <li>A should-cost has 7 layers you can negotiate. Negotiate with physics, not percentages.</li>
         <li>LPP finds the odd ones out in your own purchase data, the cheapest savings you'll ever find.</li>
       </ul></div>
-      <div class="tdo"><h4>Now do it — hands-on assignment</h4><p>Take any purchased part you know the price of. Split it into the seven should-cost layers by rough percentage.
+      <div class="tdo"><h4>Now do it: hands-on assignment</h4><p>Take any purchased part you know the price of. Split it into the seven should-cost layers by rough percentage.
 Which layer would you challenge first, and with what fact?</p></div>
 
       <div class="ve-lab" id="scPractice" data-lab="m9f">
