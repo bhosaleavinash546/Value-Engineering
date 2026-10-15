@@ -396,6 +396,93 @@ def pillar_page(p):
     jsonld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False) + "\n</script>"
     return page, jsonld, url
 
+# Public summary pages for the 13 Academy modules: /academy/<slug>/ (the lessons themselves stay in training.html).
+# (module, slug, search title, what the learner produces, related guide or topic page)
+ACADEMY_PAGES = [
+  (1, "value-engineering-basics", "Value Engineering Basics: Value = Function ÷ Cost", "a one-page cheat sheet and the first entry in your value study logbook", "vave"),
+  (2, "ve-workshop-preparation", "How to Prepare a Value Engineering Workshop", "a study scope, a team list and a starting cost finance has signed off", "job-plan"),
+  (3, "information-phase", "VE Information Phase: Costed Parts List and Pareto", "a costed, ranked parts list and the facts the workshop needs", "value-analysis"),
+  (4, "function-analysis-fast", "Function Analysis and FAST Diagrams: Free Course Module", "a FAST diagram and a function–cost matrix that shows where to look", "function-analysis"),
+  (5, "creative-phase", "Creative Phase: Brainwriting, SCAMPER and TRIZ for VE", "a list of ideas, each tagged with the function it serves", "ideation"),
+  (6, "evaluation-phase", "Evaluation Phase: Pugh Matrix and Weighted Scoring", "a screened, scored and ranked shortlist of ideas", "ideation"),
+  (7, "development-phase", "Development Phase: VE Business Case and Payback", "a costed business case with payback, risks and tests", "product-cost-reduction"),
+  (8, "presentation-implementation", "Presentation and Implementation: Tracking VE Savings", "a decision log and a savings funnel that tracks every idea", "governance"),
+  (9, "should-cost", "Should-Cost Analysis: The Seven-Layer Method", "a seven-layer should-cost for a real part", "cost-levers"),
+  (10, "teardown-benchmarking", "Teardown and Competitive Benchmarking: Free Course Module", "a teardown parts list and a benchmark against a rival", "benchmarking"),
+  (11, "ai-cost-engineering", "AI and Digital Tools for Cost Engineering", "a plan for using AI and cost tools safely in your study", "technology"),
+  (12, "ve-programme", "Running a Value Engineering Programme: Cadence and KPIs", "a programme charter with KPIs and a review rhythm", "governance"),
+  (13, "target-costing", "Target Costing and Design-to-Cost: Free Course Module", "a target-cost cascade from market price to each function", "product-cost-optimisation"),
+]
+
+def academy_pages(footer):
+    head_src = read("academy", "_head.html")
+    blurbs = dict(re.findall(r'data-open="(m\d+)"><span class="cat-n">\d+</span><span class="cat-body"><b>.*?</b><span>(.*?)</span>', head_src))
+    for k, (n, slug, seo_title, output, related) in enumerate(ACADEMY_PAGES):
+        src = read("academy", f"m{n}.html")
+        title = html.unescape(re.search(r'data-title="([^"]+)"', src).group(1))
+        mins = re.search(r'data-time="([^"]+)"', src).group(1)
+        learn = re.findall(r"<li>(.*?)</li>", re.search(r'<div class="tmod-obj"><h3>You will learn</h3><ul>(.*?)</ul>', src, re.S).group(1))
+        first = re.search(r"<h3>(.*?)</h3>\s*((?:<p>.*?</p>\s*){1,2})", src[src.find("</div>", src.find("tmod-obj")):], re.S)
+        sec_h, sec_p = first.group(1), first.group(2)
+        sec_p = re.sub(r'\s*class="[^"]*"', "", sec_p)
+        sec_title = re.sub(r"\s*\([^)]*\)\s*$", "", re.sub(r"^\d+\.\d+\s*·\s*", "", sec_h))
+        vid = re.search(r"videos/([a-z-]+)\.mp4", src)
+        tpls = "".join(f'<li><a href="toolkit/{TOOLKIT[t][1]}.html">{html.escape(TOOLKIT[t][0])}</a>' + (f' · <a href="toolkit/{TOOLKIT[t][1]}.xlsx" download>Excel</a>' if TOOLKIT[t][2] else "") + "</li>" for t in MODULE_TEMPLATES[n])
+        rel = next((x for x in PAGES + PILLARS if x["slug"] == related), None)
+        prev_p = ACADEMY_PAGES[k - 1] if k else None
+        next_p = ACADEMY_PAGES[k + 1] if k + 1 < len(ACADEMY_PAGES) else None
+        start = f"training.html?open=m{n}"
+        access = "Free to read, no account needed." if n == 1 else "Free. A free account opens Modules 2–13, the exam and your certificate."
+        url = f"{SITE}academy/{slug}/"
+        video_html = (f'<a class="am-video" href="{start}"><img src="videos/{vid.group(1)}.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />'
+                      f'<span>Short narrated video in this module <span aria-hidden="true">→</span></span></a>') if vid else ""
+        body = f'''<header class="guide-hero am-hero" id="top">
+  <div class="container">
+  <div class="am-head">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a><span aria-hidden="true">›</span><a href="training.html">VE Academy</a><span aria-hidden="true">›</span><span aria-current="page">Module {n}</span></nav>
+    <p class="kicker">Free course · Module {n} of 13 · {mins}</p>
+    <h1>{html.escape(title)}</h1>
+    <p class="sec-lede">{blurbs.get(f"m{n}", "")}. Part of the free VE Academy: 13 narrated modules, hands-on labs and a certificate of completion.</p>
+    <div class="am-cta"><a class="btn btn-primary btn-lg" href="{start}">Start Module {n} <span aria-hidden="true">→</span></a><span>{access}</span></div>
+  </div>
+  </div>
+</header>
+<main id="main">
+<div class="section pil-wrap"><div class="container">
+<article class="pil">
+  <section class="pil-sec"><h2>What you’ll learn</h2><ul>{"".join(f"<li>{x}</li>" for x in learn)}</ul></section>
+  <section class="pil-sec"><h2>What you’ll produce</h2><p>By the end of this module you’ll have {output}. Free templates:</p><ul>{tpls}</ul></section>
+  <section class="pil-sec"><p class="kicker">From the module</p><h2>{sec_title}</h2>{sec_p}{video_html}
+    <p class="pil-more">Continue reading in <a href="{start}">Module {n}</a>{f', or read the related guide: <a href="{rel["slug"]}/">{html.escape(rel["short"])}</a>' if rel else ""}.</p></section>
+</article>
+</div></div>
+<section class="section guide-end" id="next-steps"><div class="container">
+  <nav class="ge-pn" aria-label="Other modules">
+    {f'<a class="ge-prev" href="academy/{prev_p[1]}/"><small>← Module {prev_p[0]}</small>{html.escape(prev_p[2])}</a>' if prev_p else '<a class="ge-prev" href="training.html"><small>← Back to</small>The VE Academy</a>'}
+    {f'<a class="ge-next" href="academy/{next_p[1]}/"><small>Module {next_p[0]} →</small>{html.escape(next_p[2])}</a>' if next_p else '<a class="ge-next" href="training.html?open=exam"><small>Next →</small>The final exam and certificate</a>'}
+  </nav>
+</div></section>
+</main>
+'''
+        desc = f"Free course module: {title} ({mins}). {html.unescape(re.sub('<[^>]+>', '', blurbs.get(f'm{n}', '')))}. You’ll produce {output}."
+        graph = [
+            {"@type": "LearningResource", "name": seo_title, "description": desc, "url": url, "inLanguage": "en-GB",
+             "learningResourceType": "Course module", "isAccessibleForFree": True, "timeRequired": "PT" + mins.split()[0] + "M",
+             "teaches": [html.unescape(re.sub("<[^>]+>", "", x)) for x in learn],
+             "isPartOf": {"@type": "Course", "name": "VE Academy: Value Engineering 360°", "url": SITE + "training.html",
+                          "provider": {"@type": "Organization", "name": "VAVEhub", "url": SITE}}},
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE},
+                {"@type": "ListItem", "position": 2, "name": "VE Academy", "item": SITE + "training.html"},
+                {"@type": "ListItem", "position": 3, "name": f"Module {n}", "item": url}]}]
+        jsonld = '<script type="application/ld+json">\n' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False) + "\n</script>"
+        here = f"academy/{slug}"
+        doc = head(here, seo_title + " | VAVEhub", desc, url, SITE + "og-academy.png", seo_title, desc, jsonld).replace('<base href="../" />', '<base href="../../" />')
+        doc += '<body class="guide pillar academy-page">\n\n<!-- ══════════ CHROME ══════════ -->\n' + chrome(here) + "\n\n"
+        doc += body + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, here) + "\n" + TAIL_GUIDE + "\n\n" + SCRIPTS
+        write(f"{here}/index.html", doc)
+    print(f"academy/*/index.html  {len(ACADEMY_PAGES)} module pages")
+
 def playbook_section():
     cards = "\n".join(
         f'      <a class="pb-card tilt" href="{p["slug"]}/" data-reveal><span class="pb-n">{i + 1:02d}</span>'
@@ -461,6 +548,7 @@ def build():
         doc += body + "\n\n<!-- ══════════ FOOTER ══════════ -->\n" + rewrite(footer, p["slug"]) + "\n" + TAIL_GUIDE + "\n\n" + SCRIPTS
         write(f"{p['slug']}/index.html", doc)
         print(f"{p['slug']+'/index.html':34} {len(doc)//1024:>3} KB")
+    academy_pages(footer)
     build_academy()
     build_leaders()
     write_sitemap()
@@ -468,7 +556,7 @@ def build():
 
 def write_sitemap():
     """Sitemap is generated too, so it always lists exactly the pages that exist."""
-    rows = [("", "1.0", "weekly")] + [(p["slug"] + "/", "0.9", "monthly") for p in PILLARS] + [(p["slug"] + "/", "0.8", "monthly") for p in PAGES] + [
+    rows = [("", "1.0", "weekly")] + [(p["slug"] + "/", "0.9", "monthly") for p in PILLARS] + [(f"academy/{a[1]}/", "0.7", "monthly") for a in ACADEMY_PAGES] + [(p["slug"] + "/", "0.8", "monthly") for p in PAGES] + [
         ("training.html", "0.9", "weekly"), ("leaders.html", "0.9", "monthly"), ("changelog.html", "0.5", "weekly"), ("verify.html", "0.6", "monthly"), ("capstone.html", "0.7", "monthly")]
     for f in sorted(os.listdir(os.path.join(ROOT, "toolkit"))):
         if f.endswith(".html") and f != "index.html": rows.append((f"toolkit/{f}", "0.6", "monthly"))

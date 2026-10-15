@@ -129,5 +129,28 @@ module.exports = async function guides({ browser, O, r }) {
   r.ok(!!(await p.$('footer a[href="vave/"]')), "footer links to the VAVE topic page");
   await p.close(); }
 
+  // ── Public module summary pages (one per Academy module)
+  { const p = await browser.newPage(); p.on("pageerror", (e) => errs.push(e.message));
+  const sm = await (await p.request.get(`${O}/sitemap.xml`)).text();
+  const mods = [...sm.matchAll(/academy\/([a-z-]+)\//g)].map((m) => m[1]);
+  r.ok(mods.length === 13, `sitemap lists all 13 module pages (found ${mods.length})`);
+  const bad = [];
+  for (const [i, slug] of mods.entries()) {
+    await p.goto(`${O}/academy/${slug}/`); await p.waitForTimeout(250);
+    const info = await p.evaluate(() => ({
+      start: document.querySelector(".am-cta a")?.getAttribute("href"),
+      ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => JSON.parse(s.textContent)).flatMap((d) => d["@graph"] || [d]).map((g) => g["@type"]),
+      learn: document.querySelectorAll(".pil-sec:first-child li").length,
+      canon: document.querySelector('link[rel="canonical"]')?.href || "",
+      h1: document.querySelectorAll("h1").length,
+    }));
+    if (info.start !== `training.html?open=m${i + 1}` || !info.ld.includes("LearningResource") || !info.ld.includes("BreadcrumbList") || info.learn < 3 || !info.canon.endsWith(`/academy/${slug}/`) || info.h1 !== 1) bad.push(slug);
+  }
+  r.ok(!bad.length, `module pages: start button, search data, learning list, canonical and one heading${bad.length ? " (failed: " + bad.join(", ") + ")" : ""}`);
+  await p.goto(`${O}/academy/function-analysis-fast/`); await p.waitForTimeout(300);
+  await p.click(".am-cta a"); await p.waitForURL("**/training.html?open=m4"); await p.waitForTimeout(900);
+  r.ok((await p.evaluate(() => document.querySelector(".mod-link.is-active")?.dataset.target)) === "m4", "module page 'Start' button opens that module in the Academy");
+  await p.close(); }
+
   r.ok(!errs.length, `no script errors${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 };

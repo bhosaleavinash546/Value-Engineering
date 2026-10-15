@@ -1296,3 +1296,11 @@ html[data-theme="light"] .pil-table thead th{background:#f2f5fb}
 .ge-topics span{font-weight:600;margin-right:.4rem}
 .ge-topics a{color:var(--acc1);text-decoration:underline;text-underline-offset:3px}
 .pil-video{margin:.4rem 0 1.4rem}
+/* Academy module summary pages */
+.am-head{max-width:72ch;margin-inline:auto}
+.am-hero h1{font-size:clamp(1.9rem,4vw,2.8rem)}
+.am-cta{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.2rem;margin-top:1.6rem}
+.am-cta>span{color:var(--muted);font-size:.92rem}
+.am-video{display:block;margin:.6rem 0 1rem;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none!important;background:var(--card)}
+.am-video img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.am-video>span{display:block;padding:.7rem 1rem;color:var(--acc1);font-weight:600}
