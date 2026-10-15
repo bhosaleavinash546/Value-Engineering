@@ -1292,3 +1292,7 @@ html[data-theme="light"] .ge-card a.ge-leaders{color:#8a5a0c}
 .pil-tool-out{margin:0!important;padding:.9rem 1rem;border-radius:10px;background:color-mix(in srgb,var(--acc1) 8%,transparent);border:1px solid color-mix(in srgb,var(--acc1) 35%,transparent)}
 .pil .faq-list{display:flex;flex-direction:column;gap:.6rem}
 html[data-theme="light"] .pil-table thead th{background:#f2f5fb}
+.ge-topics{margin-top:1.4rem;font-size:.9rem;color:var(--muted);text-align:center;line-height:2}
+.ge-topics span{font-weight:600;margin-right:.4rem}
+.ge-topics a{color:var(--acc1);text-decoration:underline;text-underline-offset:3px}
+.pil-video{margin:.4rem 0 1.4rem}

@@ -92,6 +92,43 @@ PILLARS = [
        tldr="VAVE looks at what each part of a product is for, puts a cost on each of those jobs, and finds cheaper or better ways to do the ones that cost more than they’re worth. Value analysis does this for products already on sale; value engineering does it during design, when it saves the most. A study follows six steps with a mixed team, and a first round on a product that has never had one often finds 8–15% of its cost.",
        learn=("VAVE for Leaders · free, 1 hour", "leaders.html"),
        tries=[("VE Workshop Agenda", "toolkit/save-workshop-agenda.html"), ("FAST Diagram Worksheet", "toolkit/fast-worksheet.html"), ("All 15 free templates", "toolkit/")]),
+  dict(slug="value-engineering", short="Value engineering", kicker="Topic guide",
+       title="Value Engineering: What It Is, How It Works, Examples",
+       h1='Value engineering: what it is, how it works, and <span class="grad-text">examples</span>',
+       desc="Value engineering explained: definition, why it beats cost-cutting, history and standards, the job plan, examples in manufacturing and construction, certification and FAQ.",
+       lede="Value engineering is a systematic way to get the functions a product or project needs at the lowest total cost, without lowering quality, safety or performance. It works best during design, before the cost is locked in.",
+       tldr="Value engineering asks what a design has to do, what each of those jobs costs and what it should cost, then finds better ways to do the jobs that are out of line. It follows a six-phase job plan with a mixed team, works best early in design, and is used everywhere from consumer products to highways, where US law requires it on large projects.",
+       learn=("VE Academy · free course with certificate", "training.html"),
+       video={"@type": "VideoObject", "name": "What Is Value Engineering? VAVE Explained in 4 Minutes",
+              "description": "Value engineering (VAVE) explained in under 4 minutes: why costs keep rising, where unnecessary cost hides in almost every product, and how a structured method removes it without cutting quality.",
+              "thumbnailUrl": "https://i.ytimg.com/vi/Psya4JIOIB0/maxresdefault.jpg", "uploadDate": "2026-09-30",
+              "embedUrl": "https://www.youtube-nocookie.com/embed/Psya4JIOIB0", "url": "https://youtu.be/Psya4JIOIB0",
+              "author": {"@type": "Person", "name": "Avinash Bhosale"}},
+       tries=[("FAST Diagram Worksheet", "toolkit/fast-worksheet.html"), ("Function–Cost Matrix", "toolkit/function-cost-matrix.html"), ("All 15 free templates", "toolkit/")]),
+  dict(slug="value-analysis", short="Value analysis", kicker="Topic guide",
+       title="Value Analysis: Method, Steps and a Worked Example",
+       h1='Value analysis: method, steps and a <span class="grad-text">worked example</span>',
+       desc="Value analysis explained: what it is, when to use it, the five classic questions, the six steps, a worked example from costed parts list to business case, and value analysis in purchasing.",
+       lede="Value analysis is a structured review of a product already on sale: a mixed team works out what each part is for, what that job costs and what it should cost, then redesigns or re-sources whatever doesn’t earn its place.",
+       tldr="Value analysis takes a product that’s already on sale and asks five questions in order: what is it, what does it do, what does it cost, what is it worth, and what else could do the job. A mixed team follows six steps, from fixing the starting cost to getting a decision on each idea, and savings count only once a change is in production.",
+       learn=("Capstone: the kettle study · free", "capstone.html"),
+       tries=[("Function–Cost Matrix", "toolkit/function-cost-matrix.html"), ("Should-Cost Build-Up", "toolkit/should-cost-buildup.html"), ("Savings Funnel Tracker", "toolkit/savings-funnel-tracker.html")]),
+  dict(slug="product-cost-reduction", short="Product cost reduction", kicker="Topic guide",
+       title="Product Cost Reduction: Proven Ideas and How to Find More",
+       h1='Product cost reduction: proven ideas, and <span class="grad-text">how to find more</span>',
+       desc="How to reduce product cost without hurting quality: the six areas where savings come from, typical savings, how to find ideas with should-cost and teardown, and a 30-day plan.",
+       lede="Lasting product cost reduction comes from changing how a product is designed, made and bought, not from asking everyone for 5% less. This page shows where the savings usually are, and how to find the ones in your product.",
+       tldr="Savings come from six areas: design, materials, manufacturing, sourcing, packaging and logistics, and complexity. To find yours, get a cost you can trust, build a should-cost for the biggest parts, take a competitor apart, analyse functions instead of parts, and run a mixed workshop. Count a saving only when it’s in production and checked by finance.",
+       learn=("Module 9 · Cost Levers & Should-Costing", "training.html?open=m9"),
+       tries=[("Lever Selector", "cost-levers/#selPains"), ("Should-Cost Build-Up", "toolkit/should-cost-buildup.html"), ("Teardown BOM Capture Sheet", "toolkit/teardown-bom.html")]),
+  dict(slug="product-cost-optimisation", short="Product cost optimisation", kicker="Topic guide",
+       title="Product Cost Optimisation: Design to Cost and Target Costing",
+       h1='Product cost optimisation: design to cost and <span class="grad-text">target costing</span>',
+       desc="Product cost optimisation explained: why cost has to be designed in early, target costing step by step, design-to-cost at the project gates, the tools, and running it as a programme.",
+       lede="Product cost optimisation means designing a product to hit the right cost from the start, instead of taking cost out after it’s on sale, using target costing, design-to-cost reviews and should-cost estimates while the design can still change.",
+       tldr="Most of a product’s cost is fixed by the time the design is finished, so the cheapest time to manage cost is before then. Target costing starts from the market price, takes off the margin you need, and designs to what’s left. Design-to-cost checks that target at every project gate, and the target cost is never exceeded.",
+       learn=("Module 13 · Target Costing & Design-to-Cost", "training.html?open=m13"),
+       tries=[("Target Cost Cascade", "toolkit/target-cost-cascade.html"), ("Should-Cost Build-Up", "toolkit/should-cost-buildup.html"), ("VE Programme Charter", "toolkit/programme-charter.html")]),
 ]
 BY_OLD = {p["old"]: p for p in PAGES}
 BY_SLUG = {p["slug"]: p for p in PAGES}
@@ -250,6 +287,8 @@ def guide_page(i, p):
     pn += (f'<a class="ge-prev" href="{prev_p["slug"]}/"><small>← Previous</small>{html.escape(prev_p["short"])}</a>' if prev_p else '<a class="ge-prev" href="./#playbook"><small>← Back to</small>The playbook overview</a>')
     pn += (f'<a class="ge-next" href="{next_p["slug"]}/"><small>Next →</small>{html.escape(next_p["short"])}</a>' if next_p else '<a class="ge-next" href="training.html"><small>Next →</small>Take the free VE Academy</a>')
     pn += "</nav>"
+    # every guide links to the topic pages, so readers and search engines see how the pages fit together
+    pn += ('<p class="ge-topics"><span>Topic guides:</span>' + " · ".join(f'<a href="{t["slug"]}/">{html.escape(t["short"])}</a>' for t in PILLARS) + "</p>")
     # "On this page" bar for guides with several landmarks: (class of the block, anchor id, label)
     toc_html = ""
     toc = TOC.get(p["slug"])
@@ -349,6 +388,8 @@ def pillar_page(p):
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE},
             {"@type": "ListItem", "position": 2, "name": p["short"], "item": url}]},
     ]
+    if p.get("video"):
+        graph.append(dict(p["video"]))
     if faqs:
         graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": plain(q),
                       "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in faqs]})
