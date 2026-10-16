@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<title>Case study video stage</title>
+<!-- Draws one scene of a projector case-study video at a time for tools/casevid/make.js, which calls
+     window.setup(scene, meta) once per scene and window.frame(t) for every video frame (t in seconds).
+     Everything is a pure function of t, so a frame always looks the same. 3D scenes use the real
+     model from projector-3d.js in capture mode; the other scenes are drawn in HTML. -->
+<link rel="stylesheet" href="../../fonts/fonts.css" />
+<link rel="stylesheet" href="../../style.css" />
+<link rel="stylesheet" href="../../case-study.css" />
+<style>
+  :root{--ink:#eef3ff;--mut:#93a3c4;--blue:#4d8dff;--blue2:#2e6fe8;--green:#3fd08a;--amber:#f5b942;--orange:#ff7a3d;--red:#ff5d5d;--ln:rgba(255,255,255,.13);--panel:#0b1224}
+  *{box-sizing:border-box}
+  html,body{width:1920px;height:1080px;margin:0;overflow:hidden;background:#060a16;color:var(--ink);font-family:'Inter',sans-serif}
+  body{cursor:none}
+  /* the 3D viewer, full height, from the case study page */
+  #pjViewer{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;border-radius:0;background:#060a16}
+  #pjViewer .pj-tools,#pjViewer .pj-side,#pjViewer .pj-hint,#pjViewer .pj-card,#pjViewer .pj-fallback,#pjViewer .pj-tip{display:none!important}
+  #pjViewer .pj-body{display:block;height:100%}
+  #pjViewer .pj-stage{height:1080px;background:radial-gradient(70% 70% at 45% 42%,#18243f 0%,#0a1020 58%,#05080f 100%)}
+  .pj-balloon{transition:none!important;margin:-20px 0 0 -20px}
+  .pj-balloon span{min-width:40px;height:40px;font-size:19px;box-shadow:0 3px 10px rgba(0,0,0,.4),0 0 0 3px rgba(255,255,255,.9)}
+  .pj-balloon em{font-size:22px;padding:4px 12px;border-radius:9px;max-width:420px}
+  .pj-leaders line{stroke-width:2}
+  /* layers */
+  #card{position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 35%,#13203d 0%,#080d1b 62%,#04070e 100%);display:none}
+  #card.on{display:block}
+  #panel{position:absolute;right:70px;top:190px;width:600px;padding:40px 44px;border-radius:26px;border:2px solid var(--ln);background:rgba(8,13,27,.88);box-shadow:0 40px 90px rgba(0,0,0,.5);display:none}
+  #panel.on{display:block}
+  #panel small{display:block;font:600 22px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:18px}
+  #panel .big{font:700 92px 'IBM Plex Sans',sans-serif;letter-spacing:-.02em;line-height:1;color:#fff}
+  #panel .big em{font-style:normal;color:var(--blue)}
+  #panel p{font-size:28px;line-height:1.4;color:var(--mut);margin:16px 0 0}
+  #panel ul{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:12px}
+  #panel li{display:flex;justify-content:space-between;gap:20px;font-size:27px;padding-bottom:10px;border-bottom:1px solid var(--ln)}
+  #panel li b{font-family:'IBM Plex Mono',monospace;color:#fff;font-weight:600}
+  #chip{position:absolute;left:70px;top:56px;display:flex;align-items:center;gap:18px;font:600 24px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+  #chip .n{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--blue2);color:#fff;font:700 26px 'IBM Plex Sans',sans-serif;letter-spacing:0}
+  #chip b{color:#fff}
+  #brand{position:absolute;right:70px;top:62px;font:700 28px 'IBM Plex Sans',sans-serif;color:#fff;opacity:.85}
+  #brand span{color:var(--blue)}
+  #cap{position:absolute;left:0;right:0;bottom:46px;display:flex;justify-content:center;pointer-events:none}
+  #cap div{max-width:1640px;padding:12px 30px;border-radius:14px;background:rgba(3,6,14,.82);font-size:37px;line-height:1.32;font-weight:500;text-align:center;color:#fff}
+  #cap:empty{display:none}
+  /* card scenes */
+  .k{position:absolute;left:120px;right:120px;top:170px;bottom:190px}
+  .kt{font:600 24px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 14px}
+  .kh{font:700 58px 'IBM Plex Sans',sans-serif;letter-spacing:-.02em;margin:0 0 30px;line-height:1.1}
+  .row{display:flex;gap:28px}
+  .box{border:2px solid var(--ln);border-radius:22px;background:var(--panel);padding:30px 34px}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  .num{font-family:'IBM Plex Mono',monospace;font-weight:600}
+  /* title */
+  .tt{position:absolute;left:160px;right:160px;top:230px}
+  .tt .kick{font:600 30px 'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+  .tt h1{font:800 120px 'IBM Plex Sans',sans-serif;letter-spacing:-.035em;line-height:1.02;margin:18px 0 26px}
+  .tt p{font-size:40px;line-height:1.4;color:var(--mut);max-width:1300px;margin:0}
+  .jp{position:absolute;left:160px;right:160px;top:640px;display:flex;gap:16px}
+  .jp div{flex:1;padding:20px 18px;border-radius:16px;border:2px solid var(--ln);background:var(--panel);font:600 26px 'IBM Plex Sans',sans-serif;color:var(--mut)}
+  .jp div b{display:block;font:700 22px 'IBM Plex Mono',monospace;color:var(--blue);margin-bottom:6px}
+  .jp div.on{border-color:var(--blue);color:#fff;background:#10204a}
+  .jp div.done{color:#cfe0ff}
+  .jp div.done b::after{content:" ✓";color:var(--green)}
+  /* bars */
+  .vbars{display:grid;gap:22px}
+  .vbar{display:grid;grid-template-columns:420px 1fr 220px;align-items:center;gap:26px;font-size:32px}
+  .vbar .tr{height:34px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+  .vbar .tr i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#2e6fe8,#5aa2ff)}
+  .vbar.hl .tr i{background:linear-gradient(90deg,#ff7a3d,#ffb27a)}
+  .vbar.ok .tr i{background:linear-gradient(90deg,#1fae6a,#3fd08a)}
+  .vbar .v{font:600 32px 'IBM Plex Mono',monospace;text-align:right}
+  .vbar.dim{opacity:.45}
+  /* stacked chain */
+  .stack{display:flex;height:100px;border-radius:18px;overflow:hidden;margin:10px 0 34px}
+  .stack i{display:flex;align-items:center;justify-content:center;font:700 30px 'IBM Plex Mono',monospace;color:#fff;white-space:nowrap;overflow:hidden}
+  .legend{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 60px}
+  .legend div{display:flex;align-items:center;gap:18px;font-size:32px}
+  .legend s{width:26px;height:26px;border-radius:7px;flex:none}
+  .legend b{margin-left:auto;font:600 32px 'IBM Plex Mono',monospace}
+  .total{margin-top:30px;font:700 56px 'IBM Plex Sans',sans-serif}
+  .total span{color:var(--blue)}
+  /* table */
+  table.t{width:100%;border-collapse:collapse;font-size:28px}
+  table.t th{font:600 21px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:left;padding:0 18px 14px;border-bottom:2px solid var(--ln)}
+  table.t td{padding:8px 18px;border-bottom:1px solid var(--ln)}
+  table.t td.n,table.t th.n{text-align:right;font-family:'IBM Plex Mono',monospace}
+  table.t tr.hl td{background:rgba(255,122,61,.14);color:#fff}
+  table.t tfoot td{font-weight:700;border-bottom:0}
+  /* lists */
+  .list{display:grid;gap:22px;font-size:36px;line-height:1.35}
+  .list div{display:flex;gap:26px;align-items:flex-start}
+  .list i{flex:none;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--blue2);color:#fff;font:700 26px 'IBM Plex Sans',sans-serif;font-style:normal}
+  .list.check i{background:var(--green);color:#04130b}
+  .list.warn i{background:var(--amber);color:#1a1205}
+  .list b{color:#fff}
+  .list span{color:var(--mut)}
+  /* grid cards */
+  .grid{display:grid;gap:24px}
+  .gc{border:2px solid var(--ln);border-radius:20px;background:var(--panel);padding:26px 28px}
+  .gc h4{font:700 34px 'IBM Plex Sans',sans-serif;margin:0 0 12px}
+  .gc p{font-size:28px;line-height:1.4;color:var(--mut);margin:0}
+  .gc .id{font:600 22px 'IBM Plex Mono',monospace;color:var(--blue);letter-spacing:.08em}
+  .gc .sv{font:700 46px 'IBM Plex Mono',monospace;color:var(--green);margin-top:14px}
+  .gc.out{opacity:.5}
+  .gc.out h4{text-decoration:line-through}
+  /* big stats */
+  .stats{display:flex;gap:40px}
+  .st{flex:1;border:2px solid var(--ln);border-radius:24px;background:var(--panel);padding:40px 44px}
+  .st .b{font:700 104px 'IBM Plex Sans',sans-serif;letter-spacing:-.02em;line-height:1;white-space:nowrap}
+  .stats.n3 .st .b{font-size:86px}
+  .st .l{font-size:32px;color:var(--mut);margin-top:18px;line-height:1.35}
+  .st.good .b{color:var(--green)} .st.bad .b{color:var(--orange)} .st.blue .b{color:var(--blue)}
+  /* value index cards */
+  .vi{flex:1;border:2px solid var(--ln);border-radius:24px;background:var(--panel);padding:36px 40px}
+  .vi h3{font:700 48px 'IBM Plex Sans',sans-serif;margin:0 0 26px}
+  .vi .ln{display:grid;grid-template-columns:140px 1fr 170px;gap:20px;align-items:center;font-size:30px;margin-bottom:18px}
+  .vi .ln .tr{height:30px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+  .vi .ln .tr i{display:block;height:100%;border-radius:99px}
+  .vi .ix{margin-top:22px;font:700 84px 'IBM Plex Mono',monospace}
+  .vi .ix small{display:block;font:600 24px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+  /* FAST */
+  .fast{position:relative;height:640px}
+  .fb{position:absolute;width:172px;height:100px;border-radius:14px;border:2px solid var(--ln);background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:600 25px 'IBM Plex Sans',sans-serif;line-height:1.15}
+  .fb small{font:500 17px 'IBM Plex Mono',monospace;color:var(--mut);margin-top:6px}
+  .fb.basic{border-color:var(--blue);background:#10204a}
+  .fb.out{border-style:dashed;color:var(--mut)}
+  .fb.ok{border-color:var(--green)} .fb.warm{border-color:var(--amber)} .fb.hot{border-color:var(--orange);background:#2a160f}
+  .fl{position:absolute;height:3px;background:rgba(160,190,255,.6)}
+  .fa{position:absolute;font:700 30px 'IBM Plex Mono',monospace;color:var(--blue);letter-spacing:.1em}
+  /* scores */
+  .dots{display:flex;gap:10px}
+  .dots s{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .dots s.f{background:var(--blue)}
+  /* waterfall */
+  .wf{position:relative;height:520px}
+  .wf .c{position:absolute;bottom:60px;border-radius:8px}
+  .wf .lb{position:absolute;bottom:10px;font-size:25px;color:var(--mut);text-align:center;white-space:nowrap}
+  .wf .vv{position:absolute;font:700 30px 'IBM Plex Mono',monospace;text-align:center;white-space:nowrap}
+  .wf .tg{position:absolute;left:0;right:0;border-top:3px dashed var(--green)}
+  .wf .tg span{position:absolute;right:0;top:-44px;font:600 26px 'IBM Plex Sans',sans-serif;color:var(--green)}
+  /* end */
+  .end{position:absolute;left:0;right:0;top:300px;text-align:center}
+  .end h1{font:800 104px 'IBM Plex Sans',sans-serif;letter-spacing:-.03em;margin:0 0 30px;line-height:1.05}
+  .end h1 span{color:var(--blue)}
+  .end p{font:500 40px 'Inter',sans-serif;color:var(--mut);margin:0}
+  .end .url{margin-top:56px;display:inline-block;padding:20px 40px;border-radius:16px;background:var(--blue2);font:700 40px 'IBM Plex Sans',sans-serif;color:#fff}
+</style>
+</head>
+<body>
+<div class="pj" id="pjViewer">
+  <div class="pj-tools"><div class="pj-seg"><button data-act="assemble"></button><button data-act="explode"></button></div>
+    <input type="range" class="pj-slider" min="0" max="100" value="0" /><button data-act="light"></button><button data-act="labels"></button><button data-act="reset"></button></div>
+  <div class="pj-body"><div class="pj-stage"><div class="pj-canvas"></div><div class="pj-balloons"></div><div class="pj-tip" hidden></div><div class="pj-card" hidden></div><p class="pj-hint"></p><p class="pj-fallback"></p></div>
+    <aside class="pj-side"><div class="pj-tabs"><button class="pj-tab" data-tab="parts"></button><button class="pj-tab" data-tab="how"></button></div><ul class="pj-list"></ul><div class="pj-howto" hidden><ol class="pj-steps"></ol></div></aside></div>
+</div>
+<div id="card"></div>
+<div id="panel"></div>
+<div id="chip"></div>
+<div id="brand">VAVE<span>hub</span></div>
+<div id="cap"></div>
+<script>window.VH_CAPTURE = 1;</script>
+<script src="../../projector-data.js"></script>
+<script type="importmap">{"imports":{"three":"../../vendor/three/three.module.min.js"}}</script>
+<script type="module" src="../../projector-3d.js"></script>
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const card = $("#card"), panel = $("#panel"), chip = $("#chip"), cap = $("#cap"), viewer = $("#pjViewer");
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+const easeInOut = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const lerp = (a, b, p) => a + (b - a) * p;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const gbp = (v, dp = 2) => (v < 0 ? "−" : "") + "£" + Math.abs(v).toLocaleString("en-GB", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+// show an element p of the way in: fade and rise
+const rise = (e, p, dy = 30) => { if (!e) return; p = easeOut(clamp(p)); e.style.opacity = p; e.style.transform = `translateY(${(1 - p) * dy}px)`; };
+let S = null, DUR = 1, ROOT = null;
+
+// ── 3D scenes ──
+function camAt(c, p) {
+  if (c.orbit) { const o = c.orbit, a = lerp(o.a[0], o.a[1], p), r = lerp(o.r[0], o.r[1] ?? o.r[0], p), h = lerp(o.h[0], o.h[1] ?? o.h[0], p);
+    return [[o.target[0] + Math.cos(a) * r, o.target[1] + h, o.target[2] + Math.sin(a) * r], o.target]; }
+  if (c.to) { const e = easeInOut(p); return [c.from[0].map((v, i) => lerp(v, c.to[0][i], e)), c.from[1].map((v, i) => lerp(v, c.to[1][i], e))]; }
+  return c.from || c;
+}
+function three(t) {
+  const d = S, p = clamp(t / DUR);
+  const tt = Array.isArray(d.t) ? lerp(d.t[0], d.t[1], easeInOut(seg(t, d.tAt?.[0] ?? 0, d.tAt?.[1] ?? DUR))) : (d.t || 0);
+  const step = Array.isArray(d.step) ? d.step[Math.min(d.step.length - 1, Math.floor(p * d.step.length))] : (d.step || 0);
+  const lightA = d.light ? (d.lightIn ? easeOut(seg(t, 0, d.lightIn)) : 1) : 0;
+  window.VHProjector.set({ t: tt, light: !!d.light, lightA, step, flow: t * 0.9, sel: d.sel || [], labels: !!d.labels, only: d.only || null, cam: camAt(d.cam, p), settle: 4 });
+  if (d.panel) {
+    const q = seg(t, d.panelAt ?? 0.6, (d.panelAt ?? 0.6) + 0.6);
+    panel.style.opacity = easeOut(q); panel.style.transform = `translateX(${(1 - easeOut(q)) * 60}px)`;
+    panel.querySelectorAll("li").forEach((li, i) => rise(li, seg(t, (d.panelAt ?? 0.6) + 0.5 + i * 0.35, (d.panelAt ?? 0.6) + 1.0 + i * 0.35), 16));
+  }
+}
+
+// ── card scenes: each kind builds its HTML once, then draws frame t ──
+const K = {
+  title: {
+    html: (d) => `<div class="tt"><div class="kick">${esc(d.kick)}</div><h1>${esc(d.title)}</h1><p>${esc(d.sub || "")}</p></div>
+      <div class="jp">${["Information", "Function analysis", "Creative", "Evaluation", "Development", "Presentation"].map((n, i) =>
+        `<div class="${i + 1 === d.step ? "on" : i + 1 < d.step ? "done" : ""}"><b>${i + 1}</b>${n}</div>`).join("")}</div>`,
+    frame: (t) => { rise($(".tt .kick"), seg(t, 0.1, 0.7)); rise($(".tt h1"), seg(t, 0.3, 1.0), 50); rise($(".tt p"), seg(t, 0.7, 1.4));
+      document.querySelectorAll(".jp div").forEach((e, i) => rise(e, seg(t, 1.0 + i * 0.12, 1.5 + i * 0.12), 24)); },
+  },
+  bars: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="vbars">${d.items.map((x) =>
+      `<div class="vbar ${x.c || ""}"><span>${esc(x.l)}</span><span class="tr"><i></i></span><span class="v">${esc(x.vt || gbp(x.v))}</span></div>`).join("")}</div>
+      ${d.note ? `<p class="kt" style="margin-top:34px;color:#93a3c4;text-transform:none;letter-spacing:0;font:500 30px Inter">${esc(d.note)}</p>` : ""}</div>`,
+    frame: (t) => { const d = S, max = d.max || Math.max(...d.items.map((x) => x.v));
+      rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      document.querySelectorAll(".vbar").forEach((e, i) => { const a = 0.6 + i * (d.gap ?? 0.35); rise(e, seg(t, a, a + 0.4), 14);
+        e.querySelector("i").style.width = (easeOut(seg(t, a, a + 0.9)) * d.items[i].v / max * 100).toFixed(2) + "%"; });
+      const n = $(".k > p.kt:last-child"); if (n && d.note) rise(n, seg(t, DUR * 0.55, DUR * 0.55 + 0.6)); },
+  },
+  chain: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2>
+      <div class="stack">${d.segs.map((x) => `<i style="background:${x.c};width:0">${esc(x.short || "")}</i>`).join("")}</div>
+      <div class="legend">${d.segs.map((x) => `<div><s style="background:${x.c}"></s>${esc(x.l)}<b>${gbp(x.v)}</b></div>`).join("")}</div>
+      <div class="total">${esc(d.tl)} <span></span></div></div>`,
+    frame: (t) => { const d = S, tot = d.segs.reduce((a, x) => a + x.v, 0);
+      rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      let run = 0; const per = (DUR * 0.62 - 0.8) / d.segs.length;
+      $(".stack").querySelectorAll("i").forEach((e, i) => { const q = easeOut(seg(t, 0.8 + i * per, 0.8 + (i + 0.85) * per)); e.style.width = (q * d.segs[i].v / tot * 100) + "%"; run += q * d.segs[i].v; });
+      document.querySelectorAll(".legend div").forEach((e, i) => rise(e, seg(t, 0.8 + i * per, 0.8 + (i + 0.6) * per), 12));
+      $(".total span").textContent = gbp(run); rise($(".total"), seg(t, 0.8, 1.3)); },
+  },
+  table: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><table class="t"><thead><tr>${d.cols.map((c, i) => `<th class="${i && d.num !== false ? "n" : ""}">${esc(c)}</th>`).join("")}</tr></thead>
+      <tbody>${d.rows.map((r, j) => `<tr class="${(d.hl || []).includes(j) ? "hl" : ""}">${r.map((c, i) => `<td class="${i && d.num !== false ? "n" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+      ${d.foot ? `<tfoot><tr>${d.foot.map((c, i) => `<td class="${i && d.num !== false ? "n" : ""}">${esc(c)}</td>`).join("")}</tr></tfoot>` : ""}</table></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7)); rise($("table.t thead"), seg(t, 0.5, 0.9), 0);
+      const n = d.rows.length, per = Math.min(0.5, (DUR * 0.6 - 0.8) / n);
+      document.querySelectorAll("table.t tbody tr").forEach((e, i) => rise(e, seg(t, 0.8 + i * per, 1.2 + i * per), 0));
+      rise($("table.t tfoot"), seg(t, 0.8 + n * per, 1.3 + n * per), 0); },
+  },
+  list: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="list ${d.style || ""}">${d.items.map((x, i) =>
+      `<div><i>${d.style === "check" ? "✓" : d.style === "warn" ? "!" : i + 1}</i><p style="margin:6px 0 0"><b>${esc(x[0])}</b> <span>${esc(x[1] || "")}</span></p></div>`).join("")}</div></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      const n = d.items.length, at = d.at || d.items.map((_, i) => 0.8 + i * Math.max(0.5, (DUR * 0.7 - 0.8) / n));
+      document.querySelectorAll(".list > div").forEach((e, i) => rise(e, seg(t, at[i], at[i] + 0.5), 20)); },
+  },
+  cards: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="grid" style="grid-template-columns:repeat(${d.cols || 4},1fr)">${d.items.map((x) =>
+      `<div class="gc ${x.out ? "out" : ""}" style="${x.c ? `border-top:6px solid ${x.c}` : ""}">${x.id ? `<div class="id">${esc(x.id)}</div>` : ""}<h4>${esc(x.h)}</h4>${x.p ? `<p>${esc(x.p)}</p>` : ""}${x.sv ? `<div class="sv" style="${x.svc ? `color:${x.svc}` : ""}">${esc(x.sv)}</div>` : ""}</div>`).join("")}</div></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      const n = d.items.length, per = d.gap ?? Math.min(0.6, (DUR * 0.65 - 0.8) / n);
+      document.querySelectorAll(".gc").forEach((e, i) => rise(e, seg(t, 0.8 + i * per, 1.3 + i * per), 24)); },
+  },
+  stats: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="stats n${d.items.length}">${d.items.map((x) =>
+      `<div class="st ${x.c || ""}"><div class="b"></div><div class="l">${esc(x.l)}</div></div>`).join("")}</div></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      document.querySelectorAll(".st").forEach((e, i) => { const x = d.items[i], a = x.at ?? 0.8 + i * 0.9; rise(e, seg(t, a, a + 0.5), 24);
+        const q = easeOut(seg(t, a, a + 1.4)), v = x.v * q;
+        e.querySelector(".b").textContent = (x.pre || "") + (x.dp === 0 ? Math.round(v).toLocaleString("en-GB") : v.toLocaleString("en-GB", { minimumFractionDigits: x.dp ?? 2, maximumFractionDigits: x.dp ?? 2 })) + (x.suf || ""); }); },
+  },
+  vi: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="row">${d.items.map((x) =>
+      `<div class="vi"><h3>${esc(x.fn)}</h3>
+        <div class="ln"><span>Cost</span><span class="tr"><i style="background:#5aa2ff"></i></span><b class="num">${gbp(x.cost)}</b></div>
+        <div class="ln"><span>Worth</span><span class="tr"><i style="background:#3fd08a"></i></span><b class="num">${gbp(x.worth)}</b></div>
+        <div class="ix" style="color:${x.cost / x.worth >= 1.5 ? "#ff7a3d" : "#3fd08a"}"><small>Value index</small><span></span></div><p style="font-size:28px;color:#93a3c4;margin:10px 0 0">${esc(x.say)}</p></div>`).join("")}</div></div>`,
+    frame: (t) => { const d = S, max = Math.max(...d.items.map((x) => x.cost));
+      rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      document.querySelectorAll(".vi").forEach((e, i) => { const x = d.items[i], a = x.at ?? 0.8 + i * (DUR * 0.45);
+        rise(e, seg(t, a, a + 0.5), 24);
+        const [c, w] = e.querySelectorAll(".tr i"); c.style.width = easeOut(seg(t, a + 0.3, a + 1.1)) * x.cost / max * 100 + "%"; w.style.width = easeOut(seg(t, a + 0.8, a + 1.6)) * x.worth / max * 100 + "%";
+        const q = seg(t, a + 1.6, a + 2.4); e.querySelector(".ix span").textContent = q > 0 ? (1 + (x.cost / x.worth - 1) * easeOut(q)).toFixed(2) : "";
+        rise(e.querySelector("p"), seg(t, a + 2.2, a + 2.8), 10); }); },
+  },
+  fast: {
+    html: (d) => {
+      const X = (i) => i * 188, Y = 250;
+      let h = `<div class="k" style="top:150px"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="fast">`;
+      h += `<div class="fa" style="left:${X(1)}px;top:0">HOW? →</div><div class="fa" style="left:${X(6)}px;top:0">← WHY?</div>`;
+      d.path.forEach((f, i) => { if (i) h += `<div class="fl" data-i="${i}" style="left:${X(i) - 16}px;top:${Y + 49}px;width:16px"></div>`;
+        h += `<div class="fb ${f.cls || ""}" data-i="${i}" style="left:${X(i)}px;top:${Y}px">${esc(f.fn)}${f.sub ? `<small>${esc(f.sub)}</small>` : ""}</div>`; });
+      d.above.forEach((f, i) => (h += `<div class="fb ${f.cls || ""} up" style="left:${X(i + 1)}px;top:${Y - 190}px">${esc(f.fn)}${f.sub ? `<small>${esc(f.sub)}</small>` : ""}</div>`));
+      d.below.forEach((f, i) => (h += `<div class="fb ${f.cls || ""} dn" style="left:${X(i + (d.belowAt || 3))}px;top:${Y + 170}px">${esc(f.fn)}${f.sub ? `<small>${esc(f.sub)}</small>` : ""}</div>`));
+      return h + `</div></div>`;
+    },
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      const n = d.path.length, per = (DUR * 0.45) / n;
+      document.querySelectorAll(".fb[data-i]").forEach((e) => { const i = +e.dataset.i; rise(e, seg(t, 0.8 + i * per, 1.2 + i * per), 0); e.style.transform = `scale(${0.9 + 0.1 * easeOut(seg(t, 0.8 + i * per, 1.2 + i * per))})`; });
+      document.querySelectorAll(".fl").forEach((e) => { const i = +e.dataset.i; e.style.opacity = seg(t, 0.8 + i * per - 0.1, 0.8 + i * per + 0.2); });
+      document.querySelectorAll(".fa").forEach((e, i) => rise(e, seg(t, 0.8 + (i ? n : 1) * per, 1.3 + (i ? n : 1) * per), 0));
+      const a2 = 0.9 + n * per; document.querySelectorAll(".fb.up").forEach((e, i) => rise(e, seg(t, a2 + i * 0.25, a2 + 0.4 + i * 0.25), -20));
+      const a3 = a2 + d.above.length * 0.25 + 0.3; document.querySelectorAll(".fb.dn").forEach((e, i) => rise(e, seg(t, a3 + i * 0.3, a3 + 0.4 + i * 0.3), 20)); },
+  },
+  scores: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><table class="t"><thead><tr><th>Idea</th>${d.crit.map((c) => `<th>${esc(c)}</th>`).join("")}<th class="n">Score</th></tr></thead>
+      <tbody>${d.rows.map((r, j) => `<tr class="${j === 0 ? "hl" : ""}"><td><b>${esc(r.id)}</b> ${esc(r.t)}</td>${r.sc.map((s) => `<td><span class="dots">${[1, 2, 3, 4, 5].map((k) => `<s data-k="${k}" data-s="${s}"></s>`).join("")}</span></td>`).join("")}<td class="n"><b></b></td></tr>`).join("")}</tbody></table></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7)); rise($("table.t thead"), seg(t, 0.4, 0.8), 0);
+      document.querySelectorAll("table.t tbody tr").forEach((tr, j) => { const a = 0.8 + j * 0.9; rise(tr, seg(t, a, a + 0.4), 0);
+        tr.querySelectorAll("s").forEach((s) => { const col = [...s.parentNode.parentNode.parentNode.children].indexOf(s.parentNode.parentNode) - 1, q = seg(t, a + 0.2 + col * 0.08, a + 0.6 + col * 0.08);
+          s.classList.toggle("f", +s.dataset.k <= Math.round(+s.dataset.s * easeOut(q))); });
+        const q = seg(t, a + 0.6, a + 1.1); tr.querySelector("td.n b").textContent = q > 0 ? (d.rows[j].tot * easeOut(q)).toFixed(2) : ""; }); },
+  },
+  waterfall: {
+    html: (d) => `<div class="k" style="top:150px"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="wf"></div></div>`,
+    frame: (t) => { const d = S, wf = $(".wf"); rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      const W = 1680, H = 420, lo = d.lo, hi = d.hi, y = (v) => (v - lo) / (hi - lo) * H, n = d.bars.length, bw = W / n;
+      if (!wf.dataset.built) { wf.dataset.built = 1;
+        wf.innerHTML = `<div class="tg" style="bottom:${60 + y(d.target)}px"><span>10% target ${gbp(d.target)}</span></div>` + d.bars.map((b, i) => `<div class="c" style="left:${i * bw + 16}px;width:${bw - 32}px;background:${b.c}"></div><div class="vv" style="left:${i * bw}px;width:${bw}px"></div><div class="lb" style="left:${i * bw}px;width:${bw}px">${esc(b.n)}</div>`).join(""); }
+      const cs = wf.querySelectorAll(".c"), vs = wf.querySelectorAll(".vv"), ls = wf.querySelectorAll(".lb");
+      d.bars.forEach((b, i) => { const a = b.at, q = easeOut(seg(t, a, a + 0.6));
+        const top = y(b.top), bot = y(b.bot); cs[i].style.bottom = (60 + bot) + "px"; cs[i].style.height = Math.max(3, (top - bot) * q) + "px";
+        if (b.step) { cs[i].style.bottom = (60 + top - (top - bot) * q) + "px"; }
+        cs[i].style.opacity = q > 0 ? 1 : 0; vs[i].style.bottom = (60 + top + 12) + "px"; vs[i].textContent = b.lbl; vs[i].style.opacity = seg(t, a + 0.3, a + 0.7); ls[i].style.opacity = q > 0 ? 1 : 0; });
+      wf.querySelector(".tg").style.opacity = seg(t, d.tAt, d.tAt + 0.5); },
+  },
+  end: {
+    html: (d) => `<div class="end"><h1>${d.h}</h1><p>${esc(d.p)}</p><div class="url">${esc(d.url)}</div></div>`,
+    frame: (t) => { rise($(".end h1"), seg(t, 0.2, 1.0), 40); rise($(".end p"), seg(t, 0.8, 1.4)); rise($(".end .url"), seg(t, 1.3, 1.9)); },
+  },
+};
+
+// called once per scene
+window.setup = function (scene, meta) {
+  S = scene; DUR = meta.dur;
+  chip.innerHTML = meta.step ? `<span class="n">${meta.step}</span><span>Step ${meta.step} of 6 · <b>${esc(meta.stepName)}</b></span>` : `<span class="n">${meta.badge || "▶"}</span><span>VH-3600 case study · <b>${esc(meta.name)}</b></span>`;
+  cap.innerHTML = scene.vo ? `<div>${esc(scene.vo)}</div>` : "";
+  const is3d = scene.kind === "three";
+  card.classList.toggle("on", !is3d); viewer.style.visibility = is3d ? "visible" : "hidden";
+  if (!is3d) { card.innerHTML = K[scene.kind].html(scene); }
+  panel.classList.toggle("on", !!(is3d && scene.panel));
+  if (is3d && scene.panel) {
+    const p = scene.panel;
+    panel.innerHTML = `<small>${esc(p.k)}</small>${p.big ? `<div class="big">${p.big}</div>` : ""}${p.p ? `<p>${esc(p.p)}</p>` : ""}${p.list ? `<ul>${p.list.map(([a, b]) => `<li><span>${esc(a)}</span><b>${esc(b)}</b></li>`).join("")}</ul>` : ""}`;
+  }
+  // the model sits left of the panel when there is one
+  const w = is3d && scene.panel ? 1260 : 1920;
+  viewer.style.width = w + "px";
+  return true;
+};
+window.frame = function (t) {
+  if (S.kind === "three") three(t); else K[S.kind].frame(t);
+  // the subtitle fades in with the line and out at the end of the scene
+  cap.style.opacity = clamp(Math.min(seg(t, 0.15, 0.45), seg(DUR - t, 0, 0.25)));
+  chip.style.opacity = 1;
+};
+window.ready = () => !!window.VHProjector;
+</script>
+</body>
+</html>

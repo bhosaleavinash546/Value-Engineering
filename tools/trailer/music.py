@@ -10,6 +10,9 @@ so the music changes where the pictures change:
   groove   (the method and the montage; the five things)            kick, clap, hats, bass and a 16th-note arpeggio
   lift     (the results and the course)                              the same groove with a brighter, wider pad
   resolve  (the certificate and the end card)                        drums out, a major chord that rings out
+  calm     (under narration, used by the case-study videos)           soft pads and a slow, quiet arpeggio; no drums
+
+A scene can name its section directly with "sect"; otherwise it's looked up from the trailer's scene ids.
 
 A minor, 100 beats a minute. Everything sits on one beat grid from the first frame; section
 changes wait for the next beat, and impacts land exactly on their picture cue.
@@ -29,7 +32,8 @@ def note(n):  # MIDI note number to Hz
 PROG = {"tension": [[45, 57, 60, 64], [41, 57, 60, 65], [45, 57, 60, 64], [43, 55, 59, 62]],   # Am  F  Am  G
         "groove":  [[45, 57, 60, 64], [41, 53, 60, 65], [48, 55, 60, 64], [43, 55, 59, 62]],   # Am  F  C   G
         "lift":    [[41, 53, 60, 65, 69], [43, 55, 62, 67, 71], [45, 57, 64, 69, 72], [48, 55, 64, 67, 72]],  # F  G  Am  C
-        "resolve": [[48, 55, 60, 64, 67, 72]]}                                                  # C
+        "resolve": [[48, 55, 60, 64, 67, 72]],
+        "calm":    [[45, 57, 60, 64], [41, 53, 60, 65], [48, 55, 60, 64], [43, 55, 59, 62]]}  # Am  F  C   G                                                  # C
 
 def additive(freq, dur, bright=6.0, harm=10, detune=0.0):
     """A soft saw-like tone: harmonics rolled off by 'bright' (stands in for a filter)."""
@@ -127,7 +131,7 @@ def build(plan):
     def section_at(t):
         cur = "tension"
         for s in sc:
-            if s["start"] <= t + 1e-6: cur = SECT.get(s["id"], cur)
+            if s["start"] <= t + 1e-6: cur = s.get("sect") or SECT.get(s["id"], cur)
         return cur
     def snap(t): return np.ceil(t / BEAT - 1e-6) * BEAT
 
@@ -148,6 +152,14 @@ def build(plan):
         bar, beat = divmod(b, 4)
         prog = PROG["groove" if sec == "riser" else sec]
         chord = prog[bar % len(prog)]
+        if sec == "calm":                                           # under a voice: pads and a slow arpeggio only
+            if beat == 0:
+                pads.add(pad(chord[1:], 4 * BEAT + 0.6, bright=3.5, gain=0.5), t, pan=-0.15)
+                pads.add(pad(chord[1:], 4 * BEAT + 0.6, bright=3.5, gain=0.45), t + 0.012, pan=0.15)
+                mix.add(bass(note(chord[0]), 2 * BEAT) * np.linspace(1, .3, int(2 * BEAT * SR)), t, 0.3)
+            arp = [chord[1], chord[2], chord[3], chord[2]]
+            for e in range(2): pads.add(pluck(note(arp[(beat * 2 + e) % 4] + 12)), t + e * BEAT / 2, 0.09, pan=-0.3 if e else 0.3)
+            continue
         if beat == 0 and sec != "resolve":                          # a pad per bar
             pads.add(pad(chord[1:], 4 * BEAT + 0.6, bright=3.0 if sec == "tension" else 5.0, gain=0.55 if sec == "tension" else 0.7), t, pan=-0.15)
             pads.add(pad(chord[1:], 4 * BEAT + 0.6, bright=3.0 if sec == "tension" else 5.0, gain=0.5 if sec == "tension" else 0.65), t + 0.012, pan=0.15)
@@ -166,7 +178,7 @@ def build(plan):
                 pads.add(pad([m + 12 for m in chord[2:]], 4 * BEAT, bright=7, gain=0.35), t, pan=0.0)
 
     # resolve: drums out, one major chord that rings to the end, and a soft final hit
-    res = next((s["start"] for s in sc if SECT.get(s["id"]) == "resolve"), None)
+    res = next((s["start"] for s in sc if (s.get("sect") or SECT.get(s["id"])) == "resolve"), None)
     if res is not None:
         rt = snap(res)
         dur = total - rt + 0.5

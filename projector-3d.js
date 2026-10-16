@@ -719,7 +719,7 @@ function init() {
     if (!w || !h) return;
     for (const n in balloons) {
       const u = byN[n][0], b = balloons[n];
-      if (!show || !u.obj.visible || (COVERS.has(u.id) && st.lightA > 0.5)) { b.style.opacity = 0; b.style.pointerEvents = "none"; delete lab[n]; continue; }
+      if (!show || !u.obj.visible || (COVERS.has(u.id) && st.lightA > 0.5) || (st.only && !st.only.includes(+n))) { b.style.opacity = 0; b.style.pointerEvents = "none"; delete lab[n]; continue; }
       box3.setFromObject(u.obj); box3.getCenter(tmp);
       tmp.project(camera);
       if (tmp.z > 1) { b.style.opacity = 0; delete lab[n]; continue; }
@@ -886,6 +886,7 @@ function init() {
       if ("step" in s) st.step = s.step;
       if ("sel" in s) { st.sel = s.sel; highlight(s.sel); }
       if ("labels" in s) st.labels = s.labels;
+      if ("only" in s) st.only = s.only;
       if (s.cam) { camera.position.set(...s.cam[0]); controls.target.set(...s.cam[1]); }
       if ("flow" in s) flows.forEach((t) => { t.offset.y = -s.flow; });
       controls.autoRotate = false; renderer.shadowMap.needsUpdate = true; apply(); controls.update(); renderer.render(scene, camera);
