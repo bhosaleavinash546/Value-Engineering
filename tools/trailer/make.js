@@ -128,7 +128,7 @@ async function renderScene(page, s, data, dir, n) {
     // a few seconds of the course video, its own subtitle strip covered, with the title and caption on top
     ff(["-ss", String(s.at), "-t", s.dur.toFixed(3), "-i", path.join(ROOT, "videos", s.clip + ".mp4"),
       "-framerate", String(FPS), "-i", path.join(fdir, "%05d.png"),
-      "-filter_complex", "[0:v]scale=1920:1080,fps=30,drawbox=x=0:y=880:w=1920:h=200:color=0x060a16@1:t=fill[v];[v][1:v]overlay=0:0:shortest=1[o]",
+      "-filter_complex", "[0:v]scale=1920:1080,fps=30,drawbox=x=0:y=88:w=1920:h=100:color=0x0a111f@1:t=fill,drawbox=x=0:y=880:w=1920:h=200:color=0x060a16@1:t=fill[v];[v][1:v]overlay=0:0:shortest=1[o]",
       "-map", "[o]", "-an", ...enc, segFile]);
   }
   fs.rmSync(fdir, { recursive: true, force: true });
