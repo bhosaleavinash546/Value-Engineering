@@ -32,6 +32,15 @@
     for (var i = 0; i < nums.length; i++) countUp(nums[i]);
   }
 
+  // the narration player (vh-voice.js) shows a diagram on cue and can play it again
+  window.VHDiagrams = window.VHDiagrams || {};
+  window.VHDiagrams.reveal = reveal;
+  window.VHDiagrams.replay = function (viz) {
+    viz.classList.remove("in-view");
+    void viz.offsetWidth; // restart the CSS transitions
+    reveal(viz);
+  };
+
   var vizzes = document.querySelectorAll(".concept-viz");
   if (!vizzes.length) return;
   if (!("IntersectionObserver" in window)) {
@@ -112,7 +121,8 @@
       '<div class="xv-scene xp xp-live">' + SCENE + "</div><p class='xv-cap'></p>");
     var scene = mount.querySelector(".xv-scene");
     var cap = mount.querySelector(".xv-cap");
-    var w = { scene: scene, stage: -1 };
+    var w = { scene: scene, stage: -1, manual: false };
+    mount._stages = w;
     w.setStage = function (n) {
       if (n === w.stage) return;
       w.stage = n;
@@ -131,6 +141,7 @@
     ticking = false;
     var vh = window.innerHeight || 1;
     widgets.forEach(function (w) {
+      if (w.manual) return; // the narration is playing it
       var r = w.scene.getBoundingClientRect();
       if (r.bottom < -40 || r.top > vh + 40) return;
       var d = Math.abs((r.top + r.height / 2) - vh / 2) / vh; // 0 = centred
@@ -143,6 +154,8 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
   drive();
+  window.VHDiagrams = window.VHDiagrams || {};
+  window.VHDiagrams.redrive = onScroll;
 })();
 
 /* ── Generic two-stage scroll driver ──
@@ -157,7 +170,9 @@
   if (!els.length) return;
   var items = [];
   els.forEach(function (el) {
-    var it = { el: el, cap: el.querySelector(".ss-cap"), stage: -1 };
+    var it = { el: el, cap: el.querySelector(".ss-cap"), stage: -1, manual: false };
+    el._stages = it;
+    it.setStage = function (n) { it.set(n); };
     it.set = function (n) {
       if (n === it.stage) return;
       it.stage = n;
@@ -173,6 +188,7 @@
     ticking = false;
     var vh = window.innerHeight || 1;
     items.forEach(function (it) {
+      if (it.manual) return; // the narration is playing it
       var r = it.el.getBoundingClientRect();
       if (r.bottom < -40 || r.top > vh + 40) return;
       var d = Math.abs((r.top + r.height / 2) - vh / 2) / vh;
@@ -185,4 +201,37 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
   drive();
+  var prev = window.VHDiagrams && window.VHDiagrams.redrive;
+  window.VHDiagrams = window.VHDiagrams || {};
+  window.VHDiagrams.redrive = function () { if (prev) prev(); onScroll(); };
+})();
+
+/* ── Step-by-step playback for the narration: a two-stage diagram comes apart in
+   order (stage 1, then 2) without the reader having to scroll it through the
+   middle of the screen. Resolves when it has finished; release() hands it back
+   to the scroll driver. ── */
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.VHDiagrams = window.VHDiagrams || {};
+  function find(el) {
+    var host = el.matches("[data-xview],[data-scrollstages]") ? el : el.querySelector("[data-xview],[data-scrollstages]");
+    return host && host._stages;
+  }
+  window.VHDiagrams.hasStages = function (el) { return !!find(el); };
+  window.VHDiagrams.take = function (el) { var w = find(el); if (w) { w.manual = true; w.setStage(0); } };
+  window.VHDiagrams.playStages = function (el, wait) {
+    var w = find(el);
+    if (!w) return Promise.resolve();
+    w.manual = true;
+    w.setStage(0);
+    var pause = function (ms) { return wait ? wait(ms) : new Promise(function (ok) { setTimeout(ok, ms); }); };
+    if (reduce) { w.setStage(2); return pause(4000); }
+    return pause(900).then(function () { w.setStage(1); return pause(2600); })
+      .then(function () { w.setStage(2); return pause(4500); });
+  };
+  window.VHDiagrams.release = function (el) {
+    var w = find(el);
+    if (w && w.manual) { w.manual = false; if (window.VHDiagrams.redrive) window.VHDiagrams.redrive(); }
+  };
 })();

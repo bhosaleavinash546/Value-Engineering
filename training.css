@@ -1096,3 +1096,33 @@ html[data-theme="light"] .wf-table td.is-over{color:#b91c1c}
   .vh-focus .fm-foot{padding-inline:12px}
 }
 @media print{.fm-ui,.tmod-tools{display:none!important}}
+
+/* ════════════════ NARRATION STOPS (vh-voice.js) ════════════════ */
+.vo-stops{display:inline-flex;align-items:center;gap:.4rem;margin-left:auto;color:var(--muted);font-size:.74rem;cursor:pointer;white-space:nowrap}
+.vo-stops input{accent-color:var(--acc2);width:15px;height:15px;margin:0}
+.vs-card{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:960;display:flex;align-items:center;gap:.7rem;width:max-content;max-width:min(680px,calc(100vw - 24px));padding:.6rem .7rem .6rem .9rem;border:1px solid color-mix(in srgb,var(--acc1) 40%,var(--line));border-radius:16px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 14px 40px rgba(0,0,0,.35);font-family:var(--font-b);animation:vsIn .25s ease both}
+.vs-card[hidden]{display:none}
+@keyframes vsIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+.vs-msg{margin:0;font-size:.88rem;line-height:1.4;color:var(--txt)}
+.vs-ring{position:relative;flex:none;width:34px;height:34px}
+.vs-ring[hidden]{display:none}
+.vs-ring svg{width:34px;height:34px;transform:rotate(-90deg)}
+.vs-ring circle{fill:none;stroke:var(--line);stroke-width:3}
+.vs-ring .vs-arc{stroke:var(--acc1);stroke-dasharray:97.4;stroke-dashoffset:0;stroke-linecap:round}
+.vs-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 .78rem var(--font-m);color:var(--txt)}
+.vs-btn{flex:none;min-height:40px;padding:0 .9rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--txt);font:600 .84rem var(--font-b);cursor:pointer;white-space:nowrap}
+.vs-btn:hover{border-color:var(--acc1)}
+.vs-btn[hidden]{display:none}
+.vs-go{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.vs-go:hover{filter:brightness(1.08)}
+.vh-focus .vs-card{bottom:80px}
+@media (max-width:640px){
+  .vo-stops{margin-left:0}
+  .vs-card{flex-wrap:wrap;bottom:12px;gap:.5rem .6rem;padding:.6rem .7rem}
+  .vs-msg{flex:1 1 60%;font-size:.84rem}
+  .vh-focus .vs-card{bottom:72px}
+}
+.vw-remind{margin:1.2rem 0 .8rem;padding:.75rem .95rem;border:1px dashed color-mix(in srgb,var(--acc3) 55%,var(--line));border-radius:12px;font-size:.9rem;color:var(--txt);background:color-mix(in srgb,var(--acc3) 7%,transparent)}
+.vw-remind[hidden]{display:none}
+.vw-remind button{background:none;border:0;padding:0;color:var(--acc1);font:inherit;font-weight:600;text-decoration:underline;cursor:pointer;text-align:left}
+@media print{.vs-card,.vw-remind{display:none!important}}
