@@ -1207,7 +1207,7 @@ body.is-learner:not(.show-about) #trHero,body.is-learner:not(.show-about) .tr-ou
   .lc-hero .tr-try-opts{grid-template-columns:1fr}
   .tr-home-inner{padding:1.4rem 18px 1.2rem}
 }
-.tr-trailer{width:min(1100px,94vw);padding:0;border:0;border-radius:18px;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.6);overflow:visible}
+.tr-trailer{width:min(1100px,94vw);margin:auto;padding:0;border:0;border-radius:18px;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.6);overflow:visible}
 .tr-trailer::backdrop{background:rgba(3,6,14,.82);backdrop-filter:blur(4px)}
 .tr-trailer video{display:block;width:100%;height:auto;border-radius:18px}
 .tr-trailer-x{position:absolute;top:-48px;right:0;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.5);color:#fff;font-size:1.1rem;cursor:pointer}

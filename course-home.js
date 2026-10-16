@@ -42,7 +42,7 @@
           dlg.setAttribute("aria-label", "Course trailer");
           dlg.innerHTML = `<button type="button" class="tr-trailer-x" aria-label="Close the trailer">✕</button>
             <video controls playsinline preload="metadata" poster="${base}.webp"><source src="${base}.mp4" type="video/mp4" />
-            <track kind="captions" src="${base}.vtt" srclang="en" label="English" default /></video>`;
+            <track kind="captions" src="${base}.vtt" srclang="en" label="English" /></video>`;
           document.body.appendChild(dlg);
           const v = $("video", dlg);
           const close = () => { v.pause(); dlg.close(); };

@@ -41,7 +41,7 @@ window.VF_CONFIG = {
         learners for a quote, and the approved quotes on the course pages).
         trailers: true once videos/trailer-*.mp4 have been made and checked. */
   quotes: false,
-  trailers: false,
+  trailers: true,
 
   giscusRepo: "",
   giscusRepoId: "",
