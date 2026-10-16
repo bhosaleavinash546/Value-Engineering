@@ -326,7 +326,7 @@ def guide_page(i, p):
     <p class="kicker">{kicker}</p>
     <h1>{h1}</h1>
     <p class="sec-lede">{lede}</p>
-    <p class="guide-meta">By <a href="./#engage">{AUTHOR}</a> · Updated <time datetime="{UPDATED}">{UPDATED_HUMAN}</time> · {minutes} min read</p>
+    <p class="guide-meta">By <a href="./#author">{AUTHOR}</a> · Updated <time datetime="{UPDATED}">{UPDATED_HUMAN}</time> · {minutes} min read</p>
     <aside class="guide-tldr" aria-labelledby="tldr-{p["slug"]}"><h2 id="tldr-{p["slug"]}">In 30 seconds</h2><p>{p["tldr"]}</p></aside>
   </div>
 </header>
@@ -374,7 +374,7 @@ def pillar_page(p):
     <p class="kicker">{p["kicker"]}</p>
     <h1>{p["h1"]}</h1>
     <p class="sec-lede">{p["lede"]}</p>
-    <p class="guide-meta">By <a href="./#engage">{AUTHOR}</a> · Updated <time datetime="{UPDATED}">{UPDATED_HUMAN}</time> · {minutes} min read</p>
+    <p class="guide-meta">By <a href="./#author">{AUTHOR}</a> · Updated <time datetime="{UPDATED}">{UPDATED_HUMAN}</time> · {minutes} min read</p>
     <aside class="guide-tldr" aria-labelledby="tldr-{p["slug"]}"><h2 id="tldr-{p["slug"]}">In 30 seconds</h2><p>{p["tldr"]}</p></aside>
   </div>
 </header>

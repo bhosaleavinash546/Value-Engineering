@@ -77,6 +77,14 @@ module.exports = async function openers({ browser, O, r }) {
     await p.setViewportSize({ width: 375, height: 800 }); await p.waitForTimeout(250);
     const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     r.ok(ov <= 0, `Homepage: the tracks fit a 375px phone${ov > 0 ? " (overflows by " + ov + "px)" : ""}`);
+    // the About the author section
+    await p.evaluate(() => document.querySelector("#author").scrollIntoView({ behavior: "instant" })); await p.waitForTimeout(800);
+    const au = await p.evaluate(() => { const a = document.querySelector("#author");
+      return { img: !a.querySelector("img"), links: [...a.querySelectorAll(".author-links a")].map((x) => x.href), text: a.textContent }; });
+    r.ok(au.img, "Homepage author: no photo, initials only");
+    r.ok(au.links.some((h) => /linkedin\.com\/in\//.test(h)) && au.links.some((h) => h === "https://bhosaleavinash546.github.io/avinash-bhosale-portfolio/"), "Homepage author: LinkedIn and portfolio links");
+    r.ok(!/\b(JLR|Jaguar|John Deere|Tata)\b/.test(au.text) && !/certificate (no|number)/i.test(au.text), "Homepage author: no employer names or certificate numbers");
+    r.ok(/VMA/.test(au.text) && /PGDM/.test(au.text), "Homepage author: certificates and education listed");
     r.ok(!errs.length, `Homepage: no script errors${errs.length ? ": " + errs[0] : ""}`);
     await ctx.close();
   }
