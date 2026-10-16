@@ -1327,3 +1327,46 @@ html[data-theme="light"] .pil-table thead th{background:#f2f5fb}
 .am-video{display:block;margin:.6rem 0 1rem;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none!important;background:var(--card)}
 .am-video img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
 .am-video>span{display:block;padding:.7rem 1rem;color:var(--acc1);font-weight:600}
+
+/* ════════ Choose your track (homepage) ════════ */
+.trk{padding-bottom:70px}
+.trk .sec-head{margin-bottom:2.4rem}
+.trk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem}
+.trk-card{display:flex;flex-direction:column;padding:1.8rem 1.8rem 1.6rem;border-radius:var(--r);border:1px solid var(--line);background:var(--card)}
+.trk-acad{border-color:rgba(57,135,229,.5);box-shadow:0 18px 50px -30px rgba(57,135,229,.9)}
+.trk-lead{border-color:rgba(217,164,74,.5);box-shadow:0 18px 50px -30px rgba(217,164,74,.9)}
+.trk-tag{font-family:var(--font-m);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.trk-acad .trk-tag{color:var(--acc1)}
+.trk-lead .trk-tag{color:var(--acc3)}
+.trk-name{font-family:var(--font-d);font-size:1.75rem;font-weight:700;margin:.35rem 0 .5rem}
+.trk-for{color:var(--muted);font-size:.98rem}
+.trk-meta{margin-top:.9rem;padding:.6rem .85rem;border-radius:10px;background:var(--card-hi);font-size:.92rem;color:var(--muted)}
+.trk-meta b{color:var(--txt)}
+.trk-h{margin-top:1.2rem;font-weight:700;font-size:.95rem}
+.trk-list{list-style:none;margin:.55rem 0 0;padding:0;display:grid;gap:.45rem}
+.trk-list li{position:relative;padding-left:1.5rem;font-size:.97rem;line-height:1.45}
+.trk-list li::before{content:"";position:absolute;left:0;top:.42em;width:.8rem;height:.45rem;border-left:2px solid;border-bottom:2px solid;transform:rotate(-45deg)}
+.trk-acad .trk-list li::before{color:var(--acc1)}
+.trk-lead .trk-list li::before{color:var(--acc3)}
+.trk-inc{margin-top:1.1rem;color:var(--muted);font-size:.92rem}
+.trk-act{margin-top:auto;padding-top:1.4rem;display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+.trk-btn-lead{background:linear-gradient(100deg,#b9832a,#d9a44a);color:#1a1205;box-shadow:0 8px 28px rgba(217,164,74,.3)}
+.trk-play{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:.6rem 1.1rem;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--txt);font:600 .92rem var(--font-b);cursor:pointer}
+.trk-play span{color:var(--muted);font-weight:500}
+.trk-play:hover{border-color:var(--acc1);background:var(--card-hi)}
+.trk-catch{margin-top:1.4rem;display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:start;padding:1.2rem 1.5rem;border-radius:var(--r);border:1px dashed var(--line);background:var(--card)}
+.trk-catch-h{font-family:var(--font-d);font-weight:800;font-size:1.05rem;color:#3ccf91;white-space:nowrap}
+.trk-catch ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}
+.trk-catch li{font-size:.9rem;color:var(--muted);line-height:1.45}
+.trk-catch li b{display:block;color:var(--txt);margin-bottom:.15rem}
+.trk-catch a{color:var(--acc1);text-decoration:underline}
+.trk-both{margin-top:1.1rem;font-size:.92rem;color:var(--muted);text-align:center}
+.trk-dlg{width:min(1100px,94vw);margin:auto;padding:0;border:0;border-radius:18px;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.6);overflow:visible}
+.trk-dlg::backdrop{background:rgba(3,6,14,.82);backdrop-filter:blur(4px)}
+.trk-dlg video{display:block;width:100%;height:auto;border-radius:18px}
+.trk-dlg-x{position:absolute;top:-48px;right:0;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.5);color:#fff;font-size:1.1rem;cursor:pointer}
+html[data-theme="light"] .trk-card,html[data-theme="light"] .trk-catch{background:#fff}
+html[data-theme="light"] .trk-lead .trk-tag{color:#9a6b12}
+html[data-theme="light"] .trk-catch-h{color:#14804f}
+@media (max-width:860px){.trk-grid{grid-template-columns:1fr}.trk-catch{grid-template-columns:1fr;gap:.6rem}.trk-catch ul{grid-template-columns:1fr;gap:.7rem}}
+@media (max-width:640px){.trk-card{padding:1.3rem 1.15rem 1.2rem}.trk-name{font-size:1.5rem}.trk-act .btn{width:100%}}

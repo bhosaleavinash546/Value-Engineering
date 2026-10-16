@@ -532,10 +532,10 @@ def faq_jsonld():
 
 def build():
     for p in PAGES: CONTENT_IDS[p["slug"]] = ids_in(read("pages", p["slug"] + ".html"))
-    CONTENT_IDS[None] = set().union(*(ids_in(read("home", f)) for f in ["hero.html", "about.html", "faq.html", "diagnose.html", "engage.html"])) | {"playbook"}
+    CONTENT_IDS[None] = set().union(*(ids_in(read("home", f)) for f in ["hero.html", "tracks.html", "about.html", "faq.html", "diagnose.html", "engage.html"])) | {"playbook"}
     footer = read("partials", "footer.html")
     # ── home ──
-    home_body = "\n\n".join([read("home", "hero.html"), '<main id="main">', "", read("home", "about.html"), playbook_section(),
+    home_body = "\n\n".join([read("home", "hero.html"), '<main id="main">', "", read("home", "tracks.html"), read("home", "about.html"), playbook_section(),
                              read("home", "faq.html"), read("home", "diagnose.html"), read("home", "engage.html"), "", "</main>"])
     home = head(None, "VAVEhub: Free Value Engineering Guides, Templates and Courses",
                 "Free value engineering (VAVE) guides, templates and two free courses with certificates: the job plan, FAST diagrams, 36 cost reduction ideas, should-costing and teardown.",

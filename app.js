@@ -452,7 +452,7 @@
   const dotnav = $("#dotnav");
   if (dotnav) {
     const SECTIONS = [
-      ["top", "Home"], ["about", "Value Engineering"], ["playbook", "The Playbook"],
+      ["top", "Home"], ["tracks", "Courses"], ["about", "Value Engineering"], ["playbook", "The Playbook"],
       ["faq", "FAQ"], ["diagnose", "Diagnosis"], ["engage", "Begin"],
     ].filter(([id]) => document.getElementById(id));
     dotnav.innerHTML = SECTIONS.map(([id, label]) =>
@@ -941,4 +941,32 @@
       f.focus();
     });
   });
+})();
+
+/* ── "Choose your track": the trailer buttons open the video in a window ── */
+(() => {
+  const btns = document.querySelectorAll("[data-trailer]");
+  if (!btns.length) return;
+  let dlg = null, v = null;
+  const open = (course) => {
+    if (window.vhTrack) window.vhTrack("home/trailer-" + course);
+    if (!dlg) {
+      dlg = document.createElement("dialog");
+      dlg.className = "trk-dlg";
+      dlg.setAttribute("aria-label", "Course trailer");
+      dlg.innerHTML = '<button type="button" class="trk-dlg-x" aria-label="Close the trailer">✕</button><video controls playsinline preload="metadata"></video>';
+      document.body.appendChild(dlg);
+      v = dlg.querySelector("video");
+      const close = () => { v.pause(); dlg.close(); };
+      dlg.querySelector(".trk-dlg-x").addEventListener("click", close);
+      dlg.addEventListener("click", (e) => { if (e.target === dlg) close(); });
+      dlg.addEventListener("close", () => v.pause());
+    }
+    const base = "videos/trailer-" + course;
+    v.poster = base + ".webp";
+    v.src = base + ".mp4";
+    dlg.showModal();
+    v.play().catch(() => {});
+  };
+  btns.forEach((b) => b.addEventListener("click", () => open(b.dataset.trailer)));
 })();

@@ -61,4 +61,23 @@ module.exports = async function openers({ browser, O, r }) {
     r.ok(await p.isVisible("#trHero h1") && await p.$eval("#trAboutBtn", (b) => b.getAttribute("aria-expanded") === "true"), `${name}: "About this course" brings the introduction back`);
     await ctx.close();
   }
+
+  // ── the homepage "Choose your track" section
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 } });
+    const p = await ctx.newPage(); const errs = []; p.on("pageerror", (e) => errs.push(e.message));
+    await p.goto(`${O}/index.html`); await p.waitForTimeout(900);
+    const cards = await p.$$eval("#tracks .trk-card", (els) => els.map((e) => [e.querySelector(".trk-tag").textContent, e.querySelector("a.btn").getAttribute("href")]));
+    r.ok(cards.length === 2 && /Practitioner/.test(cards[0][0]) && cards[0][1] === "training.html" && /Executive/.test(cards[1][0]) && cards[1][1] === "leaders.html", "Homepage: two tracks, each linking to its course");
+    r.ok(/not a professional certification/.test(await p.textContent("#tracks .trk-catch")), "Homepage: the \"No catch\" strip says what the certificate isn't");
+    await p.click("[data-trailer=leaders]"); await p.waitForTimeout(500);
+    r.ok(await p.evaluate(() => { const d = document.querySelector("dialog.trk-dlg[open]"); return !!d && /trailer-leaders\.mp4$/.test(d.querySelector("video").src); }), "Homepage: a trailer button opens that course's trailer");
+    await p.keyboard.press("Escape"); await p.waitForTimeout(200);
+    r.ok(!(await p.$("dialog.trk-dlg[open]")), "Homepage: Escape closes the trailer");
+    await p.setViewportSize({ width: 375, height: 800 }); await p.waitForTimeout(250);
+    const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    r.ok(ov <= 0, `Homepage: the tracks fit a 375px phone${ov > 0 ? " (overflows by " + ov + "px)" : ""}`);
+    r.ok(!errs.length, `Homepage: no script errors${errs.length ? ": " + errs[0] : ""}`);
+    await ctx.close();
+  }
 };
