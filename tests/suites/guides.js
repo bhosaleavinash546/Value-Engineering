@@ -152,12 +152,37 @@ module.exports = async function guides({ browser, O, r }) {
   r.ok((await p.evaluate(() => document.querySelector(".mod-link.is-active")?.dataset.target)) === "m4", "module page 'Start' button opens that module in the Academy");
   await p.close(); }
 
+  // ── "Topics" menu: on every public page, opens the five topic guides, closes with Esc
+  { const p = await browser.newPage({ viewport: { width: 1440, height: 900 } }); p.on("pageerror", (e) => errs.push(e.message));
+  for (const pg of ["", "job-plan/", "value-analysis/", "academy/function-analysis-fast/"]) {
+    await p.goto(`${O}/${pg}`); await p.waitForTimeout(400);
+    const n = await p.$$eval("#navTopics a", (as) => as.map((a) => a.getAttribute("href")));
+    r.ok(n.length === 5 && n.includes("vave/") && n.includes("product-cost-optimisation/"), `Topics menu lists the five topic guides on /${pg}`);
+  }
+  await p.goto(`${O}/value-analysis/`); await p.waitForTimeout(400);
+  r.ok(await p.$eval(".nav-dd-btn", (b) => b.classList.contains("is-active")) && await p.$eval('#navTopics a[href="value-analysis/"]', (a) => a.getAttribute("aria-current") === "page"), "Topics menu marks the topic page you are on");
+  await p.focus(".nav-dd-btn"); await p.keyboard.press("Enter"); await p.waitForTimeout(250);
+  r.ok(await p.$eval(".nav-dd-btn", (b) => b.getAttribute("aria-expanded") === "true") && await p.isVisible('#navTopics a[href="vave/"]'), "Topics menu opens from the keyboard");
+  await p.keyboard.press("Escape"); await p.waitForTimeout(200);
+  r.ok(!(await p.isVisible('#navTopics a[href="vave/"]')) && await p.evaluate(() => document.activeElement.classList.contains("nav-dd-btn")), "Esc closes the Topics menu and returns focus");
+  await p.click(".nav-dd-btn"); await p.waitForTimeout(200); await p.click('#navTopics a[href="vave/"]'); await p.waitForURL("**/vave/");
+  r.ok(p.url().endsWith("/vave/"), "a Topics menu link opens its page");
+  await p.setViewportSize({ width: 375, height: 760 }); await p.waitForTimeout(300);
+  await p.click("#navToggle"); await p.waitForTimeout(450);
+  await p.click(".nav-dd-btn"); await p.waitForTimeout(250);
+  r.ok(await p.isVisible('#navTopics a[href="value-engineering/"]'), "Topics folds out inside the phone menu");
+  r.ok(await p.evaluate(() => { const l = document.getElementById("navLinks"); l.scrollTop = l.scrollHeight; const c = l.querySelector(".nav-cta").getBoundingClientRect(); return c.bottom <= innerHeight + 1; }), "the phone menu scrolls so every item can be reached");
+  await p.close(); }
+
   // ── Search engine ownership files must stay on the site, or Google/Bing lose access
   { const p = await browser.newPage();
   for (const f of ["googlefa3e3bc48c151077.html"]) {
     const res = await p.request.get(`${O}/${f}`);
     r.ok(res.status() === 200 && (await res.text()).includes("google-site-verification: " + f), `search engine ownership file ${f} is published`);
   }
+  const ink = require("fs").readdirSync(require("path").join(__dirname, "..", "..")).filter((f) => /^[0-9a-f]{32}\.txt$/.test(f));
+  const inkRes = ink.length === 1 ? await p.request.get(`${O}/${ink[0]}`) : null;
+  r.ok(ink.length === 1 && inkRes.status() === 200 && (await inkRes.text()).trim() === ink[0].slice(0, 32), "IndexNow key file is published and matches its name");
   await p.close(); }
 
   r.ok(!errs.length, `no script errors${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);

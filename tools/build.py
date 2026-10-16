@@ -195,7 +195,23 @@ def nav_links(here):
         else:
             href, extra = f"{slug}/", (' class="is-active" aria-current="page"' if slug == here else "")
         out.append(f'      <a href="{href}"{extra}>{label}</a>')
+        if label == "Guides": out.append(topics_menu(here))
     return "\n".join(out)
+
+TOPIC_NOTES = {"vave": "What VAVE means, VA vs VE", "value-engineering": "Definition, steps, examples",
+               "value-analysis": "The method for products on sale", "product-cost-reduction": "What works, and how much to expect",
+               "product-cost-optimisation": "Target costing and design-to-cost"}
+
+def topics_menu(here):
+    # "Topics" opens the five topic guides; on phones it folds out inside the menu
+    on = any(t["slug"] == here for t in PILLARS)
+    items = "".join(
+        f'<a href="{t["slug"]}/"' + (' class="is-active" aria-current="page"' if t["slug"] == here else "")
+        + f'>{t["short"]}<small>{TOPIC_NOTES[t["slug"]]}</small></a>' for t in PILLARS)
+    return (f'      <div class="nav-dd">'
+            f'<button type="button" class="nav-dd-btn{" is-active" if on else ""}" aria-expanded="false" aria-controls="navTopics">Topics'
+            f'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>'
+            f'<div class="nav-dd-menu" id="navTopics">{items}</div></div>')
 
 def chrome(here):
     c = read("partials", "chrome.html")

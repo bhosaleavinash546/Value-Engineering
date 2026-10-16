@@ -117,6 +117,24 @@
     else if (!e.shiftKey && i === items.length - 1) { e.preventDefault(); items[0].focus(); }
   });
 
+  /* ── "Topics" menu: click or tap to open; closes on Esc, on a click elsewhere or when focus leaves ── */
+  $$(".nav-dd").forEach((dd) => {
+    const btn = $(".nav-dd-btn", dd);
+    const set = (open) => { dd.classList.toggle("is-open", open); btn.setAttribute("aria-expanded", String(open)); };
+    let byHover = false; // a click right after hovering open shouldn't snap it shut
+    btn.addEventListener("click", (e) => { e.stopPropagation(); if (byHover) { byHover = false; set(true); } else set(!dd.classList.contains("is-open")); });
+    document.addEventListener("click", (e) => { if (!dd.contains(e.target)) set(false); });
+    dd.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && dd.classList.contains("is-open")) { e.stopPropagation(); set(false); btn.focus(); }
+    });
+    dd.addEventListener("focusout", (e) => { if (!navLinks.classList.contains("is-open") && !dd.contains(e.relatedTarget)) set(false); });
+    // with a mouse on a wide screen it also opens on hover
+    const wide = window.matchMedia("(min-width:1361px) and (hover:hover)");
+    let t = null;
+    dd.addEventListener("mouseenter", () => { if (wide.matches) { clearTimeout(t); byHover = !dd.classList.contains("is-open"); set(true); } });
+    dd.addEventListener("mouseleave", () => { if (wide.matches) t = setTimeout(() => { byHover = false; set(false); }, 180); });
+  });
+
   /* ── Custom cursor ── */
   if (finePointer && !reduced) {
     const dot = $("#cursorDot"), ring = $("#cursorRing");
