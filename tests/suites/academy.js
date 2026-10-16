@@ -17,7 +17,8 @@ module.exports = async function academy({ browser, O, r, ROOT }) {
   let ctx = await demoContext(browser, { viewport: { width: 1366, height: 900 } }, null);
   let p = track(await ctx.newPage());
   await p.goto(U); await p.waitForSelector("#modNav .mod-link");
-  r.ok(await p.$eval("#catWrap", (d) => d.open), "first visit: course catalogue is open");
+  r.ok(!(await p.$eval("#catWrap", (d) => d.open)), "first visit: the module list starts folded, one click away");
+  await p.click("#catWrap summary"); await p.waitForTimeout(200);
   r.ok((await p.$$(".cat-card")).length === 14, "catalogue: 13 modules + exam");
   r.ok((await p.textContent(".cat-card[data-open=m1]")).includes("Free preview"), "Module 1 is a free preview");
   await p.click(".cat-card[data-open=m1]"); await p.waitForTimeout(400);

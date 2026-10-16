@@ -95,11 +95,41 @@
       l.classList.toggle("is-done", id === quizId ? !!state.quiz.passed : state.done.includes(id));
     });
     updateSideCur();
+    renderHome();
+  }
+
+  /* ── learner home: anyone signed in, or with progress in this browser, starts here
+        instead of the course introduction (still one click away, "About this course") ── */
+  function renderHome() {
+    const home = $("#trHome");
+    if (!home) return;
+    const learner = !!acctName || state.done.length > 0;
+    // switching views changes the height above the lesson: keep the lesson where the reader sees it
+    const ref = $("#trLayout"), before = ref ? ref.getBoundingClientRect().top : 0, moved = learner !== document.body.classList.contains("is-learner");
+    document.body.classList.toggle("is-learner", learner);
+    home.hidden = !learner;
+    if (moved && ref && window.scrollY > 0) window.scrollBy(0, ref.getBoundingClientRect().top - before);
+    let box = $("#myLearn");
+    if (!learner) { if (box) box.remove(); return; }
+    if (!box) { box = document.createElement("div"); box.id = "myLearn"; box.className = "my-learn"; $(".tr-home-inner", home).appendChild(box); }
+    const total = courseMods.length, done = doneCount(), pct = Math.round((done / total) * 100);
+    const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
+    const first = acctName ? acctName.trim().split(/\s+/)[0].replace(/[<>&"]/g, "") : "";
+    const passed = !!state.quiz.passed;
+    const label = passed ? "View your certificate →" : next ? (done ? "Continue: " + next.dataset.title + " →" : "Start the course →") : "Take the final quiz →";
+    box.innerHTML = `
+      <div class="ml-ring"><svg viewBox="0 0 60 60"><circle class="mlr-bg" cx="30" cy="30" r="26"/><circle class="mlr-fg" cx="30" cy="30" r="26" style="stroke-dashoffset:${Math.round(163.4 * (1 - pct / 100))}"/></svg><b>${pct}%</b></div>
+      <div class="ml-txt"><b>Welcome back${first ? ", " + first : ""} 👋</b>
+        <span>${done} of ${total} modules${passed ? " · 🎓 Certificate earned" : ""}</span></div>
+      <button class="btn btn-primary ml-btn" id="mlGo"></button>`;
+    $("#mlGo", box).textContent = label;
+    $("#mlGo", box).addEventListener("click", () => show(passed || !next ? quizId : next.dataset.mod));
   }
 
   modNav.addEventListener("click", (e) => { const l = e.target.closest(".mod-link"); if (l) show(l.dataset.target); });
   $$(".cat-card").forEach((c) => c.addEventListener("click", () => { $("#catWrap").open = false; show(c.dataset.open); }));
   $("#startBtn").addEventListener("click", () => {
+    if (window.vhTrack) vhTrack("leaders/start-click");
     const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
     show(next ? next.dataset.mod : quizId);
   });
@@ -287,6 +317,7 @@
   let pulling = false;
   function onAccount(user) {
     acctName = user && user.name ? user.name : "";
+    renderHome();
     if (acctName && LIVE) {
       VHCloud.touchProfile();
       const pull = (retry) => VHCloud.loadCourse(C.id).then((cloud) => {

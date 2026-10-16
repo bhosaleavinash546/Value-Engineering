@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Trailer stage</title>
+<!-- Draws one trailer scene at a time for tools/trailer/make.js, which calls
+     window.setup(scene, data) once and window.frame(t) for every video frame.
+     Everything moves as a pure function of t, so a frame always looks the same. -->
+<link rel="stylesheet" href="../../fonts/fonts.css" />
+<style>
+  :root{--bg:#060a16;--ink:#eef3ff;--muted:#93a3c4;--blue:#4d8dff;--blue2:#2e6fe8;--green:#3fd08a;--orange:#ff6b35;--line:rgba(255,255,255,.14)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif}
+  html.overlay,html.overlay body{background:transparent}
+  #stage{position:absolute;inset:0;overflow:hidden}
+  .glow{position:absolute;inset:-20%;background:radial-gradient(45% 45% at 50% 40%,rgba(46,111,232,.22),transparent 70%)}
+  .abs{position:absolute}
+  .center{left:50%;top:50%;transform:translate(-50%,-50%)}
+  .big{font-family:'IBM Plex Sans',sans-serif;font-weight:700;letter-spacing:-.02em}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  #cap{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);max-width:1500px;padding:16px 30px;border-radius:14px;background:rgba(3,6,14,.72);font-size:40px;line-height:1.3;font-weight:500;text-align:center;color:#fff;white-space:pre-line}
+  #cap:empty{display:none}
+  .tag{position:absolute;padding:14px 22px;border:2px solid var(--line);border-radius:14px;background:#0d1426;font-size:30px;white-space:nowrap}
+  .tag b{font-family:'IBM Plex Mono',monospace;margin-left:14px;color:var(--blue)}
+  .stamp{position:absolute;padding:18px 34px;border:6px solid var(--orange);border-radius:16px;color:var(--orange);font:800 64px 'IBM Plex Sans',sans-serif;letter-spacing:.02em;text-transform:uppercase}
+  .card{position:absolute;width:520px;padding:40px 44px;border:2px solid var(--line);border-radius:26px;background:#0b1224;box-shadow:0 40px 80px rgba(0,0,0,.45)}
+  .card small{display:block;font:600 24px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+  .card .num{font:700 78px 'IBM Plex Sans',sans-serif;letter-spacing:-.02em;color:#fff;line-height:1}
+  .card .chk{position:static;margin:4px 0 0}
+  .card p{margin-top:18px;font-size:30px;color:var(--muted);line-height:1.35}
+  .shot{position:absolute;border-radius:18px;overflow:hidden;border:2px solid var(--line);box-shadow:0 40px 90px rgba(0,0,0,.55);background:#0b1224}
+  .shot img{display:block;width:100%;height:auto}
+  .shot .bar{height:34px;background:#141c30;display:flex;align-items:center;gap:9px;padding-left:16px}
+  .shot .bar i{width:12px;height:12px;border-radius:50%;background:#2b3550}
+  .shot-cap{position:absolute;font:600 30px 'IBM Plex Sans',sans-serif;color:#fff;padding:10px 20px;border-radius:12px;background:var(--blue2);white-space:nowrap}
+  .phase{position:absolute;top:50%;height:120px;margin-top:-60px;border-radius:18px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font:600 32px 'IBM Plex Sans',sans-serif;color:var(--muted);background:#0b1224}
+  .title-slam{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:800 150px 'IBM Plex Sans',sans-serif;letter-spacing:-.03em;white-space:nowrap}
+  .ttl{position:absolute;left:80px;top:70px;padding:14px 26px;border-radius:14px;background:var(--blue2);font:700 54px 'IBM Plex Sans',sans-serif;letter-spacing:-.01em}
+  .xp{position:absolute;left:50%;top:47%;width:1500px;height:844px;transform:translate(-50%,-50%);border-radius:26px;background:linear-gradient(180deg,#e9edf4,#cfd6e2)}
+  .xp-i{position:absolute;transform:translate(-50%,-50%)}
+  .xp-i img{width:100%;display:block;filter:drop-shadow(0 10px 14px rgba(25,32,50,.25))}
+  .xp-l{position:absolute;transform:translate(-50%,-50%);padding:6px 14px;border-radius:999px;background:#fff;color:#1a2233;font:600 20px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+  .chk{position:absolute;display:flex;align-items:center;gap:26px;font:600 46px 'IBM Plex Sans',sans-serif}
+  .chk i{width:56px;height:56px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-style:normal;color:#04130b;font-size:34px;font-weight:800}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="cap"></div>
+<script>
+"use strict";
+const $s = document.getElementById("stage"), cap = document.getElementById("cap");
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));                       // 0→1 between a and b
+const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+const easeIn = (p) => p * p * p;
+const easeInOut = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const back = (p) => { const c = 1.7; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const lerp = (a, b, p) => a + (b - a) * p;
+const el = (html) => { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstElementChild; };
+const fmt = (n) => Math.round(n).toLocaleString("en-GB");
+// "slam": arrives big and settles, with a little shake
+const slam = (p) => { const e = back(clamp(p)); return { s: lerp(1.9, 1, e), o: clamp(p * 4) }; };
+
+let D = null, R = null, DUR = 4;
+const SC = {};
+
+/* ── kettle line art: part paths and where each price tag points ── */
+const KETTLE = `
+<svg viewBox="0 0 600 600" width="600" height="600" fill="none" stroke="#eef3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <path class="k" d="M170 170 L430 170 L470 470 L130 470 Z"/>
+  <path class="k" d="M160 470 L440 470 L450 510 L150 510 Z"/>
+  <path class="k" d="M430 220 C520 220 540 380 456 420"/>
+  <path class="k" d="M170 200 L95 150 L80 165 L150 250"/>
+  <path class="k" d="M215 170 C215 130 385 130 385 170"/>
+  <path class="k" d="M280 128 L320 128"/>
+  <path class="k trim" stroke="#ffd27a" stroke-width="9" d="M150 330 L452 330"/>
+  <path class="k coil" stroke="#ff8a5c" d="M200 445 q20 -18 40 0 t40 0 t40 0 t40 0 t40 0"/>
+</svg>`;
+
+SC.cold = {
+  setup() {
+    $s.append(el(`<div class="glow"></div>`), el(`<div class="abs kettle" style="left:420px;top:220px">${KETTLE}</div>`),
+      el(`<div class="abs big price" style="left:1130px;top:420px;font-size:220px;transform-origin:left center">£9.00</div>`),
+      el(`<div class="abs mono sub" style="left:1140px;top:670px;font-size:34px;color:var(--muted);letter-spacing:.1em">TO MAKE · ONE KETTLE</div>`));
+    R = { paths: [...$s.querySelectorAll(".k")], price: $s.querySelector(".price"), sub: $s.querySelector(".sub") };
+    R.paths.forEach((p) => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.dataset.l = L; });
+  },
+  frame(t) {
+    R.paths.forEach((p, i) => { const q = easeInOut(seg(t, .1 + i * .12, 1.3 + i * .12)); p.style.strokeDashoffset = p.dataset.l * (1 - q); });
+    const s = slam(seg(t, 1.6, 2.2));
+    R.price.style.opacity = s.o; R.price.style.transform = `scale(${s.s}) rotate(${(1 - seg(t, 1.6, 2.4)) * -4}deg)`;
+    R.sub.style.opacity = seg(t, 2.3, 2.8);
+  },
+};
+
+SC.tags = {
+  setup() {
+    $s.append(el(`<div class="glow"></div>`), el(`<div class="abs kettle" style="left:660px;top:230px">${KETTLE}</div>`));
+    const T = [["Heating element", "£2.10", 1300, 760, 0], ["Body", "£1.70", 1300, 330, .35], ["Thermostat & switch", "£1.30", 1300, 545, .7], ["Chrome trim & finish", "£1.30", 170, 520, 1.05]];
+    R = { tags: T.map(([n, v, x, y, d]) => { const e = el(`<div class="tag" style="left:${x}px;top:${y}px">${n}<b>${v}</b></div>`); e.dataset.d = d; $s.append(e); return e; }) };
+    R.trim = R.tags[3];
+    R.stamp = el(`<div class="stamp" style="left:150px;top:650px">62p could go</div>`); $s.append(R.stamp);
+    R.svgTrim = $s.querySelector(".trim");
+  },
+  frame(t) {
+    R.tags.forEach((e) => { const p = back(seg(t, +e.dataset.d, +e.dataset.d + .45)); e.style.opacity = clamp(p * 2); e.style.transform = `scale(${lerp(.6, 1, p)})`; });
+    const hot = seg(t, 2.2, 2.6);
+    R.trim.style.borderColor = hot ? `rgba(255,107,53,${hot})` : "";
+    R.trim.style.boxShadow = `0 0 ${60 * hot}px rgba(255,107,53,${.6 * hot})`;
+    R.trim.querySelector("b").style.color = hot > .5 ? "var(--orange)" : "";
+    R.svgTrim.style.stroke = hot > .5 ? "#ff6b35" : "#ffd27a";
+    R.svgTrim.style.filter = `drop-shadow(0 0 ${18 * hot}px #ff6b35)`;
+    const s = slam(seg(t, 2.9, 3.4));
+    R.stamp.style.opacity = s.o; R.stamp.style.transform = `scale(${s.s}) rotate(-6deg)`;
+  },
+};
+
+SC.counter = {
+  setup() {
+    $s.append(el(`<div class="glow"></div>`),
+      el(`<div class="abs mono" style="left:50%;top:300px;transform:translateX(-50%);font-size:40px;letter-spacing:.12em;color:var(--muted)" id="cx">62p × 250,000 KETTLES</div>`),
+      el(`<div class="abs big center" id="cn" style="font-size:250px;top:540px">£0</div>`),
+      el(`<div class="abs mono" id="cy" style="left:50%;top:720px;transform:translateX(-50%);font-size:52px;letter-spacing:.14em;color:var(--orange)">EVERY YEAR</div>`));
+    R = { x: $s.querySelector("#cx"), n: $s.querySelector("#cn"), y: $s.querySelector("#cy") };
+  },
+  frame(t) {
+    R.x.style.opacity = seg(t, 0, .5);
+    const p = easeOut(seg(t, .5, DUR * .62));
+    R.n.textContent = "£" + fmt(155000 * p);
+    R.n.style.transform = `translate(-50%,-50%) scale(${1 + .04 * Math.sin(p * Math.PI)})`;
+    const y = slam(seg(t, DUR * .66, DUR * .66 + .5)); R.y.style.opacity = y.o; R.y.style.transform = `translateX(-50%) scale(${y.s})`;
+  },
+};
+
+SC.twist = {
+  setup() {
+    $s.append(el(`<div class="title-slam" id="a" style="font-size:120px">It's not in the price.</div>`), el(`<div class="title-slam" id="b" style="font-size:132px">It's in the <span style="color:var(--blue)">design.</span></div>`));
+    R = { a: $s.querySelector("#a"), b: $s.querySelector("#b") };
+  },
+  frame(t) {
+    const mid = DUR * .45, g = Math.abs(t - mid) < .18 ? 1 : 0;
+    const ao = t < mid ? seg(t, 0, .3) : 0, bo = t >= mid ? seg(t, mid, mid + .2) : 0;
+    const j = g ? (Math.sin(t * 90) * 18) : 0;
+    R.a.style.opacity = ao; R.b.style.opacity = bo;
+    [R.a, R.b].forEach((e) => { e.style.transform = `translate(calc(-50% + ${j}px),-50%)`; e.style.textShadow = g ? `${-j / 2}px 0 #ff2a6d, ${j / 2}px 0 #2ad1ff` : "none"; });
+  },
+};
+
+SC.method = {
+  setup() {
+    const P = ["Information", "Function", "Creative", "Evaluation", "Development", "Presentation"];
+    P.forEach((n, i) => $s.append(el(`<div class="phase" style="left:${120 + i * 285}px;width:265px"><span class="mono" style="font-size:22px;margin-right:12px;color:var(--blue)">${i + 1}</span>${n}</div>`)));
+    $s.append(el(`<div class="abs mono" style="left:50%;top:330px;transform:translateX(-50%);font-size:36px;letter-spacing:.16em;color:var(--muted)" id="mt">THE SIX-PHASE JOB PLAN</div>`));
+    R = { ph: [...$s.querySelectorAll(".phase")], mt: $s.querySelector("#mt") };
+  },
+  frame(t) {
+    R.mt.style.opacity = seg(t, 0, .4);
+    R.ph.forEach((e, i) => {
+      const p = back(seg(t, .15 + i * .22, .55 + i * .22));
+      e.style.opacity = clamp(p * 2); e.style.transform = `translateY(${(1 - p) * 60}px)`;
+      const on = seg(t, .6 + i * .22, .8 + i * .22);
+      e.style.borderColor = on ? `rgba(77,141,255,${on})` : ""; e.style.color = on > .5 ? "#fff" : "";
+      e.style.background = on > .5 ? "#13224a" : "";
+    });
+  },
+};
+
+/* the montage: a title on a transparent overlay over a course clip (make.js composites it) */
+SC.ttl = {
+  setup(d) { document.documentElement.classList.add("overlay"); $s.append(el(`<div class="ttl">${d.title}</div>`)); R = { t: $s.querySelector(".ttl") }; },
+  frame(t) { const s = slam(seg(t, 0, .35)); R.t.style.opacity = s.o; R.t.style.transform = `scale(${s.s})`; R.t.style.transformOrigin = "left center"; },
+};
+
+/* the exploded SUV, from the Module 10 photographs (positions as in vh-diagrams.js) */
+const ITEMS = [
+  ["biw", 4, [50, 50, 46], [50, 42, 34], [50, 42, 34]], ["bonnet", 1, [43, 44, 12], [10, 14, 13], [7, 13, 14]],
+  ["door-f", 1, [45, 47, 7], [20, 13, 8], [17, 12, 8.5]], ["door-r", 1, [51, 47, 7], [28, 13, 8], [28, 12, 8.5]],
+  ["tailgate", 1, [58, 45, 8], [37, 12, 9.5], [40, 11, 10]], ["dash", 2, [47, 48, 10], [72, 13, 13], [70, 12, 14]],
+  ["seat", 2, [52, 50, 5], [82, 15, 6], [84, 15, 6.5]], ["elec", 3, [54, 52, 8], [91, 35, 11], [92, 36, 12]],
+  ["thermal", 5, [41, 52, 7], [7, 42, 10], [6, 43, 11]], ["steering", 6, [46, 54, 7], [10, 71, 11], [9, 73, 12]],
+  ["engine", 7, [43, 58, 10], [27, 79, 14], [25, 81, 15]], ["chassis", 9, [50, 62, 34], [54, 76, 24], [55, 77, 26]],
+  ["strut", 8, [43, 63, 4.5], [77, 61, 6], [75, 58, 6.5]], ["strut-r", 8, [58, 63, 6], [88, 58, 8.5], [91, 55, 9]],
+  ["wheel", 8, [40, 66, 8], [75, 84, 8], [73, 86, 8.5]], ["wheel2", 8, [62, 66, 8], [86, 85, 8], [89, 87, 8.5]],
+];
+const XLAB = [["Closures", 22, 24.5], ["Interior", 77, 26], ["Body-in-white", 50, 56.5], ["Thermal", 7, 55], ["Electrical", 91, 49], ["Steering", 10, 85], ["Powertrain", 27, 92.5], ["Chassis frame", 54, 89.5], ["Suspension + wheels", 81, 96]];
+SC.tear = {
+  setup(d) {
+    const x = el(`<div class="xp"></div>`);
+    ITEMS.forEach(([n]) => x.append(el(`<div class="xp-i"><img src="../../parts/${n === "wheel2" ? "wheel" : n}.webp" alt="" /></div>`)));
+    XLAB.forEach(([n, a, b]) => x.append(el(`<div class="xp-l" style="left:${a}%;top:${b}%">${n}</div>`)));
+    $s.append(el(`<div class="glow"></div>`), x, el(`<div class="ttl">${d.title}</div>`));
+    R = { items: [...x.querySelectorAll(".xp-i")], labs: [...x.querySelectorAll(".xp-l")], t: $s.querySelector(".ttl") };
+  },
+  frame(t) {
+    const s = slam(seg(t, 0, .35)); R.t.style.opacity = s.o; R.t.style.transform = `scale(${s.s})`; R.t.style.transformOrigin = "left center";
+    R.items.forEach((e, i) => {
+      const [, d, a, s1, s2] = ITEMS[i];
+      const p1 = easeInOut(seg(t, .35 + d * .05, 1.35 + d * .05)), p2 = easeInOut(seg(t, 1.6 + d * .03, 2.4 + d * .03));
+      const v = [0, 1, 2].map((k) => lerp(lerp(a[k], s1[k], p1), s2[k], p2));
+      e.style.left = v[0] + "%"; e.style.top = v[1] + "%"; e.style.width = v[2] + "%";
+      e.style.opacity = n0(i) ? 1 : clamp(p1 * 3 + .35);
+    });
+    R.labs.forEach((e) => { e.style.opacity = seg(t, 2.3, 2.7); });
+  },
+};
+const n0 = (i) => i === 0; // the body shell is always visible
+
+SC.proof = {
+  setup() {
+    const C = [["IBM Proprinter", "152 → 32", "parts, and assembly time down about 90%"], ["US highways", "$1.7bn", "a year in approved savings, 2002–2011"], ["Tesla Model Y", "~70 → 1–2", "pressed and welded parts replaced by one or two castings"]];
+    C.forEach(([a, b, c], i) => $s.append(el(`<div class="card" style="left:${110 + i * 580}px;top:300px"><small>${a}</small><div class="num">${b}</div><p>${c}</p></div>`)));
+    $s.append(el(`<div class="abs mono" style="left:50%;top:190px;transform:translateX(-50%);font-size:30px;letter-spacing:.16em;color:var(--muted)" id="pt">DOCUMENTED RESULTS</div>`));
+    R = { c: [...$s.querySelectorAll(".card")], pt: $s.querySelector("#pt") };
+  },
+  frame(t) {
+    R.pt.style.opacity = seg(t, 0, .4);
+    const gap = Math.min(1.4, DUR / 4.2);
+    R.c.forEach((e, i) => { const s = slam(seg(t, .3 + i * gap, .75 + i * gap)); e.style.opacity = s.o; e.style.transform = `scale(${s.s}) rotate(${(i - 1) * 1.5}deg)`; });
+  },
+};
+
+SC.course = {
+  setup(d) {
+    const S = d.shots || [];
+    S.forEach((src, i) => $s.append(el(`<div class="shot" style="width:560px;left:${90 + i * 590}px;top:330px"><div class="bar"><i></i><i></i><i></i></div><img src="${src}" alt="" /></div>`)));
+    const L = ["13 narrated modules", "Labs, not lectures", "Your own value study"];
+    L.forEach((n, i) => $s.append(el(`<div class="shot-cap" style="left:${90 + i * 590}px;top:250px">${n}</div>`)));
+    $s.prepend(el(`<div class="glow"></div>`));
+    R = { s: [...$s.querySelectorAll(".shot")], l: [...$s.querySelectorAll(".shot-cap")] };
+  },
+  frame(t) {
+    const gap = Math.min(1.6, DUR / 3.6);
+    R.s.forEach((e, i) => { const p = easeOut(seg(t, .1 + i * gap, .8 + i * gap)); e.style.opacity = p; e.style.transform = `translateY(${(1 - p) * 120}px) scale(${lerp(.92, 1, p)})`; });
+    R.l.forEach((e, i) => { const s = slam(seg(t, .5 + i * gap, .9 + i * gap)); e.style.opacity = s.o; e.style.transform = `scale(${s.s})`; });
+  },
+};
+
+SC.cert = {
+  setup(d) {
+    $s.append(el(`<div class="glow"></div>`),
+      el(`<div class="shot" id="cc" style="width:980px;left:140px;top:110px"><img src="${d.cert}" alt="" /></div>`),
+      el(`<div class="card" id="vf" style="left:1260px;top:330px;width:560px"><small>Certificate check</small><div class="chk"><i>✓</i>Valid</div><p>Anyone can check it at valueengineeringhub.com/verify</p></div>`),
+      el(`<div class="abs big" id="fr" style="left:1290px;top:700px;font-size:120px;color:var(--green)">Free.</div>`));
+    R = { c: $s.querySelector("#cc"), v: $s.querySelector("#vf"), f: $s.querySelector("#fr") };
+  },
+  frame(t) {
+    const p = easeOut(seg(t, 0, .7)); R.c.style.opacity = p; R.c.style.transform = `rotate(${lerp(-4, -1.5, p)}deg) scale(${lerp(1.08, 1, p)})`;
+    const v = slam(seg(t, 1.1, 1.5)); R.v.style.opacity = v.o; R.v.style.transform = `scale(${v.s})`;
+    const f = slam(seg(t, DUR * .62, DUR * .62 + .4)); R.f.style.opacity = f.o; R.f.style.transform = `scale(${f.s})`;
+  },
+};
+
+SC.end = {
+  setup(d) {
+    $s.append(el(`<div class="glow"></div>`),
+      el(`<div class="abs big" id="h" style="left:50%;top:400px;transform:translateX(-50%);font-size:110px;text-align:center;width:1700px;line-height:1.05">${d.headline}</div>`),
+      el(`<div class="abs" id="u" style="left:50%;top:690px;transform:translateX(-50%);text-align:center"><div class="big" style="font-size:60px">VAVE<span style="color:var(--blue)">hub</span> · ${d.course}</div><div class="mono" style="margin-top:22px;font-size:36px;color:var(--muted);letter-spacing:.06em">${d.url}</div></div>`));
+    R = { h: $s.querySelector("#h"), u: $s.querySelector("#u") };
+  },
+  frame(t) {
+    const p = easeOut(seg(t, 0, .8)); R.h.style.opacity = p; R.h.style.transform = `translateX(-50%) translateY(${(1 - p) * 40}px)`;
+    R.u.style.opacity = seg(t, .9, 1.5);
+  },
+};
+
+/* ── VAVE for Leaders scenes ── */
+SC.lsave = {
+  setup() {
+    $s.append(el(`<div class="glow"></div>`),
+      el(`<div class="abs big" id="a" style="left:240px;top:170px;font-size:150px">50p</div>`),
+      el(`<div class="abs mono" id="x" style="left:590px;top:225px;font-size:70px;color:var(--muted)">×</div>`),
+      el(`<div class="abs big" id="b" style="left:700px;top:170px;font-size:150px">200,000</div>`),
+      el(`<div class="abs mono" id="e" style="left:240px;top:445px;font-size:90px;color:var(--muted)">=</div>`),
+      el(`<div class="abs big" id="c" style="left:380px;top:390px;font-size:170px;color:var(--green)">£100,000</div>`),
+      el(`<div class="abs mono" id="d" style="left:390px;top:600px;font-size:36px;letter-spacing:.12em;color:var(--muted)">EXTRA PROFIT, EVERY YEAR</div>`));
+    R = ["a", "x", "b", "e", "c", "d"].map((k) => $s.querySelector("#" + k));
+  },
+  frame(t) {
+    const at = [0, .6, .9, 1.6, 2.2, 2.8];
+    R.forEach((e, i) => { const s = slam(seg(t, at[i], at[i] + .4)); e.style.opacity = s.o; e.style.transform = `scale(${s.s})`; e.style.transformOrigin = "left center"; });
+  },
+};
+SC.lsales = {
+  setup() {
+    $s.append(el(`<div class="glow"></div>`),
+      el(`<div class="abs mono" style="left:200px;top:220px;font-size:34px;letter-spacing:.12em;color:var(--muted)" id="h">THE SAME £100,000 OF PROFIT</div>`),
+      el(`<div class="abs" style="left:200px;top:340px;font-size:38px;font-weight:600">From a saving</div>`),
+      el(`<div class="abs" id="b1" style="left:200px;top:400px;height:110px;border-radius:12px;background:var(--green)"></div>`),
+      el(`<div class="abs big" id="v1" style="top:415px;font-size:72px">£100k</div>`),
+      el(`<div class="abs" style="left:200px;top:600px;font-size:38px;font-weight:600">From new sales, at an 8% margin</div>`),
+      el(`<div class="abs" id="b2" style="left:200px;top:660px;height:110px;border-radius:12px;background:linear-gradient(90deg,#24324f 92%,var(--green) 92%)"></div>`),
+      el(`<div class="abs big" id="v2" style="top:675px;font-size:72px">£1.25m</div>`));
+    R = { h: $s.querySelector("#h"), b1: $s.querySelector("#b1"), v1: $s.querySelector("#v1"), b2: $s.querySelector("#b2"), v2: $s.querySelector("#v2") };
+  },
+  frame(t) {
+    R.h.style.opacity = seg(t, 0, .4);
+    const w1 = 1250 * .08 * easeOut(seg(t, .3, 1.1)), w2 = 1250 * easeOut(seg(t, 1.6, DUR * .7));
+    R.b1.style.width = w1 + "px"; R.v1.style.left = 200 + w1 + 30 + "px"; R.v1.style.opacity = seg(t, .6, 1);
+    R.b2.style.width = w2 + "px"; R.v2.style.left = 200 + w2 + 30 + "px"; R.v2.style.opacity = seg(t, DUR * .62, DUR * .7);
+    R.v2.style.color = t > DUR * .7 ? "#fff" : "var(--muted)";
+  },
+};
+SC.lcurve = {
+  setup() {
+    $s.append(el(`<div class="glow"></div>`), el(`<svg class="abs" style="left:260px;top:170px" width="1400" height="700" viewBox="0 0 1400 700" fill="none" stroke-width="8" stroke-linecap="round">
+      <line x1="80" y1="620" x2="1340" y2="620" stroke="rgba(255,255,255,.25)" stroke-width="3"/>
+      <path id="l1" d="M80 615 C240 330 480 210 700 180 S1150 110 1340 100" stroke="#4d8dff"/>
+      <path id="l2" d="M80 618 C520 610 820 560 1000 420 S1260 140 1340 105" stroke="#ff6b35"/>
+      <line id="mk" x1="700" y1="120" x2="700" y2="620" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-dasharray="10 10"/>
+      <circle id="dt" cx="700" cy="180" r="16" fill="#4d8dff" stroke="none"/>
+      <text x="80" y="670" fill="#93a3c4" stroke="none" font-size="34" font-family="IBM Plex Mono">CONCEPT</text>
+      <text x="700" y="670" fill="#93a3c4" stroke="none" font-size="34" font-family="IBM Plex Mono" text-anchor="middle">DESIGN</text>
+      <text x="1340" y="670" fill="#93a3c4" stroke="none" font-size="34" font-family="IBM Plex Mono" text-anchor="end">PRODUCTION</text></svg>`),
+      el(`<div class="abs big" id="n" style="left:1000px;top:90px;font-size:110px">70–80%</div>`),
+      el(`<div class="abs" id="nl" style="left:1005px;top:222px;font-size:34px;color:var(--muted);width:700px">of the cost is committed by the end of design</div>`));
+    R = { l1: $s.querySelector("#l1"), l2: $s.querySelector("#l2"), dt: $s.querySelector("#dt"), mk: $s.querySelector("#mk"), n: $s.querySelector("#n"), nl: $s.querySelector("#nl") };
+    [R.l1, R.l2].forEach((p) => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.dataset.l = L; });
+  },
+  frame(t) {
+    R.l1.style.strokeDashoffset = R.l1.dataset.l * (1 - easeInOut(seg(t, .2, 1.8)));
+    R.l2.style.strokeDashoffset = R.l2.dataset.l * (1 - easeInOut(seg(t, .6, 2.4)));
+    R.mk.style.opacity = R.dt.style.opacity = seg(t, 1.3, 1.6);
+    const s = slam(seg(t, 1.7, 2.1)); R.n.style.opacity = s.o; R.n.style.transform = `scale(${s.s})`; R.nl.style.opacity = seg(t, 2.1, 2.5);
+  },
+};
+SC.lfive = {
+  setup() {
+    const F = ["Sponsor it visibly", "Set targets based on evidence", "Protect the team's time", "Decide quickly", "Track real savings"];
+    $s.append(el(`<div class="glow"></div>`), el(`<div class="abs mono" id="h" style="left:300px;top:170px;font-size:34px;letter-spacing:.14em;color:var(--blue)">FIVE THINGS ONLY LEADERS CAN DO</div>`));
+    F.forEach((f, i) => $s.append(el(`<div class="chk" style="left:300px;top:${270 + i * 118}px"><i>${i + 1}</i>${f}</div>`)));
+    R = { h: $s.querySelector("#h"), c: [...$s.querySelectorAll(".chk")] };
+  },
+  frame(t) {
+    R.h.style.opacity = seg(t, 0, .4);
+    const gap = Math.min(.8, (DUR - 1.4) / 5);
+    R.c.forEach((e, i) => { const p = back(seg(t, .4 + i * gap, .8 + i * gap)); e.style.opacity = clamp(p * 2); e.style.transform = `translateX(${(1 - p) * -80}px)`; });
+  },
+};
+
+window.setup = (id, data, dur, caption) => {
+  $s.innerHTML = ""; document.documentElement.classList.remove("overlay");
+  D = data || {}; DUR = dur || 4;
+  SC[id].setup(D);
+  cap.textContent = caption || "";
+  return document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.complete ? 0 : new Promise((ok) => { i.onload = i.onerror = ok; })))).then(() => true);
+};
+window.frame = (id, t) => {
+  SC[id].frame(t);
+  cap.style.opacity = clamp(seg(t, 0, .25) * (1 - seg(t, DUR - .2, DUR)));
+};
+</script>
+</body>
+</html>

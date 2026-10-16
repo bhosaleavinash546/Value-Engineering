@@ -14,7 +14,7 @@
   const track = (n) => { if (window.vhTrack) window.vhTrack(n); };
   const KEY = "vh-review", PER_DAY = 3;
   const GAPS = [2, 4, 14]; // days to the next review after stages 1–3 (so 1, 3, 7 and 21 days after finishing)
-  const anchor = $("#trRoles");
+  const anchor = $("#trHome .tr-home-inner") || $("#trRoles");
   const POOL = window.VH_PRACTICE || [];
   if (!anchor || !POOL.length) return;
 
@@ -119,7 +119,7 @@
   // ── the panel ──
   const box = document.createElement("section");
   box.id = "vhWeek"; box.className = "vh-week"; box.setAttribute("aria-labelledby", "vhWeekTitle");
-  anchor.insertAdjacentElement("afterend", box);
+  if (anchor.id === "trRoles") anchor.insertAdjacentElement("afterend", box); else anchor.appendChild(box);
 
   function render() {
     const rv = load(), was = JSON.stringify(rv.day || null), seeded = seed(rv);
@@ -127,6 +127,7 @@
     if (seeded || JSON.stringify(rv.day) !== was) store(rv); // only save (and sync) when something changed
     const left = set.keys.filter((k) => !set.done.includes(k)).length;
     const w = week(rv), nd = nextDue(rv), anyDone = (academy().done || []).length > 0;
+    box.hidden = !anyDone; // "Your week" starts once a module is finished; before that it has nothing to show
     let rev;
     if (!anyDone) rev = `<p>Finish a module and its questions come back for a quick review 1, 3, 7 and 21 days later. Short, spaced reviews are what make it stick.</p>`;
     else if (left) rev = `<p><b>${left} question${left > 1 ? "s" : ""} due today</b>, from ${set.from.length ? set.from.map((m) => esc(modTitle(m))).join(", ") : "questions you missed"}. About ${left} minute${left > 1 ? "s" : ""}.</p>

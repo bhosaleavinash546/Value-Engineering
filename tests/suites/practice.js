@@ -116,7 +116,7 @@ module.exports = async function practice({ browser, O, r }) {
     const p = await ctx.newPage(); p.on("pageerror", (e) => errs.push(e.message));
     await p.clock.install({ time: new Date("2026-10-15T09:00:00") });
     await p.goto(U); await p.waitForTimeout(600);
-    r.ok(/Finish a module and its questions come back/.test(await p.textContent("#vhWeek")), "review: explained before any module is finished");
+    r.ok(await p.$eval("#vhWeek", (b) => b.hidden), "Your week stays out of the way until a module is finished");
     const at = (s) => new Date(s).toISOString();
     await p.evaluate((x) => localStorage.setItem("vf-academy", JSON.stringify({ done: ["m1", "m2", "m4"], doneAt: { m1: x[0], m2: x[1], m4: x[2] } })),
       [at("2026-10-08T10:00"), at("2026-10-12T10:00"), at("2026-10-14T10:00")]);

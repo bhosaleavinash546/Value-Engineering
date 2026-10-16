@@ -616,6 +616,18 @@ def templates_box(i):
         rows.append(f'<li><b>{html.escape(title)}</b><span>{links}</span></li>')
     return f'<div class="tmpl-box"><h4>Templates for this module</h4><ul>{"".join(rows)}</ul></div>\n\n      '
 
+def updated_date():
+    """The "Updated" date on the course pages: the newest entry on the What's new page, so it moves
+    whenever something ships and the build stays repeatable (no clock involved)."""
+    import datetime
+    m = re.search(r"<time>(\d{1,2} \w+ \d{4})</time>", open(os.path.join(ROOT, "changelog.html"), encoding="utf-8").read())
+    d = datetime.datetime.strptime(m.group(1), "%d %B %Y")
+    return m.group(1), d.strftime("%Y-%m-%d")
+
+def course_page(parts):
+    text, iso = updated_date()
+    return "".join(parts).replace("{{UPDATED_ISO}}", iso).replace("{{UPDATED}}", text)
+
 def build_academy():
     """training.html = src/academy/_head.html + m1..m13.html + _tail.html (exam, certificate, scripts).
     Edit the module files, not training.html. The narration workflow reads the built page, so any
@@ -627,14 +639,14 @@ def build_academy():
         if src.count(anchor) != 1: sys.exit(f"m{i}.html: expected one quick-check block")
         mods.append(src.replace(anchor, templates_box(i) + anchor))
     parts = [read("academy", "_head.html")] + mods + [read("academy", "_tail.html")]
-    write("training.html", "".join(parts))
+    write("training.html", course_page(parts))
     print("training.html  13 modules")
 
 def build_leaders():
     """leaders.html (VAVE for Leaders, the 1-hour crash course) = src/leaders/_head.html + l0..l6.html + _tail.html.
     Same rule as the Academy: edit the source files, and regenerate narration for any module whose text changes."""
     parts = [read("leaders", "_head.html")] + [read("leaders", f"l{i}.html") for i in range(7)] + [read("leaders", "_tail.html")]
-    write("leaders.html", "".join(parts))
+    write("leaders.html", course_page(parts))
     print("leaders.html   7 modules")
 
 if __name__ == "__main__":

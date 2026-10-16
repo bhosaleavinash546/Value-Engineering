@@ -131,6 +131,8 @@ window.VHCloud = (function () {
       return cert;
     },
   };
+  const demoQuotes = () => { try { return JSON.parse(localStorage.getItem("vh-demo-quotes")) || []; } catch (e) { return []; } };
+  const demoQuotesSave = (q) => { try { localStorage.setItem("vh-demo-quotes", JSON.stringify(q)); } catch (e) {} };
   async function rpc(fn, args) {
     await ready;
     if (!client) return { error: "offline" };
@@ -276,5 +278,18 @@ window.VHCloud = (function () {
     examStart: (course) => (LIVE ? rpc("start_exam", { p_course: course }) : demo.start(course)),
     examSubmit: (attempt, answers) => (LIVE ? rpc("submit_exam", { p_attempt: attempt, p_answers: answers.map((a) => (a == null ? null : a)) }) : demo.submit(attempt, answers)),
     examIssue: (attempt, name) => (LIVE ? rpc("issue_certificate", { p_attempt: attempt, p_name: name }) : demo.issue(attempt, name)),
+
+    // ── verified learner quotes (supabase-testimonials.sql); demo mode keeps them in this browser ──
+    quoteSubmit: (course, certId, quote, name, role) => (LIVE
+      ? rpc("submit_testimonial", { p_course: course, p_cert: certId, p_quote: quote, p_name: name, p_role: role || "", p_consent: true })
+      : (() => { const q = demoQuotes(); const i = q.findIndex((x) => x.course === course); const row = { id: "d" + Date.now(), course, cert_id: certId, quote, display_name: name, role: role || null, consent: true, approved: false, created_at: new Date().toISOString() }; if (i >= 0) { if (q[i].approved) return { error: "already approved" }; q[i] = row; } else q.push(row); demoQuotesSave(q); return "ok"; })()),
+    async quotes(course) {
+      if (!LIVE) return demoQuotes().filter((x) => x.approved && x.course === course);
+      await ready; if (!client) return [];
+      try { const r = await client.rpc("approved_testimonials", { p_course: course }); return r.error ? [] : (r.data || []); } catch (e) { return []; }
+    },
+    adminQuotes: () => (LIVE ? rpc("admin_testimonials", {}) : demoQuotes()),
+    adminSetQuote: (id, approved, del) => (LIVE ? rpc("admin_set_testimonial", { p_id: id, p_approved: !!approved, p_delete: !!del })
+      : (() => { let q = demoQuotes(); q = del ? q.filter((x) => x.id !== id) : q.map((x) => (x.id === id ? Object.assign(x, { approved: !!approved }) : x)); demoQuotesSave(q); return "ok"; })()),
   };
 })();

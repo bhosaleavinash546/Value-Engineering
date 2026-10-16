@@ -196,6 +196,7 @@
   });
 
   function show(id, scroll, focus) {
+    if (window.vhTrack && focus) vhTrack("academy-open/" + id); // which modules people choose to open
     if (focus) setUrl(id); // only when the learner chose the module, so a plain reload still resumes where they are
     if (gated(id) && !acctName) { renderGate(id, scroll); return; }
     currentId = id;
@@ -262,7 +263,7 @@
       const id = l.dataset.target;
       l.classList.toggle("is-done", id === "exam" ? !!(state.exam && state.exam.passed) : state.done.includes(id));
     });
-    if (acctName) renderMyLearn();
+    renderMyLearn();
   }
 
   /* ── Role-based learning paths ── */
@@ -306,30 +307,40 @@
   }));
 
   $("#startBtn").addEventListener("click", () => {
+    if (window.vhTrack) vhTrack("academy/start-click");
     const firstUnread = courseMods.find((m) => !state.done.includes(m.dataset.mod));
     show(firstUnread ? firstUnread.dataset.mod : "exam");
   });
 
   /* ── Signed-in state: My Learning banner + cert name prefill ── */
+  // Anyone signed in, or with progress in this browser, gets the learner home at the top of the
+  // page instead of the course introduction (which stays one click away, "About this course").
   function renderMyLearn() {
-    if (!acctName) return;
+    const learner = !!acctName || state.done.length > 0;
+    // switching views changes the height above the lesson: keep the lesson where the reader sees it
+    const ref = $("#trLayout"), before = ref ? ref.getBoundingClientRect().top : 0, moved = learner !== document.body.classList.contains("is-learner");
+    document.body.classList.toggle("is-learner", learner);
+    const home = $("#trHome");
+    if (home) home.hidden = !learner;
+    if (moved && ref && window.scrollY > 0) window.scrollBy(0, ref.getBoundingClientRect().top - before);
     let box = $("#myLearn");
+    if (!learner) { if (box) box.remove(); return; }
     if (!box) {
       box = document.createElement("div");
       box.id = "myLearn"; box.className = "my-learn";
-      const anchor = $("#trRoles");
-      anchor.parentNode.insertBefore(box, anchor);
+      const anchor = $("#trHome .tr-home-inner");
+      if (anchor) anchor.appendChild(box); else { const r = $("#trRoles"); r.parentNode.insertBefore(box, r); }
     }
     const total = courseMods.length, done = state.done.length;
     const pct = Math.round((done / total) * 100);
     const next = courseMods.find((m) => !state.done.includes(m.dataset.mod));
     const goal = window.VHWeek ? VHWeek.summary() : "";
     const certified = state.exam && state.exam.passed;
-    const first = acctName.trim().split(/\s+/)[0].replace(/[<>&"]/g, "");
+    const first = acctName ? acctName.trim().split(/\s+/)[0].replace(/[<>&"]/g, "") : "";
     box.innerHTML = `
       <div class="ml-ring"><svg viewBox="0 0 60 60"><circle class="mlr-bg" cx="30" cy="30" r="26"/><circle class="mlr-fg" cx="30" cy="30" r="26" style="stroke-dashoffset:${Math.round(163.4 * (1 - pct / 100))}"/></svg><b>${pct}%</b></div>
       <div class="ml-txt">
-        <b>Welcome back, ${first} 👋</b>
+        <b>Welcome back${first ? ", " + first : ""} 👋</b>
         <span>${done} of ${total} modules · ${points()} pts · ${rank(points())}${goal ? " · " + goal : ""}${certified ? " · 🎓 Certified" : ""}</span>
       </div>
       <button class="btn btn-primary ml-btn" id="mlGo">${certified ? "View your certificate →" : next ? (done ? "Continue: " + next.dataset.title + " →" : "Start learning →") : "Take the exam →"}</button>`;
@@ -341,7 +352,7 @@
       const ss = $("#sideSync"); if (ss) ss.remove();
     } else {
       acctName = "";
-      const ml = $("#myLearn"); if (ml) ml.remove();
+      renderMyLearn();
       const foot = $(".tr-side-foot");
       if (foot && !$("#sideSync")) {
         const n = document.createElement("p");

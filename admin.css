@@ -220,3 +220,13 @@ dialog.detail::backdrop { background: rgba(0, 0, 0, .55); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 @media (forced-colors: active) { .hb-bar, .bar, .stk b, .meter i { forced-color-adjust: none; } }
+.card .note{margin:.9rem 0 0;font-size:.8rem;line-height:1.5;color:var(--muted)}
+.card .note{overflow-wrap:anywhere}
+.qlist{display:grid;gap:.8rem}
+.qitem{padding:.8rem 1rem;border:1px solid var(--line);border-radius:12px}
+.qitem.is-on{border-color:color-mix(in srgb,#3fbf7f 60%,var(--line))}
+.qitem blockquote{margin:0 0 .4rem;font-size:.92rem;line-height:1.5}
+.qmeta{margin:0 0 .6rem;font-size:.78rem;color:var(--muted);overflow-wrap:anywhere}
+.qacts{display:flex;gap:.5rem}
+.btn-sm{border:1px solid var(--line);background:none;color:inherit;font:600 .8rem inherit;padding:.4rem .8rem;border-radius:999px;cursor:pointer;min-height:36px}
+.btn-sm.btn-ok{background:#2e6fe8;border-color:#2e6fe8;color:#fff}

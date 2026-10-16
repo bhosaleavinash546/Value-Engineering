@@ -18,6 +18,7 @@ module.exports = async function leaders({ browser, O, r, ROOT }) {
   await p.goto(U); await p.waitForTimeout(900);
   r.ok((await p.$$("#modNav .mod-link")).length === 8, "sidebar lists 7 modules + the quiz");
   r.ok((await p.$$(".cat-card")).length === 8, "course-at-a-glance lists 7 modules + the quiz");
+  await p.click("#catWrap summary"); await p.waitForTimeout(200); // the module list starts folded
   await p.click(".cat-card[data-open=l4]"); await p.waitForTimeout(300);
   r.ok(!!(await p.$('section[data-mod="l4"].is-visible')), "any module opens without an account");
   r.ok(await p.$eval('.tmod-done[data-done="l4"]', (b) => b.disabled), "'Mark complete' waits for the quick check");

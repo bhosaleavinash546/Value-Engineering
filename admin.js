@@ -373,6 +373,28 @@
     const cFunnel = card("funnel", "Course progress", "How far this period's learners have got: completed each module",
       () => (sl.fresh.length ? hbars(funnel) : h("p", { class: "empty" }, "No sign-ups in this period.")), { cols: ["Stage", "Learners"], rows: funnel.map((r) => [r.label, r.text]) });
 
+    // the learner journey: each step as a share of the step before, so the biggest drop stands out
+    const half = Math.ceil(MODS.length / 2);
+    const steps = [
+      ["Signed up", sl.fresh.length],
+      ["Finished Module 1", sl.fresh.filter((u) => u.done.includes(MODS[0])).length],
+      ["Finished Module 2", sl.fresh.filter((u) => u.done.includes(MODS[1])).length],
+      [`Halfway (${half} modules)`, sl.fresh.filter((u) => u.done.length >= half).length],
+      [`All ${MODS.length} modules`, sl.fresh.filter((u) => u.done.length >= MODS.length).length],
+      ["Passed the exam", sl.fresh.filter((u) => u.passed).length],
+    ];
+    const jRows = steps.map(([label, v], i) => {
+      const prev = i ? steps[i - 1][1] : v;
+      return { label, v, text: `${fmtN(v)}` + (i ? ` · ${pct(v, prev)}%` : ""), tip: `${label}: ${fmtN(v)}` + (i ? `, ${pct(v, prev)}% of the step before` : "") };
+    });
+    const gc = (window.VF_CONFIG || {}).goatcounterCode;
+    const cJourney = card("journey", "Learner journey", "From sign-up to certificate, for learners who signed up in this period. The % is the share kept from the step before.",
+      () => (sl.fresh.length ? h("div", {}, hbars(jRows),
+        h("p", { class: "note" }, "Before sign-up (visits, the 60-second try-it, the sign-up step) is counted in GoatCounter: ",
+          gc ? h("a", { href: `https://${gc}.goatcounter.com`, target: "_blank", rel: "noopener" }, "open GoatCounter") : "not set up",
+          ". Look for academy/view-visitor, academy/tryit-answered, academy/tryit-start, academy/start-click and academy-signup-gate (and the same for leaders/).")) : h("p", { class: "empty" }, "No sign-ups in this period.")),
+      { cols: ["Step", "Learners"], rows: jRows.map((r) => [r.label, r.text]) });
+
     const srcRows = top(tally(sl.fresh, (u) => u.source || "Not recorded yet"), 8).map(([k, v]) => ({ label: k === "direct" ? "Typed the address / bookmark" : k, v, text: `${fmtN(v)} · ${pct(v, sl.fresh.length)}%` }));
     const cSrc = card("source", "How they found VAVEhub", "The website that first sent each learner here",
       () => hbars(srcRows), { cols: ["Source", "Learners"], rows: srcRows.map((r) => [r.label, r.text]) });
@@ -445,12 +467,36 @@
         st.live ? h("a", { href: "admin.html" }, "Show real data") : "Real data appears once Supabase is connected.") : null,
       h("h1", { class: "sr-only" }, "Owner dashboard"),
       filters, kpi1, kpi2,
-      h("div", { class: "grid" }, cSign, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead, questionsCard()),
+      h("div", { class: "grid" }, cSign, cJourney, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead, quotesCard(), questionsCard()),
       usersCard(sl),
       h("p", { class: "foot-note" }, "Countries are estimated from each learner's time zone (or their browser language if the time zone is missing). Details are recorded when a learner next opens the Academy, so people who haven't been back since this dashboard launched show as \"Unknown\" or \"Not recorded yet\"."));
   }
 
   /* ── exam questions that learners find hardest (all time, not filtered by period) ── */
+  /* ── learner quotes: approve before anything appears on the course pages ── */
+  function quotesCard() {
+    if (!Array.isArray(st.quotes)) return null;
+    const list = st.quotes.slice().sort((a, b) => (a.approved - b.approved) || (a.created_at < b.created_at ? 1 : -1));
+    const act = async (q, approved, del) => {
+      if (del && !confirm("Delete this quote for good?")) return;
+      if (st.sample) { if (del) st.quotes = st.quotes.filter((x) => x.id !== q.id); else q.approved = approved; render(); return; }
+      const r = await client.rpc("admin_set_testimonial", { p_id: q.id, p_approved: approved, p_delete: !!del });
+      if (r.error) { alert("That didn't save: " + r.error.message); return; }
+      if (del) st.quotes = st.quotes.filter((x) => x.id !== q.id); else q.approved = approved;
+      render();
+    };
+    const pending = list.filter((q) => !q.approved).length;
+    return card("quotes", "Learner quotes", `What learners wrote after passing, with their consent. Nothing appears on the course pages until you approve it. ${pending ? pending + " waiting." : "None waiting."}`,
+      () => (list.length ? h("div", { class: "qlist" }, list.map((q) => h("div", { class: "qitem" + (q.approved ? " is-on" : "") },
+        h("blockquote", {}, "“" + q.quote + "”"),
+        h("p", { class: "qmeta" }, `${q.display_name}${q.role ? ", " + q.role : ""} · ${q.course === "leaders" ? "VAVE for Leaders" : "VE Academy"} · certificate ${q.cert_id} · ${q.approved ? "shown on the course page" : "waiting"}`),
+        h("div", { class: "qacts" },
+          q.approved ? h("button", { type: "button", class: "btn-sm", onclick: () => act(q, false) }, "Hide") : h("button", { type: "button", class: "btn-sm btn-ok", onclick: () => act(q, true) }, "Approve"),
+          h("button", { type: "button", class: "btn-sm", onclick: () => act(q, false, true) }, "Delete")))))
+        : h("p", { class: "empty" }, "No quotes yet. Learners are asked for one after they pass.")),
+      null, { wide: true });
+  }
+
   function questionsCard() {
     if (!Array.isArray(st.qstats)) return null;
     const MIN = 20;
@@ -580,12 +626,17 @@
         { course: "academy", module: "m13", q: "Sample: allowable cost from a shop price including VAT…", attempts: 58, pct_right: 47, common_wrong: "£15,000" },
         { course: "leaders", module: "l4", q: "Sample: what a six-month delay costs…", attempts: 31, pct_right: 52, common_wrong: "£15,000" },
       ];
+      st.quotes = [
+        { id: "s1", course: "academy", cert_id: "VH-SAMPLE1", quote: "Sample: clear, practical, and the should-cost module paid for itself in my first supplier meeting.", display_name: "Sample learner", role: "Buyer", approved: false, created_at: new Date().toISOString() },
+      ];
       return sample();
     }
     const { data, error } = await client.rpc("admin_dashboard");
     if (error) throw error;
     // how each exam question performs (needs supabase-exam.sql; missing function = no card)
     try { const qs = await client.rpc("admin_question_stats"); st.qstats = qs.error ? null : qs.data; } catch (e) { st.qstats = null; }
+    // learner quotes waiting for approval (needs supabase-testimonials.sql; missing function = no card)
+    try { const tq = await client.rpc("admin_testimonials"); st.quotes = tq.error ? null : tq.data; } catch (e) { st.quotes = null; }
     return data;
   }
   async function load(first) {

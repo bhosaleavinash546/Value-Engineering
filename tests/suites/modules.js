@@ -39,6 +39,7 @@ module.exports = async function modules({ browser, O, r, ROOT }) {
       const ids = await p.$$eval(".cat-card[data-open]", (els) => els.map((e) => e.dataset.open).filter((id) => /^[ml]\d+$/.test(id)));
       for (const id of ids) {
         await p.goto(`${O}/${pg}`); await p.waitForTimeout(400);
+        await p.evaluate(() => { document.getElementById("catWrap").open = true; }); // the module list starts folded
         await p.click(`.cat-card[data-open="${id}"]`); await p.waitForTimeout(400);
         // scroll through so diagrams that reveal on scroll are checked as people see them
         await p.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 450) { scrollTo(0, y); await new Promise((ok) => setTimeout(ok, 25)); } });

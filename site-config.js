@@ -36,6 +36,13 @@ window.VF_CONFIG = {
         repo, install the giscus app (github.com/apps/giscus), then copy
         the four values from giscus.app. Until set, the discussion panel
         stays hidden. */
+  /* 7) SWITCHES for Batch 6 features that need something done first.
+        quotes: true once supabase-testimonials.sql has been run (the box that asks
+        learners for a quote, and the approved quotes on the course pages).
+        trailers: true once videos/trailer-*.mp4 have been made and checked. */
+  quotes: false,
+  trailers: false,
+
   giscusRepo: "",
   giscusRepoId: "",
   giscusCategory: "",
