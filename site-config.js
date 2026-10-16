@@ -40,7 +40,7 @@ window.VF_CONFIG = {
         quotes: true once supabase-testimonials.sql has been run (the box that asks
         learners for a quote, and the approved quotes on the course pages).
         trailers: true once videos/trailer-*.mp4 have been made and checked. */
-  quotes: false,
+  quotes: true,
   trailers: true,
 
   giscusRepo: "",
