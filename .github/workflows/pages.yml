@@ -18,6 +18,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50 # enough history to see which pages changed, for IndexNow
       - uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -26,3 +28,9 @@ jobs:
           path: .
       - id: deployment
         uses: actions/deploy-pages@v4
+      # Tell Bing and the other IndexNow search engines which pages changed. A failure here never fails the deploy.
+      - name: Notify IndexNow
+        continue-on-error: true
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: python3 tools/indexnow.py ${{ github.event_name == 'workflow_dispatch' && '--all' || '' }}
