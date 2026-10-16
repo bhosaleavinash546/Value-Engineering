@@ -152,5 +152,13 @@ module.exports = async function guides({ browser, O, r }) {
   r.ok((await p.evaluate(() => document.querySelector(".mod-link.is-active")?.dataset.target)) === "m4", "module page 'Start' button opens that module in the Academy");
   await p.close(); }
 
+  // ── Search engine ownership files must stay on the site, or Google/Bing lose access
+  { const p = await browser.newPage();
+  for (const f of ["googlefa3e3bc48c151077.html"]) {
+    const res = await p.request.get(`${O}/${f}`);
+    r.ok(res.status() === 200 && (await res.text()).includes("google-site-verification: " + f), `search engine ownership file ${f} is published`);
+  }
+  await p.close(); }
+
   r.ok(!errs.length, `no script errors${errs.length ? ": " + errs.slice(0, 3).join(" | ") : ""}`);
 };
