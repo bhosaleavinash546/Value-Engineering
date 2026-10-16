@@ -51,7 +51,7 @@
       what it does and roughly what it costs, then watch the method find where the value is. It brings together everything
       in the course, from function analysis to the business case.</p>
       <p class="cs-note">The VH-3600 is a made-up model, built on the usual design of a 3LCD classroom projector. Costs are
-      should-cost estimates built from real volume prices, shown as ranges, with the assumptions and sources at the end of the page.</p>
+      taken from a detailed should-cost report for a comparable 3,600-lumen XGA 3LCD projector, with the sources at the end of section B.</p>
     </div>
     <aside class="cs-spec" aria-labelledby="specTitle">
       <p class="cs-spec-k" id="specTitle">VH-3600 at a glance</p>
@@ -61,16 +61,22 @@
 
   <nav class="cs-chapters" aria-label="Chapters">
     <ol>
-      <li><a href="#product"><span>A</span>Meet the product</a></li>
+      <li><a href="#product"><span>A</span>The product</a></li>
       <li><a href="#bom"><span>B</span>Bill of materials</a></li>
-      <li class="is-soon"><span>1–6</span>The six phases (coming next)</li>
+      <li><a href="#p1"><span>1</span>Information</a></li>
+      <li><a href="#p2"><span>2</span>Function analysis</a></li>
+      <li><a href="#p3"><span>3</span>Creative</a></li>
+      <li><a href="#p4"><span>4</span>Evaluation</a></li>
+      <li><a href="#p5"><span>5</span>Development</a></li>
+      <li><a href="#p6"><span>6</span>Presentation</a></li>
+      <li><a href="#learnt"><span>✓</span>What we learnt</a></li>
     </ol>
   </nav>
 
   <section class="cs-sec" id="product" aria-labelledby="prodTitle">
     <p class="cs-sec-k">A · Meet the product</p>
     <h2 id="prodTitle">Take it apart in 3D</h2>
-    <p class="cs-sec-lede">Turn the projector round, explode it to see all 44 kinds of parts, or follow the light from the lamp to
+    <p class="cs-sec-lede">Turn the projector round, explode it to see all 49 kinds of parts, or follow the light from the lamp to
     the screen. Click any part for its name, its job and its estimated cost. The numbers match the bill of materials below.</p>
 
     <div class="pj" id="pjViewer">
@@ -112,59 +118,251 @@
     <p class="cs-sec-k">B · Bill of materials</p>
     <h2 id="bomTitle">Every part, what it does and what it costs</h2>
     <p class="cs-sec-lede">The bill of materials is where every value study starts: you can't judge value until you know what's
-    there and what it costs. Each line gives the part's main function as a verb and a noun, ready for function analysis.</p>
+    there and what it costs. The costs come from a detailed should-cost report for a comparable projector. Each report line
+    is shown at the report's cost, with the parts it pays for underneath, and each part has its main function as a verb and a noun.</p>
     <div class="cs-kpis" id="pjKpis"></div>
 
     <div class="cs-two">
       <div class="cs-panel">
         <h3>Where the cost sits</h3>
-        <p class="cs-small">Sub-assemblies by estimated cost, largest first. The top four carry most of the cost, so that's where a study looks first.</p>
+        <p class="cs-small">The ten most expensive lines, largest first. Panels, lamp, lens and the video chips carry half the parts cost, so that's where a study looks first.</p>
         <ol class="cs-pareto" id="pjPareto"></ol>
       </div>
       <div class="cs-panel">
-        <h3>How the estimates were made</h3>
+        <h3>From parts to a landed projector</h3>
+        <div id="pjChain"></div>
+      </div>
+    </div>
+
+    <div class="cs-two">
+      <div class="cs-panel cs-price">
+        <h3>Where the £425 goes</h3>
+        <div id="pjPrice"></div>
+      </div>
+      <div class="cs-panel">
+        <h3>Where the costs come from</h3>
         <ul class="cs-list">
-          <li><b>What a large maker would pay</b> buying parts on the open market: 2025/26 prices, about 500,000 projectors a year, assembled in the Philippines or China, at £1 = $1.30.</li>
-          <li><b>Built from volume prices,</b> not shop prices: wholesale listings at volume tiers (lamps, prisms, filters, fans, boards, cords), a prism and lens maker's accounts (about $1 per optical part), resin prices and Asian labour rates.</li>
-          <li><b>Spare parts aren't used.</b> A replacement lamp or panel sells for 5–10 times what the factory pays.</li>
-          <li><b>Least certain:</b> the LCD panels and the zoom lens. No volume price is published, so they're modelled from wafer and glass costs. A maker that builds its own panels pays less again.</li>
-          <li><b>Checked from the top down:</b> similar projectors sell for about £375 ex VAT, and a complete Chinese 3LCD projector sells ex-factory for about £250–280 with the assembler's margin in it.</li>
+          <li><b>A should-cost report</b> for a comparable 3,600-lumen XGA 3LCD projector: 200,000 a year, built by a tier-1 contract manufacturer in Shenzhen, costed in pounds.</li>
+          <li><b>Every report line is kept at its cost.</b> Where one line covers several parts, such as the integrator optics, VAVEhub splits it between them; the split always adds back up to the report's figure.</li>
+          <li><b>Five small parts</b> the report doesn't list (thermistors, interlock switch, front bezel, rear feet, manual pack) are added and marked. Together they come to £1.20.</li>
+          <li><b>Panels are at a transfer price.</b> Where a maker builds its own panels, the report prices them as if bought at arm's length, including the fab's running costs.</li>
         </ul>
         <button type="button" class="btn btn-primary cs-dl" id="pjCsv">Download the bill of materials (CSV)</button>
       </div>
     </div>
 
-    <div class="cs-panel cs-price">
-      <h3>Where the £450 goes</h3>
-      <div id="pjPrice"></div>
-    </div>
-
     <div class="cs-tablewrap" tabindex="0" role="region" aria-label="Bill of materials table">
       <table class="cs-bom" id="pjBom">
-        <caption>VH-3600 bill of materials, estimated costs in pounds</caption>
-        <thead><tr><th scope="col">Item</th><th scope="col">Part</th><th scope="col">Function</th><th scope="col">Qty</th><th scope="col">Material / process</th><th scope="col">Unit cost</th><th scope="col">Line cost</th></tr></thead>
+        <caption>VH-3600 bill of materials in pounds: report lines, and the parts each one pays for</caption>
+        <thead><tr><th scope="col">Line / item</th><th scope="col">Description</th><th scope="col">Function</th><th scope="col">Qty</th><th scope="col">Unit cost</th><th scope="col">Cost</th></tr></thead>
         <tbody></tbody>
         <tfoot></tfoot>
       </table>
     </div>
 
     <details class="cs-sources">
-      <summary>Sources and price signals</summary>
+      <summary>Sources</summary>
       <ul id="pjSources"></ul>
-      <p class="cs-small">Listings and shop prices change. Volume listings still carry a trader's margin, so a large maker usually pays 20–50% less than the listed price; the ranges allow for that.</p>
+      <p class="cs-small">The cross-checks are independent volume prices that sit close to the report's figures.</p>
     </details>
   </section>
 
-  <section class="cs-sec cs-soon">
-    <p class="cs-sec-k">Coming next</p>
-    <h2>The six phases</h2>
-    <p class="cs-sec-lede">Information, function analysis and FAST, creative ideas, evaluation, development and the business case,
-    and the decision meeting. Each phase gets its own section and a narrated video.</p>
+  <section class="cs-sec st-phase" id="p1" aria-labelledby="p1T">
+    <p class="cs-sec-k"><span class="st-n">1</span>Phase 1 · Information</p>
+    <h2 id="p1T">Get the facts before the ideas</h2>
+    <p class="cs-sec-lede">A study starts with facts, not ideas. The team agrees the brief, gathers the costs, the factory data and the
+    volumes, checks them, and finds out what customers really value. Skip this and the workshop ends up arguing about opinions.</p>
+    <ol class="st-jp" aria-label="The job plan">
+      <li><b>Before</b>Prepare</li><li class="on"><b>1</b>Information</li><li><b>2</b>Function analysis</li><li><b>3</b>Creative</li>
+      <li><b>4</b>Evaluation</li><li><b>5</b>Development</li><li><b>6</b>Presentation</li><li><b>After</b>Implement and track</li>
+    </ol>
+    <div class="cs-two">
+      <div class="cs-panel">
+        <h3>Before the workshop</h3>
+        <ul class="cs-list">
+          <li><b>Pick the project.</b> The VH-3600 is the highest-volume model and its cost is under pressure from cheaper rivals.</li>
+          <li><b>Name a sponsor and a team:</b> the product director as sponsor; optics, electronics and mechanical engineers, purchasing, the factory, quality, service, product marketing and finance, with a facilitator.</li>
+          <li><b>Set the scope:</b> the whole projector, its packaging and the factory process, up to delivery in the UK. The brand owner's own overheads and the sales channel are out of scope.</li>
+          <li><b>Ask for data in advance:</b> a should-cost report with a teardown, the factory audit, tooling, volumes, warranty data and customer interviews.</li>
+        </ul>
+      </div>
+      <div class="cs-panel">
+        <h3>The brief</h3>
+        <dl class="st-brief">
+          <div><dt>Product</dt><dd>VH-3600 classroom projector, 200,000 a year, made by a contract manufacturer in Shenzhen</dd></div>
+          <div><dt>Goal</dt><dd>Take at least 10% (£14.27) off the landed cost of £142.70, with no loss of brightness (3,600 lumens white <i>and</i> colour), picture, reliability or safety, at the same £425 price</dd></div>
+          <div><dt>And</dt><dd>Lower what it costs a school to own one</dd></div>
+          <div><dt>Decision</dt><dd>The sponsor decides in week 6</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="cs-panel">
+      <h3>The facts gathered</h3>
+      <ul class="cs-list st-facts">
+        <li><b>Where the cost sits</b> (section B): the optical engine is £55.20, 53% of the parts. Electronics £30.10, case and cooling £12.80, packing and accessories £5.90. Making it adds £27.60 and getting it to the UK £9.90.</li>
+        <li><b>The market:</b> £425 in the shops (£354.17 ex VAT). After the £141.50 landed cost, the brand owner and the shops share about 60% of the ex-VAT price.</li>
+        <li><b>The factory:</b> 42 people and 85 minutes of work a projector, most of it waiting in burn-in. The panel alignment rig is the most expensive step.</li>
+        <li><b>The customer:</b> interviews with IT managers and teachers, sorted with the Kano model below.</li>
+      </ul>
+    </div>
+    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Factory process"><div id="stProcess"></div></div>
+    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Tooling"><div id="stTooling"></div></div>
+    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Volume sensitivity"><div id="stSens"></div></div>
+    <div class="cs-panel st-checks">
+      <h3>Checking the data</h3>
+      <p class="cs-small">Even a good report needs checking before a team builds on it. Every total in it adds up, and every wave and saving in the roll-up matches its ideas. Five things didn't, and the team noted them before going on:</p>
+      <ol class="cs-list">
+        <li><b>Tooling:</b> the report amortises £880k, but the tools it lists come to £715k. The other £165k (perhaps fixtures and alignment rigs) isn't itemised.</li>
+        <li><b>The factory margin</b> is described as 8% of £122.20, which would be £9.78. The report uses £9.40, which is 7.7%. The team keeps £9.40.</li>
+        <li><b>VAVE-10</b> is headed £1.55 a projector, but the roll-up counts £1.85, including £0.30 of freight. The team uses £1.85, as the roll-up does.</li>
+        <li><b>Panel alignment</b> is £3.10 in the text and the DLP comparison, but £2.00 in the factory table. The table is used for the process; the comparison is left as the report has it.</li>
+        <li><b>Parts the report doesn't list:</b> its idea VAVE-19 saves 28p on printed manuals that aren't in its bill of materials. That and four other small parts are added as lines X1–X5 (£1.20), which is why the landed cost here is £142.70, not £141.50.</li>
+      </ol>
+    </div>
+    <div class="cs-panel st-kano">
+      <h3>What schools value (Kano)</h3>
+      <div class="kano-grid">
+        <div><b>Must-be</b><p>Safe. Reliable. A bright, readable picture in a lit classroom, in colour as well as white. Works with any laptop over HDMI.</p><small>Missing one of these loses the sale.</small></div>
+        <div><b>More is better</b><p>Brightness. Lamp life. Low running cost. A quiet fan. Quick to set up.</p><small>Each step up wins more buyers.</small></div>
+        <div><b>Delighters</b><p>Instant on. Wireless casting. Automatic keystone.</p><small>Unexpected, and remembered.</small></div>
+        <div><b>Indifferent for most</b><p>A second VGA input and VGA out. RS-232C. A VGA cable in the box (over 90% connect by HDMI). A thick printed manual.</p><small>Costs money, adds little. Worth testing.</small></div>
+      </div>
+    </div>
+    <div class="cs-panel st-life">
+      <h3>What it costs a school over five years</h3>
+      <table class="cs-tbl"><caption class="sr">Five-year cost of owning a VH-3600</caption>
+        <tbody>
+          <tr><th scope="row">The projector, ex VAT</th><td class="num">£354</td></tr>
+          <tr><th scope="row">Electricity: about 280 W in normal mode × 5,700 hours (6 hours a day, 190 days a year) = about 1,600 kWh at 25p</th><td class="num">about £400</td></tr>
+          <tr><th scope="row">A replacement lamp near the end (6,000-hour life), with fitting</th><td class="num">£80–135</td></tr>
+          <tr><th scope="row">Cleaning the air filter: about 2 hours of technician time</th><td class="num">about £40</td></tr>
+        </tbody>
+        <tfoot><tr><th scope="row">Total over five years</th><td class="num">about £875–930</td></tr></tfoot>
+      </table>
+      <p class="cs-small"><b>The surprise:</b> the school spends more on electricity than on the projector itself. That makes <i>generate light</i> a target for the customer even if it's fair value for the maker, and it puts eco mode (about a quarter less power, twice the lamp life) on the table.</p>
+    </div>
+    <div class="st-gate"><b>Gate check before phase 2</b><ul><li>Brief signed by the sponsor</li><li>Costs, volumes and factory data checked, with the gaps written down</li><li>Customer needs ranked, not guessed</li></ul></div>
+  </section>
+
+  <section class="cs-sec st-phase" id="p2" aria-labelledby="p2T">
+    <p class="cs-sec-k"><span class="st-n">2</span>Phase 2 · Function analysis</p>
+    <h2 id="p2T">What does it do, and what does each job cost?</h2>
+    <p class="cs-sec-lede">Every part gets a function: a verb and a noun, like <i>modulate light</i>. Each part's cost is shared out among
+    the functions it does (the main board, for example, mostly processes the signal, but some of it receives the signal and
+    drives the speaker), so the function costs add up exactly to the bill of materials. Then the team asks what each function is
+    <b>worth</b>: the lowest cost shown to do the same job reliably, from benchmarks, supplier quotes and the report's teardown.
+    Cost divided by worth is the <b>value index</b>. The higher it is, the more is being paid for that job.</p>
+    <div class="cs-panel st-fast">
+      <h3>The FAST diagram</h3>
+      <p class="cs-small">Read left to right to ask <b>how?</b> and right to left to ask <b>why?</b> The basic function, <i>project image</i>, is
+      done by the chain of functions on the critical path. Functions above it happen all the time; below it are the functions that
+      happen when the picture is being made, and the supporting ones. The dashed boxes sit outside the scope.</p>
+      <div id="stFast"></div>
+    </div>
+    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Function cost and worth"><div id="stFunctions"></div></div>
+    <div class="cs-two st-find">
+      <div class="cs-panel"><h3>What it tells us</h3>
+        <ul class="cs-list">
+          <li><b>The biggest cost isn't the worst value.</b> Modulating light costs £27.50, over a quarter of the parts, but its value index is 1.04. A single-chip DLP design would be cheaper, but it fails the must-be on colour brightness. Keep the design and look at the materials.</li>
+          <li><b>Receiving the signal is the worst value with real money in it:</b> £5.00 for a job worth £1.30 (value index 3.85), mostly ports that few schools use.</li>
+          <li><b>Processing the signal has the biggest gap,</b> £4.25 between cost and worth.</li>
+          <li><b>Three small jobs have value indexes over 9</b> (limit emissions, mute image, inform user). Little money, but easy to fix.</li>
+          <li><b>Generating light</b> is fair value for the maker (1.14), but it's the school's biggest running cost.</li>
+        </ul></div>
+      <div class="cs-panel"><h3>Targets for the creative session</h3>
+        <p class="cs-small">Go after functions with a high value index <b>and</b> enough money to matter, plus the factory process, which costs £27.60 a projector but isn't a product function.</p>
+        <ol class="cs-list"><li>Receive signal and process signal</li><li>Generate light and convert power (the power design)</li><li>Enclose components and remove heat</li><li>Enlarge image, condition and separate light (the optics)</li><li>Align optics</li><li>Protect product, inform user and the small jobs</li><li>The factory process and supply chain</li><li>Generate light, for the school</li></ol></div>
+    </div>
+    <div class="st-gate"><b>Gate check before phase 3</b><ul><li>Every part has a function</li><li>Function costs add up to the bill of materials</li><li>Every worth has a reason, and the targets are agreed</li></ul></div>
+  </section>
+
+  <section class="cs-sec st-phase" id="p3" aria-labelledby="p3T">
+    <p class="cs-sec-k"><span class="st-n">3</span>Phase 3 · Creative</p>
+    <h2 id="p3T">Lots of ideas, no judging yet</h2>
+    <p class="cs-sec-lede">The team works on the target functions only, using brainstorming, SCAMPER, TRIZ, design for manufacture and
+    assembly, the teardown and ideas from suppliers. The rule is simple: no idea is criticised during the session. Twenty-four ideas
+    come out: the report's twenty (V01–V20) and four more (H1–H4). Each one is tied to the functions and parts it changes; press
+    <b>3D</b> to see them in the model. A quick screen afterwards drops anything that breaks a must-be need, and parks anything
+    that's really a different product.</p>
+    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Ideas"><div id="stIdeas"></div></div>
+    <div class="st-gate"><b>Gate check before phase 4</b><ul><li>Ideas for every target function</li><li>Nothing judged during the session</li><li>Only must-be failures dropped at screening, with the reason written down</li></ul></div>
+  </section>
+
+  <section class="cs-sec st-phase" id="p4" aria-labelledby="p4T">
+    <p class="cs-sec-k"><span class="st-n">4</span>Phase 4 · Evaluation</p>
+    <h2 id="p4T">Score every idea the same way</h2>
+    <p class="cs-sec-lede">Before anyone scores an idea, the team and the sponsor agree the criteria and their weights: saving 30%, risk
+    25%, what the customer gets 20%, one-off cost 15% and speed 10%. Each idea is then scored from 1 to 5 against each one, where 5
+    is always good: a big saving, a low risk, a small investment. Agreeing the weights first stops people working back from the
+    answer they want. Eighteen ideas are a clear go; three need a feasibility check first.</p>
+    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Weighted evaluation"><div id="stEval"></div></div>
+    <div class="st-gate"><b>Gate check before phase 5</b><ul><li>Criteria and weights agreed before scoring</li><li>Every score has a reason</li><li>Shortlist agreed by the sponsor</li></ul></div>
+  </section>
+
+  <section class="cs-sec st-phase" id="p5" aria-labelledby="p5T">
+    <p class="cs-sec-k"><span class="st-n">5</span>Phase 5 · Development</p>
+    <h2 id="p5T">Turn the best ideas into business cases</h2>
+    <p class="cs-sec-lede">A good idea isn't a saving yet. Each idea on the shortlist gets numbers finance will sign: the saving per
+    projector, the one-off cost, the payback, the risks and the tests needed before it goes into production. Three are shown in
+    full here: the biggest saving, the riskiest and the quickest. Then all twenty, grouped into the report's four waves.</p>
+    <div class="st-cases" id="stCases"></div>
+    <div class="st-waves" id="stWaves"></div>
+    <div class="st-stack">
+      <div class="cs-panel">
+        <h3>Why not switch to DLP?</h3>
+        <p class="cs-small">The team tested the biggest idea of all (H3) against the report's benchmark. DLP is cheaper to build, but it
+        gives about 1,400 colour lumens against 3,600. In a lit classroom that's a must-be failure, so it was rejected.</p>
+        <div class="cs-tablewrap" tabindex="0" role="region" aria-label="3LCD against DLP"><div id="stDlp"></div></div>
+      </div>
+      <div class="cs-panel st-laser">
+        <h3>Lamp or laser?</h3>
+        <p class="cs-small">For the maker, a laser-phosphor engine (H2) costs £27.60 against £14.10 for the lamp and ballast: £13.50 more a
+        projector. It removes lamp changes and lamp warranty claims, and supports a retail premium of £90 or more, so it belongs on a
+        premium model. For the school, it depends on how hard the projector works:</p>
+        <div class="cs-tablewrap" tabindex="0" role="region" aria-label="Lamp or laser"><div id="stTco"></div></div>
+      </div>
+    </div>
+    <div class="st-gate"><b>Gate check before phase 6</b><ul><li>Savings and one-off costs signed off by finance</li><li>Every risk has an owner and a test</li><li>Suppliers have confirmed prices in writing</li></ul></div>
+  </section>
+
+  <section class="cs-sec st-phase" id="p6" aria-labelledby="p6T">
+    <p class="cs-sec-k"><span class="st-n">6</span>Phase 6 · Presentation</p>
+    <h2 id="p6T">Ask for a decision, then track the savings</h2>
+    <p class="cs-sec-lede">The study ends with a short meeting and a clear ask, not a long report. The sponsor sees the result, the money,
+    the risks and the plan, and decides. After that, savings are tracked every month against the old cost until they're banked.</p>
+    <div id="stDecision"></div>
+    <div class="cs-panel"><h3>From today's cost to the target</h3><div class="st-bridge" id="stBridge"></div></div>
+    <div class="cs-panel"><h3>The plan: 14 months, four waves</h3><div id="stPlan"></div></div>
+    <div class="cs-two">
+      <div class="cs-panel st-funnel-p"><h3>The savings funnel</h3><ol class="st-funnel" id="stFunnel"></ol></div>
+      <div class="cs-panel"><h3>After the workshop</h3>
+        <ol class="cs-list">
+          <li><b>Engineer and test</b> each approved idea, with the tests from its business case.</li>
+          <li><b>Release it</b> through a formal engineering change, with a date it starts in the factory.</li>
+          <li><b>Bank it</b> only when finance sees the lower cost in the actual price paid or the factory's invoice.</li>
+          <li><b>Review monthly:</b> savings banked, ideas late, risks that came true. Most savings are lost between approval and the factory, which is why this matters.</li>
+        </ol></div>
+    </div>
+  </section>
+
+  <section class="cs-sec st-learnt" id="learnt" aria-labelledby="lT">
+    <p class="cs-sec-k"><span class="st-n">✓</span>What we learnt</p>
+    <h2 id="lT">Eight lessons from one projector</h2>
+    <div class="learnt-grid">
+      <div><b>Facts first, and check them</b><p>A detailed report still had five things that didn't add up. Finding them before the workshop kept every later number honest.</p><a href="academy/information-phase/">Module 3 · Information</a></div>
+      <div><b>Functions, not parts</b><p>The most expensive function, modulating light, was good value. The worst value hid in a cheap one: receiving the signal through ports few schools use.</p><a href="academy/function-analysis-fast/">Module 4 · Function analysis</a></div>
+      <div><b>The customer sets the worth</b><p>Over 90% of classrooms use HDMI. That one fact is behind £6.30 of savings: the ports, the smaller board and the cable.</p><a href="academy/information-phase/">Module 3 · Information</a></div>
+      <div><b>How it's made is value too</b><p>£4.05 a projector came from the factory and supply chain (faster curing, shorter burn-in, better stock) with no change to the product.</p><a href="academy/should-cost/">Module 9 · Should-costing</a></div>
+      <div><b>Create first, judge later</b><p>Twenty-four ideas came from keeping the two apart. Three were screened out, each with a written reason.</p><a href="academy/creative-phase/">Module 5 · Creative</a></div>
+      <div><b>Agree the criteria before scoring</b><p>Weighted scoring made the choice visible and fair, and it flagged the three ideas that need proving before anyone spends on them.</p><a href="academy/evaluation-phase/">Module 6 · Evaluation</a></div>
+      <div><b>A saving isn't real until it's banked</b><p>Business cases, tests, owners, waves and monthly tracking turn £24.65 of ideas into money in the bank.</p><a href="academy/presentation-implementation/">Module 8 · Presentation</a></div>
+      <div><b>Value depends on who pays</b><p>Eco mode costs the maker nothing and saves the school a quarter of its power. Laser costs the maker more but can suit a busy lecture theatre.</p><a href="academy/value-engineering-basics/">Module 1 · Foundations</a></div>
+    </div>
   </section>
 </main>
 
 <footer class="tr-footer">
-  <p>VAVEhub VE Academy · worked case study. The VH-3600 is a made-up model; its costs are teaching estimates.</p>
+  <p>VAVEhub VE Academy · worked case study. The VH-3600 is a made-up model; its costs come from a should-cost report for a comparable projector.</p>
   <p>© Avinash Bhosale · VAVEhub. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>
 </footer>
 
@@ -172,6 +370,7 @@
 <script src="vh-protect.js"></script>
 <script src="projector-data.js"></script>
 <script src="case-study.js"></script>
+<script src="projector-study.js"></script>
 <script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script>
 <script type="module" src="projector-3d.js"></script>
 </body>
