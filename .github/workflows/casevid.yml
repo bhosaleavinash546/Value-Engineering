@@ -2,7 +2,7 @@ name: Make case study videos
 # Builds the projector case-study videos (videos/cs-*.mp4 and posters) from tools/casevid: scenes drawn
 # by tools/casevid/stage.html with the real 3D model, a voice-over by a Microsoft neural voice
 # (en-GB-RyanNeural) and music written by tools/trailer/music.py. Each video renders in its own job.
-# By default the videos are only uploaded as a run artifact for review; set publish to "yes" to commit them.
+# By default the videos go to the casevid-review branch for review; set publish to "yes" to commit them to main.
 on:
   workflow_dispatch:
     inputs:
@@ -57,26 +57,40 @@ jobs:
           path: out/
           retention-days: 14
 
-  publish:
+  collect:
+    # review copies go to the casevid-review branch (not published); with publish "yes" they go to main
     needs: render
-    if: ${{ inputs.publish == 'yes' }}
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           path: art
           pattern: cs-*
           merge-multiple: true
       - name: Commit the videos
+        env:
+          PUBLISH: ${{ inputs.publish }}
         run: |
-          cp art/cs-* videos/
           git config user.name "vavehub-casevid"
           git config user.email "actions@users.noreply.github.com"
+          if [ "$PUBLISH" != "yes" ]; then
+            git fetch origin casevid-review || true
+            git checkout -B casevid-review
+          fi
+          mkdir -p videos && cp art/cs-* videos/
           git add videos/cs-*
-          git commit -m "Update the case study videos" || { echo "nothing to commit"; exit 0; }
-          for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 5; done
+          git commit -m "Case study videos ($([ "$PUBLISH" = yes ] && echo publish || echo review))" || { echo "nothing to commit"; exit 0; }
+          if [ "$PUBLISH" = "yes" ]; then
+            for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 5; done
+          else
+            git push -f origin casevid-review
+          fi
       - name: Publish and re-run the site checks
+        if: ${{ inputs.publish == 'yes' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

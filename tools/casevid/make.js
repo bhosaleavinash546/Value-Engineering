@@ -263,7 +263,7 @@ function voice(v, dir) {
     s.voFile = path.join(dir, `vo-${i}.mp3`);
     if (VOICE) {
       for (let a = 0; ; a++) {
-        try { execFileSync("edge-tts", ["--voice", "en-GB-RyanNeural", "--rate", "-2%", "--text", s.vo, "--write-media", s.voFile], { stdio: "inherit" }); break; }
+        try { execFileSync("edge-tts", ["--voice", "en-GB-RyanNeural", "--rate=-2%", "--text", s.vo, "--write-media", s.voFile], { stdio: "inherit" }); break; }
         catch (e) { if (a >= 3) throw e; execFileSync("sleep", [String(5 * (a + 1))]); }
       }
       s.voDur = duration(s.voFile);
