@@ -379,6 +379,21 @@ const VIDEOS = {
       vo: "Then the real work starts. Engineer it, test it, release it, and track every saving monthly until finance sees it in the actual cost." },
   ] },
 
+  // closing for the five function analysis films joined into one video (YouTube); not used on the site
+  ytend: { name: "Value Engineering Hub", badge: "▶", scenes: [
+    { kind: "cards", cols: 2, k: "Keep learning, free", h: "valueengineeringhub.com", min: 22, gap: 3.6,
+      items: [{ h: "The full case study", p: "Explore the projector in 3D, its bill of materials, and all six phases of the study.", c: BLUE },
+        { h: "VE Academy", p: "13 narrated modules, hands-on labs, a capstone study, an exam and a certificate.", c: GREEN },
+        { h: "VAVE for Leaders", p: "A one-hour course on why value engineering matters and what leaders must do.", c: AMBER },
+        { h: "Guides and templates", p: "Ten guides, 15 templates and 36 cost reduction ideas, ready to use.", c: "#9b6cf0" }],
+      vo: "Everything in this series comes from the classroom projector case study on Value Engineering Hub. There you can explore the projector in 3D, and follow all six phases of the study. The VE Academy takes you through value engineering in thirteen narrated modules, with labs, a capstone study and a certificate. VAVE for Leaders is a one-hour course for managers. And there are guides, templates and thirty-six cost reduction ideas, ready to use." },
+    { kind: "big", k: "No fee, no catch", h: "Free courses. <em>Free certificates.</em>", p: "Learn value engineering at your own pace, then prove it.", min: 8,
+      vo: "The courses and the certificates are free. Learn at your own pace, then prove what you know." },
+    { kind: "end", h: "Created by <span>Avinash Bhosale</span>", p: "Free value engineering courses, guides and templates", url: "valueengineeringhub.com", min: 10, sect: "resolve",
+      vo: "This series was created by Avinash Bhosale. Visit value engineering hub dot com, and start today. Thanks for watching.",
+      sub: "This series was created by Avinash Bhosale. Visit valueengineeringhub.com, and start today. Thanks for watching." },
+  ] },
+
   learnt: { name: "What we learnt", badge: "✓", scenes: [
     { kind: "three", cam: { orbit: { target: [0, -1, 0], r: [60, 66], h: [22, 26], a: [1.2, 0.6] } }, min: 5,
       vo: "So what did one projector teach us?" },
@@ -441,10 +456,10 @@ async function stage(browser, O) {
 }
 // subtitles: the line is shown a sentence or two at a time, timed by length across the spoken line
 function chunks(s) {
-  const sent = s.vo.match(/[^.!?]+[.!?]+["'”]?\s*|[^.!?]+$/g).map((x) => x.trim()), out = [];
+  const sent = (s.sub || s.vo).replace(/\.com/g, "\u2024com").match(/[^.!?]+[.!?]+["'”]?\s*|[^.!?]+$/g).map((x) => x.trim()), out = [];
   sent.forEach((x) => { const last = out[out.length - 1]; if (last && words(last) + words(x) <= 24 && (words(last) < 12 || words(x) < 6)) out[out.length - 1] = last + " " + x; else out.push(x); });
   const total = sum(out, (x) => x.length); let at = 0.3;
-  return out.map((text) => { const c = { at, text }; at += s.voDur * text.length / total; return c; });
+  return out.map((text) => { const c = { at, text: text.replace(/\u2024/g, ".") }; at += s.voDur * text.length / total; return c; });
 }
 async function setScene(page, v, s) {
   s.chunks = chunks(s);
