@@ -23,7 +23,8 @@ const HEADS = ["£105.20 in parts. <em>£20</em> overspent.", "Every part has a 
 // film 1's scene starts, from the .json made with it: scene 1 is the product turning, then taken apart; scene 9 the lamp
 const film = (f) => (fs.existsSync(path.join(src, f)) ? path.join(src, f) : path.join(ROOT, "videos", f));
 const A = JSON.parse(fs.readFileSync(film("cs-p2a.json"), "utf8")), aAt = (i) => A.slice(0, i).reduce((x, y) => x + y.dur, 0);
-const CLIPS = [["cs-p2a.mp4", aAt(1) + 0.3, 410, 410], ["cs-p2a.mp4", aAt(9) + 1.3, 800, 800], ["cs-p2c.mp4", 94.5, 0, 700],
+const CLIPS = [["cs-p2a.mp4", aAt(1) + 0.3, 470, 470, 900, 264],   // [film, start, crop x from, to, crop width, crop top]; this one sits below the film's label
+  ["cs-p2a.mp4", aAt(9) + 1.3, 800, 800], ["cs-p2c.mp4", 94.5, 0, 700],
   ["cs-p2d.mp4", 99.5, 420, 520], ["cs-p2d.mp4", 142, 0, 120], null];
 const CW = 1100, CH = Math.round(CW * 780 / 1080), CY = 100;   // the crop of the 1920 × 1080 film that fills the 1080 × 780 window
 
@@ -63,9 +64,9 @@ const CW = 1100, CH = Math.round(CW * 780 / 1080), CY = 100;   // the crop of th
   const segs = [];
   for (const [i, c] of CLIPS.entries()) {
     if (!c) continue;
-    const [fname, ss, x0, x1] = c, d = T[i].dur, f = path.join(tmp, `seg${i}.mp4`);
+    const [fname, ss, x0, x1, cw = CW, cy = CY] = c, d = T[i].dur, f = path.join(tmp, `seg${i}.mp4`), ch = Math.round(cw * 780 / 1080);
     execFileSync(FF, ["-hide_banner", "-loglevel", "error", "-y", "-ss", String(ss), "-t", d.toFixed(3), "-i", film(fname), "-an",
-      "-vf", `crop=${CW}:${CH}:'${x0}+(${x1 - x0})*min(t/${d.toFixed(3)},1)':${CY},scale=1080:780,fade=in:st=0:d=0.25,fade=out:st=${(d - 0.25).toFixed(3)}:d=0.25,fps=30,format=yuv420p`,
+      "-vf", `crop=${cw}:${ch}:'${x0}+(${x1 - x0})*min(t/${d.toFixed(3)},1)':${cy},scale=1080:780,fade=in:st=0:d=0.25,fade=out:st=${(d - 0.25).toFixed(3)}:d=0.25,fps=30,format=yuv420p`,
       "-c:v", "libx264", "-preset", "medium", "-crf", "18", f], { stdio: "inherit" });
     segs.push(f);
   }
