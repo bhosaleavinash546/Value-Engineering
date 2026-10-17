@@ -917,6 +917,11 @@ html[data-theme="light"] .nav-links a:hover,html[data-theme="light"] .nav-links 
 @media (max-width:1500px){.brand-tag{display:none}}
 @media (max-width:1280px){.nav-links{gap:1.05rem}.nav-links a{font-size:.86rem}}
 @media (max-width:1360px){.nav-links{gap:1.8rem}.nav-links a{font-size:1.25rem}.brand-tag{display:inline}}
+/* desktop: the full top bar plus a signed-in account chip must still fit */
+@media (min-width:1361px){.nav-links{gap:.95rem}.nav-links a{font-size:.86rem}.nav-inner{gap:.75rem}}
+.acct-name{max-width:7.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (min-width:1361px) and (max-width:1480px){.nav-links{gap:.8rem}.nav-links a{font-size:.84rem}.nav-inner{width:min(1400px,97vw)}}
+.nav:has(.acct-chip) .brand-tag{display:none}
 @media (max-width:400px){.brand-tag{display:none!important}}
 
 /* ── Hero animated bulb ── */

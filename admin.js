@@ -467,7 +467,7 @@
         st.live ? h("a", { href: "admin.html" }, "Show real data") : "Real data appears once Supabase is connected.") : null,
       h("h1", { class: "sr-only" }, "Owner dashboard"),
       filters, kpi1, kpi2,
-      h("div", { class: "grid" }, cSign, cJourney, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead, quotesCard(), questionsCard()),
+      h("div", { class: "grid" }, cSign, cJourney, cCountry, cFunnel, cSrc, cDev, cRole, cFb, cCert, cLead, quotesCard(), questionsCard(), welcomeCard()),
       usersCard(sl),
       h("p", { class: "foot-note" }, "Countries are estimated from each learner's time zone (or their browser language if the time zone is missing). Details are recorded when a learner next opens the Academy, so people who haven't been back since this dashboard launched show as \"Unknown\" or \"Not recorded yet\"."));
   }
@@ -507,6 +507,44 @@
       `Questions answered at least ${MIN} times, lowest % right first. A low score with one popular wrong answer often means unclear wording; change the question in Supabase → Table Editor → exam_questions.`,
       () => (rows.length ? tableView(t) : h("p", { class: "empty" }, `Shows once questions have been answered ${MIN} times. ${fmtN(st.qstats.reduce((n, q) => n + q.attempts, 0))} answers recorded so far.`)),
       null, { wide: true });
+  }
+
+  // The welcome tour: who saw it, which path they chose, how far they got (needs supabase-welcome.sql; missing function = no card)
+  function welcomeCard() {
+    if (st.welcome === null) return null;
+    if (st.welcome === undefined || st.welcome.range !== st.range) { loadWelcome(); return null; }
+    const rows = st.welcome.rows, v = (ev, path) => rows.filter((r) => r.event === ev && (path === undefined || r.path === path)).reduce((n, r) => n + Number(r.visitors), 0);
+    const shown = v("shown"), chose = v("path");
+    const NAMES = [["student", "🎓 I'm a student"], ["pro", "🛠 I work on product cost"], ["leader", "📊 I lead a team"], ["explore", "👀 Just exploring"]];
+    const list = [
+      { label: "Saw the welcome question", v: shown },
+      ...NAMES.map(([k, t]) => ({ label: t, v: v("path", k), text: `${fmtN(v("path", k))} · finished ${fmtN(v("finish", k) + v("finish_stay", k))}` })),
+      { label: "Skipped the question", v: v("skip") },
+      { label: "Ticked all four first steps", v: v("checklist_done") },
+      { label: "Took the first sign-in tour", v: v("signin_tour") },
+    ];
+    return card("welcome", "Welcome tour",
+      `Visitors ${inPeriod()}. ${shown ? pct(chose, shown) + "% of those who saw the question chose a path." : "Counts appear once new visitors see the question."} Each visitor is counted once per line, with no name or account.`,
+      () => hbars(list, { empty: "No welcome tour visits yet." }),
+      { cols: ["Line", "Visitors"], rows: list.map((r) => [r.label, r.text || fmtN(r.v)]) });
+  }
+  async function loadWelcome() {
+    if (st.welcomeBusy) return; st.welcomeBusy = true;
+    const range = st.range;
+    await null;   // let the render that asked for this finish first
+    try {
+      if (st.sample) {
+        const f = range === "all" ? 3 : Number(range) / 30;
+        const r = (event, path, n) => ({ event, path, visitors: Math.round(n * f), events: Math.round(n * f) });
+        st.welcome = { range, rows: [r("shown", null, 420), r("skip", null, 96), r("path", "student", 118), r("path", "pro", 104), r("path", "leader", 38), r("path", "explore", 64),
+          r("finish", "student", 71), r("finish", "pro", 66), r("finish", "leader", 27), r("finish", "explore", 40), r("checklist_done", null, 31), r("signin_tour", null, 22)] };
+      } else {
+        const { data, error } = await client.rpc("welcome_stats", { p_days: range === "all" ? null : Number(range) });
+        st.welcome = error ? null : { range, rows: data || [] };
+      }
+    } catch (e) { st.welcome = null; }
+    st.welcomeBusy = false;
+    if (st.data) render();
   }
 
   /* ── learners table ── */

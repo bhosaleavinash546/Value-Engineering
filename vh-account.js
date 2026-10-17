@@ -53,7 +53,7 @@ window.VHAccount = (function () {
     if (window.VHCloud && VHCloud.live) {
       try {
         const name = await VHCloud.displayName();
-        if (name) { const u = await VHCloud.user(); return { name, email: (u && u.email) || "", live: true }; }
+        if (name) { const u = await VHCloud.user(); return { name, email: (u && u.email) || "", created: (u && u.created_at) || null, live: true }; }
       } catch (e) {}
       return null;
     }
@@ -91,6 +91,7 @@ window.VHAccount = (function () {
         '<div class="acct-who">Signed in as<br><b>' + esc(user.name) + '</b>' + (user.email ? '<span>' + esc(user.email) + '</span>' : '') + '</div>' +
         '<a href="' + myCourse() + '">🎓 My learning</a>' +
         '<a href="toolkit/">🧰 Toolkit</a>' +
+        '<a href="/?tour=1">🧭 Show me around</a>' +
         '<button type="button" data-signout>Sign out</button>' +
       '</div>';
     const btn = $(".acct-btn", wrap), menu = $(".acct-menu", wrap);

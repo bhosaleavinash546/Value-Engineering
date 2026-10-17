@@ -1,0 +1,90 @@
+/* VAVEhub welcome: the question card, the spotlight tour, the checklist, hints and toasts (see welcome.js) */
+.vw-ask,.vw-card,.vw-list,.vw-toast,.vw-hint-t{--vw-bg:#0d1427;--vw-line:rgba(255,255,255,.12);--vw-txt:var(--txt,#eaeefb);--vw-muted:var(--muted,#98a2c0);--vw-acc:var(--acc2,#2e6fe8);--vw-acc-hi:var(--acc1,#5aa2ff)}
+html[data-theme="light"] .vw-ask,html[data-theme="light"] .vw-card,html[data-theme="light"] .vw-list,html[data-theme="light"] .vw-toast,html[data-theme="light"] .vw-hint-t{--vw-bg:#ffffff;--vw-line:rgba(15,23,42,.12)}
+.vw-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* the question card, bottom right */
+.vw-ask{position:fixed;right:24px;bottom:24px;z-index:4100;width:min(400px,calc(100vw - 32px));padding:1.3rem 1.3rem 1rem;border:1px solid var(--vw-line);border-radius:20px;background:var(--vw-bg);color:var(--vw-txt);
+  box-shadow:0 24px 70px rgba(0,0,0,.45);opacity:0;transform:translateY(24px) scale(.98);transition:opacity .35s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+.vw-ask.is-on{opacity:1;transform:none}
+.vw-k{margin:0 0 .35rem;font:700 .7rem var(--font-m,monospace);letter-spacing:.12em;text-transform:uppercase;color:var(--acc3,#d9a44a)}
+.vw-ask h2,.vw-card h2{margin:0 0 .45rem;font:700 1.2rem/1.25 var(--font-d,sans-serif);color:var(--vw-txt);outline:none}
+.vw-ask h2[tabindex]:focus-visible,.vw-card h2[tabindex]:focus-visible{outline:none}
+.vw-ask .vw-foot .vw-skip{display:inline-block;margin:0 0 0 .4rem}
+.vw-d{margin:0 0 1rem;font-size:.95rem;line-height:1.5;color:var(--vw-muted)}
+.vw-choices{display:grid;gap:.5rem}
+.vw-choice{display:flex;align-items:center;gap:.6rem;width:100%;min-height:48px;padding:.65rem .9rem;border:1px solid var(--vw-line);border-radius:14px;background:transparent;color:var(--vw-txt);font:600 .98rem var(--font-b,sans-serif);text-align:left;cursor:pointer;
+  transition:border-color .2s,background .2s,transform .2s,box-shadow .2s}
+.vw-choice:hover,.vw-choice:focus-visible{border-color:var(--vw-acc-hi);background:color-mix(in srgb,var(--vw-acc) 12%,transparent);transform:translateX(3px);box-shadow:0 6px 18px rgba(46,111,232,.18);outline:none}
+.vw-skip,.vw-stay{display:block;margin:.8rem auto 0;padding:.4rem .8rem;border:0;background:none;color:var(--vw-muted);font:500 .88rem var(--font-b,sans-serif);cursor:pointer;border-radius:8px}
+.vw-skip:hover,.vw-stay:hover,.vw-skip:focus-visible,.vw-stay:focus-visible{color:var(--vw-txt);text-decoration:underline}
+.vw-x{position:absolute;top:.6rem;right:.6rem;width:34px;height:34px;border:0;border-radius:50%;background:transparent;color:var(--vw-muted);font-size:1.3rem;line-height:1;cursor:pointer;transition:background .2s,color .2s}
+.vw-x:hover,.vw-x:focus-visible{background:color-mix(in srgb,var(--vw-txt) 10%,transparent);color:var(--vw-txt)}
+
+/* the spotlight: everything dims except the item being explained */
+.vw-ov{position:fixed;inset:0;z-index:4000;pointer-events:none}
+.vw-spot{position:fixed;border-radius:14px;box-shadow:0 0 0 200vmax rgba(3,6,16,.66);transition:left .4s cubic-bezier(.2,.8,.2,1),top .4s cubic-bezier(.2,.8,.2,1),width .4s cubic-bezier(.2,.8,.2,1),height .4s cubic-bezier(.2,.8,.2,1)}
+html[data-theme="light"] .vw-spot{box-shadow:0 0 0 200vmax rgba(15,23,42,.5)}
+.vw-ring{position:fixed;border-radius:14px;border:2px solid #5aa2ff;box-shadow:0 0 0 4px rgba(90,162,255,.25),0 0 26px rgba(90,162,255,.55);animation:vwPulse 1.8s ease-in-out infinite;
+  transition:left .4s cubic-bezier(.2,.8,.2,1),top .4s cubic-bezier(.2,.8,.2,1),width .4s cubic-bezier(.2,.8,.2,1),height .4s cubic-bezier(.2,.8,.2,1),opacity .3s}
+@keyframes vwPulse{0%,100%{box-shadow:0 0 0 4px rgba(90,162,255,.25),0 0 22px rgba(90,162,255,.45)}50%{box-shadow:0 0 0 8px rgba(90,162,255,.12),0 0 34px rgba(90,162,255,.7)}}
+.vw-ov.is-free .vw-ring{opacity:0}
+.vw-ov.is-out,.vw-card.is-out{opacity:0;transition:opacity .25s}
+.vw-target{position:relative;z-index:1;transition:transform .25s ease}
+.vw-target:hover{transform:translateY(-2px)}
+
+/* the explanation card, with an arrow to its item */
+.vw-card{position:fixed;z-index:4050;width:min(360px,calc(100vw - 24px));padding:1.15rem 1.2rem 1rem;border:1px solid var(--vw-line);border-radius:18px;background:var(--vw-bg);color:var(--vw-txt);
+  box-shadow:0 22px 60px rgba(0,0,0,.45);transition:left .4s cubic-bezier(.2,.8,.2,1),top .4s cubic-bezier(.2,.8,.2,1);animation:vwIn .35s ease both}
+@keyframes vwIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.vw-card[data-side]::before{content:"";position:absolute;left:var(--ax,50%);width:14px;height:14px;background:var(--vw-bg);border:1px solid var(--vw-line);transform:translateX(-50%) rotate(45deg)}
+.vw-card[data-side="below"]::before{top:-8px;border-right:0;border-bottom:0}
+.vw-card[data-side="above"]::before{bottom:-8px;border-left:0;border-top:0}
+.vw-foot{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.vw-dots{display:flex;gap:6px;margin-right:auto}
+.vw-dots i{width:7px;height:7px;border-radius:50%;background:var(--vw-line);transition:background .3s,width .3s}
+.vw-dots i.is-on{width:20px;border-radius:99px;background:var(--vw-acc-hi)}
+.vw-btn{display:inline-flex;align-items:center;gap:.35rem;min-height:42px;padding:.5rem 1rem;border-radius:12px;border:1px solid var(--vw-line);background:transparent;color:var(--vw-txt);font:600 .92rem var(--font-b,sans-serif);text-decoration:none;cursor:pointer;
+  transition:background .2s,border-color .2s,transform .2s,box-shadow .2s}
+.vw-btn:hover,.vw-btn:focus-visible{border-color:var(--vw-acc-hi);transform:translateY(-1px);outline:none}
+.vw-next,.vw-go{background:var(--vw-acc);border-color:var(--vw-acc);color:#fff}
+.vw-next:hover,.vw-go:hover,.vw-next:focus-visible,.vw-go:focus-visible{background:#3d7ef0;box-shadow:0 8px 22px rgba(46,111,232,.4);color:#fff}
+.vw-card .vw-stay{margin:.55rem 0 0 auto;margin-left:auto}
+/* phones: the card becomes a sheet at the bottom */
+.vw-card.is-sheet{left:8px!important;right:8px;top:auto!important;bottom:8px;width:auto;border-radius:20px;padding-bottom:1.1rem}
+.vw-card.is-sheet::before{display:none}
+.vw-card.is-sheet.is-top{top:8px!important;bottom:auto}
+.vw-card.is-sheet .vw-btn{min-height:48px}
+
+/* the checklist: a small pill bottom left that opens into four ticks */
+.vw-list{position:fixed;left:16px;bottom:16px;z-index:1200;max-width:calc(100vw - 32px);border:1px solid var(--vw-line);border-radius:18px;background:var(--vw-bg);color:var(--vw-txt);box-shadow:0 14px 40px rgba(0,0,0,.35);animation:vwIn .4s ease both}
+.vw-list-toggle{display:flex;align-items:center;gap:.6rem;width:100%;padding:.5rem .9rem .5rem .5rem;border:0;background:none;color:inherit;font:600 .9rem var(--font-b,sans-serif);cursor:pointer;border-radius:18px}
+.vw-list-toggle:hover{background:color-mix(in srgb,var(--vw-txt) 6%,transparent)}
+.vw-list-toggle i{font-style:normal;color:var(--vw-muted);margin-left:auto}
+.vw-list-ring{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:conic-gradient(#3fd08a calc(var(--p)*360deg),var(--vw-line) 0)}
+.vw-list-ring b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--vw-bg);font:700 .72rem var(--font-m,monospace)}
+.vw-list-items{list-style:none;margin:0;padding:.2rem .6rem .2rem}
+.vw-list-items a{display:flex;align-items:center;gap:.6rem;padding:.55rem .5rem;border-radius:10px;color:var(--vw-txt);text-decoration:none;font-size:.92rem;transition:background .2s,transform .2s}
+.vw-list-items a:hover,.vw-list-items a:focus-visible{background:color-mix(in srgb,var(--vw-acc) 12%,transparent);transform:translateX(3px);outline:none}
+.vw-list-items i{display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--vw-line);font-style:normal;font-size:.75rem;color:#fff}
+.vw-list-items .is-done a{color:var(--vw-muted);text-decoration:line-through}
+.vw-list-items .is-done i{background:#1fae6a;border-color:#1fae6a}
+.vw-list-hide{display:block;margin:0 auto .5rem;padding:.3rem .7rem;border:0;background:none;color:var(--vw-muted);font:500 .8rem var(--font-b,sans-serif);cursor:pointer}
+.vw-list-hide:hover{color:var(--vw-txt);text-decoration:underline}
+
+/* a short confirmation when something is ticked */
+.vw-toast{position:fixed;left:50%;bottom:24px;z-index:1300;padding:.7rem 1.1rem;border:1px solid var(--vw-line);border-radius:14px;background:var(--vw-bg);color:var(--vw-txt);font:600 .92rem var(--font-b,sans-serif);
+  box-shadow:0 14px 40px rgba(0,0,0,.35);opacity:0;transform:translate(-50%,16px);transition:opacity .3s,transform .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.vw-toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+/* one-off hints: a pulsing dot with a label */
+.vw-hint{position:fixed;z-index:1400;display:flex;align-items:center;gap:.5rem;transform:translate(-11px,-11px);transition:opacity .3s}
+.vw-hint.is-off{opacity:0;pointer-events:none}
+.vw-hint-dot{position:relative;width:22px;height:22px;border-radius:50%;background:#2e6fe8;box-shadow:0 0 0 0 rgba(46,111,232,.6);animation:vwDot 1.6s ease-out infinite}
+.vw-hint-dot::after{content:"";position:absolute;inset:7px;border-radius:50%;background:#fff}
+@keyframes vwDot{0%{box-shadow:0 0 0 0 rgba(46,111,232,.55)}100%{box-shadow:0 0 0 16px rgba(46,111,232,0)}}
+.vw-hint-t{padding:.45rem .7rem;border:1px solid var(--vw-line);border-radius:10px;background:var(--vw-bg);color:var(--vw-txt);font:600 .85rem var(--font-b,sans-serif);box-shadow:0 10px 26px rgba(0,0,0,.3);white-space:nowrap}
+.vw-hint button{width:28px;height:28px;border:1px solid var(--vw-line,rgba(255,255,255,.12));border-radius:50%;background:var(--bg2,#0d1427);color:var(--muted,#98a2c0);cursor:pointer}
+.vw-hint button:hover{color:var(--txt,#fff)}
+@media (max-width:640px){.vw-ask{right:8px;left:8px;bottom:8px;width:auto}.vw-hint-t{white-space:normal;max-width:60vw}.vw-list{left:8px;bottom:8px}}
+@media (prefers-reduced-motion:reduce){.vw-ask,.vw-card,.vw-spot,.vw-ring,.vw-toast,.vw-list,.vw-choice,.vw-btn,.vw-target{transition:none!important;animation:none!important}.vw-hint-dot{animation:none}}

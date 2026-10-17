@@ -112,8 +112,8 @@ module.exports = async function guides({ browser, O, r }) {
   await p.keyboard.press("Escape"); await p.waitForTimeout(200);
   r.ok(await p.evaluate(() => !document.getElementById("navLinks").classList.contains("is-open") && document.activeElement.id === "navToggle"), "Phone menu closes with Esc and returns focus");
   await p.click("#navToggle"); await p.waitForTimeout(400);
-  await p.click('#navLinks a[href="glossary/"]'); await p.waitForURL("**/glossary/");
-  r.ok(p.url().endsWith("/glossary/"), "Phone menu navigates");
+  await p.click('#navLinks a[href="case-study.html"]'); await p.waitForURL("**/case-study.html");
+  r.ok(p.url().endsWith("/case-study.html"), "Phone menu navigates");
   await done(p);
 
   // ── Topic page: VAVE explained
@@ -152,12 +152,12 @@ module.exports = async function guides({ browser, O, r }) {
   r.ok((await p.evaluate(() => document.querySelector(".mod-link.is-active")?.dataset.target)) === "m4", "module page 'Start' button opens that module in the Academy");
   await p.close(); }
 
-  // ── "Topics" menu: on every public page, opens the five topic guides, closes with Esc
+  // ── "Topics" menu: on every public page, opens the five topic guides and the glossary, closes with Esc
   { const p = await browser.newPage({ viewport: { width: 1440, height: 900 } }); p.on("pageerror", (e) => errs.push(e.message));
   for (const pg of ["", "job-plan/", "value-analysis/", "academy/function-analysis-fast/"]) {
     await p.goto(`${O}/${pg}`); await p.waitForTimeout(400);
     const n = await p.$$eval("#navTopics a", (as) => as.map((a) => a.getAttribute("href")));
-    r.ok(n.length === 5 && n.includes("vave/") && n.includes("product-cost-optimisation/"), `Topics menu lists the five topic guides on /${pg}`);
+    r.ok(n.length === 6 && n.includes("vave/") && n.includes("product-cost-optimisation/") && n.some((h) => h.endsWith("glossary/")), `Topics menu lists the five topic guides and the glossary on /${pg}`);
   }
   await p.goto(`${O}/value-analysis/`); await p.waitForTimeout(400);
   r.ok(await p.$eval(".nav-dd-btn", (b) => b.classList.contains("is-active")) && await p.$eval('#navTopics a[href="value-analysis/"]', (a) => a.getAttribute("aria-current") === "page"), "Topics menu marks the topic page you are on");

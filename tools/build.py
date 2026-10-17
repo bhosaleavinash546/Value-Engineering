@@ -239,6 +239,7 @@ SCRIPTS = """<script src="site-config.js"></script>
 <script src="vh-account.js"></script>
 <script src="app.js"></script>
 <script src="vh-diagrams.js"></script>
+<script src="welcome.js" defer></script>
 </body>
 </html>
 """
