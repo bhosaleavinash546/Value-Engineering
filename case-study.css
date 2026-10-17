@@ -419,3 +419,15 @@ html[data-theme="light"] .pj-hint{color:rgba(30,40,60,.55)}
 .pj-unw{color:#f87171}
 .fp-axr{text-anchor:start}.fp-v{font:600 10px var(--font-m);fill:var(--txt);text-anchor:middle;opacity:0;transition:opacity .4s 1s}.is-on .fp-v{opacity:1}
 .fp-axl{text-anchor:start}
+
+/* link to the YouTube version of the function analysis films */
+.cs-yt{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:1.2rem;align-items:center;margin:1.2rem 0 1.4rem;padding:.8rem;border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--txt);text-decoration:none;max-width:880px;transition:border-color .2s,transform .2s}
+.cs-yt:hover,.cs-yt:focus-visible{border-color:var(--acc3);transform:translateY(-2px)}
+.cs-yt img{width:100%;height:auto;border-radius:12px;display:block}
+.cs-yt-t{display:flex;flex-direction:column;gap:.35rem}
+.cs-yt-t small{font:700 .72rem var(--font-m);letter-spacing:.1em;text-transform:uppercase;color:var(--acc3)}
+.cs-yt-t b{font:700 1.15rem var(--font-b);line-height:1.3}
+.cs-yt-t>span{font-size:.92rem;line-height:1.5;color:var(--muted)}
+.cs-yt-t em{font-style:normal;font-weight:700;color:var(--acc1)}
+@media (max-width:640px){.cs-yt{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.cs-yt{transition:none}.cs-yt:hover{transform:none}}
