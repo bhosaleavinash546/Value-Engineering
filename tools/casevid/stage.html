@@ -65,6 +65,7 @@
   .jp div.done b::after{content:" ✓";color:var(--green)}
   /* bars */
   .vbars{display:grid;gap:22px}
+  .vbars.dense{gap:10px}.vbars.dense .vbar{font-size:28px}.vbars.dense .vbar .tr{height:26px}.vbars.dense .vbar .v{font-size:28px}
   .vbar{display:grid;grid-template-columns:420px 1fr 220px;align-items:center;gap:26px;font-size:32px}
   .vbar .tr{height:34px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
   .vbar .tr i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#2e6fe8,#5aa2ff)}
@@ -147,6 +148,59 @@
   .end h1 span{color:var(--blue)}
   .end p{font:500 40px 'Inter',sans-serif;color:var(--mut);margin:0}
   .end .url{margin-top:56px;display:inline-block;padding:20px 40px;border-radius:16px;background:var(--blue2);font:700 40px 'IBM Plex Sans',sans-serif;color:#fff}
+  /* function analysis series */
+  .bigs{position:absolute;left:160px;right:160px;top:240px;text-align:center}
+  .bigs h2{font:800 92px 'IBM Plex Sans',sans-serif;letter-spacing:-.03em;line-height:1.08;margin:0 0 26px}
+  .bigs h2 em{font-style:normal;color:var(--blue)}
+  .bigs .bp,.tryq .bp{font-size:38px;line-height:1.4;color:var(--mut);margin:0 auto;max-width:1300px}
+  .tryq{position:absolute;left:160px;right:160px;top:220px;text-align:center}
+  .tryq .kt{color:var(--green)}
+  .tryq h2{font:800 78px 'IBM Plex Sans',sans-serif;letter-spacing:-.02em;line-height:1.1;margin:0 0 22px}
+  .tryq .ring{position:relative;width:150px;height:150px;margin:40px auto 0}
+  .tryq .ring svg{width:150px;height:150px;transform:rotate(-90deg)}
+  .tryq .r0{fill:none;stroke:rgba(255,255,255,.1);stroke-width:10}
+  .tryq .r1{fill:none;stroke:var(--green);stroke-width:10;stroke-linecap:round;stroke-dasharray:326.7;stroke-dashoffset:0}
+  .tryq .ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 64px 'IBM Plex Mono',monospace}
+  table.t td.strike{color:var(--mut);text-decoration:line-through;text-decoration-color:var(--orange)}
+  table.t td.bold{font-weight:700;color:#fff}
+  .spl{display:grid;gap:24px}
+  .spl-h{display:flex;justify-content:space-between;font-size:32px;margin-bottom:10px}.spl-h span{font-family:'IBM Plex Mono',monospace}
+  .spl-bar{position:relative;display:flex;height:96px;border-radius:14px;overflow:hidden}
+  .spl-bar .whole{position:absolute;inset:0;background:#3b4560;z-index:1}
+  .spl-bar .pc{display:flex;align-items:center;justify-content:center;text-align:center;min-width:150px;opacity:0}
+  .spl-bar .pc em{font:600 22px 'Inter',sans-serif;font-style:normal;color:#fff;line-height:1.2}
+  .par svg{width:1680px;height:560px;overflow:visible}
+  .par .pg{stroke:rgba(255,255,255,.08)}.par .pa{font:500 20px 'IBM Plex Mono',monospace;fill:var(--mut);text-anchor:end}
+  .par .pb{fill:#5a7fc4}.par .pb.top{fill:var(--orange)}.par .pb.hl{fill:#ffb27a}
+  .par .pn{font:500 17px 'Inter',sans-serif;fill:var(--mut);text-anchor:end}
+  .par .pv{font:600 16px 'IBM Plex Mono',monospace;fill:#fff;text-anchor:middle}
+  .par .pz{fill:rgba(255,122,61,.1)}.par .pzt{font:700 26px 'IBM Plex Sans',sans-serif;fill:var(--orange);text-anchor:start}
+  .par .pl{fill:none;stroke:#fff;stroke-width:3}.par .pd{fill:#fff}
+  .vg2{display:grid;gap:7px}
+  .vr{display:grid;grid-template-columns:330px 1fr 120px;gap:24px;align-items:center;font-size:30px}
+  .vb{display:grid;gap:3px}.vb i{display:block;height:19px;border-radius:99px;font:600 17px 'IBM Plex Mono',monospace;font-style:normal;color:#04130b;text-align:right;padding-right:8px;line-height:22px;min-width:4px}
+  .vb .vi1{background:var(--green)}.vb .vi2{background:#5a7fc4;color:#fff}
+  .vx{font:700 30px 'IBM Plex Mono',monospace;text-align:right}.vr.hot .vx{color:var(--orange)}
+  .vk{display:flex;gap:40px;font-size:26px;color:var(--mut);margin-top:16px}
+  .vk span::before{content:"";display:inline-block;width:22px;height:22px;border-radius:5px;margin-right:12px;vertical-align:-3px}
+  .vk .k1::before{background:var(--green)}.vk .k2::before{background:#5a7fc4}
+  .fb2{position:absolute;left:60px;top:104px;width:1800px;height:820px}
+  .fb2 svg{width:1800px;height:820px;overflow:visible}
+  .fb2 .bx rect{fill:var(--panel);stroke:rgba(255,255,255,.3);stroke-width:2}
+  .fb2 .bx text{font:600 15.5px 'Inter',sans-serif;fill:#fff;text-anchor:middle}
+  .fb2 .bx .sb{font:500 12.5px 'IBM Plex Mono',monospace;fill:var(--mut)}
+  .fb2 .k-basic rect{stroke:var(--blue);stroke-width:3.5;fill:#10204a}
+  .fb2 .k-higher rect,.fb2 .k-assumed rect{stroke-dasharray:6 5;fill:transparent}
+  .fb2 .k-unwanted rect{stroke:var(--red);stroke-dasharray:6 4;fill:#2a1012}.fb2 .k-unwanted text{fill:#ff8a8a}
+  .fb2 .k-all rect{stroke:#22a39a}.fb2 .k-one rect{stroke:#9b6cf0}.fb2 .k-user rect{stroke:#7b8db0}.fb2 .k-esteem rect{stroke:#e06aa8}.fb2 .k-second rect{stroke:var(--amber)}.fb2 .k-when rect{stroke:#7c8db5}
+  .fb2 .bx.ok rect{stroke:var(--green)}.fb2 .bx.warm rect{stroke:var(--amber)}.fb2 .bx.hot rect{stroke:var(--orange);fill:#2a160f}
+  .fb2 .glow{fill:none;stroke:#ffd23f;stroke-width:4}
+  .fb2 .ln{stroke:rgba(170,195,255,.65);stroke-width:2.2}.fb2 .ln.dash{stroke-dasharray:6 5}.fb2 .ln.when{stroke-dasharray:4 4}.fb2 .ln.cause{stroke:var(--red);stroke-dasharray:6 5}
+  .fb2 .rl text{font:700 13px 'IBM Plex Mono',monospace;fill:var(--mut);letter-spacing:.08em}
+  .fb2 .ax line{stroke:var(--blue);stroke-width:2.5}.fb2 .ax path{fill:var(--blue)}.fb2 .ax text{font:700 20px 'IBM Plex Mono',monospace;fill:var(--blue)}
+  .fb2 .sc line{stroke:var(--amber);stroke-width:2.5;stroke-dasharray:10 7}.fb2 .sc text{font:600 16px 'IBM Plex Mono',monospace;fill:var(--amber);text-anchor:middle}
+  .fb2 .cr rect{fill:transparent;stroke:var(--mut);stroke-dasharray:7 5}.fb2 .cr text{font:500 14px 'Inter',sans-serif;fill:var(--mut)}.fb2 .cr .crh{font:700 13px 'IBM Plex Mono',monospace;fill:var(--amber)}.fb2 .ob rect{stroke:var(--amber);stroke-dasharray:none;fill:rgba(255,190,80,.07)}.fb2 .ob text{font-size:13px;fill:#fff}
+  .fb2 .lab{font:700 20px 'IBM Plex Mono',monospace;fill:var(--amber);letter-spacing:.1em}
 </style>
 </head>
 <body>
@@ -169,6 +223,7 @@
 "use strict";
 const $ = (s) => document.querySelector(s);
 const card = $("#card"), panel = $("#panel"), chip = $("#chip"), cap = $("#cap"), viewer = $("#pjViewer");
+let capAt = 0;
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const seg = (t, a, b) => clamp((t - a) / (b - a));
 const easeOut = (p) => 1 - Math.pow(1 - p, 3);
@@ -210,7 +265,7 @@ const K = {
       document.querySelectorAll(".jp div").forEach((e, i) => rise(e, seg(t, 1.0 + i * 0.12, 1.5 + i * 0.12), 24)); },
   },
   bars: {
-    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="vbars">${d.items.map((x) =>
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="vbars${d.items.length > 7 ? " dense" : ""}">${d.items.map((x) =>
       `<div class="vbar ${x.c || ""}"><span>${esc(x.l)}</span><span class="tr"><i></i></span><span class="v">${esc(x.vt || gbp(x.v))}</span></div>`).join("")}</div>
       ${d.note ? `<p class="kt" style="margin-top:34px;color:#93a3c4;text-transform:none;letter-spacing:0;font:500 30px Inter">${esc(d.note)}</p>` : ""}</div>`,
     frame: (t) => { const d = S, max = d.max || Math.max(...d.items.map((x) => x.v));
@@ -233,7 +288,7 @@ const K = {
   },
   table: {
     html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><table class="t ${d.rows.length > 6 ? "dense" : ""}"><thead><tr>${d.cols.map((c, i) => `<th class="${i && d.num !== false ? "n" : ""}">${esc(c)}</th>`).join("")}</tr></thead>
-      <tbody>${d.rows.map((r, j) => `<tr class="${(d.hl || []).includes(j) ? "hl" : ""}">${r.map((c, i) => `<td class="${i && d.num !== false ? "n" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
+      <tbody>${d.rows.map((r, j) => `<tr class="${(d.hl || []).includes(j) ? "hl" : ""}">${r.map((c, i) => `<td class="${i && d.num !== false ? "n" : ""}${d.strike === i ? " strike" : ""}${d.bold === i ? " bold" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
       ${d.foot ? `<tfoot><tr>${d.foot.map((c, i) => `<td class="${i && d.num !== false ? "n" : ""}">${esc(c)}</td>`).join("")}</tr></tfoot>` : ""}</table></div>`,
     frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7)); rise($("table.t thead"), seg(t, 0.5, 0.9), 0);
       const n = d.rows.length, per = Math.min(0.5, (DUR * 0.6 - 0.8) / n);
@@ -317,6 +372,96 @@ const K = {
         cs[i].style.opacity = q > 0 ? 1 : 0; vs[i].style.bottom = (60 + top + 12) + "px"; vs[i].textContent = b.lbl; vs[i].style.opacity = seg(t, a + 0.3, a + 0.7); ls[i].style.opacity = q > 0 ? 1 : 0; });
       wf.querySelector(".tg").style.opacity = seg(t, d.tAt, d.tAt + 0.5); },
   },
+  // a big statement in the middle of the screen
+  big: {
+    html: (d) => `<div class="bigs">${d.k ? `<p class="kt">${esc(d.k)}</p>` : ""}<h2>${d.h}</h2>${d.p ? `<p class="bp">${esc(d.p)}</p>` : ""}</div>`,
+    frame: (t) => { rise($(".bigs .kt"), seg(t, 0, 0.5)); rise($(".bigs h2"), seg(t, 0.2, 1.0), 40); rise($(".bigs .bp"), seg(t, 1.0, 1.6)); },
+  },
+  // pause and try: a question with a countdown ring
+  try: {
+    html: (d) => `<div class="tryq"><p class="kt">Pause and try</p><h2>${esc(d.q)}</h2>${d.hint ? `<p class="bp">${esc(d.hint)}</p>` : ""}<div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="r0"/><circle cx="60" cy="60" r="52" class="r1"/></svg><b></b></div></div>`,
+    frame: (t) => { rise($(".tryq .kt"), seg(t, 0, 0.4)); rise($(".tryq h2"), seg(t, 0.2, 0.9), 30); rise($(".tryq .bp"), seg(t, 0.8, 1.3));
+      const a = DUR * 0.45, left = Math.max(0, DUR - 0.4 - t), span = DUR - 0.4 - a, q = clamp((t - a) / span);
+      rise($(".tryq .ring"), seg(t, a - 0.4, a), 0); $(".tryq .r1").style.strokeDashoffset = (326.7 * q).toFixed(1); $(".tryq .ring b").textContent = t >= a ? Math.ceil(left * 5 / span) || "" : ""; },
+  },
+  // a part's cost split into the functions it performs
+  split: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="spl">${d.rows.map((r) =>
+      `<div class="spr"><div class="spl-h"><b>${esc(r.part)}</b><span>${gbp(r.total)}</span></div><div class="spl-bar"><i class="whole"></i>${r.pieces.map((p) => `<i class="pc" style="background:${p.c};flex:${p.v}"><em>${esc(p.fn)}<br>${gbp(p.v)}</em></i>`).join("")}</div></div>`).join("")}</div></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      const per = (DUR * 0.8 - 0.8) / d.rows.length;
+      document.querySelectorAll(".spr").forEach((e, i) => { const a = 0.8 + i * per; rise(e, seg(t, a, a + 0.4), 16);
+        const q = easeOut(seg(t, a + 0.6, a + 1.4)); e.querySelector(".whole").style.opacity = 1 - q;
+        e.querySelectorAll(".pc").forEach((p) => { p.style.opacity = q; p.style.transform = `scaleY(${0.6 + 0.4 * q})`; }); }); },
+  },
+  // Pareto chart: bars grow in order, then the cumulative line, then the top-30% zone
+  pareto: {
+    html: (d) => `<div class="k" style="top:140px"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="par"><svg viewBox="0 0 1680 560"></svg></div></div>`,
+    frame: (t) => { const d = S, svg = $(".par svg"); rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7));
+      const W = 1680, H = 470, L = 70, R = 70, T = 40, n = d.items.length, bw = (W - L - R) / n, max = 30, yb = (v) => H - v / max * (H - T), yc = (p) => H - p / 100 * (H - T);
+      const grow = DUR * 0.45, per = grow / n, lineAt = 0.8 + grow, zoneAt = lineAt + 1.2;
+      let cum = 0, pts = [], s = "";
+      [0, 25, 50, 75, 100].forEach((p) => (s += `<line x1="${L}" x2="${W - R}" y1="${yc(p)}" y2="${yc(p)}" class="pg"/><text x="${L - 10}" y="${yc(p) + 7}" class="pa">${p}%</text>`));
+      const zq = easeOut(seg(t, zoneAt, zoneAt + 0.8));
+      s += `<rect x="${L}" y="${T}" width="${d.top * bw * zq}" height="${H - T}" class="pz"/><text x="${L}" y="${T - 12}" class="pzt" style="opacity:${zq}">${esc(d.zone)}</text>`;
+      d.items.forEach((f, i) => { cum += f.cost; pts.push([L + i * bw + bw / 2, yc(cum / d.total * 100)]);
+        const q = easeOut(seg(t, 0.8 + i * per, 0.8 + i * per + 0.5)), h = (H - yb(f.cost)) * q, top = i < d.top && zq > 0;
+        s += `<rect x="${L + i * bw + 4}" y="${H - h}" width="${bw - 8}" height="${h}" rx="3" class="pb${top ? " top" : ""}${(d.hl || []).includes(f.id) ? " hl" : ""}"/>`;
+        s += `<text transform="translate(${L + i * bw + bw / 2 + 6},${H + 14}) rotate(-55)" class="pn" style="opacity:${q}">${esc(f.fn)}</text>`;
+        if (i < Math.min(d.top, 6)) s += `<text x="${L + i * bw + bw / 2}" y="${H - h - 8}" class="pv" style="opacity:${seg(t, zoneAt, zoneAt + 0.6)}">£${f.cost.toFixed(2)}</text>`; });
+      const lq = seg(t, lineAt, lineAt + 1.0), k = Math.max(1, Math.round(lq * n));
+      if (lq > 0) s += `<polyline points="${pts.slice(0, k).map((p) => p.join(",")).join(" ")}" class="pl"/>` + pts.slice(0, k).map((p) => `<circle cx="${p[0]}" cy="${p[1]}" r="4" class="pd"/>`).join("");
+      svg.innerHTML = s; },
+  },
+  // value graph: importance to the customer against share of the cost
+  vg2: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh">${esc(d.h)}</h2><div class="vg2">${d.rows.map((r) =>
+      `<div class="vr ${r.cost / r.imp >= 2 ? "hot" : ""}"><span class="vn">${esc(r.fn)}</span><span class="vb"><i class="vi1"></i><i class="vi2"></i></span><span class="vx">${(r.cost / r.imp).toFixed(1)}×</span></div>`).join("")}</div>
+      <p class="vk"><span class="k1">importance to the school</span><span class="k2">share of the cost</span></p></div>`,
+    frame: (t) => { const d = S, mx = Math.max(...d.rows.flatMap((r) => [r.imp, r.cost])); rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.7)); rise($(".vk"), seg(t, 0.4, 0.8));
+      const per = (DUR * 0.55) / d.rows.length;
+      document.querySelectorAll(".vr").forEach((e, i) => { const r = d.rows[i], a = 0.8 + i * per; rise(e, seg(t, a, a + 0.3), 10);
+        const [b1, b2] = e.querySelectorAll("i"), q1 = easeOut(seg(t, a + 0.1, a + 0.8)), q2 = easeOut(seg(t, a + 0.4, a + 1.1));
+        b1.style.width = q1 * r.imp / mx * 100 + "%"; b1.textContent = q1 > 0.9 ? r.imp.toFixed(0) + "%" : ""; b2.style.width = q2 * r.cost / mx * 100 + "%"; b2.textContent = q2 > 0.9 ? r.cost.toFixed(0) + "%" : "";
+        e.querySelector(".vx").style.opacity = seg(t, a + 1.0, a + 1.4); }); },
+  },
+  // the FAST diagram, built up layer by layer
+  fastb: {
+    html: () => `<div class="fb2"><svg viewBox="10 0 1545 716"></svg></div>`,
+    frame: (t) => { const d = S, D = window.VH_PROJ, FNS = Object.fromEntries(D.funcs.map((f) => [f.id, f]));
+      const ROWY = { D: 34, A: 118, B: 194, P: 300, W1: 396, W2: 470, W3: 544, W4: 618 }, CW = 140, BW = 124, BH = 58, X0 = 20, bx = (f) => ({ x: X0 + f.col * CW, y: ROWY[f.row] });
+      // when each box appears: base ones are already there; added ones appear in turn
+      const add = d.add || [], span = Math.max(0.5, DUR * 0.75 - 0.6), at = {};
+      (d.base || []).forEach((id) => (at[id] = -1)); add.forEach((id, i) => (at[id] = 0.6 + i * span / Math.max(1, add.length)));
+      const vis = (id) => (at[id] == null ? 0 : easeOut(seg(t, at[id], at[id] + 0.5)));
+      const on = (k) => (d.flags || []).includes(k) || (d.addFlags || []).includes(k);
+      const fq = (k) => ((d.flags || []).includes(k) ? 1 : (d.addFlags || []).includes(k) ? easeOut(seg(t, 0.6, 1.3)) : 0);
+      let s = "";
+      if (on("axis")) s += `<g style="opacity:${fq("axis")}" class="ax"><line x1="200" y1="14" x2="700" y2="14"/><path d="M700 8 L714 14 L700 20Z"/><text x="722" y="20">HOW?</text><path d="M200 24 L186 30 L200 36Z"/><line x1="200" y1="30" x2="700" y2="30"/><text x="178" y="36" style="text-anchor:end">WHY?</text></g>`;
+      if (on("scope")) { const q = fq("scope"), x1 = X0 + CW - 8, x2 = X0 + 10 * CW - 8; s += `<g style="opacity:${q}" class="sc"><line x1="${x1}" y1="100" x2="${x1}" y2="${100 + 590 * q}"/><line x1="${x2}" y1="100" x2="${x2}" y2="${100 + 590 * q}"/><text x="${x1}" y="708">scope</text><text x="${x2}" y="708">scope</text></g>`; }
+      if (on("objective")) s += `<g style="opacity:${fq("objective")}" class="cr ob"><rect x="${X0}" y="48" width="${5 * CW + BW}" height="40" rx="8"/><text x="${X0 + 12}" y="73"><tspan class="crh">STUDY OBJECTIVE </tspan>${esc(D.objective)}</text></g>`;
+      if (on("criteria")) s += `<g style="opacity:${fq("criteria")}" class="cr"><rect x="${X0 + 6 * CW}" y="4" width="${4 * CW + BW}" height="96" rx="8"/><text class="crh" x="${X0 + 6 * CW + 12}" y="22">DESIGN CRITERIA (requirements, not functions)</text>${D.criteria.map((c, i) => `<text x="${X0 + 6 * CW + 12 + (i % 3) * 222}" y="${42 + Math.floor(i / 3) * 20}">${esc(c)}</text>`).join("")}</g>`;
+      // row labels, shown with the first box of each row
+      [["ALL THE TIME", "AND ESTEEM", "encl", X0, ROWY.A + 22], ["USER AND", "ONE TIME", "cmd", X0, ROWY.B + 22], ["CRITICAL PATH", "", "mag", X0 + 2 * CW, ROWY.P - 12], ["WHEN, OR", "CAUSED BY", "sig", X0, ROWY.W3 + 22]]
+        .forEach(([a, b, id, x, y]) => { const q = vis(id); if (q) s += `<g class="rl" style="opacity:${q * 0.9}"><text x="${x}" y="${y}">${a}</text>${b ? `<text x="${x}" y="${y + 17}">${b}</text>` : ""}</g>`; });
+      const path = D.funcs.filter((f) => f.row === "P").sort((a, b) => a.col - b.col);
+      path.forEach((f, i) => { if (!i) return; const q = Math.min(vis(f.id), vis(path[i - 1].id)); if (!q) return; const a = bx(path[i - 1]), b = bx(f);
+        s += `<line class="ln${f.kind === "assumed" ? " dash" : ""}" style="opacity:${q}" x1="${a.x + BW}" y1="${a.y + BH / 2}" x2="${b.x}" y2="${b.y + BH / 2}"/>`; });
+      D.flinks.forEach(([from, to, type]) => { const q = Math.min(vis(from), vis(to)); if (!q) return; const a = bx(FNS[from]), b = bx(FNS[to]);
+        const cls = `ln ${type}`, st = `opacity:${q}`;
+        if (a.x === b.x) s += `<line class="${cls}" style="${st}" x1="${a.x + BW / 2}" y1="${a.y + BH}" x2="${b.x + BW / 2}" y2="${b.y}"/>`;
+        else if (a.y === b.y) s += `<line class="${cls}" style="${st}" x1="${a.x + BW}" y1="${a.y + BH / 2}" x2="${b.x}" y2="${b.y + BH / 2}"/>`;
+        else s += `<path class="${cls}" style="${st}" d="M${a.x + BW / 2} ${a.y + BH} L${a.x + BW / 2} ${b.y + BH / 2} L${b.x} ${b.y + BH / 2}" fill="none"/>`; });
+      const hl = d.hl || null, pulse = hl ? 0.5 + 0.5 * Math.sin(t * 4) : 0;
+      D.funcs.forEach((f) => { const q = vis(f.id); if (!q) return; const { x, y } = bx(f), w = f.fn.split(" "), c = d.cost && d.costs ? d.costs[f.id] : null;
+        const sub = c ? `${gbp(c[0])} · VI ${c[1] > 10 ? ">10" : c[1].toFixed(2)}` : f.kind === "basic" ? "basic function" : f.kind === "higher" ? "higher-order" : f.kind === "assumed" ? "input" : f.kind === "unwanted" ? "unwanted" : "";
+        const vic = c ? (c[1] >= 2 ? " hot" : c[1] >= 1.25 ? " warm" : " ok") : "", isH = hl && hl.includes(f.id), dim = hl && !isH ? 0.32 : 1;
+        s += `<g class="bx k-${f.kind}${vic}${isH ? " hl" : ""}" style="opacity:${q * dim};transform-origin:${x + BW / 2}px ${y + BH / 2}px;transform:scale(${0.85 + 0.15 * q})">
+          ${isH ? `<rect x="${x - 5}" y="${y - 5}" width="${BW + 10}" height="${BH + 10}" rx="11" class="glow" style="opacity:${0.4 + 0.6 * pulse}"/>` : ""}
+          <rect x="${x}" y="${y}" width="${BW}" height="${BH}" rx="8"/><text x="${x + BW / 2}" y="${y + (sub ? 20 : 25)}">${esc(w[0])}</text><text x="${x + BW / 2}" y="${y + (sub ? 36 : 42)}">${esc(w.slice(1).join(" "))}</text>${sub ? `<text class="sb" x="${x + BW / 2}" y="${y + 51}">${sub}</text>` : ""}</g>`; });
+      if (d.label) s += `<text class="lab" x="${d.label[1]}" y="${d.label[2]}" style="opacity:${seg(t, 0.4, 1)}">${esc(d.label[0])}</text>`;
+      $(".fb2 svg").innerHTML = s; },
+  },
   end: {
     html: (d) => `<div class="end"><h1>${d.h}</h1><p>${esc(d.p)}</p><div class="url">${esc(d.url)}</div></div>`,
     frame: (t) => { rise($(".end h1"), seg(t, 0.2, 1.0), 40); rise($(".end p"), seg(t, 0.8, 1.4)); rise($(".end .url"), seg(t, 1.3, 1.9)); },
@@ -327,7 +472,7 @@ const K = {
 window.setup = function (scene, meta) {
   S = scene; DUR = meta.dur;
   chip.innerHTML = meta.step ? `<span class="n">${meta.step}</span><span>Step ${meta.step} of 6 · <b>${esc(meta.stepName)}</b></span>` : `<span class="n">${meta.badge || "▶"}</span><span>VH-3600 case study · <b>${esc(meta.name)}</b></span>`;
-  cap.innerHTML = scene.vo ? `<div>${esc(scene.vo)}</div>` : "";
+  cap.innerHTML = scene.vo ? `<div>${esc(scene.chunks ? scene.chunks[0].text : scene.vo)}</div>` : ""; capAt = 0;
   const is3d = scene.kind === "three";
   card.classList.toggle("on", !is3d); viewer.style.visibility = is3d ? "visible" : "hidden";
   if (!is3d) { card.innerHTML = K[scene.kind].html(scene); }
@@ -344,7 +489,13 @@ window.setup = function (scene, meta) {
 window.frame = function (t) {
   if (S.kind === "three") three(t); else K[S.kind].frame(t);
   // the subtitle fades in with the line and out at the end of the scene
-  cap.style.opacity = clamp(Math.min(seg(t, 0.15, 0.45), seg(DUR - t, 0, 0.25)));
+  let o = clamp(Math.min(seg(t, 0.15, 0.45), seg(DUR - t, 0, 0.25)));
+  if (S.chunks && S.chunks.length > 1) {   // a sentence or two at a time, with a short dip between them
+    let i = 0; S.chunks.forEach((c, j) => { if (t >= c.at - 0.1) i = j; });
+    if (i !== capAt) { capAt = i; cap.firstChild.textContent = S.chunks[i].text; }
+    const nx = S.chunks[i + 1]; if (i > 0) o = Math.min(o, seg(t, S.chunks[i].at - 0.1, S.chunks[i].at + 0.1)); if (nx) o = Math.min(o, seg(nx.at - 0.1 - t, 0, 0.12));
+  }
+  cap.style.opacity = o;
   chip.style.opacity = 1;
 };
 window.ready = () => !!window.VHProjector;

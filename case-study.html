@@ -260,41 +260,178 @@
 
   <section class="cs-sec st-phase" id="p2" aria-labelledby="p2T">
     <p class="cs-sec-k"><span class="st-n">2</span>Phase 2 · Function analysis</p>
-    <h2 id="p2T">What does it do, and what does each job cost?</h2>
-    <p class="cs-sec-lede">Every part gets a function: a verb and a noun, like <i>modulate light</i>. Each part's cost is shared out among
-    the functions it does (the main board, for example, mostly processes the signal, but some of it receives the signal and
-    drives the speaker), so the function costs add up exactly to the bill of materials. Then the team asks what each function is
-    <b>worth</b>: the lowest cost shown to do the same job reliably, from benchmarks, supplier quotes and the report's teardown.
-    Cost divided by worth is the <b>value index</b>. The higher it is, the more is being paid for that job.</p>
-    <figure class="cs-vid">
-      <video controls preload="none" playsinline poster="videos/cs-p2.webp" width="1280" height="720" aria-label="Video: Step 2, Function analysis">
-        <source src="videos/cs-p2.mp4" type="video/mp4" />
+    <h2 id="p2T">What does it do, and what should each job cost?</h2>
+    <p class="cs-sec-lede">Function analysis is the heart of value engineering. Customers don't pay for parts; they pay for what the parts
+    do. This step turns the projector into a set of functions, maps how they depend on each other, puts a cost and a worth on each
+    one, and shows where money is spent on things the customer doesn't value. It's done in seven steps.</p>
+    <ol class="fa-steps" aria-label="The seven steps of function analysis">
+      <li><a href="#fa1"><b>1</b>Name the functions</a></li><li><a href="#fa2"><b>2</b>Classify them</a></li><li><a href="#fa3"><b>3</b>Build the FAST diagram</a></li>
+      <li><a href="#fa4"><b>4</b>Cost the functions</a></li><li><a href="#fa5"><b>5</b>Find where the cost sits</a></li><li><a href="#fa6"><b>6</b>Set the worth</a></li><li><a href="#fa7"><b>7</b>Pick the targets</a></li>
+    </ol>
+
+    <figure class="cs-vid" id="vid-p2a">
+      <video controls preload="none" playsinline poster="videos/cs-p2a.webp" width="1280" height="720" aria-label="Video: Function analysis, film 1 of 5, Why functions?">
+        <source src="videos/cs-p2a.mp4" type="video/mp4" />
       </video>
-      <figcaption><b>Video, 1½ minutes:</b> functions, the FAST diagram, function costs, worth and the value index. Subtitles are shown on screen.</figcaption>
-      <details><summary>Read the transcript</summary><p>Step two is function analysis. Stop looking at the parts, and ask what the product does.</p><p>Every part gets a function, written as a verb and a noun. The lamp generates light. The panels modulate light. The prism combines colours. The lens enlarges the image.</p><p>The FAST diagram links them. Read to the right, it answers how. Read to the left, it answers why. Project image is the basic function: the reason the product exists.</p><p>Then each part's cost is shared out among its functions. Modulating light costs twenty-seven pounds fifty: over a quarter of everything.</p><p>Next comes worth: the lowest cost shown to do the same job. Cost divided by worth gives the value index. The higher it is, the more you're overpaying.</p><p>Modulating light is expensive, but good value: its index is one point oh four. Receiving the signal costs five pounds, for a job worth one pound thirty. Its index is three point eight five.</p><p>So the targets for the creative session are set by value, not just by cost.</p></details>
+      <figcaption><b>Video 1 of 5, about 3 minutes:</b> why functions matter, value, and the seven steps. Subtitles are shown on screen.</figcaption>
+      <details><summary>Read the transcript</summary><p>This is the first of five short films on function analysis, the heart of value engineering. By the end of them, you'll be able to do it yourself, step by step, on a real product.</p><p>Here's our projector, taken apart. Fifty kinds of part. The usual way to cut cost is to go through them one by one and ask each supplier for a lower price. That finds a little. Function analysis finds far more, because it asks a different question.</p><p>A school doesn't want a lamp, three LCD panels and a lens. It wants a bright, clear picture on the wall. Every part is there only to do a job, and that job is called a function.</p><p>The idea came from General Electric in the nineteen-forties. Wartime shortages forced its engineers to use substitute materials, and often the substitute did the job just as well, for less. Lawrence Miles turned that into a method. Don't ask what the part is. Ask what it does, then find the cheapest reliable way to do that.</p><p>That gives us value: the function you get, divided by what it costs. We can raise value by doing the same job for less, or by doing more for the same money. What we never do is cut cost by cutting a function the customer needs.</p><p>Why go to this trouble? Because it frees the team from today's design. It shows what each job really costs, however many parts it takes. It shows money spent on jobs nobody asked for. And it points the creative session at the right targets.</p><p>We'll do it in seven steps. Name the functions, and classify them. Build the FAST diagram. Cost the functions, and find where the cost sits. Set the worth. And pick the targets. Each step has a purpose, and we'll say what it is as we go.</p><p>Let's try the question on one part. The lamp burner. What is it? A two hundred and ten watt lamp. What does it do? It generates light. Two words: a verb, and a noun you can measure. That's a function.</p><p>On this projector, function analysis turned fifty kinds of part into thirty-two costed functions, and found about twenty pounds a projector spent above what those functions are worth.</p><p>So: a function is what a part does, written as an active verb and a measurable noun. Value is function divided by cost. In film two, we name and classify every function in the projector.</p></details>
     </figure>
-    <div class="cs-panel st-fast">
-      <h3>The FAST diagram</h3>
-      <p class="cs-small">Read left to right to ask <b>how?</b> and right to left to ask <b>why?</b> The basic function, <i>project image</i>, is
-      done by the chain of functions on the critical path. Functions above it happen all the time; below it are the functions that
-      happen when the picture is being made, and the supporting ones. The dashed boxes sit outside the scope.</p>
-      <div id="stFast"></div>
+
+    <div class="fa-step" id="fa1">
+      <h3><span>2.1</span>Name the functions</h3>
+      <p class="fa-why"><b>Why this step:</b> you can't improve what you can't describe. Naming each job in two words makes the team agree what every part is for, and frees them from how it's done today.</p>
+    <figure class="cs-vid" id="vid-p2b">
+      <video controls preload="none" playsinline poster="videos/cs-p2b.webp" width="1280" height="720" aria-label="Video: Function analysis, film 2 of 5, Naming and classifying">
+        <source src="videos/cs-p2b.mp4" type="video/mp4" />
+      </video>
+      <figcaption><b>Video 2 of 5, about 3 minutes:</b> naming every part's function and classifying them. Subtitles are shown on screen.</figcaption>
+      <details><summary>Read the transcript</summary><p>Film two: naming and classifying functions. Step two point one is to name every function. The purpose: the whole team agrees what every part is for, in words that don't depend on today's design.</p><p>There are four rules. Use an active verb and a measurable noun: generate light, in lumens; remove heat, in watts. Say what it does, not how it does it. Avoid weak verbs, such as provide, allow and ensure. And name the job, not the part: trap dust, not filter.</p><p>Here are some weak names, and better ones. Provide light tells you nothing you can measure; generate light can be measured in lumens. Protect user is a wish. Interrupt power is a job a switch really does, and you can test it.</p><p>Your turn. The fold mirror bends the light through ninety degrees. What is its function? Pause the film and try.</p><p>Redirect light. Not reflect light: reflecting is only how a mirror does it. A prism could redirect light too. A good function stays true even if the part is replaced by something completely different.</p><p>Now every part, group by group. The light source. The burner generates light, the reflector collects it, and the cage positions the lamp. The safety glass contains fragments if the lamp bursts. The door exposes the lamp, and the baffle deflects heat.</p><p>The optics. The fly's-eye arrays divide and distribute the light. The converter polarises it. Dichroic mirrors separate wavelengths into red, green and blue. The LCD panels modulate light, the X-cube combines the three images, and the lens magnifies the image.</p><p>Cooling and power. Three fans move air, the filter traps dust, and thermistors sense temperature. The power supply converts voltage. The ballast ignites the arc, then regulates power to the lamp.</p><p>Electronics and housing. The main board processes the signal, and the rear connectors receive it. The buttons accept commands. The case encloses components, the shutter interrupts the image, and thirty-eight screws fasten components.</p><p>Part functions are detailed. When we draw the product's diagram, related ones roll up. The two fly's-eye arrays and the superposition lens divide, distribute and superimpose light. Together they homogenise light: an even patch of light on every panel.</p><p>Step two point two is to classify them. The purpose: to separate the job the customer pays for from everything else. The basic function is the reason the product exists: project image. Secondary functions are needed for the way it's designed. Unwanted functions are side effects nobody asked for. And esteem functions make people want it, rather than making it work.</p><p>Unwanted functions need special attention. Nobody asked for heat, ultraviolet, interference, fan noise or a four hundred pound electricity bill. They're worth nothing to the school, yet each one costs money to deal with, as we'll see.</p><p>So: name every function as an active verb and a measurable noun, and say what it does, not how. Then classify it. In film three, we arrange them into a FAST diagram.</p></details>
+    </figure>
+      <div class="cs-two">
+        <div class="cs-panel"><h4>The rules</h4>
+          <ul class="cs-list">
+            <li><b>An active verb and a measurable noun.</b> <i>Generate light</i> (lumens), <i>Remove heat</i> (watts), <i>Conduct current</i> (amps).</li>
+            <li><b>Say what it does, not how.</b> The reflector's job is to <i>collect light</i>; reflecting is only how it does it.</li>
+            <li><b>Avoid weak verbs</b> such as provide, allow, enable, permit and ensure. They hide the real job.</li>
+            <li><b>Avoid nouns you can't measure</b>, such as user, buyer or quality.</li>
+            <li><b>Name the job, not the part.</b> <i>Trap dust</i>, not "filter".</li>
+          </ul></div>
+        <div class="cs-panel"><h4>Wrong and right</h4>
+          <table class="cs-tbl fa-wr"><caption class="sr">Examples of weak function names and better ones</caption>
+            <thead><tr><th scope="col">Part</th><th scope="col">Weak</th><th scope="col">Better</th></tr></thead>
+            <tbody><tr><td>Lamp</td><td>Provide light</td><td><b>Generate light</b></td></tr><tr><td>Lamp door</td><td>Allow access</td><td><b>Expose lamp</b></td></tr>
+              <tr><td>Interlock switch</td><td>Protect user</td><td><b>Interrupt power</b></td></tr><tr><td>Front bezel</td><td>Look nice</td><td><b>Enhance appearance</b></td></tr>
+              <tr><td>Air filter</td><td>Filter</td><td><b>Trap dust</b></td></tr><tr><td>Tilt foot</td><td>Level image</td><td><b>Adjust angle</b></td></tr>
+              <tr><td>Carton</td><td>Protect product</td><td><b>Absorb shock</b></td></tr></tbody></table></div>
+      </div>
+      <p class="fa-miss"><b>Common mistake:</b> describing the part or the way it works. A good function would still be true if the part were replaced by something completely different.</p>
     </div>
-    <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Function cost and worth"><div id="stFunctions"></div></div>
-    <div class="cs-two st-find">
-      <div class="cs-panel"><h3>What it tells us</h3>
-        <ul class="cs-list">
-          <li><b>The biggest cost isn't the worst value.</b> Modulating light costs £27.50, over a quarter of the parts, but its value index is 1.04. A single-chip DLP design would be cheaper, but it fails the must-be on colour brightness. Keep the design and look at the materials.</li>
-          <li><b>Receiving the signal is the worst value with real money in it:</b> £5.00 for a job worth £1.30 (value index 3.85), mostly ports that few schools use.</li>
-          <li><b>Processing the signal has the biggest gap,</b> £4.25 between cost and worth.</li>
-          <li><b>Three small jobs have value indexes over 9</b> (limit emissions, mute image, inform user). Little money, but easy to fix.</li>
-          <li><b>Generating light</b> is fair value for the maker (1.14), but it's the school's biggest running cost.</li>
-        </ul></div>
-      <div class="cs-panel"><h3>Targets for the creative session</h3>
-        <p class="cs-small">Go after functions with a high value index <b>and</b> enough money to matter, plus the factory process, which costs £27.60 a projector but isn't a product function.</p>
-        <ol class="cs-list"><li>Receive signal and process signal</li><li>Generate light and convert power (the power design)</li><li>Enclose components and remove heat</li><li>Enlarge image, condition and separate light (the optics)</li><li>Align optics</li><li>Protect product, inform user and the small jobs</li><li>The factory process and supply chain</li><li>Generate light, for the school</li></ol></div>
+
+    <div class="fa-step" id="fa2">
+      <h3><span>2.2</span>Classify them</h3>
+      <p class="fa-why"><b>Why this step:</b> it separates the job the customer pays for from the jobs that only support it, protect it or clean up after it. That's where unnecessary cost usually hides.</p>
+      <div class="fa-types">
+        <div class="t-basic"><b>Basic</b><p>The reason the product exists. One per product: <i>Project image</i>.</p></div>
+        <div class="t-sec"><b>Secondary, required</b><p>Needed to deliver the basic function the way it's designed: <i>Generate light</i>, <i>Remove heat</i>.</p></div>
+        <div class="t-unw"><b>Unwanted</b><p>A side effect nobody asked for: <i>Generate heat</i>, <i>Emit UV</i>, <i>Generate interference</i>, <i>Generate noise</i>, <i>Consume energy</i>. Worth £0.</p></div>
+        <div class="t-est"><b>Esteem</b><p>Makes the product appealing rather than making it work: <i>Enhance appearance</i>. Use functions make it work; esteem functions make people want it.</p></div>
+      </div>
+      <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Every part's function"><div id="stPartFns"></div></div>
+      <p class="fa-miss"><b>Common mistake:</b> treating every function as essential. In most products, more of the cost sits in secondary functions than in the basic one.</p>
     </div>
-    <div class="st-gate"><b>Gate check before phase 3</b><ul><li>Every part has a function</li><li>Function costs add up to the bill of materials</li><li>Every worth has a reason, and the targets are agreed</li></ul></div>
+
+    <div class="fa-step" id="fa3">
+      <h3><span>2.3</span>Build the FAST diagram</h3>
+      <p class="fa-why"><b>Why this step:</b> the FAST diagram (Function Analysis System Technique) turns a list of functions into logic. It shows which functions lie on the path to the customer's need and which hang off it, and it tests the team's understanding of the product.</p>
+    <figure class="cs-vid" id="vid-p2c">
+      <video controls preload="none" playsinline poster="videos/cs-p2c.webp" width="1280" height="720" aria-label="Video: Function analysis, film 3 of 5, The FAST diagram">
+        <source src="videos/cs-p2c.mp4" type="video/mp4" />
+      </video>
+      <figcaption><b>Video 3 of 5, about 4 minutes:</b> the FAST diagram, built one layer at a time. Subtitles are shown on screen.</figcaption>
+      <details><summary>Read the transcript</summary><p>Film three: step two point three, the FAST diagram. Its purpose is to turn a list of functions into logic, and to test whether the team really understands the product.</p><p>Start with the basic function, the one the customer pays for. For the projector, that's project image.</p><p>Ask why we project an image. To communicate information. That's the higher-order function: why the customer wants the product at all. It sits on the left, outside the scope line, because this study won't change it.</p><p>Now ask how. How do we project an image? By magnifying it. How do we magnify it? First we need one full-colour image, so we combine images. And how do we get those images? By modulating light, pixel by pixel, in three LCD panels.</p><p>How do we modulate light? An LCD panel only works with polarised light, so we polarise it. And before that, we generate light.</p><p>How do we generate light? We regulate power to the lamp. How? By converting voltage. And for that, we receive power. The building's supply is outside the study, so it sits past the right-hand scope line. Everything between the scope lines is the critical path.</p><p>Now test it backwards, asking why. Why receive power? To convert voltage. Why regulate power? To generate light. Why combine images? To magnify one image. Why magnify it? To project it. If every step makes sense both ways, the logic holds. If not, a card is in the wrong place.</p><p>Some functions need more than one answer to how. To modulate light, the panels also need the light split into red, green and blue, and spread evenly. So we separate wavelengths, and homogenise light. Stacked like this, they read as AND: all three are needed. Focus image is a second answer to how we project it.</p><p>Below the path go functions that happen at the same time. When we modulate light, we process the signal, and for that we must receive it. When we generate light, the ballast first ignites the arc, with a pulse of about three and a half thousand volts.</p><p>Now the unwanted functions, in red. Generating light also generates heat and ultraviolet. Processing the signal generates interference. And receiving power means consuming energy: about four hundred pounds of electricity over five years.</p><p>Each unwanted function drags in more. Heat must be removed, so we add fans. The fans pull in dust, so we trap dust, and they generate noise. The ultraviolet must be blocked, and the interference suppressed. None of this is what the school pays for. It exists only because of something unwanted.</p><p>Above the path go functions needed all the time, whatever the projector is doing: enclose and locate components, support weight, fasten components, and contain fragments if the lamp ever bursts. Enhance appearance is an esteem function.</p><p>Next, user functions, such as accept commands and interrupt image. Then one-time functions, which happen once or only now and then: adjust angle, convey instructions, absorb shock in transit, and expose lamp when it's changed, with interrupt power at the same moment, for safety.</p><p>Last, the design criteria. Brightness, resolution, lamp life, noise, safety and price aren't functions. They're requirements that every idea must still meet. Beside them sits the objective: at least ten per cent off the landed cost.</p><p>So: start with the basic function and ask how, to build the critical path. Test it with why. Add the scope lines, the AND functions, and the when functions. And mark the unwanted ones, because they drag in cost. In film four, we put a price on every box.</p></details>
+    </figure>
+      <div class="cs-two">
+        <div class="cs-panel"><h4>How to read it</h4>
+          <ul class="cs-list fa-defs">
+            <li><b>Higher-order function</b> (left, outside scope): why the customer wants the product. <i>Communicate information</i>.</li>
+            <li><b>Basic function</b> (first inside scope): <i>Project image</i>.</li>
+            <li><b>Critical path:</b> each step to the right answers <b>how?</b>, each step to the left answers <b>why?</b></li>
+            <li><b>Scope lines</b> mark what the study covers. <i>Supply power</i>, from the building's mains, is the input outside scope.</li>
+            <li><b>AND:</b> two or more boxes stacked under one function are all needed together. Modulate light needs Polarise light <i>and</i> Separate wavelengths <i>and</i> Homogenise light.</li>
+            <li><b>Below the path:</b> functions that happen <b>when</b> a path function happens, or are <b>caused by</b> it. Unwanted ones are in red.</li>
+            <li><b>Above the path:</b> functions needed <b>all the time</b>, <b>one-time</b> functions, user functions and esteem.</li>
+            <li><b>Design criteria</b> (dashed box) are requirements such as brightness, noise and safety, not functions. The <b>objective</b> sits beside them so nobody forgets what the study is for.</li>
+          </ul></div>
+        <div class="cs-panel"><h4>How the team built it</h4>
+          <ol class="cs-list">
+            <li>Write every function on a card.</li><li>Find the basic function: the one the customer pays for.</li>
+            <li>Ask "how?" again and again to build the critical path to the right.</li><li>Check it backwards with "why?". If a step doesn't make sense both ways, a card is in the wrong place.</li>
+            <li>Draw the scope lines.</li><li>Place the "when" and "caused by" functions below, including the unwanted ones.</li>
+            <li>Place the all-time, one-time, user and esteem functions above.</li><li>Add the design criteria, then test the whole diagram out loud.</li>
+          </ol>
+          <p class="cs-small"><b>Try it:</b> how do we project an image? By magnifying it. How do we magnify it? We need one full-colour image, so we combine images. Now read it back: why combine images? So we can magnify one image. Why magnify it? To project it.</p></div>
+      </div>
+      <div class="cs-panel st-fast"><h4>The VH-3600 FAST diagram</h4><p class="cs-small">Click a box to see its parts in 3D. Switch on the costs to see where the money goes.</p><div id="stFast"></div></div>
+      <p class="fa-miss"><b>Common mistake:</b> laying the cards out in the order the parts sit in the product rather than in how–why order, or letting the diagram grow past the scope.</p>
+    </div>
+
+    <div class="fa-step" id="fa4">
+      <h3><span>2.4</span>Cost the functions</h3>
+      <p class="fa-why"><b>Why this step:</b> a part can do several jobs, and a job can need several parts. Sharing each part's cost out among its functions shows what every job really costs. A parts list never can.</p>
+    <figure class="cs-vid" id="vid-p2d">
+      <video controls preload="none" playsinline poster="videos/cs-p2d.webp" width="1280" height="720" aria-label="Video: Function analysis, film 4 of 5, Costing the functions">
+        <source src="videos/cs-p2d.mp4" type="video/mp4" />
+      </video>
+      <figcaption><b>Video 4 of 5, about 3 minutes:</b> costing the functions, the costed FAST diagram and the Pareto chart. Subtitles are shown on screen.</figcaption>
+      <details><summary>Read the transcript</summary><p>Film four: steps two point four and two point five. Costing the functions, and finding where the cost sits.</p><p>Why cost functions, when we already know what the parts cost? Because a part can do several jobs, and a job can need several parts. A parts list can never show what a job really costs.</p><p>So each part's cost is shared out among its functions, based on what's inside it. The main board's video chip, drivers and memory process the signal: thirteen pounds. Its network chip receives the signal, and its amplifier drives the speaker. The ballast ignites the arc and regulates power. The power supply's filter suppresses interference. The shares always add back to the part's cost.</p><p>Do that for every part and you get the function cost matrix: fifty parts against thirty-two functions. Each row adds up to its part. Each column gives a function's cost. And the grand total must still be a hundred and five pounds twenty, or something's been lost.</p><p>Now put those costs on the FAST diagram. The colours show value, which we'll come to in film five. For now, just look at where the money sits.</p><p>Group the costs by where they sit. Fifty-seven per cent of the parts cost is on the critical path, doing the job the school pays for. The other forty-three per cent supports it, protects it, or cleans up after something unwanted.</p><p>Follow the red boxes. Removing heat, trapping dust, blocking ultraviolet and suppressing interference cost five pounds eighty-nine a projector. That's money spent only because of unwanted functions. Make less heat, or stop the interference at its source, and some of it disappears.</p><p>So, of a hundred and five pounds twenty: fifty-nine pounds fifty-four does the job itself. Thirty-nine seventy-seven supports it. And five eighty-nine exists only because of unwanted functions. That last pile is often the easiest money in the whole study.</p><p>Step two point five: rank the functions by cost, largest first, and add a running total. This is a Pareto chart. Its purpose is to show where effort will pay back. Thirty per cent of the functions, ten out of thirty-two, carry seventy-eight per cent of the cost.</p><p>These ten are where to look first: modulate light, process signal, generate light, magnify image, combine images, convert voltage, receive signal, remove heat, regulate power and enclose components. The other twenty-two share just twenty-three pounds between them.</p><p>So: share each part's cost among its functions, check it adds up, put the costs on the FAST diagram, and rank them. Cost tells us where the money goes. It doesn't tell us whether it's good value. That's worth, in film five.</p></details>
+    </figure>
+      <p class="cs-small">Each share is estimated from what the part contains. The main board's video chip, panel drivers and memory process the signal (£13.00); its network interface receives it (£0.55); its amplifier drives the speaker (£0.45). The shares always add back up to the part's cost.</p>
+      <p class="cs-small"><b>Cost basis:</b> the parts cost of one projector, £105.20, at 400,000 a year. Assembly, overheads and freight aren't shared out over functions; they're handled with the factory ideas in phase 3.</p>
+      <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Function cost matrix"><div id="stMatrix"></div></div>
+      <button type="button" class="btn btn-primary cs-dl" id="stMatrixCsv">Download the full matrix: 50 parts × 32 functions (CSV)</button>
+      <div class="cs-panel"><h4>Where the cost goes on the FAST diagram</h4><div id="stSplit"></div></div>
+      <p class="fa-miss"><b>Common mistake:</b> putting a part's whole cost on its main function. The main board would then hide what receiving the signal and sound really cost.</p>
+    </div>
+
+    <div class="fa-step" id="fa5">
+      <h3><span>2.5</span>Find where the cost sits</h3>
+      <p class="fa-why"><b>Why this step:</b> a few functions carry most of the cost. Ranking them shows where effort will pay back, and stops the team spending days on functions worth pennies.</p>
+      <div class="cs-panel"><h4>Function costs, largest first</h4><div id="stFnPareto"></div></div>
+    </div>
+
+    <div class="fa-step" id="fa6">
+      <h3><span>2.6</span>Set the worth</h3>
+      <p class="fa-why"><b>Why this step:</b> cost tells you what you pay. Worth tells you what you should pay: the lowest cost shown to perform the function reliably. The difference is the prize.</p>
+    <figure class="cs-vid" id="vid-p2e">
+      <video controls preload="none" playsinline poster="videos/cs-p2e.webp" width="1280" height="720" aria-label="Video: Function analysis, film 5 of 5, Worth, value and targets">
+        <source src="videos/cs-p2e.mp4" type="video/mp4" />
+      </video>
+      <figcaption><b>Video 5 of 5, about 4 minutes:</b> worth, value index, the paired comparison and the targets. Subtitles are shown on screen.</figcaption>
+      <details><summary>Read the transcript</summary><p>Film five: steps two point six and two point seven. Setting the worth, and picking the targets.</p><p>Worth is the lowest cost shown to perform the function reliably. Cost is what you pay. Worth is what you should pay. The difference is the prize. And every worth needs evidence: it's never a guess.</p><p>There are five common ways to set it. A cheaper way that does the same job to the same standard. A supplier quote, or a should-cost. A benchmark, but only one that meets every must-be need. What the customer actually needs: one VGA input, not three. And the theoretical minimum. An unwanted function is worth nothing at all.</p><p>Be careful with benchmarks. A single-chip DLP projector is cheaper, but it gives about fourteen hundred colour lumens, not thirty-six hundred. It fails a must-be need, so it can't set the worth of modulating light.</p><p>Cost and worth give two numbers. The value gap, cost minus worth, is the money at stake. The value index, cost divided by worth, shows how far off fair value it is. One point two five or more is worth a look; two or more is a strong target. Use both: a high index on a few pence matters less than a modest one on many pounds.</p><p>Here's why it matters. Modulating light is the biggest cost in the projector, but it's good value: an index of one point oh four. Receiving the signal costs five pounds, for a job worth one pound thirty. Its index is three point eight five: ports and a cable that few schools ever use.</p><p>Sort by value gap and two functions stand out. Process signal has the biggest gap, four pounds twenty-five. Receive signal is next, at three pounds seventy, with the worst index. Locate components has an index of two: a steel cage doing a job the case could do.</p><p>Worth asks: what's the cheapest way to do this? The team also asks: how much does the school care? In a paired comparison, they take the ten functions a school would notice and compare every pair. Which matters more to a teacher: generating light, or receiving the signal? The winner scores one, two or three points. It's the team's judgement, from the school interviews, and it isn't perfectly consistent. That's normal.</p><p>Then set each function's share of the importance against its share of the cost. Process signal takes seventeen per cent of the cost for five per cent of the importance. Combine images and enclose components are flagged too. But combine images has no cheaper way to do it, so it stays. Use the graph to find questions. Use worth to answer them.</p><p>Step two point seven: pick the targets. Read the costed FAST diagram for clues, and turn each one into a question. Does the school need all of receive signal? Can fewer parts process the signal? Can we make less heat? Can we stop the interference at its source? Can two functions share one board?</p><p>These are the targets: functions with a big gap, a high index, or a cost driven by something unwanted. Not simply the most expensive ones. Modulate light, the biggest cost of all, is left alone, apart from a cheaper material in one corner.</p><p>For every target, the creative session asks one question. How else could we perform this function, at the lowest total cost, with no loss of performance, quality, reliability or safety?</p><p>That's function analysis: name, classify, build the FAST diagram, cost it, rank it, set the worth, and pick the targets. In this study, those targets led to twenty-four ideas, and seventeen per cent off the landed cost. Next, the creative phase.</p></details>
+    </figure>
+      <div class="cs-two">
+        <div class="cs-panel"><h4>Five ways to set worth</h4>
+          <ul class="cs-list">
+            <li><b>A cheaper alternative</b> that does the same job to the same standard: organic polarisers where it runs cooler.</li>
+            <li><b>A supplier quote or should-cost:</b> local optical glass.</li>
+            <li><b>A benchmark</b>, but only if it meets every must-be need. DLP is cheaper, but fails on colour brightness, so it can't set a worth.</li>
+            <li><b>What the customer needs:</b> if only part of a function is used, only that part has worth (one VGA input, not three).</li>
+            <li><b>The theoretical minimum:</b> unwanted functions are worth £0; a one-time job is worth the least that does it once.</li>
+          </ul></div>
+        <div class="cs-panel"><h4>Two numbers from cost and worth</h4>
+          <ul class="cs-list">
+            <li><b>Value gap = cost − worth.</b> The money at stake.</li>
+            <li><b>Value index = cost ÷ worth.</b> 1.0 is fair value. Above about 1.25 is worth a look; 2 or more is a strong target, a common rule of thumb.</li>
+            <li><b>Use both.</b> A high index on a few pence matters less than a modest index on many pounds.</li>
+          </ul></div>
+      </div>
+      <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Function cost and worth"><div id="stFunctions"></div></div>
+      <h4 class="fa-sub">What the school values: a paired comparison</h4>
+      <p class="cs-small">Worth asks "what's the cheapest way to do this?". The team also asks "how much does the school care?". Each pair of functions the school can see is compared, and the winner gets 1, 2 or 3 points. This is the study team's judgement, made on the school's behalf from the interviews in phase 1, and it isn't perfectly consistent: three of the low-scoring functions beat each other in a circle, which happens in real workshops.</p>
+      <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Paired comparison"><div id="stPaired"></div></div>
+      <div class="cs-panel"><h4>Importance against cost: the value graph</h4><div id="stValGraph"></div>
+        <p class="cs-small">Where a function's share of the cost is far bigger than its importance, look harder. <b>Process signal</b> and <b>Enclose components</b> are flagged here and confirmed by the worth evidence. <b>Combine images</b> is flagged too, but customers can't see what it does and there's no cheaper way to do it, so it stays. <b>Modulate light</b> costs more than its share of importance, but nothing cheaper meets the must-be needs. Use the graph to find questions; use worth to answer them.</p></div>
+      <p class="fa-miss"><b>Common mistake:</b> setting worth from a benchmark that doesn't meet the must-be needs, or from an idea nobody has checked.</p>
+    </div>
+
+    <div class="fa-step" id="fa7">
+      <h3><span>2.7</span>Pick the targets</h3>
+      <p class="fa-why"><b>Why this step:</b> the costed FAST diagram is full of clues. Each one becomes a question for the creative session: how can we perform the same function, at the lowest total cost, with no loss of performance, quality, reliability or safety?</p>
+      <div class="cs-tablewrap st-tw" tabindex="0" role="region" aria-label="Clues and targets">
+      <table class="cs-tbl fa-clues"><caption>Clues from the costed FAST diagram, the questions they raise and where they led</caption>
+        <thead><tr><th scope="col">Clue</th><th scope="col">Question for the creative session</th><th scope="col">Led to</th></tr></thead>
+        <tbody>
+          <tr><td><b>Receive signal</b> has the highest value index on real money (3.85)</td><td>Does the school need all of it?</td><td>V01, V10, V13</td></tr>
+          <tr><td><b>Process signal</b> has the biggest value gap (£4.25)</td><td>Can fewer or simpler parts do it?</td><td>V02, V13, V17, V18</td></tr>
+          <tr><td>The unwanted <b>Generate heat</b> drives <b>Remove heat</b> and <b>Trap dust</b> (£4.34)</td><td>Can we make less heat, or remove it with less?</td><td>V08, H1</td></tr>
+          <tr><td>The unwanted <b>Generate interference</b> drives £1.25 of filtering and shielding</td><td>Can we stop it at the source?</td><td>V16</td></tr>
+          <tr><td><b>Convert voltage</b> and <b>Regulate power</b> sit on two separate boards</td><td>Can two functions share parts?</td><td>V03</td></tr>
+          <tr><td><b>Enclose</b>, <b>Locate</b> and <b>Fasten components</b> use the case, a steel cage and 38 screws</td><td>Can the case do the bracket's and the screws' job?</td><td>V07, V09, V14</td></tr>
+          <tr><td><b>Modulate light</b> is the biggest cost, but good value (1.04)</td><td>Leave the design; can a cheaper material do part of it?</td><td>V05</td></tr>
+          <tr><td>One-time functions: <b>Absorb shock</b>, <b>Convey instructions</b></td><td>What's the least that does it once?</td><td>V10, V19</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="st-gate"><b>Gate check before phase 3</b><ul><li>Every part has a verb-noun function</li><li>The FAST diagram passes the how–why test</li><li>Function costs add up to the bill of materials</li><li>Every worth has evidence, and the targets are agreed</li></ul></div>
   </section>
 
   <section class="cs-sec st-phase" id="p3" aria-labelledby="p3T">

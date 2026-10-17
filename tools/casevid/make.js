@@ -1,6 +1,6 @@
 /* Builds the projector case-study videos: videos/cs-<id>.mp4, each with a poster (.webp).
 
-     node tools/casevid/make.js intro p1 p2 p3 p4 p5 p6 learnt      (or "all")
+     node tools/casevid/make.js intro p1 p2a p2b p2c p2d p2e p3 p4 p5 p6 learnt   (or "all")
      PREVIEW=dir node tools/casevid/make.js all                     (stills only, to check the pictures)
 
    1. Voice-over: with VOICE=1 each line is spoken by edge-tts (en-GB-RyanNeural) and its length measured;
@@ -29,7 +29,15 @@ const BOM = r2(sum(D.lines, (l) => l.ext)), CONV = r2(sum(D.chain.filter((c) => 
 const SHIP = r2(sum(D.chain.filter((c) => /Freight/.test(c.name)), (c) => c.cost)), LANDED = r2(BOM + CONV + SHIP);
 const V = D.ideas.filter((x) => !x.extra), IDEA = Object.fromEntries(D.ideas.map((x) => [x.id, x]));
 const FN = Object.fromEntries(D.funcs.map((f) => [f.id, f]));
-D.funcs.forEach((f) => { f.save = r2(sum(V.filter((x) => x.f && x.f[f.id]), (x) => x.f[f.id])); f.worth = Math.max({ emc: 0.05, info: 0.03 }[f.id] || 0, r2(f.cost - f.save)); });
+D.funcs.forEach((f) => { f.save = r2(sum(V.filter((x) => x.f && x.f[f.id]), (x) => x.f[f.id])); f.worth = f.cost > 0 ? Math.max({ instr: 0.03 }[f.id] || 0, r2(f.cost - f.save)) : 0; f.vi = f.cost > 0 ? f.cost / f.worth : null; });
+// function analysis figures, the same as the case study page
+const FUNC = D.funcs.filter((f) => f.cost > 0).sort((a, b) => b.cost - a.cost), TOPN = Math.round(FUNC.length * 0.3), TOPC = r2(sum(FUNC.slice(0, TOPN), (f) => f.cost));
+const COSTS = Object.fromEntries(FUNC.map((f) => [f.id, [f.cost, f.vi]])), ALLF = D.funcs.map((f) => f.id), PATHF = D.funcs.filter((f) => f.row === "P").map((f) => f.id);
+const kindCost = (...k) => r2(sum(D.funcs.filter((f) => k.includes(f.kind)), (f) => f.cost));
+const CAUSEDC = r2(sum(["heat", "dust", "uv", "emc"], (id) => FN[id].cost)), GAP = r2(sum(FUNC, (f) => f.cost - f.worth));
+const PAIRS = (() => { const P = D.paired, sc = Object.fromEntries(P.fns.map((id) => [id, 0])); P.pairs.forEach(([, , w, n]) => (sc[w] += n));
+  const tot = sum(P.fns, (id) => sc[id]), pc = sum(P.fns, (id) => FN[id].cost);
+  return { tot, rows: P.fns.map((id) => ({ id, fn: FN[id].fn, imp: sc[id] / tot * 100, cost: FN[id].cost / pc * 100 })).sort((a, b) => b.imp - a.imp) }; })();
 const LINE = Object.fromEntries(D.lines.map((l) => [l.id, l]));
 const save = (ids) => r2(sum(ids, (id) => IDEA[id].save));
 const CORE = V.filter((x) => +x.id.slice(1) <= 12), ALL = save(V.map((x) => x.id)), CORESAVE = save(CORE.map((x) => x.id));
@@ -54,7 +62,7 @@ const optical = D.parts.filter((p) => Object.keys(p.alloc).some((l) => l[0] === 
 const CAM = { home: [[34, 24, 40], [0, 0, 0]], exploded: [[98, 58, 114], [-6, 2.5, 0]], light: [[-4, 31, 25], [-2, 0, 2]] };
 const BLUE = "#2e6fe8", AMBER = "#d9a44a", GREEN = "#1fae6a", GREY = "#55607a", ORANGE = "#ff7a3d";
 
-// ── the eight videos ──
+// ── the videos ──
 const VIDEOS = {
   intro: { name: "The product and the challenge", badge: "A", scenes: [
     { kind: "title", kick: "VAVEhub · Worked case study", title: "The classroom projector", sub: "One product, taken through all six steps of a value study.", step: 0, min: 6,
@@ -104,30 +112,182 @@ const VIDEOS = {
       vo: "With the brief signed and the facts checked, the team moves on to step two." },
   ] },
 
-  p2: { name: "Function analysis", step: 2, scenes: [
-    { kind: "title", kick: "Step 2 of 6", title: "Function analysis", sub: "What does it do, and what does each job cost?", step: 2, min: 5,
-      vo: "Step two is function analysis. Stop looking at the parts, and ask what the product does." },
-    { kind: "three", t: 1, sel: [1, 16, 19, 21], only: [1, 16, 19, 21], labels: true, cam: { from: [[66, 50, 88], [-8, 6, 3]], to: [[56, 46, 86], [-8, 7, 3]] },
-      panel: { k: "A verb and a noun", list: [["Lamp", "generate light"], ["LCD panels", "modulate light"], ["X-cube", "combine colours"], ["Lens", "enlarge image"]] }, min: 10,
-      vo: "Every part gets a function, written as a verb and a noun. The lamp generates light. The panels modulate light. The prism combines colours. The lens enlarges the image." },
-    { kind: "fast", k: "The FAST diagram", h: "How? to the right. Why? to the left.", min: 11,
-      path: [{ fn: "Communicate information", sub: "higher-order", cls: "out" }, { fn: "Project image", sub: "basic function", cls: "basic" }, { fn: "Enlarge image" }, { fn: "Combine colours" },
-        { fn: "Modulate light" }, { fn: "Separate colours" }, { fn: "Condition light" }, { fn: "Generate light" }, { fn: "Convert power" }],
-      above: [{ fn: "Enclose components" }, { fn: "Remove heat" }, { fn: "Align optics" }, { fn: "Protect user" }], below: [{ fn: "Process signal", sub: "when" }, { fn: "Receive signal" }], belowAt: 4,
-      vo: "The FAST diagram links them. Read to the right, it answers how. Read to the left, it answers why. Project image is the basic function: the reason the product exists." },
-    { kind: "bars", k: "Cost of each function", h: "Each part's cost, shared out among its jobs", min: 9, gap: 0.3,
-      items: ["mod", "sig", "gen", "enl", "pow", "comb", "rcv", "encl"].map((id, i) => ({ l: FN[id].fn, v: FN[id].cost, c: i ? "" : "hl" })),
-      vo: "Then each part's cost is shared out among its functions. Modulating light costs twenty-seven pounds fifty: over a quarter of everything." },
-    { kind: "list", k: "Worth and the value index", h: "What should each job cost?", min: 9,
-      items: [["Worth:", "the lowest cost shown to do the same job reliably"], ["Value index:", "cost divided by worth"], ["1.5 or more:", "poor value, so look there first"]],
-      vo: "Next comes worth: the lowest cost shown to do the same job. Cost divided by worth gives the value index. The higher it is, the more you're overpaying." },
-    { kind: "vi", k: "Two functions compared", h: "The biggest cost isn't the worst value", min: 13,
-      items: [{ fn: "Modulate light", cost: FN.mod.cost, worth: FN.mod.worth, say: "Expensive, but good value. DLP is cheaper, but fails on colour.", at: 0.8 },
-        { fn: "Receive signal", cost: FN.rcv.cost, worth: FN.rcv.worth, say: "Cheap, but poor value: ports few schools use.", at: 5.6 }],
-      vo: "Modulating light is expensive, but good value: its index is one point oh four. Receiving the signal costs five pounds, for a job worth one pound thirty. Its index is three point eight five." },
-    { kind: "list", k: "Targets for the creative session", h: "Chosen by value, not just by cost", min: 7, sect: "resolve",
-      items: [["Receive and process the signal", ""], ["Generate light and convert power", ""], ["Enclose components and remove heat", ""], ["The optics, and the factory process", ""]],
-      vo: "So the targets for the creative session are set by value, not just by cost." },
+  // function analysis: five short films, one per group of steps
+  p2a: { name: "Function analysis · 1 of 5", step: 2, scenes: [
+    { kind: "title", kick: "Step 2 · Function analysis · Film 1 of 5", title: "Why functions?", sub: "The heart of value engineering.", step: 2, min: 6,
+      vo: "This is the first of five short films on function analysis, the heart of value engineering. By the end of them, you'll be able to do it yourself, step by step, on a real product." },
+    { kind: "three", t: 1, cam: { from: CAM.exploded, to: [[84, 52, 100], [-6, 2.5, 0]] }, min: 10,
+      vo: "Here's our projector, taken apart. Fifty kinds of part. The usual way to cut cost is to go through them one by one and ask each supplier for a lower price. That finds a little. Function analysis finds far more, because it asks a different question." },
+    { kind: "big", k: "The different question", h: "Customers don't buy parts. They buy what the parts <em>do</em>.", p: "That job is called a function.", min: 9,
+      vo: "A school doesn't want a lamp, three LCD panels and a lens. It wants a bright, clear picture on the wall. Every part is there only to do a job, and that job is called a function." },
+    { kind: "cards", cols: 3, k: "Where it came from", h: "General Electric, the 1940s", min: 15, gap: 3.6,
+      items: [{ h: "A shortage", p: "Wartime shortages forced GE's engineers to use substitute materials.", c: GREY }, { h: "A surprise", p: "Often the substitute did the job just as well, and cost less.", c: AMBER },
+        { h: "A method", p: "Lawrence Miles asked: what does it do? Then: what else would do that, for less?", c: GREEN }],
+      vo: "The idea came from General Electric in the nineteen-forties. Wartime shortages forced its engineers to use substitute materials, and often the substitute did the job just as well, for less. Lawrence Miles turned that into a method. Don't ask what the part is. Ask what it does, then find the cheapest reliable way to do that." },
+    { kind: "big", k: "Value", h: "Value = <em>Function</em> ÷ Cost", p: "Do the same job for less, or more for the same. Never cut a function the customer needs.", min: 10,
+      vo: "That gives us value: the function you get, divided by what it costs. We can raise value by doing the same job for less, or by doing more for the same money. What we never do is cut cost by cutting a function the customer needs." },
+    { kind: "list", k: "Why analyse functions?", h: "Four things a parts list can't show you", min: 13,
+      items: [["It frees the team", "from today's design"], ["It shows what each job really costs,", "however many parts it takes"], ["It shows money spent on jobs", "nobody asked for"], ["It points the creative session", "at the right targets"]],
+      vo: "Why go to this trouble? Because it frees the team from today's design. It shows what each job really costs, however many parts it takes. It shows money spent on jobs nobody asked for. And it points the creative session at the right targets." },
+    { kind: "table", k: "The plan for these five films", h: "Function analysis in seven steps", min: 14, num: false,
+      cols: ["Step", "What you do", "Film"], rows: [["2.1", "Name the functions", "2"], ["2.2", "Classify them", "2"], ["2.3", "Build the FAST diagram", "3"], ["2.4", "Cost the functions", "4"], ["2.5", "Find where the cost sits", "4"], ["2.6", "Set the worth", "5"], ["2.7", "Pick the targets", "5"]],
+      vo: "We'll do it in seven steps. Name the functions, and classify them. Build the FAST diagram. Cost the functions, and find where the cost sits. Set the worth. And pick the targets. Each step has a purpose, and we'll say what it is as we go." },
+    { kind: "three", t: 1, sel: [1], only: [1, 2, 3], labels: true, cam: { from: [[-8, 26, 22], [-30, 12, -7]], to: [[-12, 24, 18], [-30, 12, -7]] },
+      panel: { k: "One part, one question", big: "Generate light", p: "Lamp burner: a verb and a noun you can measure, in lumens.", list: [["What is it?", "A 210 W lamp"], ["What does it do?", "Generate light"]] }, min: 10,
+      vo: "Let's try the question on one part. The lamp burner. What is it? A two hundred and ten watt lamp. What does it do? It generates light. Two words: a verb, and a noun you can measure. That's a function." },
+    { kind: "stats", k: "What it found on this projector", h: "Fifty parts became thirty-two costed functions", min: 10,
+      items: [{ v: D.parts.length, dp: 0, l: "kinds of part", c: "blue", at: 0.6 }, { v: FUNC.length, dp: 0, l: "functions with a cost", c: "blue", at: 2.0 }, { v: GAP, pre: "£", l: "a projector spent above what the functions are worth", c: "bad", at: 3.4 }],
+      vo: `On this projector, function analysis turned fifty kinds of part into thirty-two costed functions, and found about twenty pounds a projector spent above what those functions are worth.` },
+    { kind: "list", style: "check", k: "Recap", h: "Film 1 of 5", min: 9, sect: "resolve",
+      items: [["A function is what a part does:", "an active verb and a measurable noun"], ["Value = function ÷ cost", ""], ["Seven steps,", "from naming the functions to picking the targets"]],
+      vo: "So: a function is what a part does, written as an active verb and a measurable noun. Value is function divided by cost. In film two, we name and classify every function in the projector." },
+  ] },
+
+  p2b: { name: "Function analysis · 2 of 5", step: 2, scenes: [
+    { kind: "title", kick: "Step 2 · Function analysis · Film 2 of 5", title: "Naming and classifying", sub: "An active verb and a measurable noun.", step: 2, min: 6,
+      vo: "Film two: naming and classifying functions. Step two point one is to name every function. The purpose: the whole team agrees what every part is for, in words that don't depend on today's design." },
+    { kind: "list", k: "Step 2.1 · The rules", h: "Two words, chosen with care", min: 16,
+      items: [["An active verb and a measurable noun:", "Generate light (lumens), Remove heat (watts)"], ["Say what it does, not how:", "the reflector collects light; reflecting is how"], ["No weak verbs:", "provide, allow, enable, ensure"], ["Name the job, not the part:", "Trap dust, not \"filter\""]],
+      vo: "There are four rules. Use an active verb and a measurable noun: generate light, in lumens; remove heat, in watts. Say what it does, not how it does it. Avoid weak verbs, such as provide, allow and ensure. And name the job, not the part: trap dust, not filter." },
+    { kind: "table", k: "Wrong and right", h: "Weak names hide the real job", min: 14, num: false, strike: 1, bold: 2,
+      cols: ["Part", "Weak", "Better"], rows: [["Lamp", "Provide light", "Generate light"], ["Lamp door", "Allow access", "Expose lamp"], ["Interlock switch", "Protect user", "Interrupt power"], ["Carton", "Protect product", "Absorb shock"], ["Air filter", "Filter", "Trap dust"], ["Tilt foot", "Level image", "Adjust angle"]],
+      vo: "Here are some weak names, and better ones. Provide light tells you nothing you can measure; generate light can be measured in lumens. Protect user is a wish. Interrupt power is a job a switch really does, and you can test it." },
+    { kind: "try", q: "The fold mirror bends the light through 90°. What is its function?", hint: "An active verb and a measurable noun.", min: 10,
+      vo: "Your turn. The fold mirror bends the light through ninety degrees. What is its function? Pause the film and try." },
+    { kind: "big", k: "Answer", h: "<em>Redirect</em> light", p: "Not \"reflect light\": reflecting is only how a mirror does it. A prism could redirect light too.", min: 10,
+      vo: "Redirect light. Not reflect light: reflecting is only how a mirror does it. A prism could redirect light too. A good function stays true even if the part is replaced by something completely different." },
+    { kind: "three", t: 1, sel: [1, 2, 3, 4, 5, 6], only: [1, 2, 3, 4, 5, 6], labels: true, cam: { from: [[8, 22, 34], [-24, 15, -6]], to: [[2, 21, 32], [-24, 15, -6]] },
+      panel: { k: "The light source", list: [["Lamp burner", "Generate light"], ["Reflector", "Collect light"], ["Lamp cage", "Position lamp"], ["Safety glass", "Contain fragments"], ["Lamp door", "Expose lamp"], ["Heat baffle", "Deflect heat"]] }, min: 12,
+      vo: "Now every part, group by group. The light source. The burner generates light, the reflector collects it, and the cage positions the lamp. The safety glass contains fragments if the lamp bursts. The door exposes the lamp, and the baffle deflects heat." },
+    { kind: "three", t: 1, sel: [7, 8, 9, 10, 11, 12, 16, 19, 21], only: [7, 8, 9, 10, 11, 12, 16, 19, 21], labels: true, cam: { from: [[38, 36, 52], [-6, 11, 2]], to: [[30, 34, 52], [-6, 11, 2]] },
+      panel: { k: "The optics", list: [["Fly's-eye arrays", "Divide, distribute light"], ["Polarisation converter", "Polarise light"], ["Dichroic mirrors", "Separate wavelengths"], ["LCD panels", "Modulate light"], ["X-cube prism", "Combine images"], ["Zoom lens", "Magnify image"]] }, min: 13,
+      vo: "The optics. The fly's-eye arrays divide and distribute the light. The converter polarises it. Dichroic mirrors separate wavelengths into red, green and blue. The LCD panels modulate light, the X-cube combines the three images, and the lens magnifies the image." },
+    { kind: "three", t: 1, sel: [22, 23, 24, 26, 28, 29], only: [22, 23, 24, 26, 27, 28, 29, 30], labels: true, cam: { from: [[64, 30, 62], [4, -8, -4]], to: [[56, 28, 66], [4, -8, -4]] },
+      panel: { k: "Cooling and power", list: [["Three fans", "Move air"], ["Air filter", "Trap dust"], ["Thermistors", "Sense temperature"], ["Power supply", "Convert voltage"], ["Ballast", "Ignite arc, regulate power"], ["Mains inlet", "Conduct current"]] }, min: 12,
+      vo: "Cooling and power. Three fans move air, the filter traps dust, and thermistors sense temperature. The power supply converts voltage. The ballast ignites the arc, then regulates power to the lamp." },
+    { kind: "three", t: 1, sel: [31, 32, 33, 38, 41, 44], only: [31, 32, 33, 38, 41, 44], labels: true, cam: { from: CAM.exploded, to: [[90, 54, 108], [-6, 2.5, 0]] },
+      panel: { k: "Electronics and housing", list: [["Main board", "Process signal"], ["Rear connectors", "Receive signal"], ["Buttons", "Accept commands"], ["Top case", "Enclose components"], ["Lens shutter", "Interrupt image"], ["Screws", "Fasten components"]] }, min: 12,
+      vo: "Electronics and housing. The main board processes the signal, and the rear connectors receive it. The buttons accept commands. The case encloses components, the shutter interrupts the image, and thirty-eight screws fasten components." },
+    { kind: "big", k: "From parts to the product", h: "Divide + distribute + superimpose light = <em>Homogenise light</em>", p: "Part functions are detailed. On the FAST diagram, related ones roll up into one.", min: 12,
+      vo: "Part functions are detailed. When we draw the product's diagram, related ones roll up. The two fly's-eye arrays and the superposition lens divide, distribute and superimpose light. Together they homogenise light: an even patch of light on every panel." },
+    { kind: "cards", cols: 4, k: "Step 2.2 · Classify them", h: "Four kinds of function", min: 18, gap: 3.4,
+      items: [{ h: "Basic", p: "The reason it exists. One per product: Project image.", c: BLUE }, { h: "Secondary", p: "Needed for the way it's designed: Generate light, Remove heat.", c: GREY },
+        { h: "Unwanted", p: "A side effect nobody asked for: Generate heat. Worth £0.", c: "#ff5d5d" }, { h: "Esteem", p: "Makes people want it, not makes it work: Enhance appearance.", c: "#e06aa8" }],
+      vo: "Step two point two is to classify them. The purpose: to separate the job the customer pays for from everything else. The basic function is the reason the product exists: project image. Secondary functions are needed for the way it's designed. Unwanted functions are side effects nobody asked for. And esteem functions make people want it, rather than making it work." },
+    { kind: "cards", cols: 5, k: "Unwanted functions", h: "Worth nothing, but they still cost money", min: 14, gap: 0.5,
+      items: [{ h: "Generate heat", p: "Most of the lamp's 210 W", c: "#ff5d5d" }, { h: "Emit UV", p: "From the arc", c: "#ff5d5d" }, { h: "Generate interference", p: "From the chips and supplies", c: "#ff5d5d" },
+        { h: "Generate noise", p: "From the fans", c: "#ff5d5d" }, { h: "Consume energy", p: "About £400 over five years", c: "#ff5d5d" }],
+      vo: "Unwanted functions need special attention. Nobody asked for heat, ultraviolet, interference, fan noise or a four hundred pound electricity bill. They're worth nothing to the school, yet each one costs money to deal with, as we'll see." },
+    { kind: "list", style: "check", k: "Recap", h: "Film 2 of 5", min: 9, sect: "resolve",
+      items: [["Name every function:", "active verb, measurable noun"], ["Say what, not how", ""], ["Classify:", "basic, secondary, unwanted, esteem"]],
+      vo: "So: name every function as an active verb and a measurable noun, and say what it does, not how. Then classify it. In film three, we arrange them into a FAST diagram." },
+  ] },
+
+  p2c: { name: "Function analysis · 3 of 5", step: 2, scenes: [
+    { kind: "title", kick: "Step 2 · Function analysis · Film 3 of 5", title: "The FAST diagram", sub: "Function Analysis System Technique, built one layer at a time.", step: 2, min: 6,
+      vo: "Film three: step two point three, the FAST diagram. Its purpose is to turn a list of functions into logic, and to test whether the team really understands the product." },
+    { kind: "fastb", base: [], add: ["proj"], hl: ["proj"], min: 8,
+      vo: "Start with the basic function, the one the customer pays for. For the projector, that's project image." },
+    { kind: "fastb", base: ["proj"], add: ["comm"], addFlags: ["axis", "scope"], hl: ["comm"], min: 13,
+      vo: "Ask why we project an image. To communicate information. That's the higher-order function: why the customer wants the product at all. It sits on the left, outside the scope line, because this study won't change it." },
+    { kind: "fastb", base: ["comm", "proj"], flags: ["axis", "scope"], add: ["mag", "comb", "mod"], hl: ["mag", "comb", "mod"], min: 15,
+      vo: "Now ask how. How do we project an image? By magnifying it. How do we magnify it? First we need one full-colour image, so we combine images. And how do we get those images? By modulating light, pixel by pixel, in three LCD panels." },
+    { kind: "fastb", base: ["comm", "proj", "mag", "comb", "mod"], flags: ["axis", "scope"], add: ["pol", "gen"], hl: ["pol", "gen"], min: 10,
+      vo: "How do we modulate light? An LCD panel only works with polarised light, so we polarise it. And before that, we generate light." },
+    { kind: "fastb", base: ["comm", "proj", "mag", "comb", "mod", "pol", "gen"], flags: ["axis", "scope"], add: ["reg", "volt", "rpow", "supply"], hl: ["reg", "volt", "rpow", "supply"], min: 15,
+      vo: "How do we generate light? We regulate power to the lamp. How? By converting voltage. And for that, we receive power. The building's supply is outside the study, so it sits past the right-hand scope line. Everything between the scope lines is the critical path." },
+    { kind: "fastb", base: PATHF, flags: ["axis", "scope"], hl: PATHF, label: ["Read it back: WHY?", 680, 470], min: 14,
+      vo: "Now test it backwards, asking why. Why receive power? To convert voltage. Why regulate power? To generate light. Why combine images? To magnify one image. Why magnify it? To project it. If every step makes sense both ways, the logic holds. If not, a card is in the wrong place." },
+    { kind: "fastb", base: PATHF, flags: ["axis", "scope"], add: ["sep", "hom", "focus"], hl: ["sep", "hom", "focus"], min: 16,
+      vo: "Some functions need more than one answer to how. To modulate light, the panels also need the light split into red, green and blue, and spread evenly. So we separate wavelengths, and homogenise light. Stacked like this, they read as AND: all three are needed. Focus image is a second answer to how we project it." },
+    { kind: "fastb", base: [...PATHF, "sep", "hom", "focus"], flags: ["axis", "scope"], add: ["sig", "rcv", "ign"], hl: ["sig", "rcv", "ign"], min: 14,
+      vo: "Below the path go functions that happen at the same time. When we modulate light, we process the signal, and for that we must receive it. When we generate light, the ballast first ignites the arc, with a pulse of about three and a half thousand volts." },
+    { kind: "fastb", base: [...PATHF, "sep", "hom", "focus", "sig", "rcv", "ign"], flags: ["axis", "scope"], add: ["gheat", "guv", "gint", "energy"], hl: ["gheat", "guv", "gint", "energy"], min: 14,
+      vo: "Now the unwanted functions, in red. Generating light also generates heat and ultraviolet. Processing the signal generates interference. And receiving power means consuming energy: about four hundred pounds of electricity over five years." },
+    { kind: "fastb", base: [...PATHF, "sep", "hom", "focus", "sig", "rcv", "ign", "gheat", "guv", "gint", "energy"], flags: ["axis", "scope"], add: ["heat", "dust", "noise", "uv", "emc"], hl: ["heat", "dust", "noise", "uv", "emc"], min: 17,
+      vo: "Each unwanted function drags in more. Heat must be removed, so we add fans. The fans pull in dust, so we trap dust, and they generate noise. The ultraviolet must be blocked, and the interference suppressed. None of this is what the school pays for. It exists only because of something unwanted." },
+    { kind: "fastb", base: ALLF.filter((id) => !["encl", "loc", "sup", "fast", "frag", "app", "cmd", "mute", "angle", "instr", "expose", "intr", "shock"].includes(id)), flags: ["axis", "scope"], add: ["encl", "loc", "sup", "fast", "frag", "app"], hl: ["encl", "loc", "sup", "fast", "frag", "app"], min: 14,
+      vo: "Above the path go functions needed all the time, whatever the projector is doing: enclose and locate components, support weight, fasten components, and contain fragments if the lamp ever bursts. Enhance appearance is an esteem function." },
+    { kind: "fastb", base: ALLF.filter((id) => !["cmd", "mute", "angle", "instr", "expose", "intr", "shock"].includes(id)), flags: ["axis", "scope"], add: ["cmd", "mute", "angle", "instr", "expose", "intr", "shock"], hl: ["cmd", "mute", "angle", "instr", "expose", "intr", "shock"], min: 18,
+      vo: "Next, user functions, such as accept commands and interrupt image. Then one-time functions, which happen once or only now and then: adjust angle, convey instructions, absorb shock in transit, and expose lamp when it's changed, with interrupt power at the same moment, for safety." },
+    { kind: "fastb", base: ALLF, flags: ["axis", "scope"], addFlags: ["criteria", "objective"], min: 15,
+      vo: "Last, the design criteria. Brightness, resolution, lamp life, noise, safety and price aren't functions. They're requirements that every idea must still meet. Beside them sits the objective: at least ten per cent off the landed cost." },
+    { kind: "list", style: "check", k: "Recap", h: "Film 3 of 5", min: 12, sect: "resolve",
+      items: [["Basic function first,", "then ask HOW? to the right"], ["Test every step with WHY?", "to the left"], ["Scope lines, AND, and when", ""], ["Unwanted functions in red:", "they drag in cost"]],
+      vo: "So: start with the basic function and ask how, to build the critical path. Test it with why. Add the scope lines, the AND functions, and the when functions. And mark the unwanted ones, because they drag in cost. In film four, we put a price on every box." },
+  ] },
+
+  p2d: { name: "Function analysis · 4 of 5", step: 2, scenes: [
+    { kind: "title", kick: "Step 2 · Function analysis · Film 4 of 5", title: "Costing the functions", sub: "Where does the money really go?", step: 2, min: 6,
+      vo: "Film four: steps two point four and two point five. Costing the functions, and finding where the cost sits." },
+    { kind: "big", k: "Step 2.4 · Why cost functions?", h: "A part can do several jobs. A job can need <em>several parts</em>.", p: "A parts list can't show what a job costs. A function cost can.", min: 10,
+      vo: "Why cost functions, when we already know what the parts cost? Because a part can do several jobs, and a job can need several parts. A parts list can never show what a job really costs." },
+    { kind: "split", k: "Share each part's cost among its jobs", h: "By what's inside the part", min: 20,
+      rows: [{ part: "Main board", total: 14.00, pieces: [{ fn: "Process signal", v: 13.00, c: BLUE }, { fn: "Receive signal", v: 0.55, c: AMBER }, { fn: "Emit sound", v: 0.45, c: GREEN }] },
+        { part: "Lamp ballast", total: 4.70, pieces: [{ fn: "Ignite arc", v: 1.70, c: AMBER }, { fn: "Regulate power", v: 3.00, c: BLUE }] },
+        { part: "Power supply", total: 5.60, pieces: [{ fn: "Convert voltage", v: 5.00, c: BLUE }, { fn: "Suppress interference", v: 0.60, c: "#ff5d5d" }] }],
+      vo: "So each part's cost is shared out among its functions, based on what's inside it. The main board's video chip, drivers and memory process the signal: thirteen pounds. Its network chip receives the signal, and its amplifier drives the speaker. The ballast ignites the arc and regulates power. The power supply's filter suppresses interference. The shares always add back to the part's cost." },
+    { kind: "stats", k: "The function cost matrix", h: "Every part against every function", min: 13,
+      items: [{ v: D.parts.length, dp: 0, l: "parts, one row each", c: "blue", at: 0.6 }, { v: FUNC.length, dp: 0, l: "functions, one column each", c: "blue", at: 2.0 }, { v: BOM, pre: "£", l: "the total, the same as the parts list", c: "good", at: 3.4 }],
+      vo: "Do that for every part and you get the function cost matrix: fifty parts against thirty-two functions. Each row adds up to its part. Each column gives a function's cost. And the grand total must still be a hundred and five pounds twenty, or something's been lost." },
+    { kind: "fastb", base: ALLF, flags: ["axis", "scope"], cost: true, costs: COSTS, min: 11,
+      vo: "Now put those costs on the FAST diagram. The colours show value, which we'll come to in film five. For now, just look at where the money sits." },
+    { kind: "bars", k: "Where the cost sits on the FAST diagram", h: `${Math.round(kindCost("path") / BOM * 100)}% is on the critical path`, min: 15, gap: 0.5,
+      items: [["Critical path", kindCost("path"), "hl"], ["When and caused by", kindCost("when")], ["All the time", kindCost("all")], ["AND, second answers", kindCost("second")], ["One time", kindCost("one")], ["User", kindCost("user")], ["Esteem", kindCost("esteem")]]
+        .map(([l, v, c]) => ({ l, v, c, vt: `${gbp(v)} · ${Math.round(v / BOM * 100)}%` })),
+      vo: `Group the costs by where they sit. Fifty-seven per cent of the parts cost is on the critical path, doing the job the school pays for. The other forty-three per cent supports it, protects it, or cleans up after something unwanted.` },
+    { kind: "fastb", base: ALLF, flags: ["axis", "scope"], cost: true, costs: COSTS, hl: ["gheat", "heat", "dust", "noise", "guv", "uv", "gint", "emc"], min: 15,
+      vo: `Follow the red boxes. Removing heat, trapping dust, blocking ultraviolet and suppressing interference cost five pounds eighty-nine a projector. That's money spent only because of unwanted functions. Make less heat, or stop the interference at its source, and some of it disappears.` },
+    { kind: "stats", k: "Beyond the basic function", h: "Where the parts money goes", min: 13,
+      items: [{ v: kindCost("path"), pre: "£", l: "on the critical path: the job itself", c: "blue", at: 0.6 }, { v: r2(BOM - kindCost("path") - CAUSEDC), pre: "£", l: "supporting it: case, controls, signal", c: "", at: 2.2 }, { v: CAUSEDC, pre: "£", l: "only because of unwanted functions", c: "bad", at: 3.8 }],
+      vo: "So, of a hundred and five pounds twenty: fifty-nine pounds fifty-four does the job itself. Thirty-nine seventy-seven supports it. And five eighty-nine exists only because of unwanted functions. That last pile is often the easiest money in the whole study." },
+    { kind: "pareto", k: "Step 2.5 · Find where the cost sits", h: "Function costs, largest first", min: 20, items: FUNC.map((f) => ({ fn: f.fn, cost: f.cost })), top: TOPN, total: BOM,
+      zone: `Top ${TOPN} of ${FUNC.length} functions (30%): ${gbp(TOPC)}, ${Math.round(TOPC / BOM * 100)}% of the cost`,
+      vo: `Step two point five: rank the functions by cost, largest first, and add a running total. This is a Pareto chart. Its purpose is to show where effort will pay back. Thirty per cent of the functions, ten out of thirty-two, carry seventy-eight per cent of the cost.` },
+    { kind: "bars", k: "The top 30%", h: `${TOPN} functions, ${gbp(TOPC)} of ${gbp(BOM)}`, min: 15, gap: 0.45,
+      items: FUNC.slice(0, TOPN).map((f, i) => ({ l: f.fn, v: f.cost, c: i ? "" : "hl" })),
+      vo: "These ten are where to look first: modulate light, process signal, generate light, magnify image, combine images, convert voltage, receive signal, remove heat, regulate power and enclose components. The other twenty-two share just twenty-three pounds between them." },
+    { kind: "list", style: "check", k: "Recap", h: "Film 4 of 5", min: 11, sect: "resolve",
+      items: [["Share each part's cost", "among its functions"], ["Check it adds up", "to the parts list"], ["Put the costs on the FAST diagram,", "and follow the unwanted ones"], ["Rank them:", "30% of the functions, 78% of the cost"]],
+      vo: "So: share each part's cost among its functions, check it adds up, put the costs on the FAST diagram, and rank them. Cost tells us where the money goes. It doesn't tell us whether it's good value. That's worth, in film five." },
+  ] },
+
+  p2e: { name: "Function analysis · 5 of 5", step: 2, scenes: [
+    { kind: "title", kick: "Step 2 · Function analysis · Film 5 of 5", title: "Worth, value and targets", sub: "What should each job cost?", step: 2, min: 6,
+      vo: "Film five: steps two point six and two point seven. Setting the worth, and picking the targets." },
+    { kind: "big", k: "Step 2.6 · Worth", h: "The lowest cost shown to perform the function <em>reliably</em>.", p: "Cost is what you pay. Worth is what you should pay. Every worth needs evidence.", min: 12,
+      vo: "Worth is the lowest cost shown to perform the function reliably. Cost is what you pay. Worth is what you should pay. The difference is the prize. And every worth needs evidence: it's never a guess." },
+    { kind: "list", k: "Five ways to set worth", h: "Each with evidence", min: 21,
+      items: [["A cheaper way that does the same job:", "organic polarisers where it runs cooler"], ["A supplier quote or should-cost:", "local optical glass"], ["A benchmark,", "but only if it meets every must-be need"], ["What the customer needs:", "one VGA input, not three"], ["The theoretical minimum:", "an unwanted function is worth £0"]],
+      vo: "There are five common ways to set it. A cheaper way that does the same job to the same standard. A supplier quote, or a should-cost. A benchmark, but only one that meets every must-be need. What the customer actually needs: one VGA input, not three. And the theoretical minimum. An unwanted function is worth nothing at all." },
+    { kind: "table", k: "A benchmark that can't set the worth", h: "Modulate light: 3LCD or single-chip DLP?", min: 13, num: false, hl: [2],
+      cols: ["", "3LCD (today)", "Single-chip DLP"], rows: [["Cheaper?", "No", "Yes"], ["Colour brightness", "3,600 lumens", "About 1,400 lumens"], ["Can it set the worth?", "", "No: fails a must-be"]],
+      vo: "Be careful with benchmarks. A single-chip DLP projector is cheaper, but it gives about fourteen hundred colour lumens, not thirty-six hundred. It fails a must-be need, so it can't set the worth of modulating light." },
+    { kind: "list", k: "Two numbers from cost and worth", h: "Value gap and value index", min: 15,
+      items: [["Value gap = cost − worth:", "the money at stake"], ["Value index = cost ÷ worth:", "1.0 is fair value"], ["1.25 or more is worth a look;", "2 or more is a strong target"], ["Use both:", "a high index on pennies matters less"]],
+      vo: "Cost and worth give two numbers. The value gap, cost minus worth, is the money at stake. The value index, cost divided by worth, shows how far off fair value it is. One point two five or more is worth a look; two or more is a strong target. Use both: a high index on a few pence matters less than a modest one on many pounds." },
+    { kind: "vi", k: "Two functions compared", h: "The biggest cost isn't the worst value", min: 15,
+      items: [{ fn: "Modulate light", cost: FN.mod.cost, worth: FN.mod.worth, say: "The biggest cost, but good value. Nothing cheaper meets the must-be needs.", at: 0.8 },
+        { fn: "Receive signal", cost: FN.rcv.cost, worth: FN.rcv.worth, say: "Cheap, but poor value: ports and a cable few schools use.", at: 6.4 }],
+      vo: "Here's why it matters. Modulating light is the biggest cost in the projector, but it's good value: an index of one point oh four. Receiving the signal costs five pounds, for a job worth one pound thirty. Its index is three point eight five: ports and a cable that few schools ever use." },
+    { kind: "table", k: "The biggest value gaps", h: "Cost, worth and value index", min: 16, hl: [0, 1],
+      cols: ["Function", "Cost", "Worth", "Gap", "Index"], rows: FUNC.slice().sort((a, b) => (b.cost - b.worth) - (a.cost - a.worth)).slice(0, 7).map((f) => [f.fn, gbp(f.cost), gbp(f.worth), gbp(f.cost - f.worth), f.vi.toFixed(2)]),
+      vo: "Sort by value gap and two functions stand out. Process signal has the biggest gap, four pounds twenty-five. Receive signal is next, at three pounds seventy, with the worst index. Locate components has an index of two: a steel cage doing a job the case could do." },
+    { kind: "list", k: "Step 2.6 · The customer's view", h: "A paired comparison", min: 21,
+      items: [["Take the ten functions", "a school would notice"], ["Compare every pair:", "which matters more to a teacher?"], ["Score the winner 1, 2 or 3", `(45 pairs, ${PAIRS.tot} points)`], ["Expect a little inconsistency:", "real workshops have it too"]],
+      vo: "Worth asks: what's the cheapest way to do this? The team also asks: how much does the school care? In a paired comparison, they take the ten functions a school would notice and compare every pair. Which matters more to a teacher: generating light, or receiving the signal? The winner scores one, two or three points. It's the team's judgement, from the school interviews, and it isn't perfectly consistent. That's normal." },
+    { kind: "vg2", k: "Importance against cost", h: "Look harder where cost far outruns importance", min: 20, rows: PAIRS.rows.map((r) => ({ fn: r.fn, imp: r.imp, cost: r.cost })),
+      vo: "Then set each function's share of the importance against its share of the cost. Process signal takes seventeen per cent of the cost for five per cent of the importance. Combine images and enclose components are flagged too. But combine images has no cheaper way to do it, so it stays. Use the graph to find questions. Use worth to answer them." },
+    { kind: "table", k: "Step 2.7 · Clues from the costed FAST diagram", h: "Every clue becomes a question", min: 20, num: false,
+      cols: ["Clue", "Question for the creative session"], rows: [["Receive signal: index 3.85", "Does the school need all of it?"], ["Process signal: gap £4.25", "Can fewer or simpler parts do it?"], ["Heat drives £4.34 of fans and filters", "Can we make less heat, or remove it with less?"], ["Interference drives £1.25 of shielding", "Can we stop it at the source?"], ["Convert voltage + regulate power on two boards", "Can two functions share parts?"], ["Case, steel cage and 38 screws", "Can the case do the bracket's and the screws' job?"]],
+      vo: "Step two point seven: pick the targets. Read the costed FAST diagram for clues, and turn each one into a question. Does the school need all of receive signal? Can fewer parts process the signal? Can we make less heat? Can we stop the interference at its source? Can two functions share one board?" },
+    { kind: "fastb", base: ALLF, flags: ["axis", "scope"], cost: true, costs: COSTS, hl: ["rcv", "sig", "heat", "emc", "volt", "reg", "encl", "loc", "fast"], min: 13,
+      vo: "These are the targets: functions with a big gap, a high index, or a cost driven by something unwanted. Not simply the most expensive ones. Modulate light, the biggest cost of all, is left alone, apart from a cheaper material in one corner." },
+    { kind: "big", k: "The question for every target", h: "How else could we <em>perform this function</em>, at the lowest total cost?", p: "With no loss of performance, quality, reliability or safety.", min: 12,
+      vo: "For every target, the creative session asks one question. How else could we perform this function, at the lowest total cost, with no loss of performance, quality, reliability or safety?" },
+    { kind: "list", style: "check", k: "Gate check before step 3", h: "Function analysis, done", min: 17, sect: "resolve",
+      items: [["Every part has a verb-noun function", ""], ["The FAST diagram passes the how–why test", ""], ["Function costs add up to the parts list", ""], ["Every worth has evidence, and the targets are agreed", ""]],
+      vo: `That's function analysis: name, classify, build the FAST diagram, cost it, rank it, set the worth, and pick the targets. In this study, those targets led to twenty-four ideas, and seventeen per cent off the landed cost. Next, the creative phase.` },
   ] },
 
   p3: { name: "Creative", step: 3, scenes: [
@@ -279,7 +439,15 @@ async function stage(browser, O) {
   await page.waitForFunction(() => window.ready && window.ready(), null, { timeout: 120000 });
   return { ctx, page };
 }
+// subtitles: the line is shown a sentence or two at a time, timed by length across the spoken line
+function chunks(s) {
+  const sent = s.vo.match(/[^.!?]+[.!?]+["'”]?\s*|[^.!?]+$/g).map((x) => x.trim()), out = [];
+  sent.forEach((x) => { const last = out[out.length - 1]; if (last && words(last) + words(x) <= 24 && (words(last) < 12 || words(x) < 6)) out[out.length - 1] = last + " " + x; else out.push(x); });
+  const total = sum(out, (x) => x.length); let at = 0.3;
+  return out.map((text) => { const c = { at, text }; at += s.voDur * text.length / total; return c; });
+}
 async function setScene(page, v, s) {
+  s.chunks = chunks(s);
   await page.evaluate(({ s, meta }) => window.setup(s, meta), { s: { ...s, voFile: undefined }, meta: { dur: s.dur, step: v.step, stepName: v.name, name: v.name, badge: v.badge } });
   await page.waitForTimeout(s.kind === "three" ? 400 : 120);   // let the 3D canvas take its new size
 }

@@ -691,7 +691,7 @@ function init() {
     const ideas = (D.ideas || []).filter((i) => (i.parts || []).includes(p.n));
     card.innerHTML = `<button type="button" class="pj-card-x" aria-label="Close">✕</button>
       <p class="pj-card-k">Item ${p.n} · ${GROUP[p.g].name}</p><h3>${p.name}</h3>
-      <dl><div><dt>Function</dt><dd><b>${p.fn}</b></dd></div><div><dt>Quantity</dt><dd>${p.q}</dd></div>
+      <dl><div><dt>Function</dt><dd><b>${p.fn}</b>${p.fn2 && p.fn2.length ? `<br>also: ${p.fn2.join(", ")}` : ""}${p.fnU && p.fnU.length ? `<br><span class="pj-unw">unwanted: ${p.fnU.join(", ")}</span>` : ""}</dd></div><div><dt>Quantity</dt><dd>${p.q}</dd></div>
       <div><dt>Material / process</dt><dd>${p.mat}</dd></div>
       <div><dt>Cost</dt><dd><b>${fmt(p.ext)}</b>${p.q > 1 ? ` (${fmt(p.cost)} each)` : ""}</dd></div>
       <div><dt>From the report</dt><dd>${from}</dd></div>

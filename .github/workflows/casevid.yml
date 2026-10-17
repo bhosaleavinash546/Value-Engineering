@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       videos:
-        description: 'Which videos (JSON list): ["intro","p1","p2","p3","p4","p5","p6","learnt"]'
+        description: 'Which videos (JSON list): ["intro","p1","p2a","p2b","p2c","p2d","p2e","p3","p4","p5","p6","learnt"]'
         required: false
-        default: '["intro","p1","p2","p3","p4","p5","p6","learnt"]'
+        default: '["intro","p1","p2a","p2b","p2c","p2d","p2e","p3","p4","p5","p6","learnt"]'
       publish:
         description: 'Commit the videos to the site: "yes" or "no"'
         required: false

@@ -22,6 +22,11 @@ module.exports = async function casestudy({ browser, O, r, ROOT }) {
   const V = D.ideas.filter((x) => !x.extra), core = r2(sum(V.filter((x) => +x.id.slice(1) <= 12), (x) => x.save)), all = r2(sum(V, (x) => x.save));
   const waves = [1, 2, 3, 4].map((w) => [r2(sum(V.filter((x) => x.wave === w), (x) => x.save)), sum(V.filter((x) => x.wave === w), (x) => x.nre)]);
   r.ok(V.length === 20 && core === 18.35 && all === 24.65 && JSON.stringify(waves) === JSON.stringify([[3.1, 31], [9.55, 166], [7.65, 270], [4.35, 220]]), "Case study data: the 20 ideas match the report's totals and waves");
+  const fid = new Set(D.funcs.map((f) => f.id)), pairKey = (a, b) => [a, b].sort().join("|");
+  const pairsOk = D.paired.pairs.length === D.paired.fns.length * (D.paired.fns.length - 1) / 2 && new Set(D.paired.pairs.map((p) => pairKey(p[0], p[1]))).size === D.paired.pairs.length && D.paired.pairs.every((p) => p[2] === p[0] || p[2] === p[1]);
+  r.ok(D.flinks.every(([a, b]) => fid.has(a) && fid.has(b)) && D.funcs.filter((f) => f.kind === "basic").length === 1 && D.funcs.every((f) => /^[A-Z][a-z]+ [a-zA-Z]+$/.test(f.fn)) && pairsOk,
+    "Case study data: one basic function, verb-noun FAST functions, valid links and a complete paired comparison");
+  r.ok(D.parts.every((p) => Array.isArray(p.fn2) && Array.isArray(p.fnU) && [...p.fn2, ...p.fnU].every((f) => /^[A-Z][a-z]+ [a-zA-Z]+$/.test(f))), "Case study data: every part's secondary and unwanted functions are verb-noun too");
   r.ok(D.ideas.every((x) => x.parts.every((n) => D.parts.some((p) => p.n === n)) && Object.keys(x.f || {}).every((id) => D.funcs.some((f) => f.id === id))), "Case study data: every idea points at real parts and functions");
 
   const ctx = await browser.newContext({ viewport: { width: 1366, height: 900 }, acceptDownloads: true });
@@ -42,17 +47,22 @@ module.exports = async function casestudy({ browser, O, r, ROOT }) {
   // a video for the product, each step and the lessons, each with its file, poster and transcript
   const vids = await p.$$eval(".cs-vid", (f) => f.map((x) => [x.querySelector("source").getAttribute("src"), x.querySelector("video").getAttribute("poster"), x.querySelectorAll("details p").length]));
   const missing = vids.filter(([v, po, n]) => !fs.existsSync(require("path").join(ROOT, v)) || !fs.existsSync(require("path").join(ROOT, po)) || n < 3);
-  r.ok(vids.length === 8 && !missing.length, `Case study: eight videos with their files, posters and transcripts${missing.length ? " (missing: " + missing.map((m) => m[0]).join(", ") + ")" : ""}`);
+  r.ok(vids.length === 12 && !missing.length, `Case study: twelve videos with their files, posters and transcripts${missing.length ? " (missing: " + missing.map((m) => m[0]).join(", ") + ")" : ""}`);
 
   // the six phases
   r.ok(await p.evaluate(() => ["p1", "p2", "p3", "p4", "p5", "p6", "learnt"].every((id) => document.getElementById(id))), "Case study: all six phases and the lessons are on the page");
   const st = await p.evaluate(() => ({ proc: document.querySelectorAll("#stProcess tbody tr").length, tool: /£165k/.test(document.querySelector("#stTooling").textContent), sens: document.querySelectorAll("#stSens tbody tr").length,
-    fn: document.querySelectorAll("#stFunctions tbody tr").length, fast: document.querySelectorAll("#stFast g.fx").length, total: document.querySelector("#stFunctions tfoot td").textContent,
+    fn: document.querySelectorAll("#stFunctions tbody tr").length, fast: document.querySelectorAll("#stFast g.fx").length, total: document.querySelectorAll("#stFunctions tfoot td")[0].textContent,
+    pf: document.querySelectorAll("#stPartFns tbody tr:not(.pf-grp)").length, mx: document.querySelectorAll("#stMatrix tbody tr").length, pareto: document.querySelectorAll("#stFnPareto .fp-b").length,
+    pc: document.querySelectorAll("#stPaired tbody tr").length, vg: document.querySelectorAll("#stValGraph li").length, clues: document.querySelectorAll(".fa-clues tbody tr").length,
     ideas: document.querySelectorAll("#stIdeas tbody tr").length, ev: document.querySelectorAll("#stEval tbody tr").length, cases: document.querySelectorAll("#stCases .st-case").length,
     waves: document.querySelectorAll("#stWaves table").length, dlp: /£131\.85/.test(document.querySelector("#stDlp").textContent), bridge: document.querySelectorAll("#stBridge rect").length }));
   r.ok(st.proc === 8 && st.tool && st.sens === 5, "Case study phase 1: factory audit, tooling (with the £165k gap flagged) and volume tables");
-  r.ok(st.fn === D.funcs.length - 1 && st.total === "£" + bomAll.toFixed(2), `Case study phase 2: ${st.fn} functions whose costs add up to the parts total (${st.total})`);
-  r.ok(st.fast >= 24, "Case study phase 2: the FAST diagram is drawn with every function");
+  const costed = D.funcs.filter((f) => f.cost > 0).length;
+  r.ok(st.fn === costed && st.total === "£" + bomAll.toFixed(2), `Case study phase 2: ${st.fn} costed functions whose costs add up to the parts total (${st.total})`);
+  r.ok(st.fast === D.funcs.length, `Case study phase 2: the FAST diagram draws every function (${st.fast})`);
+  r.ok(st.pf === D.parts.length && st.mx === 12 && st.pareto === costed && st.pc === D.paired.fns.length && st.vg === D.paired.fns.length && st.clues >= 6,
+    "Case study phase 2: part functions, cost matrix, Pareto, paired comparison, value graph and clues are all drawn");
   r.ok(st.ideas === 24 && st.ev === 21 && st.cases === 3 && st.waves === 4 && st.dlp, "Case study phases 3–5: 24 ideas, 21 scored, 3 business cases, 4 waves and the DLP benchmark");
   r.ok(/£24\.65/.test(await p.textContent("#stDecision")) && st.bridge === 9 && (await p.$$("#stPlan .g-row")).length === 8, "Case study phase 6: the decision, the cost bridge and the plan");
   const [dl] = await Promise.all([p.waitForEvent("download"), p.click("#pjCsv")]);
@@ -67,7 +77,7 @@ module.exports = async function casestudy({ browser, O, r, ROOT }) {
     r.ok(shown > 25, `Case study 3D: exploding shows numbered callouts on the parts (${shown})`);
     await p.click('.pj-part[data-n="19"]'); await p.waitForTimeout(400);
     const cardTxt = await p.textContent(".pj-card");
-    r.ok(await p.isVisible(".pj-card") && /Combine colours/.test(cardTxt) && /A4 Dichroic cross prism/.test(cardTxt) && /V20/.test(cardTxt), "Case study 3D: picking a part shows its function, its report line and its VAVE ideas");
+    r.ok(await p.isVisible(".pj-card") && /Combine images/.test(cardTxt) && /A4 Dichroic cross prism/.test(cardTxt) && /V20/.test(cardTxt), "Case study 3D: picking a part shows its function, its report line and its VAVE ideas");
     await p.click("[data-act=light]"); await p.waitForTimeout(500);
     r.ok(await p.isVisible(".pj-howto") && (await p.getAttribute("[data-act=light]", "aria-pressed")) === "true", "Case study 3D: Light path switches to the how-it-works steps");
     await p.click('.pj-step[data-i="4"]'); await p.waitForTimeout(300);

@@ -78,7 +78,7 @@
           kids.map((p) => {
             const share = p.alloc[l.id], others = Object.keys(p.alloc).filter((k) => k !== l.id);
             return `<tr class="bom-kid"><td class="num">${p.n}</td><td>↳ ${esc(p.name)}<small>${esc(p.mat)}${others.length ? ` · also ${others.map((k) => `${k} ${money(p.alloc[k])}`).join(", ")}` : ""}</small></td>
-              <td class="fn">${esc(p.fn)}</td><td class="num">${p.q}</td><td class="num">${unitFmt(share / p.q)}</td><td class="num">${money(share)}</td></tr>`;
+              <td class="fn">${esc(p.fn)}${p.fn2 && p.fn2.length ? `<small>also ${p.fn2.map(esc).join(", ")}</small>` : ""}</td><td class="num">${p.q}</td><td class="num">${unitFmt(share / p.q)}</td><td class="num">${money(share)}</td></tr>`;
           }).join("");
       }).join("");
     }).join("");
