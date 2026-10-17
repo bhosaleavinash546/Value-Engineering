@@ -633,6 +633,7 @@ function init() {
   const COVERS = new Set(["top", "bottom", "bezel", "lampdoor", "keypad", "lenscover", "interlock", "ir", "baffle"]);
   const DIM = new Set(["main", "psu", "ballast", "io", "emi", "mbcage", "inlet", "speaker", "harness", "blower", "ducts", "intake", "exhaust", "filter", "therm", "frame", "tiltfoot", "feet", "screws", "cage"]); // faded back while the light path is on
   const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const unease = (y) => (y < 0.5 ? Math.cbrt(y / 4) : 1 - Math.cbrt(2 * (1 - y)) / 2);   // the inverse: the slider moves the parts in even steps
   function setOpacity(rec, a) {
     rec.obj.visible = a > 0.02;
     rec.mats.forEach((mt) => {
@@ -807,7 +808,7 @@ function init() {
 
   // ── controls ──
   const tExp = $("[data-act=explode]"), tAsm = $("[data-act=assemble]"), tLight = $("[data-act=light]"), tLab = $("[data-act=labels]"), slider = $(".pj-slider");
-  function animateT(to) { st.tTo = to; }
+  function animateT(to) { st.tTo = to; st.follow = false; }
   function explode(on) {
     stopAuto(); if (st.light) setLight(false);
     animateT(on ? 1 : 0); fly(on ? "exploded" : "home");
@@ -823,7 +824,15 @@ function init() {
   tLight.onclick = () => { stopAuto(); setLight(!st.light); if (!st.light) fly("home"); };
   tLab.onclick = () => { poke(); st.labels = !st.labels; tLab.setAttribute("aria-pressed", st.labels); };
   $("[data-act=reset]").onclick = () => { select(0); setLight(false); animateT(0); fly("home"); tExp.setAttribute("aria-pressed", false); tAsm.setAttribute("aria-pressed", true); };
-  slider.addEventListener("input", () => { stopAuto(); if (st.light) setLight(false); st.t = st.tTo = slider.value / 100; tExp.setAttribute("aria-pressed", st.t > 0.5); tAsm.setAttribute("aria-pressed", st.t <= 0.5); });
+  // the slider sets where the parts should be; update() glides them there on every frame, so dragging is smooth
+  let sliding = false;
+  slider.addEventListener("pointerdown", () => { sliding = true; });
+  ["pointerup", "pointercancel", "change", "blur"].forEach((ev) => slider.addEventListener(ev, () => { sliding = false; }));
+  slider.addEventListener("input", () => {
+    stopAuto(); if (st.light) setLight(false);
+    st.tTo = unease(slider.value / 100); st.follow = true; poke();
+    tExp.setAttribute("aria-pressed", st.tTo > 0.5); tAsm.setAttribute("aria-pressed", st.tTo <= 0.5);
+  });
   function stopAuto() { controls.autoRotate = false; }
 
   // ── size and loop ──
@@ -836,7 +845,12 @@ function init() {
   new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) { last = performance.now(); requestAnimationFrame(loop); } }).observe(root);
   function update(dt) {
     const t0 = st.t, l0 = st.lightA;
-    if (st.t !== st.tTo) { const s = Math.sign(st.tTo - st.t) * dt / 1.3; st.t = Math.abs(st.tTo - st.t) <= Math.abs(s) ? st.tTo : st.t + s; slider.value = Math.round(st.t * 100); }
+    if (st.t !== st.tTo) {
+      if (st.follow) {   // following the slider: close most of the gap each frame, so it keeps up without jumping
+        st.t += (st.tTo - st.t) * (1 - Math.exp(-dt * 12)); if (Math.abs(st.tTo - st.t) < 0.0005) st.t = st.tTo;
+      } else { const s = Math.sign(st.tTo - st.t) * dt / 1.3; st.t = Math.abs(st.tTo - st.t) <= Math.abs(s) ? st.tTo : st.t + s; }
+      if (!sliding) slider.value = Math.round(ease(st.t) * 100);
+    } else st.follow = false;
     const la = st.light ? 1 : 0; if (st.lightA !== la) { const s = Math.sign(la - st.lightA) * dt / 0.7; st.lightA = Math.abs(la - st.lightA) <= Math.abs(s) ? la : st.lightA + s; }
     if (st.tween) { const k = Math.min(1, (performance.now() - st.tween.s) / st.tween.ms), e = ease(k); camera.position.lerpVectors(st.tween.p0, st.tween.p1, e); controls.target.lerpVectors(st.tween.t0, st.tween.t1, e); if (k >= 1) st.tween = null; }
     flows.forEach((t) => { t.offset.y -= dt * 0.9; });
