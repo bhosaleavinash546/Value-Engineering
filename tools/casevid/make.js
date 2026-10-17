@@ -441,11 +441,11 @@ const VIDEOS = {
 
   // narration for the 60-second vertical Short; the pictures are composed separately (tools/casevid/short.js)
   short: { name: "Function analysis in 60 seconds", badge: "▶", scenes: [
-    { kind: "big", h: "£105.20 in parts. £20 overspent.", min: 4, vo: "This projector's parts cost a hundred and five pounds twenty. About twenty pounds of it is overspent. Here's how to find it." },
-    { kind: "big", h: "Every part has a job", min: 4, vo: "Customers don't buy parts. They buy what parts do. So every part gets a job: an active verb and a measurable noun. The lamp? Generate light." },
-    { kind: "big", h: "The FAST diagram", min: 4, vo: "Then the FAST diagram links them. Ask how, to the right. Ask why, to the left." },
-    { kind: "big", h: "Unwanted functions cost money", min: 4, vo: "Unwanted functions, like heat, drag in cost: fans, filters and shielding. Five pounds eighty-nine a projector, for jobs nobody asked for." },
-    { kind: "big", h: "30% of functions, 78% of the cost", min: 4, vo: "Put a cost on every function and rank them. Thirty per cent of the functions carry seventy-eight per cent of the cost. That's where you look first." },
+    { kind: "big", h: "£105.20 in parts. £20 overspent.", min: 4, tail: 0.7, vo: "This projector's parts cost a hundred and five pounds twenty. About twenty pounds of it is overspent." },
+    { kind: "big", h: "Every part has a job", min: 4, tail: 0.7, vo: "Customers don't buy parts. They buy what parts do. Every part gets a job: an active verb and a measurable noun. The lamp? Generate light." },
+    { kind: "big", h: "The FAST diagram", min: 4, tail: 0.7, vo: "Then the FAST diagram links them. Ask how, to the right. Ask why, to the left." },
+    { kind: "big", h: "Unwanted functions cost money", min: 4, tail: 0.7, vo: "Unwanted functions, like heat, drag in cost: fans, filters and shielding. Five pounds eighty-nine a projector." },
+    { kind: "big", h: "30% of functions, 78% of the cost", min: 4, tail: 0.7, vo: "Put a cost on every function and rank them. Thirty per cent of the functions carry seventy-eight per cent of the cost." },
     { kind: "big", h: "valueengineeringhub.com", min: 5, sect: "resolve", vo: "Find out where the twenty pounds went in the full video, and learn free at value engineering hub dot com.",
       sub: "Find out where the £20 went in the full video, and learn free at valueengineeringhub.com." },
   ] },
@@ -499,7 +499,7 @@ function voice(v, dir) {
       }
       s.voDur = duration(s.voFile);
     } else { s.voFile = null; s.voDur = words(s.vo) / 2.6 + 0.3; }
-    s.dur = Math.max(s.min, s.voDur + 1.1);
+    s.dur = Math.max(s.min, s.voDur + (s.tail ?? 1.1));   // tail: the pause after the line
   }
 }
 async function stage(browser, O) {
