@@ -184,8 +184,8 @@ def rewrite(htmltext, here):
     return re.sub(r'href="#([A-Za-z][\w-]*)"', lambda m: f'href="{link_for(m.group(1), here)}"', htmltext)
 
 def nav_links(here):
-    # seven items: "Guides" opens the full list of ten; the rest are the most-used pages
-    NAV = ["job-plan", "cost-levers", "ideation", "benchmarking", "toolkit", "glossary"]
+    # "Guides" opens the full list of ten, "Topics" the topic guides and the glossary; then the most-used pages and the case study
+    NAV = ["job-plan", "cost-levers", "ideation", "benchmarking", "toolkit"]
     items = [("Guides", None, "playbook")] + [(BY_SLUG[s]["nav"], s, None) for s in NAV]
     out = []
     for label, slug, frag in items:
@@ -196,6 +196,7 @@ def nav_links(here):
             href, extra = f"{slug}/", (' class="is-active" aria-current="page"' if slug == here else "")
         out.append(f'      <a href="{href}"{extra}>{label}</a>')
         if label == "Guides": out.append(topics_menu(here))
+    out.append('      <a href="case-study.html">Case Study</a>')
     return "\n".join(out)
 
 TOPIC_NOTES = {"vave": "What VAVE means, VA vs VE", "value-engineering": "Definition, steps, examples",
@@ -203,11 +204,12 @@ TOPIC_NOTES = {"vave": "What VAVE means, VA vs VE", "value-engineering": "Defini
                "product-cost-optimisation": "Target costing and design-to-cost"}
 
 def topics_menu(here):
-    # "Topics" opens the five topic guides; on phones it folds out inside the menu
-    on = any(t["slug"] == here for t in PILLARS)
+    # "Topics" opens the five topic guides and the glossary; on phones it folds out inside the menu
+    on = any(t["slug"] == here for t in PILLARS) or here == "glossary"
+    entries = [(t["slug"], t["short"], TOPIC_NOTES[t["slug"]]) for t in PILLARS] + [("glossary", "Glossary", "VE terms in plain English")]
     items = "".join(
-        f'<a href="{t["slug"]}/"' + (' class="is-active" aria-current="page"' if t["slug"] == here else "")
-        + f'>{t["short"]}<small>{TOPIC_NOTES[t["slug"]]}</small></a>' for t in PILLARS)
+        f'<a href="{slug}/"' + (' class="is-active" aria-current="page"' if slug == here else "")
+        + f'>{short}<small>{note}</small></a>' for slug, short, note in entries)
     return (f'      <div class="nav-dd">'
             f'<button type="button" class="nav-dd-btn{" is-active" if on else ""}" aria-expanded="false" aria-controls="navTopics">Topics'
             f'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>'
