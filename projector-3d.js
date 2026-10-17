@@ -26,7 +26,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: !!window.VH_CAPTURE });
   } catch (e) { root.classList.add("pj-nogl"); return; }
   if (!renderer.getContext()) { root.classList.add("pj-nogl"); return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(window.VH_CAPTURE && window.VH_PR ? window.VH_PR : Math.min(window.devicePixelRatio || 1, 2));   // video capture can ask for more, for sharper edges
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;

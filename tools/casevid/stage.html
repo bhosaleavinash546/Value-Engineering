@@ -36,6 +36,9 @@
   #panel ul{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:12px}
   #panel li{display:flex;justify-content:space-between;gap:20px;font-size:27px;padding-bottom:10px;border-bottom:1px solid var(--ln)}
   #panel li b{font-family:'IBM Plex Mono',monospace;color:#fff;font-weight:600}
+  #tag{position:absolute;left:58px;top:150px;padding:14px 28px;border-radius:16px;background:rgba(6,10,22,.82);border:2px solid rgba(255,255,255,.12);font:700 40px 'IBM Plex Sans',sans-serif;color:#fff;opacity:0}
+  #tag small{display:block;font:600 20px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+  #tag:empty{display:none}
   #chip{position:absolute;left:58px;top:46px;padding:8px 22px 8px 10px;border-radius:999px;background:rgba(6,10,22,.82);display:flex;align-items:center;gap:18px;font:600 24px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
   #chip .n{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--blue2);color:#fff;font:700 26px 'IBM Plex Sans',sans-serif;letter-spacing:0}
   #chip b{color:#fff}
@@ -177,6 +180,11 @@
   .par .pv{font:600 16px 'IBM Plex Mono',monospace;fill:#fff;text-anchor:middle}
   .par .pz{fill:rgba(255,122,61,.1)}.par .pzt{font:700 26px 'IBM Plex Sans',sans-serif;fill:var(--orange);text-anchor:start}
   .par .pl{fill:none;stroke:#fff;stroke-width:3}.par .pd{fill:#fff}
+  .qz-h{font-size:64px!important;line-height:1.12;max-width:1600px}
+  .qz{display:grid;gap:22px;margin-top:40px;width:1400px}
+  .qo{display:grid;grid-template-columns:84px 1fr auto;align-items:center;gap:30px;padding:22px 34px;border-radius:20px;border:2px solid var(--ln);background:var(--panel);font:600 44px 'IBM Plex Sans',sans-serif}
+  .qo i{display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:var(--blue2);font:700 38px 'IBM Plex Sans',sans-serif;font-style:normal;color:#fff}
+  .qo b{font:700 44px 'IBM Plex Mono',monospace;color:var(--amber)}
   .vg2{display:grid;gap:7px}
   .vr{display:grid;grid-template-columns:330px 1fr 120px;gap:24px;align-items:center;font-size:30px}
   .vb{display:grid;gap:3px}.vb i{display:block;height:19px;border-radius:99px;font:600 17px 'IBM Plex Mono',monospace;font-style:normal;color:#04130b;text-align:right;padding-right:8px;line-height:22px;min-width:4px}
@@ -214,16 +222,17 @@
 <div id="card"></div>
 <div id="panel"></div>
 <div id="chip"></div>
+<div id="tag"></div>
 <div id="brand">VAVE<span>hub</span></div>
 <div id="cap"></div>
-<script>window.VH_CAPTURE = 1;</script>
+<script>window.VH_CAPTURE = 1; window.VH_PR = 2;   /* the 3D drawn at twice the size and scaled down: sharper edges */</script>
 <script src="../../projector-data.js"></script>
 <script type="importmap">{"imports":{"three":"../../vendor/three/three.module.min.js"}}</script>
 <script type="module" src="../../projector-3d.js"></script>
 <script>
 "use strict";
 const $ = (s) => document.querySelector(s);
-const card = $("#card"), panel = $("#panel"), chip = $("#chip"), cap = $("#cap"), viewer = $("#pjViewer");
+const card = $("#card"), panel = $("#panel"), chip = $("#chip"), cap = $("#cap"), viewer = $("#pjViewer"), tag = $("#tag");
 let capAt = 0;
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const seg = (t, a, b) => clamp((t - a) / (b - a));
@@ -239,7 +248,8 @@ let S = null, DUR = 1, ROOT = null;
 // ── 3D scenes ──
 function camAt(c, p) {
   if (c.orbit) { const o = c.orbit, a = lerp(o.a[0], o.a[1], p), r = lerp(o.r[0], o.r[1] ?? o.r[0], p), h = lerp(o.h[0], o.h[1] ?? o.h[0], p);
-    return [[o.target[0] + Math.cos(a) * r, o.target[1] + h, o.target[2] + Math.sin(a) * r], o.target]; }
+    const tg = Array.isArray(o.target[0]) ? o.target[0].map((v, i) => lerp(v, o.target[1][i], easeInOut(p))) : o.target;   // the target can move
+    return [[tg[0] + Math.cos(a) * r, tg[1] + h, tg[2] + Math.sin(a) * r], tg]; }
   if (c.to) { const e = easeInOut(p); return [c.from[0].map((v, i) => lerp(v, c.to[0][i], e)), c.from[1].map((v, i) => lerp(v, c.to[1][i], e))]; }
   return c.from || c;
 }
@@ -248,7 +258,15 @@ function three(t) {
   const tt = Array.isArray(d.t) ? lerp(d.t[0], d.t[1], easeInOut(seg(t, d.tAt?.[0] ?? 0, d.tAt?.[1] ?? DUR))) : (d.t || 0);
   const step = Array.isArray(d.step) ? d.step[Math.min(d.step.length - 1, Math.floor(p * d.step.length))] : (d.step || 0);
   const lightA = d.light ? (d.lightIn ? easeOut(seg(t, 0, d.lightIn)) : 1) : 0;
-  window.VHProjector.set({ t: tt, light: !!d.light, lightA, step, flow: t * 0.9, sel: d.sel || [], labels: !!d.labels, only: d.only || null, cam: camAt(d.cam, p), settle: 4 });
+  // groups light up one after another, each with its name
+  let sel = d.sel || [];
+  if (d.groups) {
+    const g0 = d.groupsAt ?? 0.8, gd = (DUR - g0 - 0.4) / d.groups.length, i = Math.max(0, Math.min(d.groups.length - 1, Math.floor((t - g0) / gd)));
+    if (t >= g0) { sel = d.groups[i].ns; if (tag.dataset.i !== String(i)) { tag.dataset.i = i; tag.innerHTML = `<small>${esc(d.groups[i].k || "")}</small>${esc(d.groups[i].l)}`; } }
+    const last = i === d.groups.length - 1, s0 = g0 + i * gd;
+    tag.style.opacity = t < g0 ? 0 : Math.min(seg(t, s0, s0 + 0.25), last ? seg(DUR - t, 0, 0.3) : seg(s0 + gd - t, 0, 0.2));
+  } else if (d.tag) tag.style.opacity = Math.min(seg(t, d.tagAt ?? 0.5, (d.tagAt ?? 0.5) + 0.5), seg(DUR - t, 0, 0.3));
+  window.VHProjector.set({ t: tt, light: !!d.light, lightA, step, flow: t * 0.9, sel, labels: !!d.labels, only: d.only || null, cam: camAt(d.cam, p), settle: 4 });
   if (d.panel) {
     const q = seg(t, d.panelAt ?? 0.6, (d.panelAt ?? 0.6) + 0.6);
     panel.style.opacity = easeOut(q); panel.style.transform = `translateX(${(1 - easeOut(q)) * 60}px)`;
@@ -426,6 +444,14 @@ const K = {
         b1.style.width = q1 * r.imp / mx * 100 + "%"; b1.textContent = q1 > 0.9 ? r.imp.toFixed(0) + "%" : ""; b2.style.width = q2 * r.cost / mx * 100 + "%"; b2.textContent = q2 > 0.9 ? r.cost.toFixed(0) + "%" : "";
         e.querySelector(".vx").style.opacity = seg(t, a + 1.0, a + 1.4); }); },
   },
+  // a challenge for the viewer: a question and its options
+  quiz: {
+    html: (d) => `<div class="k"><p class="kt">${esc(d.k)}</p><h2 class="kh qz-h">${esc(d.h)}</h2><div class="qz">${d.opts.map((o) =>
+      `<div class="qo"><i>${esc(o.l)}</i><span>${esc(o.t)}</span>${o.v ? `<b>${esc(o.v)}</b>` : ""}</div>`).join("")}</div></div>`,
+    frame: (t) => { const d = S; rise($(".k .kt"), seg(t, 0, 0.5)); rise($(".k .kh"), seg(t, 0.15, 0.8));
+      const at = d.at || d.opts.map((_, i) => 1.0 + i * 0.6);
+      document.querySelectorAll(".qo").forEach((e, i) => rise(e, seg(t, at[i], at[i] + 0.45), 24)); },
+  },
   // the FAST diagram, built up layer by layer
   fastb: {
     html: () => `<div class="fb2"><svg viewBox="10 0 1545 716"></svg></div>`,
@@ -475,6 +501,7 @@ window.setup = function (scene, meta) {
   chip.innerHTML = meta.step ? `<span class="n">${meta.step}</span><span>Step ${meta.step} of 6 · <b>${esc(meta.stepName)}</b></span>` : `<span class="n">${meta.badge || "▶"}</span><span>VH-3600 case study · <b>${esc(meta.name)}</b></span>`;
   cap.innerHTML = scene.vo ? `<div>${esc(scene.chunks ? scene.chunks[0].text : scene.vo)}</div>` : ""; capAt = 0;
   const is3d = scene.kind === "three";
+  tag.innerHTML = is3d && scene.tag ? scene.tag : ""; tag.dataset.i = ""; tag.style.opacity = 0;
   card.classList.toggle("on", !is3d); viewer.style.visibility = is3d ? "visible" : "hidden";
   if (!is3d) { card.innerHTML = K[scene.kind].html(scene); }
   panel.classList.toggle("on", !!(is3d && scene.panel));

@@ -62,6 +62,15 @@ const optical = D.parts.filter((p) => Object.keys(p.alloc).some((l) => l[0] === 
 const CAM = { home: [[34, 24, 40], [0, 0, 0]], exploded: [[98, 58, 114], [-6, 2.5, 0]], light: [[-4, 31, 25], [-2, 0, 2]] };
 const BLUE = "#2e6fe8", AMBER = "#d9a44a", GREEN = "#1fae6a", GREY = "#55607a", ORANGE = "#ff7a3d";
 
+// no numbered tags in these shots: (only: [])
+// the product, whole and turning, then taken apart, then the exploded view turning with its groups lit in turn (25 s)
+const GROUPS = [["Light source", 1, 6], ["Optics", 7, 21], ["Cooling", 22, 27], ["Power", 28, 30], ["Electronics", 31, 37], ["Housing", 38, 46]]
+  .map(([l, a, b], i) => ({ k: `Group ${i + 1} of 6`, l, ns: Array.from({ length: b - a + 1 }, (_, j) => a + j) }));
+const EXT = [-6, -2, 0];   // where the camera looks in the exploded shots (a little low, so the model sits clear of the subtitles)
+const productWhole = (o) => ({ kind: "three", t: 0, only: [], cam: { orbit: { target: [0, -1, 0], r: [72], h: [26], a: [2.5, 1.0] } }, min: 8, ...o });
+const productApart = (o) => ({ kind: "three", t: [0, 1], tAt: [0.3, 4.6], only: [], cam: { orbit: { target: [[0, -1, 0], EXT], r: [72, 158], h: [26, 58], a: [1.0, 0.75] } }, min: 5, ...o });
+const productGroups = (o) => ({ kind: "three", t: 1, groups: GROUPS, only: [], cam: { orbit: { target: EXT, r: [158, 150], h: [58, 52], a: [0.75, -0.45] } }, min: 12, ...o });
+
 // ── the videos ──
 const VIDEOS = {
   intro: { name: "The product and the challenge", badge: "A", scenes: [
@@ -116,10 +125,12 @@ const VIDEOS = {
   p2a: { name: "Function analysis · 1 of 5", step: 2, scenes: [
     { kind: "title", kick: "Step 2 · Function analysis · Film 1 of 5", title: "Why functions?", sub: "The heart of value engineering.", step: 2, min: 6,
       vo: "This is the first of five short films on function analysis, the heart of value engineering. By the end of them, you'll be able to do it yourself, step by step, on a real product." },
-    { kind: "three", t: 1, cam: { from: CAM.exploded, to: [[84, 52, 100], [-6, 2.5, 0]] }, min: 10,
-      vo: "Here's our projector, taken apart. Fifty kinds of part. The usual way to cut cost is to go through them one by one and ask each supplier for a lower price. That finds a little. Function analysis finds far more, because it asks a different question." },
-    { kind: "big", k: "The different question", h: "Customers don't buy parts. They buy what the parts <em>do</em>.", p: "That job is called a function.", min: 9,
-      vo: "A school doesn't want a lamp, three LCD panels and a lens. It wants a bright, clear picture on the wall. Every part is there only to do a job, and that job is called a function." },
+    productWhole({ tag: "<small>The product</small>VH-3600 · 3LCD classroom projector",
+      vo: "This is the product: a three LCD classroom projector, built to throw a bright picture across a classroom." }),
+    productApart({ vo: "Now take it apart." }),
+    productGroups({ vo: "Fifty kinds of part, in six groups: the light source, the optics, cooling, power, electronics and the housing. Each has a job, and each has a cost." }),
+    { kind: "big", k: "The different question", h: "Customers don't buy parts. They buy what the parts <em>do</em>.", p: "That job is called a function.", min: 14,
+      vo: "The usual way to cut cost is to squeeze each supplier, part by part. Function analysis asks a different question. A school doesn't want a lamp, three LCD panels and a lens. It wants a bright, clear picture on the wall. Every part is there only to do a job, and that job is called a function." },
     { kind: "cards", cols: 3, k: "Where it came from", h: "General Electric, the 1940s", min: 15, gap: 3.6,
       items: [{ h: "A shortage", p: "Wartime shortages forced GE's engineers to use substitute materials.", c: GREY }, { h: "A surprise", p: "Often the substitute did the job just as well, and cost less.", c: AMBER },
         { h: "A method", p: "Lawrence Miles asked: what does it do? Then: what else would do that, for less?", c: GREEN }],
@@ -379,6 +390,40 @@ const VIDEOS = {
       vo: "Then the real work starts. Engineer it, test it, release it, and track every saving monthly until finance sees it in the actual cost." },
   ] },
 
+  // the YouTube cut only: a cold open with two challenges, a teaser between films, and the payoff before the closing
+  ytopen: { name: "Function analysis · The challenge", badge: "?", scenes: [
+    productWhole({ panel: { k: "One projector", big: "£105.20", p: "in parts: fifty kinds of them" },
+      vo: "This classroom projector is built from fifty kinds of part, costing a hundred and five pounds twenty." }),
+    productApart({ min: 7, panel: { k: "Of which", big: `<em>${gbp(GAP)}</em>`, p: "is spent above what the jobs are worth" }, panelAt: 1.2,
+      vo: "About twenty pounds of that, almost one pound in five, is spent above what its jobs are worth." }),
+    { kind: "three", t: 1, sel: [16, 17, 18], only: [16], labels: true, cam: { orbit: { target: EXT, r: [158, 150], h: [58, 52], a: [0.75, 0.35] } }, min: 9,
+      panel: { k: "The obvious suspect", big: "£27.50", p: "The LCD panels: the most expensive job in the projector. It's actually good value." },
+      vo: "The obvious suspect is the most expensive part: the LCD panels. It's actually good value. So where is the twenty pounds hiding?" },
+    { kind: "quiz", k: "Challenge 1", h: `Of the ${gbp(BOM)}, how much does the job the school pays for?`, min: 10, opts: [{ l: "A", t: "About 30%" }, { l: "B", t: "About 57%" }, { l: "C", t: "About 80%" }], at: [4.6, 5.6, 6.6],
+      vo: "Two challenges. One: of the hundred and five pounds twenty, how much actually does the job the school pays for? Thirty, fifty-seven or eighty per cent?" },
+    { kind: "quiz", k: "Challenge 2", h: "Which job is the worst value for money?", min: 11, at: [2.6, 4.4, 6.0, 7.6],
+      opts: [{ l: "A", t: "Modulate light", v: gbp(FN.mod.cost) }, { l: "B", t: "Process signal", v: gbp(FN.sig.cost) }, { l: "C", t: "Receive signal", v: gbp(FN.rcv.cost) }, { l: "D", t: "Remove heat", v: gbp(FN.heat.cost) }],
+      vo: "Two: which job is the worst value? Modulate light, at twenty-seven fifty. Process signal, thirteen twenty. Receive signal, five pounds. Or remove heat, three seventy-nine?" },
+    { kind: "big", k: "Make your guesses", h: "The answers are in <em>part 4</em> and <em>part 5</em>", p: "By the end, you'll be able to find this money in any product.", min: 8, sect: "resolve",
+      vo: "Make your guesses. The answers come in parts four and five. By the end, you'll be able to find this money in any product. Let's start." },
+  ] },
+  ytb1: { name: "Coming up", badge: "2", scenes: [{ kind: "big", k: "Coming up · Part 2 of 5 · Naming and classifying", h: "A mirror riddle, and why <em>\"protect user\"</em> is the wrong answer", min: 6,
+    vo: "Next: a mirror riddle, and why protect user is the wrong answer." }] },
+  ytb2: { name: "Coming up", badge: "3", scenes: [{ kind: "big", k: "Coming up · Part 3 of 5 · The FAST diagram", h: "The diagram that explains why a projector needs <em>fans</em> at all", min: 6,
+    vo: "Next: the diagram that explains why a projector needs fans at all." }] },
+  ytb3: { name: "Coming up", badge: "4", scenes: [{ kind: "big", k: "Coming up · Part 4 of 5 · Costing the functions", h: `We follow the ${gbp(BOM)}, and the <em>first answer</em>`, min: 6,
+    vo: "Next: we follow the hundred and five pounds twenty, and the first answer." }] },
+  ytb4: { name: "Coming up", badge: "5", scenes: [{ kind: "big", k: "Coming up · Part 5 of 5 · Worth, value and targets", h: "The worst value in the projector. <em>Was your guess right?</em>", min: 6,
+    vo: "Next: the worst value in the projector. Was your guess right?" }] },
+  ytpay: { name: "Where was the £20?", badge: "✓", scenes: [
+    { kind: "bars", k: "The payoff", h: `Where the ${gbp(GAP)} sits`, min: 18, gap: 0.5,
+      items: (() => { const g = FUNC.map((f) => ({ l: f.fn, v: r2(f.cost - f.worth) })).sort((a, b) => b.v - a.v), top = g.slice(0, 7); return top.map((x, i) => ({ ...x, c: i < 2 ? "hl" : "" })); })(),
+      note: (() => { const g = FUNC.map((f) => r2(f.cost - f.worth)).sort((a, b) => b - a), rest = g.slice(7).filter((v) => v > 0); return `The other ${rest.length} functions with a gap share ${gbp(r2(sum(rest, (v) => v)))}.`; })(),
+      vo: "So where was the twenty pounds? Almost eight pounds of it sat in receiving and processing the signal: ports few schools use, and a board doing more than it needs to. And the obvious suspect, the twenty-seven pound optics? Only one pound fifteen." },
+    { kind: "big", k: "Next in this case study", h: "24 ideas. <em>17%</em> off the landed cost.", p: "From the targets to the ideas, the scores and the decision.", min: 8, sect: "resolve",
+      vo: "Next in this case study: how twenty-four ideas took seventeen per cent off the landed cost." },
+  ] },
+
   // closing for the five function analysis films joined into one video (YouTube); not used on the site
   ytend: { name: "Value Engineering Hub", badge: "▶", scenes: [
     { kind: "cards", cols: 2, k: "Keep learning, free", h: "valueengineeringhub.com", min: 22, gap: 3.6,
@@ -396,13 +441,13 @@ const VIDEOS = {
 
   // narration for the 60-second vertical Short; the pictures are composed separately (tools/casevid/short.js)
   short: { name: "Function analysis in 60 seconds", badge: "▶", scenes: [
-    { kind: "big", h: "Customers don't buy parts.", min: 4, vo: "Customers don't buy parts. They buy what the parts do." },
-    { kind: "big", h: "Every part has a job", min: 4, vo: "That's function analysis, the heart of value engineering. Every part gets a job, written as an active verb and a measurable noun. The lamp? Generate light." },
+    { kind: "big", h: "£105.20 in parts. £20 overspent.", min: 4, vo: "This projector's parts cost a hundred and five pounds twenty. About twenty pounds of it is overspent. Here's how to find it." },
+    { kind: "big", h: "Every part has a job", min: 4, vo: "Customers don't buy parts. They buy what parts do. So every part gets a job: an active verb and a measurable noun. The lamp? Generate light." },
     { kind: "big", h: "The FAST diagram", min: 4, vo: "Then the FAST diagram links them. Ask how, to the right. Ask why, to the left." },
     { kind: "big", h: "Unwanted functions cost money", min: 4, vo: "Unwanted functions, like heat, drag in cost: fans, filters and shielding. Five pounds eighty-nine a projector, for jobs nobody asked for." },
     { kind: "big", h: "30% of functions, 78% of the cost", min: 4, vo: "Put a cost on every function and rank them. Thirty per cent of the functions carry seventy-eight per cent of the cost. That's where you look first." },
-    { kind: "big", h: "valueengineeringhub.com", min: 5, sect: "resolve", vo: "Watch the full twenty-minute course, and learn value engineering free at value engineering hub dot com.",
-      sub: "Watch the full 20-minute course, and learn value engineering free at valueengineeringhub.com." },
+    { kind: "big", h: "valueengineeringhub.com", min: 5, sect: "resolve", vo: "Find out where the twenty pounds went in the full video, and learn free at value engineering hub dot com.",
+      sub: "Find out where the £20 went in the full video, and learn free at valueengineeringhub.com." },
   ] },
 
   learnt: { name: "What we learnt", badge: "✓", scenes: [
