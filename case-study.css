@@ -346,3 +346,13 @@ html[data-theme="light"] .pj-hint{color:rgba(30,40,60,.55)}
 @media (max-width:720px){.st-bridge{overflow-x:auto}.st-bridge svg{min-width:640px}}
 .cs-two>*{min-width:0}
 .st-stack{display:grid;gap:1.2rem;margin:0 0 1.2rem}.st-stack>*{min-width:0}
+
+/* case study videos */
+.cs-vid{margin:0 0 1.6rem;max-width:880px}
+.cs-vid video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:16px;border:1px solid var(--line);background:#0b1220}
+.cs-vid figcaption{margin-top:.6rem;font-size:.86rem;line-height:1.55;color:var(--muted)}
+.cs-vid figcaption b{color:var(--txt)}
+.cs-vid details{margin-top:.5rem;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.cs-vid summary{cursor:pointer;padding:.6rem .9rem;font-size:.86rem;font-weight:600;color:var(--txt);min-height:40px;display:flex;align-items:center}
+.cs-vid details[open] summary{border-bottom:1px solid var(--line)}
+.cs-vid details p{margin:.6rem .9rem;font-size:.86rem;line-height:1.6;color:var(--muted)}

@@ -39,6 +39,11 @@ module.exports = async function casestudy({ browser, O, r, ROOT }) {
   r.ok((await p.$$("#pjPareto li")).length === 11 && /£131\.60 ex-works and £141\.50 landed/.test(await p.textContent("#pjChain")), "Case study: Pareto of the costliest lines, and the cost build-up against the report's totals");
   r.ok((await p.$$(".pj-part")).length === D.parts.filter((x) => !x.hidden3d).length && (await p.$$(".pj-step")).length === 7, "Case study: the side panel lists the parts and the seven light-path steps");
 
+  // a video for the product, each step and the lessons, each with its file, poster and transcript
+  const vids = await p.$$eval(".cs-vid", (f) => f.map((x) => [x.querySelector("source").getAttribute("src"), x.querySelector("video").getAttribute("poster"), x.querySelectorAll("details p").length]));
+  const missing = vids.filter(([v, po, n]) => !fs.existsSync(require("path").join(ROOT, v)) || !fs.existsSync(require("path").join(ROOT, po)) || n < 3);
+  r.ok(vids.length === 8 && !missing.length, `Case study: eight videos with their files, posters and transcripts${missing.length ? " (missing: " + missing.map((m) => m[0]).join(", ") + ")" : ""}`);
+
   // the six phases
   r.ok(await p.evaluate(() => ["p1", "p2", "p3", "p4", "p5", "p6", "learnt"].every((id) => document.getElementById(id))), "Case study: all six phases and the lessons are on the page");
   const st = await p.evaluate(() => ({ proc: document.querySelectorAll("#stProcess tbody tr").length, tool: /£165k/.test(document.querySelector("#stTooling").textContent), sens: document.querySelectorAll("#stSens tbody tr").length,
