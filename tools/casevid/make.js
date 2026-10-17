@@ -389,7 +389,7 @@ const VIDEOS = {
       vo: "Everything in this series comes from the classroom projector case study on Value Engineering Hub. There you can explore the projector in 3D, and follow all six phases of the study. The VE Academy takes you through value engineering in thirteen narrated modules, with labs, a capstone study and a certificate. VAVE for Leaders is a one-hour course for managers. And there are guides, templates and thirty-six cost reduction ideas, ready to use." },
     { kind: "big", k: "No fee, no catch", h: "Free courses. <em>Free certificates.</em>", p: "Learn value engineering at your own pace, then prove it.", min: 8,
       vo: "The courses and the certificates are free. Learn at your own pace, then prove what you know." },
-    { kind: "end", h: "Created by <span>Avinash Bhosale</span>", p: "Free value engineering courses, guides and templates", url: "valueengineeringhub.com", min: 10, sect: "resolve",
+    { kind: "end", h: "Created by <span>Avinash Bhosale</span>", p: "Free value engineering courses, guides and templates", url: "valueengineeringhub.com", copy: "© 2026 Avinash Bhosale · VAVEhub. All rights reserved. No copying, re-uploading or reuse without written permission.", min: 10, sect: "resolve",
       vo: "This series was created by Avinash Bhosale. Visit value engineering hub dot com, and start today. Thanks for watching.",
       sub: "This series was created by Avinash Bhosale. Visit valueengineeringhub.com, and start today. Thanks for watching." },
   ] },
