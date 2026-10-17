@@ -43,38 +43,50 @@
 
   // ── the four paths ──
   const NAV = (href) => () => document.querySelector('#navLinks a[href$="' + href + '"]');
+  // Every path visits the main sections, in the order that suits that visitor, and ends on the best place to start.
+  const SEC = {
+    guides: { el: () => document.querySelector('#navLinks a[href$="#playbook"]'), t: "Ten step-by-step guides", d: "The job plan, function analysis and FAST, cost levers, idea generation, benchmarking and teardown, each with worked examples." },
+    toolkit: { el: NAV("toolkit/"), t: "15 free templates", d: "Function worksheets, idea registers, evaluation matrices and business cases. Download them and use them today, with no sign-up." },
+    study: { el: NAV("case-study.html"), t: "A full study on a real product", d: "A classroom projector taken through all six steps of a value study, in 3D, with a video for every step." },
+    academy: { el: () => $(".hc-acad"), t: "The VE Academy", d: "13 short modules, about 6 hours in all, with quick checks, an exam and a free certificate you can share." },
+    leaders: { el: () => $(".hc-lead"), t: "VAVE for Leaders", d: "One hour, seven short modules: what value engineering delivers, what to ask for, and how to keep the savings. With a certificate." },
+    video: { el: () => $(".ve-video"), t: "Value engineering in 4 minutes", d: "What it is, and why it works, in one short video." },
+  };
+  const step = (k, more) => Object.assign({}, SEC[k], more || {});
   const PATHS = {
-    student: {
-      label: "🎓 I'm a student",
-      steps: [
-        { el: () => $(".hc-acad"), t: "Start with the VE Academy", d: "13 short modules, about 6 hours in all, with quick checks, an exam and a free certificate you can share." },
-        { el: NAV("case-study.html"), t: "Then see it done on a real product", d: "A classroom projector taken through all six steps of a value study, in 3D, with a video for every step." },
-      ],
-      end: { t: "Ready when you are", d: "Module 1 takes about 20 minutes. Your progress is saved as you go.", href: "/training.html", go: "Start Module 1" },
-    },
     pro: {
       label: "🛠 I work on product cost",
       steps: [
-        { el: () => document.querySelector('#navLinks a[href$="#playbook"]'), t: "Ten step-by-step guides", d: "The job plan, FAST diagrams, cost levers, should-costing, teardown and more, each with worked examples." },
-        { el: NAV("toolkit/"), t: "15 free templates", d: "Function worksheets, idea registers, evaluation matrices and business cases. Download them and use them today." },
+        step("guides"), step("study"),
+        step("academy", { d: "Learn the whole method in 13 short modules, with a free certificate you can add to your CV or LinkedIn." }),
+        step("leaders", { t: "Getting your manager on board?", d: "VAVE for Leaders is a one-hour course written for them: what to expect, what to ask for and how to keep the savings." }),
+        step("toolkit", { d: "Everything you need for your next study: worksheets, registers, matrices and business cases. Free, with no sign-up.", href: "/toolkit/", go: "Open the toolkit" }),
       ],
-      end: { t: "Pick up a template", d: "Everything in the toolkit is free, with no sign-up needed.", href: "/toolkit/", go: "Open the toolkit" },
     },
     leader: {
       label: "📊 I lead a team",
       steps: [
-        { el: () => $(".hc-lead"), t: "VAVE for Leaders", d: "One hour, seven short modules: what value engineering delivers, what to ask for, and how to keep the savings. With a certificate." },
-        { el: NAV("case-study.html"), t: "See the business result", d: "A real product study: 24 ideas, 17% off the landed cost, with the business cases and the decision pack." },
+        step("study", { t: "See the business result", d: "A real product study: 24 ideas, 17% off the landed cost, with the business cases and the decision pack." }),
+        step("academy", { t: "Train your team", d: "The VE Academy takes engineers and buyers through the whole method in 13 short modules, with an exam and a certificate." }),
+        step("guides"), step("toolkit"),
+        step("leaders", { t: "Start here: one hour", d: "Seven short modules on what value engineering delivers, what to ask for, and how to keep the savings. With a certificate.", href: "/leaders.html", go: "Start the 1-hour course" }),
       ],
-      end: { t: "One hour well spent", d: "Start the leaders' course, or come back to the case study any time from the top bar.", href: "/leaders.html", go: "Start the 1-hour course" },
+    },
+    student: {
+      label: "🎓 I'm a student",
+      steps: [
+        step("study", { t: "See it done on a real product", d: "A classroom projector taken through all six steps of a value study, in 3D, with a video for every step." }),
+        step("guides", { d: "Ten guides that explain each part of the method, with worked examples. Handy for revision and assignments." }),
+        step("toolkit"), step("leaders"),
+        step("academy", { t: "Start with the VE Academy", d: "13 short modules, about 6 hours in all. Module 1 takes about 20 minutes, and your progress is saved as you go.", href: "/training.html", go: "Start Module 1" }),
+      ],
     },
     explore: {
       label: "👀 Just exploring",
       steps: [
-        { el: () => $(".ve-video"), t: "Start here", d: "What value engineering is, and why it works, explained in 4 minutes." },
-        { el: NAV("case-study.html"), t: "Then take a projector apart", d: "Turn it, explode it and see where every pound of its cost goes, in 3D." },
+        step("video"), step("academy"), step("leaders"), step("guides"), step("toolkit"),
+        step("study", { t: "Then take a projector apart", d: "Turn it, explode it and see where every pound of its cost goes, in 3D.", href: "/case-study.html", go: "Explore the case study" }),
       ],
-      end: { t: "Have a look around", d: "The case study is the quickest way to see value engineering in action.", href: "/case-study.html", go: "Explore the case study" },
     },
   };
 
@@ -264,9 +276,9 @@
     const box = document.createElement("div");
     box.className = "vw-ask"; box.setAttribute("role", "dialog"); box.setAttribute("aria-labelledby", "vwAskT");
     box.innerHTML = student
-      ? `<p class="vw-k">Welcome</p><h2 id="vwAskT">Hello, and welcome to VAVEhub 👋</h2><p class="vw-d">You're here to learn value engineering. Here's where to start, in three quick steps.</p>` +
+      ? `<p class="vw-k">Welcome</p><h2 id="vwAskT">Hello, and welcome to VAVEhub 👋</h2><p class="vw-d">You're here to learn value engineering. Here's a quick look at what's here and where to start.</p>` +
         '<div class="vw-foot"><button type="button" class="vw-btn vw-go" data-p="student">Show me <span aria-hidden="true">→</span></button><button type="button" class="vw-skip">Not now</button></div>'
-      : `<p class="vw-k">Welcome to VAVEhub</p><h2 id="vwAskT">What brings you here?</h2><p class="vw-d">Pick one and we'll show you where to start. It takes 20 seconds.</p>` +
+      : `<p class="vw-k">Welcome to VAVEhub</p><h2 id="vwAskT">What brings you here?</h2><p class="vw-d">Pick one and we'll show you around. It takes under a minute.</p>` +
         '<div class="vw-choices">' + Object.entries(PATHS).map(([k, p]) => '<button type="button" class="vw-choice" data-p="' + k + '">' + esc(p.label) + "</button>").join("") + "</div>" +
         '<button type="button" class="vw-skip">Skip</button>';
     box.insertAdjacentHTML("beforeend", '<button type="button" class="vw-x" aria-label="Close">×</button>');
@@ -284,8 +296,7 @@
   function start(path) {
     const p = PATHS[path]; if (!p) return;
     S.path = path; S.started = Date.now(); delete S.tourEnded; save(); track("path", path);
-    const steps = p.steps.concat([{ k: "Step 3 of 3", t: p.end.t, d: p.end.d, href: p.end.href, go: p.end.go }]);
-    tour(steps, {
+    tour(p.steps, {
       onStep: (i) => track("step" + (i + 1)),
       onGo: () => { S.tourEnded = Date.now(); save(); track("finish"); },
       onEnd: (ev) => { S.tourEnded = Date.now(); save(); track(ev === "stay" ? "finish_stay" : "close"); checkAll(true); renderList(); },

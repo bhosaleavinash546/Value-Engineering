@@ -1,4 +1,4 @@
-// The welcome tour: the question appears once, each path's three steps end on the right page, keyboard,
+// The welcome tour: the question appears once, each path visits every main section and ends on the right page, keyboard,
 // the checklist ticks, the students' link, phone fit, the replay link, the counts sent, and accessibility.
 const fs = require("fs");
 const AXE = fs.readFileSync(require.resolve("axe-core/axe.min.js"), "utf8");
@@ -17,29 +17,38 @@ module.exports = async function welcome({ browser, O, r }) {
       .filter((x) => x.nodes.some((n) => n.target.join(" ").includes("vw-"))).map((x) => x.id + " (" + x.nodes.map((n) => n.target.join(" ")).slice(0, 2).join("; ") + ")")); };
 
   // first visit: the question, then each path to its last step
-  const ENDS = { student: "/training.html", pro: "/toolkit/", leader: "/leaders.html", explore: "/case-study.html" };
+  const ENDS = { pro: "/toolkit/", leader: "/leaders.html", student: "/training.html", explore: "/case-study.html" };
+  const MAIN = ["#playbook", "toolkit/", "case-study.html", "hc-acad", "hc-lead"];
   for (const [path, end] of Object.entries(ENDS)) {
     const { ctx, p, sent, errs } = await open();
     await p.goto(`${O}/`);
     const shown = await p.waitForSelector(".vw-ask.is-on", { timeout: 9000 }).then(() => true, () => false);
     r.ok(shown, `${path}: a first visit sees the welcome question`);
     if (!shown) { await ctx.close(); continue; }
-    if (path === "student") {
+    if (path === "pro") {
+      const order = await p.$$eval(".vw-choice", (b) => b.map((x) => x.dataset.p).join(","));
+      r.ok(order === "pro,leader,student,explore", `the answers are in order: product cost, lead a team, student, exploring (${order})`);
       const v = await axe(p); r.ok(!v.length, `the welcome question passes accessibility checks${v.length ? ": " + v.join(", ") : ""}`);
       r.ok(await p.evaluate(() => document.activeElement && document.activeElement.classList.contains("vw-choice")), "the first answer has keyboard focus");
     }
     await p.click(`.vw-choice[data-p="${path}"]`); await p.waitForTimeout(700);
-    r.ok(await p.$(".vw-card .vw-next") && /Step 1 of 3/i.test(await p.textContent(".vw-card .vw-k")), `${path}: step 1 of 3 is shown`);
+    r.ok(await p.$(".vw-card .vw-next") && /Step 1 of [5-6]/i.test(await p.textContent(".vw-card .vw-k")), `${path}: step 1 is shown`);
     r.ok(await p.evaluate(() => { const t = document.querySelector(".vw-target"), s = document.querySelector(".vw-spot"); if (!t || !s) return false;
       const a = t.getBoundingClientRect(), b = s.getBoundingClientRect(); return Math.abs(a.left - b.left) < 20 && Math.abs(a.width - b.width) < 30; }), `${path}: the spotlight is on the item being explained`);
     if (path === "student") {
       await p.keyboard.press("ArrowRight"); await p.waitForTimeout(500);
-      r.ok(/Step 2 of 3/i.test(await p.textContent(".vw-card .vw-k")), "→ moves to the next step");
+      r.ok(/Step 2 of/i.test(await p.textContent(".vw-card .vw-k")), "→ moves to the next step");
       await p.keyboard.press("ArrowLeft"); await p.waitForTimeout(500);
-      r.ok(/Step 1 of 3/i.test(await p.textContent(".vw-card .vw-k")), "← moves back a step");
+      r.ok(/Step 1 of/i.test(await p.textContent(".vw-card .vw-k")), "← moves back a step");
     }
-    await p.click(".vw-next"); await p.waitForTimeout(500);
-    await p.click(".vw-next"); await p.waitForTimeout(500);
+    const seen = [];
+    for (let k = 0; k < 8; k++) {
+      seen.push(await p.evaluate(() => { const t = document.querySelector(".vw-target"); return t ? (t.getAttribute("href") || "") + " " + t.className : ""; }));
+      if (await p.$(".vw-card .vw-go")) break;
+      await p.click(".vw-next"); await p.waitForTimeout(500);
+    }
+    const missing = MAIN.filter((m) => !seen.some((x) => x.includes(m)));
+    r.ok(!missing.length, `${path}: the tour shows every main section${missing.length ? " (missing " + missing.join(", ") + ")" : ""}`);
     if (path === "pro") { const v = await axe(p); r.ok(!v.length, `the tour card passes accessibility checks${v.length ? ": " + v.join(", ") : ""}`); }
     const href = await p.getAttribute(".vw-card .vw-go", "href");
     r.ok(href === end, `${path}: the last step leads to ${end} (${href})`);

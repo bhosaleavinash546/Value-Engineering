@@ -34,7 +34,7 @@ html[data-theme="light"] .vw-spot{box-shadow:0 0 0 200vmax rgba(15,23,42,.5)}
 .vw-target:hover{transform:translateY(-2px)}
 
 /* the explanation card, with an arrow to its item */
-.vw-card{position:fixed;z-index:4050;width:min(360px,calc(100vw - 24px));padding:1.15rem 1.2rem 1rem;border:1px solid var(--vw-line);border-radius:18px;background:var(--vw-bg);color:var(--vw-txt);
+.vw-card{position:fixed;z-index:4050;width:min(420px,calc(100vw - 24px));padding:1.15rem 1.2rem 1rem;border:1px solid var(--vw-line);border-radius:18px;background:var(--vw-bg);color:var(--vw-txt);
   box-shadow:0 22px 60px rgba(0,0,0,.45);transition:left .4s cubic-bezier(.2,.8,.2,1),top .4s cubic-bezier(.2,.8,.2,1);animation:vwIn .35s ease both}
 @keyframes vwIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .vw-card[data-side]::before{content:"";position:absolute;left:var(--ax,50%);width:14px;height:14px;background:var(--vw-bg);border:1px solid var(--vw-line);transform:translateX(-50%) rotate(45deg)}

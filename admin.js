@@ -515,7 +515,7 @@
     if (st.welcome === undefined || st.welcome.range !== st.range) { loadWelcome(); return null; }
     const rows = st.welcome.rows, v = (ev, path) => rows.filter((r) => r.event === ev && (path === undefined || r.path === path)).reduce((n, r) => n + Number(r.visitors), 0);
     const shown = v("shown"), chose = v("path");
-    const NAMES = [["student", "🎓 I'm a student"], ["pro", "🛠 I work on product cost"], ["leader", "📊 I lead a team"], ["explore", "👀 Just exploring"]];
+    const NAMES = [["pro", "🛠 I work on product cost"], ["leader", "📊 I lead a team"], ["student", "🎓 I'm a student"], ["explore", "👀 Just exploring"]];
     const list = [
       { label: "Saw the welcome question", v: shown },
       ...NAMES.map(([k, t]) => ({ label: t, v: v("path", k), text: `${fmtN(v("path", k))} · finished ${fmtN(v("finish", k) + v("finish_stay", k))}` })),
