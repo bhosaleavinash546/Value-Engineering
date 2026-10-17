@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<title>Short overlays</title>
+<!-- Draws the layers of the vertical Short (1080 × 1920) for tools/casevid/short.js: the background, a headline
+     per scene, a subtitle per line and the end card. Each is screenshotted as a PNG and laid over the footage. -->
+<link rel="stylesheet" href="../../fonts/fonts.css" />
+<style>
+  :root{--ink:#eef3ff;--mut:#93a3c4;--blue:#4d8dff;--blue2:#2e6fe8;--amber:#f5b942;--ln:rgba(255,255,255,.14)}
+  html,body{width:1080px;height:1920px;margin:0;overflow:hidden;background:transparent;color:var(--ink);font-family:'Inter',sans-serif}
+  .bg{position:absolute;inset:0;background:radial-gradient(900px 700px at 50% 30%,#13224a 0%,#0a1230 45%,#060a16 100%)}
+  .top{position:absolute;left:0;right:0;top:110px;display:flex;justify-content:center}
+  .chip{display:flex;align-items:center;gap:16px;padding:10px 26px 10px 12px;border-radius:999px;background:rgba(6,10,22,.8);border:1px solid var(--ln);font:600 26px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+  .chip i{display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:var(--blue2);color:#fff;font:700 24px 'IBM Plex Sans',sans-serif;font-style:normal}
+  .chip b{color:#fff}
+  .frame{position:absolute;left:-2px;right:-2px;top:598px;height:784px;border-top:2px solid var(--ln);border-bottom:2px solid var(--ln)}
+  .brand{position:absolute;left:0;right:0;top:206px;text-align:center;font:600 30px 'IBM Plex Sans',sans-serif;color:var(--mut)}
+  .brand b{color:#fff}.brand span{color:var(--blue)}
+  .head{position:absolute;left:70px;right:70px;top:290px;height:280px;display:flex;align-items:center;justify-content:center;text-align:center;font:800 84px 'IBM Plex Sans',sans-serif;letter-spacing:-.03em;line-height:1.05;color:#fff}
+  .head em{font-style:normal;color:var(--blue)}
+  .cap{position:absolute;left:60px;right:60px;top:1420px;display:flex;justify-content:center}
+  .cap div{padding:18px 30px;border-radius:20px;background:rgba(3,6,14,.86);font:700 50px 'Inter',sans-serif;line-height:1.28;text-align:center;color:#fff}
+  .end{position:absolute;inset:0;background:radial-gradient(900px 800px at 50% 40%,#16285a 0%,#0a1230 45%,#060a16 100%);text-align:center}
+  .end .k{position:absolute;left:0;right:0;top:360px;font:600 30px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+  .end h1{position:absolute;left:60px;right:60px;top:430px;margin:0;font:800 104px 'IBM Plex Sans',sans-serif;letter-spacing:-.03em;line-height:1.04}
+  .end h1 em{font-style:normal;color:var(--blue)}
+  .end .p{position:absolute;left:80px;right:80px;top:720px;font:500 44px 'Inter',sans-serif;line-height:1.35;color:var(--mut)}
+  .end .url{position:absolute;left:50%;top:930px;transform:translateX(-50%);padding:26px 44px;border-radius:20px;background:var(--blue2);font:700 52px 'IBM Plex Sans',sans-serif;color:#fff;white-space:nowrap}
+  .end .free{position:absolute;left:0;right:0;top:1100px;font:600 38px 'Inter',sans-serif;color:#fff}
+  .end .copy{position:absolute;left:90px;right:90px;top:1300px;font:500 24px 'Inter',sans-serif;line-height:1.4;color:var(--mut)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+// what: bg | head | cap | end; d: its text
+window.draw = function (what, d) {
+  const r = document.getElementById("root");
+  if (what === "bg") r.innerHTML = `<div class="bg"></div><div class="top"><div class="chip"><i>▶</i><span><b>Function analysis</b> in 60 seconds</span></div></div>
+    <div class="brand"><b>VAVE</b><span>hub</span> · valueengineeringhub.com</div><div class="frame"></div>`;
+  if (what === "head") r.innerHTML = `<div class="head"><div>${d}</div></div>`;
+  if (what === "cap") r.innerHTML = `<div class="cap"><div>${esc(d)}</div></div>`;
+  if (what === "layer") { const parts = []; if (d.end) { window.draw("end"); parts.push(r.innerHTML); } if (d.head) parts.push(`<div class="head"><div>${d.head}</div></div>`);
+    if (d.cap) parts.push(`<div class="cap"><div>${esc(d.cap)}</div></div>`); r.innerHTML = parts.join(""); return; }
+  if (what === "end") r.innerHTML = `<div class="end"><div class="k">The full 20-minute course</div><h1>Created by<br><em>Avinash Bhosale</em></h1>
+    <div class="p">Function analysis and the FAST diagram, step by step, on a real product</div><div class="url">valueengineeringhub.com</div>
+    <div class="free">Free courses · Free certificates</div>
+    <div class="copy">© 2026 Avinash Bhosale · VAVEhub. All rights reserved.</div></div>`;
+};
+</script>
+</body>
+</html>
