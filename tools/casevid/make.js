@@ -394,6 +394,17 @@ const VIDEOS = {
       sub: "This series was created by Avinash Bhosale. Visit valueengineeringhub.com, and start today. Thanks for watching." },
   ] },
 
+  // narration for the 60-second vertical Short; the pictures are composed separately (tools/casevid/short.js)
+  short: { name: "Function analysis in 60 seconds", badge: "▶", scenes: [
+    { kind: "big", h: "Customers don't buy parts.", min: 4, vo: "Customers don't buy parts. They buy what the parts do." },
+    { kind: "big", h: "Every part has a job", min: 4, vo: "That's function analysis, the heart of value engineering. Every part gets a job, written as an active verb and a measurable noun. The lamp? Generate light." },
+    { kind: "big", h: "The FAST diagram", min: 4, vo: "Then the FAST diagram links them. Ask how, to the right. Ask why, to the left." },
+    { kind: "big", h: "Unwanted functions cost money", min: 4, vo: "Unwanted functions, like heat, drag in cost: fans, filters and shielding. Five pounds eighty-nine a projector, for jobs nobody asked for." },
+    { kind: "big", h: "30% of functions, 78% of the cost", min: 4, vo: "Put a cost on every function and rank them. Thirty per cent of the functions carry seventy-eight per cent of the cost. That's where you look first." },
+    { kind: "big", h: "valueengineeringhub.com", min: 5, sect: "resolve", vo: "Watch the full twenty-minute course, and learn value engineering free at value engineering hub dot com.",
+      sub: "Watch the full 20-minute course, and learn value engineering free at valueengineeringhub.com." },
+  ] },
+
   learnt: { name: "What we learnt", badge: "✓", scenes: [
     { kind: "three", cam: { orbit: { target: [0, -1, 0], r: [60, 66], h: [22, 26], a: [1.2, 0.6] } }, min: 5,
       vo: "So what did one projector teach us?" },
@@ -530,6 +541,8 @@ async function build(id, browser, O) {
   fs.mkdirSync(path.dirname(out), { recursive: true });
   ff(["-i", silent, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out + ".mp4"]);
   ff(["-ss", "3.2", "-i", out + ".mp4", "-frames:v", "1", "-vf", "scale=1280:720", "-quality", "82", out + ".webp"]);
+  // scene timings and subtitle chunks, for anything composed from this video's sound (the Short)
+  fs.writeFileSync(out + ".json", JSON.stringify(v.scenes.map((s) => ({ dur: s.dur, voDur: s.voDur, chunks: s.chunks }))));
   console.log(`  ${id}: ${total.toFixed(1)} s → ${out}.mp4 (${(fs.statSync(out + ".mp4").size / 1e6).toFixed(1)} MB)${VOICE ? "" : " (no voice: VOICE=1 to record it)"}`);
 }
 
